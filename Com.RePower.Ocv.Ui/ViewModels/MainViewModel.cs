@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Com.RePower.Ocv.Ui.ViewModel
+namespace Com.RePower.Ocv.Ui.ViewModels
 {
     public class MainViewModel:ObservableObject
     {

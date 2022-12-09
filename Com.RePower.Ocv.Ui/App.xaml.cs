@@ -31,7 +31,7 @@ namespace Com.RePower.Ocv.Ui
         }
         private void IocRegister(ContainerBuilder builder)
         {
-
+            
         }
     }
 }

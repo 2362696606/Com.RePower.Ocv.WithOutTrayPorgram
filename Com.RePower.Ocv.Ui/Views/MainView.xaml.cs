@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Com.RePower.Ocv.Ui.View
+namespace Com.RePower.Ocv.Ui.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
