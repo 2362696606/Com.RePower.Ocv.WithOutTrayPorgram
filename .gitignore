@@ -1,0 +1,13 @@
+bin/
+obj/
+.vs/
+.svn/
+*.suo
+*.orig
+.sonarqube/
+*.bat
+*.v11
+*.v12
+*.suo
+*.user
+/CC_SMSC.v11.suo
