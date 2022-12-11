@@ -6,24 +6,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Com.RePower.DeviceBase.DMM
+namespace Com.RePower.DeviceBase.TemperatureSensor
 {
     /// <summary>
-    /// 万用表
+    /// 温度传感器
     /// </summary>
-    [DeviceInfo(Models.DeviceType.DMM)]
-    public interface IDMM:IDevice
+    [DeviceInfo( Models.DeviceType.TemperatureSensor)]
+    public interface ITemperatureSensor:IDevice
     {
         /// <summary>
-        /// 读直流电压
+        /// 读取温度
         /// </summary>
-        /// <returns></returns>
-        OperateResult<double> ReadDc();
-        /// <summary>
-        /// 读交流电压
-        /// </summary>
-        /// <returns></returns>
-        OperateResult<double> ReadAc();
+        /// <returns>温度读取结果</returns>
+        OperateResult<double[]> ReadTemp();
         /// <summary>
         /// 直接发送指令
         /// </summary>

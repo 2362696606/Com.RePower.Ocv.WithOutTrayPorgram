@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.DeviceBase.Models
 {
+    /// <summary>
+    /// 设备类型枚举
+    /// </summary>
     public enum DeviceType
     {
         /// <summary>

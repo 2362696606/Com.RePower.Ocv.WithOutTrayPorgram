@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Com.RePower.DeviceBase.Plc
 {
+    /// <summary>
+    /// Plc
+    /// </summary>
     [DeviceInfo(DeviceType.PLC)]
     public interface IPlc : IDevice
     {

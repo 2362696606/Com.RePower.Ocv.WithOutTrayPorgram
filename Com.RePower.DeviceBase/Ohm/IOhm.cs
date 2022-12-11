@@ -6,24 +6,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Com.RePower.DeviceBase.DMM
+namespace Com.RePower.DeviceBase.Ohm
 {
     /// <summary>
-    /// 万用表
+    /// 内阻仪
     /// </summary>
-    [DeviceInfo(Models.DeviceType.DMM)]
-    public interface IDMM:IDevice
+    [DeviceInfo(Models.DeviceType.Ohm)]
+    public interface IOhm:IDevice
     {
         /// <summary>
-        /// 读直流电压
+        /// 读取内阻
         /// </summary>
-        /// <returns></returns>
-        OperateResult<double> ReadDc();
-        /// <summary>
-        /// 读交流电压
-        /// </summary>
-        /// <returns></returns>
-        OperateResult<double> ReadAc();
+        /// <returns>读取结果</returns>
+        OperateResult<double> ReadRes();
         /// <summary>
         /// 直接发送指令
         /// </summary>

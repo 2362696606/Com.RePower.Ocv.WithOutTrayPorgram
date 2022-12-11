@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Com.RePower.DeviceBase.Plc
+namespace Com.RePower.DeviceBase.SwitchBoard
 {
     /// <summary>
-    /// 网口通讯内Plc
+    /// 串口通讯切换板
     /// </summary>
-    public interface IPlcNet:IPlc,INetDevice
+    public interface ISwitchBoardSerialPort:ISwitchBoard,ISerialPortDevice
     {
     }
 }
