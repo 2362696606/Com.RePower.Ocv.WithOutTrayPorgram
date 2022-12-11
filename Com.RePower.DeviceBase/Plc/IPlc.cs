@@ -745,5 +745,18 @@ namespace Com.RePower.DeviceBase.Plc
         /// <param name="encoding">编码方式</param>
         /// <returns>写入结果</returns>
         Task<OperateResult> WriteAsync(string address, string value, int length, Encoding encoding);
+        /// <summary>
+        /// 异步读自定义类型
+        /// </summary>
+        /// <typeparam name="T">类型</typeparam>
+        /// <returns>读取结果</returns>
+        //Task<OperateResult<T>> ReadAsync<T>() where T : class, new();
+        /// <summary>
+        /// 异步写自定义类型
+        /// </summary>
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="data">数据</param>
+        /// <returns>写入结果</returns>
+        //Task<OperateResult> WriteAsync<T>(T data) where T : class, new();
     }
 }

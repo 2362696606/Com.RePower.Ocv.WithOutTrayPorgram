@@ -2,8 +2,10 @@
 using Com.RePower.DeviceBase.Plc;
 using Com.RePower.WpfBase;
 using HslCommunication;
+using HslCommunication.Core;
 using HslCommunication.Core.Net;
 using HslCommunication.LogNet;
+using HslCommunication.Profinet.Inovance;
 using System.Text;
 
 namespace Com.RePower.Device.Plc
