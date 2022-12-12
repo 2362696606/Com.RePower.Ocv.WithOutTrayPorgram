@@ -17,7 +17,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.RePower.DeviceBase", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.RePower.Ocv.Test", "Com.RePower.Ocv.Test\Com.RePower.Ocv.Test.csproj", "{A1AE85FF-6F11-47D1-A32E-45B8A08568EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.RePower.Device.Plc", "Com.RePower.Device.Plc\Com.RePower.Device.Plc.csproj", "{F881068A-25A4-42DA-B5C1-AF9503AD5BBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.RePower.Device.Plc", "Com.RePower.Device.Plc\Com.RePower.Device.Plc.csproj", "{F881068A-25A4-42DA-B5C1-AF9503AD5BBB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{48F64DD8-0BBB-48E8-B978-9C6792EAB139}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.RePower.Ocv.Project", "Com.RePower.Ocv.Project\Com.RePower.Ocv.Project.csproj", "{985A8187-F284-47FA-B172-58C472F382D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.RePower.Ocv.Project.WuWei", "Com.RePower.Ocv.Project.WuWei\Com.RePower.Ocv.Project.WuWei.csproj", "{8C68BD8B-B85F-4BAA-814A-4E4CFE1F61BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +59,14 @@ Global
 		{F881068A-25A4-42DA-B5C1-AF9503AD5BBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F881068A-25A4-42DA-B5C1-AF9503AD5BBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F881068A-25A4-42DA-B5C1-AF9503AD5BBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{985A8187-F284-47FA-B172-58C472F382D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{985A8187-F284-47FA-B172-58C472F382D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{985A8187-F284-47FA-B172-58C472F382D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{985A8187-F284-47FA-B172-58C472F382D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C68BD8B-B85F-4BAA-814A-4E4CFE1F61BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C68BD8B-B85F-4BAA-814A-4E4CFE1F61BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C68BD8B-B85F-4BAA-814A-4E4CFE1F61BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C68BD8B-B85F-4BAA-814A-4E4CFE1F61BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +74,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{2E09D213-DD34-495C-B927-5FF625D1EC0B} = {DEA0AE80-2FE4-40CF-8CB2-668718CEDC6E}
 		{F881068A-25A4-42DA-B5C1-AF9503AD5BBB} = {DEA0AE80-2FE4-40CF-8CB2-668718CEDC6E}
+		{985A8187-F284-47FA-B172-58C472F382D1} = {48F64DD8-0BBB-48E8-B978-9C6792EAB139}
+		{8C68BD8B-B85F-4BAA-814A-4E4CFE1F61BC} = {48F64DD8-0BBB-48E8-B978-9C6792EAB139}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {88805ACA-2D00-4E18-A293-E570B08FCE76}

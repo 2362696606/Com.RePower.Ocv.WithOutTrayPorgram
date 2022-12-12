@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Model.Plc
 {
-    public partial class CacheValue<T>:ObservableObject
+    public partial class CacheValue:ObservableObject
     {
         /// <summary>
         /// 值
         /// </summary>
         [ObservableProperty]
-        private T? value;
+        private dynamic? value;
 
         public CacheValue()
         {

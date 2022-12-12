@@ -7,11 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Com.RePower.DeviceBase\Com.RePower.DeviceBase.csproj" />
+    <Compile Remove="a\**" />
+    <Compile Remove="Model\**" />
+    <EmbeddedResource Remove="a\**" />
+    <EmbeddedResource Remove="Model\**" />
+    <None Remove="a\**" />
+    <None Remove="Model\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Model\" />
+    <ProjectReference Include="..\Com.RePower.DeviceBase\Com.RePower.DeviceBase.csproj" />
   </ItemGroup>
 
   <ItemGroup>

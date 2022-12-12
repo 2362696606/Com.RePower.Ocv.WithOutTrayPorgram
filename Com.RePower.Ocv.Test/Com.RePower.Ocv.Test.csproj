@@ -21,4 +21,15 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Com.RePower.Device.Plc\Com.RePower.Device.Plc.csproj" />
+    <ProjectReference Include="..\Com.RePower.DeviceBase\Com.RePower.DeviceBase.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="HslCommunication">
+      <HintPath>..\Com.RePower.Device.Plc\Libs\HslCommunication.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

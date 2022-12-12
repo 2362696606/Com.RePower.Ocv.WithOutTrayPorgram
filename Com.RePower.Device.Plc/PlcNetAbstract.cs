@@ -14,9 +14,9 @@ namespace Com.RePower.Device.Plc
     {
         protected NetworkDeviceBase netWorkDeviceBase = new NetworkDeviceBase();
 
-        private bool _isConnected = false;
+        protected bool _isConnected = false;
 
-        private string _deviceName = "UnnamedDevice";
+        protected string _deviceName = "UnnamedDevice";
 
         public PlcNetAbstract()
         {
