@@ -3,10 +3,10 @@
     /// <summary>
     /// 项目主业务接口
     /// </summary>
-    public interface IProjectMainWork:IDisposable
+    public interface IProjectMainWork
     {
         /// <summary>
-        /// 任务状态
+        /// 任务状态0:停止,1.正在运行,2:暂停
         /// </summary>
         public int WorkStatus { get; }
         /// <summary>

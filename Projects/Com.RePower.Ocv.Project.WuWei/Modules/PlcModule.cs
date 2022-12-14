@@ -19,7 +19,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
         {
             using(OcvSettingDbContext settingContext = new OcvSettingDbContext())
             {
-                var localPlcSettingObj = settingContext.SettingItems.First(x => x.SettingName == "本地Plc ");
+                var localPlcSettingObj = settingContext.SettingItems.First(x => x.SettingName == "本地Plc");
                 if(localPlcSettingObj!=null)
                 {
                     var localPlcSettingJson = localPlcSettingObj.JsonValue;

@@ -179,7 +179,7 @@ namespace Com.RePower.DeviceBase.Plc
         /// <param name="readInterval">读取间隔</param>
         /// <param name="waitTimeout">等待超时时间</param>
         /// <returns>等待结果带等待时长</returns>
-        OperateResult<TimeSpan> Wait(string address, bool waitValue, int readInterval, int waitTimeout);
+        OperateResult<TimeSpan> Wait(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1);
         /// <summary>
         /// 等待Int16
         /// </summary>
@@ -188,7 +188,7 @@ namespace Com.RePower.DeviceBase.Plc
         /// <param name="readInterval">读取间隔</param>
         /// <param name="waitTimeout">等待超时时间</param>
         /// <returns>等待结果带等待时长</returns>
-        OperateResult<TimeSpan> Wait(string address, short waitValue, int readInterval, int waitTimeout);
+        OperateResult<TimeSpan> Wait(string address, short waitValue, int readInterval = 100, int waitTimeout = -1);
         /// <summary>
         /// 等待UInt16
         /// </summary>
@@ -197,7 +197,7 @@ namespace Com.RePower.DeviceBase.Plc
         /// <param name="readInterval">读取间隔</param>
         /// <param name="waitTimeout">等待超时时间</param>
         /// <returns>等待结果带等待时长</returns>
-        OperateResult<TimeSpan> Wait(string address, ushort waitValue, int readInterval, int waitTimeout);
+        OperateResult<TimeSpan> Wait(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1);
         /// <summary>
         /// 等待Int32
         /// </summary>
@@ -206,7 +206,7 @@ namespace Com.RePower.DeviceBase.Plc
         /// <param name="readInterval">读取间隔</param>
         /// <param name="waitTimeout">等待超时时间</param>
         /// <returns>等待结果带等待时长</returns>
-        OperateResult<TimeSpan> Wait(string address, int waitValue, int readInterval, int waitTimeout);
+        OperateResult<TimeSpan> Wait(string address, int waitValue, int readInterval = 100, int waitTimeout = -1);
         /// <summary>
         /// 等待UInt32
         /// </summary>
@@ -215,7 +215,7 @@ namespace Com.RePower.DeviceBase.Plc
         /// <param name="readInterval">读取间隔</param>
         /// <param name="waitTimeout">等待超时时间</param>
         /// <returns>等待结果带等待时长</returns>
-        OperateResult<TimeSpan> Wait(string address, uint waitValue, int readInterval, int waitTimeout);
+        OperateResult<TimeSpan> Wait(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1);
         /// <summary>
         /// 等待Int64
         /// </summary>
@@ -224,7 +224,7 @@ namespace Com.RePower.DeviceBase.Plc
         /// <param name="readInterval">读取间隔</param>
         /// <param name="waitTimeout">等待超时时间</param>
         /// <returns>等待结果带等待时长</returns>
-        OperateResult<TimeSpan> Wait(string address, long waitValue, int readInterval, int waitTimeout);
+        OperateResult<TimeSpan> Wait(string address, long waitValue, int readInterval = 100, int waitTimeout = -1);
         /// <summary>
         /// 等待UInt64
         /// </summary>
@@ -233,7 +233,7 @@ namespace Com.RePower.DeviceBase.Plc
         /// <param name="readInterval">读取间隔</param>
         /// <param name="waitTimeout">等待超时时间</param>
         /// <returns>等待结果带等待时长</returns>
-        OperateResult<TimeSpan> Wait(string address, ulong waitValue, int readInterval, int waitTimeout);
+        OperateResult<TimeSpan> Wait(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1);
         /// <summary>
         /// 异步等待Bool
         /// </summary>
@@ -242,7 +242,7 @@ namespace Com.RePower.DeviceBase.Plc
         /// <param name="readInterval">读取间隔</param>
         /// <param name="waitTimeout">等待超时时间</param>
         /// <returns>等待结果带等待时长</returns>
-        Task<OperateResult<TimeSpan>> WaitAsync(string address, bool waitValue, int readInterval, int waitTimeout);
+        Task<OperateResult<TimeSpan>> WaitAsync(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1);
         /// <summary>
         /// 异步等待Int16
         /// </summary>
@@ -251,7 +251,7 @@ namespace Com.RePower.DeviceBase.Plc
         /// <param name="readInterval">读取间隔</param>
         /// <param name="waitTimeout">等待超时时间</param>
         /// <returns>等待结果带等待时长</returns>
-        Task<OperateResult<TimeSpan>> WaitAsync(string address, short waitValue, int readInterval, int waitTimeout);
+        Task<OperateResult<TimeSpan>> WaitAsync(string address, short waitValue, int readInterval = 100, int waitTimeout = -1);
         /// <summary>
         /// 异步等待UInt16
         /// </summary>
@@ -260,7 +260,7 @@ namespace Com.RePower.DeviceBase.Plc
         /// <param name="readInterval">读取间隔</param>
         /// <param name="waitTimeout">等待超时时间</param>
         /// <returns>等待结果带等待时长</returns>
-        Task<OperateResult<TimeSpan>> WaitAsync(string address, ushort waitValue, int readInterval, int waitTimeout);
+        Task<OperateResult<TimeSpan>> WaitAsync(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1);
         /// <summary>
         /// 异步等待Int32
         /// </summary>
@@ -269,7 +269,7 @@ namespace Com.RePower.DeviceBase.Plc
         /// <param name="readInterval">读取间隔</param>
         /// <param name="waitTimeout">等待超时时间</param>
         /// <returns>等待结果带等待时长</returns>
-        Task<OperateResult<TimeSpan>> WaitAsync(string address, int waitValue, int readInterval, int waitTimeout);
+        Task<OperateResult<TimeSpan>> WaitAsync(string address, int waitValue, int readInterval = 100, int waitTimeout = -1);
         /// <summary>
         /// 异步等待UInt32
         /// </summary>
@@ -278,7 +278,7 @@ namespace Com.RePower.DeviceBase.Plc
         /// <param name="readInterval">读取间隔</param>
         /// <param name="waitTimeout">等待超时时间</param>
         /// <returns>等待结果带等待时长</returns>
-        Task<OperateResult<TimeSpan>> WaitAsync(string address, uint waitValue, int readInterval, int waitTimeout);
+        Task<OperateResult<TimeSpan>> WaitAsync(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1);
         /// <summary>
         /// 异步等待Int64
         /// </summary>
@@ -287,7 +287,7 @@ namespace Com.RePower.DeviceBase.Plc
         /// <param name="readInterval">读取间隔</param>
         /// <param name="waitTimeout">等待超时时间</param>
         /// <returns>等待结果带等待时长</returns>
-        Task<OperateResult<TimeSpan>> WaitAsync(string address, long waitValue, int readInterval, int waitTimeout);
+        Task<OperateResult<TimeSpan>> WaitAsync(string address, long waitValue, int readInterval = 100, int waitTimeout = -1);
         /// <summary>
         /// 异步等待UInt64
         /// </summary>
@@ -296,7 +296,7 @@ namespace Com.RePower.DeviceBase.Plc
         /// <param name="readInterval">读取间隔</param>
         /// <param name="waitTimeout">等待超时时间</param>
         /// <returns>等待结果带等待时长</returns>
-        Task<OperateResult<TimeSpan>> WaitAsync(string address, ulong waitValue, int readInterval, int waitTimeout);
+        Task<OperateResult<TimeSpan>> WaitAsync(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1);
         /// <summary>
         /// 写Int16
         /// </summary>
