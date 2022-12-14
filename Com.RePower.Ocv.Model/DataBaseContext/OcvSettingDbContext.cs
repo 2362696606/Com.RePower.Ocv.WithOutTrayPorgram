@@ -14,7 +14,7 @@ namespace Com.RePower.Ocv.Model.DataBaseContext
         public DbSet<OcvSettingItemDto> SettingItems { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectString = @"data source=C:\Users\23626\Documents\GitHub\Com.RePower.Ocv.WithOutTrayPorgram\Projects\Com.RePower.Ocv.Project.WuWei\OcvSetting.dbs";
+            string connectString = @"data source=D:\Code\Com.RePower.Ocv.WithOutTrayPorgram\Projects\Com.RePower.Ocv.Project.WuWei\OcvSetting.dbs";
             optionsBuilder.UseSqlite(connectString);
             optionsBuilder.UseLazyLoadingProxies();
             base.OnConfiguring(optionsBuilder);
