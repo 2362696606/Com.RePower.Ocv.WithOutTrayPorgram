@@ -12,7 +12,7 @@ namespace Com.RePower.DeviceBase.TemperatureSensor
     /// 温度传感器
     /// </summary>
     [DeviceInfo( Models.DeviceType.TemperatureSensor)]
-    public interface ITemperatureSensor:IDevice
+    public interface ITemperatureSensor:IDevice,ISendCmd
     {
         /// <summary>
         /// 读取温度
@@ -20,10 +20,9 @@ namespace Com.RePower.DeviceBase.TemperatureSensor
         /// <returns>温度读取结果</returns>
         OperateResult<double[]> ReadTemp();
         /// <summary>
-        /// 直接发送指令
+        /// 异步读取温度
         /// </summary>
-        /// <param name="cmd">指令</param>
-        /// <returns>指令返回结果</returns>
-        OperateResult<byte[]> SendCmd(byte[] cmd);
+        /// <returns>读取结果</returns>
+        Task<OperateResult<double[]>> ReadTempAsync();
     }
 }

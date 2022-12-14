@@ -12,7 +12,7 @@ namespace Com.RePower.DeviceBase.SwitchBoard
     /// 切换板
     /// </summary>
     [DeviceInfo(Models.DeviceType.SwitchBoard)]
-    public interface ISwitchBoard:IDevice
+    public interface ISwitchBoard:IDevice,ISendCmd
     {
         /// <summary>
         /// 打开单个通道
@@ -21,11 +21,23 @@ namespace Com.RePower.DeviceBase.SwitchBoard
         /// <returns>开启结果</returns>
         OperateResult OpenChannel(int channel);
         /// <summary>
+        /// 异步打开单个通道
+        /// </summary>
+        /// <param name="channel">通道号</param>
+        /// <returns>开启结果</returns>
+        Task<OperateResult> OpenChannelAsync(int channel);
+        /// <summary>
         /// 打开多个通道
         /// </summary>
         /// <param name="channels">通道号数组</param>
         /// <returns>开启结果</returns>
         OperateResult OpenChannels(int[] channels);
+        /// <summary>
+        /// 异步打开多个通道
+        /// </summary>
+        /// <param name="channels">通道号数组</param>
+        /// <returns>开启结果</returns>
+        Task<OperateResult> OpenChannelsAsync(int[] channels);
         /// <summary>
         /// 关闭单个通道
         /// </summary>
@@ -33,21 +45,32 @@ namespace Com.RePower.DeviceBase.SwitchBoard
         /// <returns>关闭结果</returns>
         OperateResult CloseChannel(int channel);
         /// <summary>
+        /// 异步关闭单个通道
+        /// </summary>
+        /// <param name="channel">通道号</param>
+        /// <returns>关闭结果</returns>
+        Task<OperateResult> CloseChannelAsync(int channel);
+        /// <summary>
         /// 关闭多个通道
         /// </summary>
         /// <param name="channels">通道号数组</param>
         /// <returns>关闭结果</returns>
         OperateResult CloseChannels(int[] channels);
         /// <summary>
+        /// 异步关闭多个通道
+        /// </summary>
+        /// <param name="channels">通道号数组</param>
+        /// <returns>关闭结果</returns>
+        Task<OperateResult> CloseChannelsAsync(int[] channels);
+        /// <summary>
         /// 关闭所有通道
         /// </summary>
         /// <returns>关闭结果</returns>
         OperateResult CloseAllChannels();
         /// <summary>
-        /// 直接发送指令
+        /// 异步关闭所有通道
         /// </summary>
-        /// <param name="cmd">指令</param>
-        /// <returns>指令返回结果</returns>
-        OperateResult<byte[]> SendCmd(byte[] cmd);
+        /// <returns>关闭结果</returns>
+        Task<OperateResult> CloseAllChannelsAsync();
     }
 }

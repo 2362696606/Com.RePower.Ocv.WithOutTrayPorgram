@@ -12,7 +12,7 @@ namespace Com.RePower.DeviceBase.Ohm
     /// 内阻仪
     /// </summary>
     [DeviceInfo(Models.DeviceType.Ohm)]
-    public interface IOhm:IDevice
+    public interface IOhm:IDevice,ISendCmd
     {
         /// <summary>
         /// 读取内阻
@@ -20,10 +20,9 @@ namespace Com.RePower.DeviceBase.Ohm
         /// <returns>读取结果</returns>
         OperateResult<double> ReadRes();
         /// <summary>
-        /// 直接发送指令
+        /// 异步读取内阻
         /// </summary>
-        /// <param name="cmd">指令</param>
-        /// <returns>指令返回结果</returns>
-        OperateResult<byte[]> SendCmd(byte[] cmd);
+        /// <returns>读取结果</returns>
+        Task<OperateResult<double>> ReadResAsync();
     }
 }

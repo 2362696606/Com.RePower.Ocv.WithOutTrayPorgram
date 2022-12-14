@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Com.RePower.Ocv.WpfBase\Com.RePower.Ocv.WpfBase.csproj" />
+    <ProjectReference Include="..\Com.RePower.DeviceBase\Com.RePower.DeviceBase.csproj" />
   </ItemGroup>
 
 </Project>

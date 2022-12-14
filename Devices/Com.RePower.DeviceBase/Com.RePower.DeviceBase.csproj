@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Com.RePower.Ocv.WpfBase\Com.RePower.Ocv.WpfBase.csproj" />
+    <ProjectReference Include="..\..\Com.RePower.Ocv.WpfBase\Com.RePower.Ocv.WpfBase.csproj" />
   </ItemGroup>
 
 </Project>

@@ -8,11 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Com.RePower.Ocv.Model\Com.RePower.Ocv.Model.csproj" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.6.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MaterialDesignThemes" Version="4.6.1" />
+    <ProjectReference Include="..\..\Com.RePower.Ocv.Model\Com.RePower.Ocv.Model.csproj" />
   </ItemGroup>
 
 </Project>

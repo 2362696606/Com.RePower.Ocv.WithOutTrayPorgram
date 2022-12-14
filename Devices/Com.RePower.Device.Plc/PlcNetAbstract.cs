@@ -20,12 +20,16 @@ namespace Com.RePower.Device.Plc
 
         public PlcNetAbstract()
         {
-            this.netWorkDeviceBase.LogNet = new LogNetDateTime(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs/PlcLogs"), GenerateMode.ByEveryDay, 30);
-            this.netWorkDeviceBase.SetPersistentConnection();
+            OnDeviceCreated();
         }
         public PlcNetAbstract(NetworkDeviceBase networkDeviceBase)
         {
             this.netWorkDeviceBase= networkDeviceBase;
+            OnDeviceCreated();
+        }
+
+        protected virtual void OnDeviceCreated()
+        {
             this.netWorkDeviceBase.LogNet = new LogNetDateTime(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs/PlcLogs"), GenerateMode.ByEveryDay, 30);
             this.netWorkDeviceBase.SetPersistentConnection();
         }
