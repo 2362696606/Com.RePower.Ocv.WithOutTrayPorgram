@@ -10,7 +10,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
     {
         public FlowController()
         {
-            ResetEvent = new ManualResetEvent(false);
+            ResetEvent = new ManualResetEvent(true);
             CancelTokenSource = new CancellationTokenSource();
         }
         public ManualResetEvent ResetEvent { get; set; }

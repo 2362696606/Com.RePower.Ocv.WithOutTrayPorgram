@@ -152,6 +152,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                         return OperateResult.CreateFailedResult(read1.Message ?? "读取物流Plc[托盘条码]失败", read1.ErrorCode);
                     }
                     batteryCode = read1.Content ?? string.Empty;
+                    Battery.BarCode = batteryCode;
                     validateResult = ValidateBatteryCode(batteryCode);
                     if (!validateResult)
                     {
@@ -233,6 +234,14 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         }
         private OperateResult TestBattery()
         {
+            if (DevicesController.DMM.IsConnected == false)
+            {
+                var result = DevicesController.DMM.Connect();
+                if(result.IsFailed)
+                {
+                    return result;
+                }
+            }
             var read1 = DevicesController.DMM.ReadDc();
             if(read1.IsFailed)
             {

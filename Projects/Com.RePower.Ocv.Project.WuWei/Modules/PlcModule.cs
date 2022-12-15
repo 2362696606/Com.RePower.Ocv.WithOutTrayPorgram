@@ -49,7 +49,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                                 .AsSelf()
                                 .As<IPlc>()
                                 .As<IDevice>()
-                                .Keyed<IPlc>(PlcDeviceEnum.LocalPlc);
+                                .Keyed<IPlc>(PlcDeviceEnum.LogisticsPlc);
                         }
                     }
                 }

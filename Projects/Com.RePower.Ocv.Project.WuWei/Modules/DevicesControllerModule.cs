@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Com.RePower.Ocv.Project.WuWei.Controllers;
+using Autofac.Features.AttributeFilters;
 
 namespace Com.RePower.Ocv.Project.WuWei.Modules
 {
@@ -40,7 +41,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                         }
                     }
                 }
-                var logisticsPlcAddressCacheSettingObj = settingContext.SettingItems.First(x => x.SettingName == "本地Plc缓存");
+                var logisticsPlcAddressCacheSettingObj = settingContext.SettingItems.First(x => x.SettingName == "物流Plc缓存");
                 if (logisticsPlcAddressCacheSettingObj != null)
                 {
                     var logisticsPlcAddressCacheSettingJson = logisticsPlcAddressCacheSettingObj.JsonValue;
@@ -60,6 +61,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                 }
                 builder.RegisterType<DevicesController>()
                     .AsSelf()
+                    .WithAttributeFiltering()
                     .WithProperty("LocalPlcAddressCache", localPlcAddressCache)
                     .WithProperty("LogisticsPlcAddressCache", logisticsPlcAddressCache);
             }

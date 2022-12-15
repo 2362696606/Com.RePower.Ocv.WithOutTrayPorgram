@@ -4,10 +4,36 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Com.RePower.Ocv.Ui.WuWei"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="clr-namespace:Com.RePower.Ocv.Ui.WuWei.Views"
     Title="MainWindow"
-    Width="800"
-    Height="450"
+    Width="1920"
+    Height="1080"
+    WindowState="Maximized"
     mc:Ignorable="d">
-    <Grid />
+    <Viewbox Stretch="Fill">
+        <materialDesign:ColorZone Width="2560" Height="1440">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <views:BatteryView />
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.7*" />
+                        <ColumnDefinition Width="0.3*" />
+                    </Grid.ColumnDefinitions>
+                    <views:ControlView Grid.Column="1" />
+                </Grid>
+            </Grid>
+        </materialDesign:ColorZone>
+    </Viewbox>
 </Window>

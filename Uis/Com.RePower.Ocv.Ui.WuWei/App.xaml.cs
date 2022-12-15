@@ -1,6 +1,11 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Com.RePower.DeviceBase.Plc;
+using Com.RePower.Ocv.Model;
+using Com.RePower.Ocv.Project;
 using Com.RePower.Ocv.Project.WuWei.Modules;
+using Com.RePower.Ocv.Ui.WuWei.ViewModels;
+using Com.RePower.Ocv.Ui.WuWei.Views;
 using Com.RePower.WpfBase;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -35,6 +40,7 @@ namespace Com.RePower.Ocv.Ui.WuWei
                 IocRegister(builder);
                 var serviceProvider = autofacServiceProviderFactory.CreateServiceProvider(builder);
                 IocHelper.Default.ConfigureServices(serviceProvider);
+
                 #endregion
             }
             catch (Exception err)
@@ -50,11 +56,15 @@ namespace Com.RePower.Ocv.Ui.WuWei
             builder.RegisterAssemblyTypes(dataAccess).Where(t => t.Name.EndsWith("ViewModel") || t.Name.EndsWith("View"))
                 .AsSelf();
 
+            builder.RegisterType<BatteryViewModel>().AsSelf();
+
             builder.RegisterModule<DevicesControllerModule>();
             builder.RegisterModule<DMMModule>();
             builder.RegisterModule<PlcModule>();
             builder.RegisterModule<WorkModule>();
             builder.RegisterModule<FlowControllerModule>();
+            builder.RegisterModule<NgInfoModule>();
+            builder.RegisterModule<BatteryNgCriteriaModule>();
         }
     }
 }
