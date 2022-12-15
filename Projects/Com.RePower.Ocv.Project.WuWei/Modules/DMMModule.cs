@@ -27,10 +27,18 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                     var localPlcSettingJson = localPlcSettingObj.JsonValue;
                     if (!string.IsNullOrEmpty(localPlcSettingJson))
                     {
-                        var obj = JsonConvert.DeserializeObject<Keysight_34461A>(localPlcSettingJson);
+                        //var obj = JsonConvert.DeserializeObject<Keysight_34461A>(localPlcSettingJson);
+                        //if (obj != null)
+                        //{
+                        //    builder.RegisterInstance<Keysight_34461A>(obj)
+                        //        .AsSelf()
+                        //        .As<IDMM>()
+                        //        .As<IDevice>();
+                        //}
+                        var obj = JsonConvert.DeserializeObject<DmmSimulator>(localPlcSettingJson);
                         if (obj != null)
                         {
-                            builder.RegisterInstance<Keysight_34461A>(obj)
+                            builder.RegisterInstance<DmmSimulator>(obj)
                                 .AsSelf()
                                 .As<IDMM>()
                                 .As<IDevice>();

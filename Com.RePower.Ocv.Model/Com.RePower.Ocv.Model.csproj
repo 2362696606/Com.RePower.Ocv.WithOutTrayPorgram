@@ -15,4 +15,10 @@
     <ProjectReference Include="..\Com.RePower.Ocv.WpfBase\Com.RePower.Ocv.WpfBase.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="CLDC.Framework.Log">
+      <HintPath>..\Com.RePower.Ocv.WpfBase\Libs\CLDC.Framework.Log.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

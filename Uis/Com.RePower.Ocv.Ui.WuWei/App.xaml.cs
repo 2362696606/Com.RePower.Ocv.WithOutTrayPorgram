@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using Com.RePower.DeviceBase.Plc;
 using Com.RePower.Ocv.Model;
+using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project;
 using Com.RePower.Ocv.Project.WuWei.Modules;
 using Com.RePower.Ocv.Ui.WuWei.ViewModels;
@@ -40,7 +41,20 @@ namespace Com.RePower.Ocv.Ui.WuWei
                 IocRegister(builder);
                 var serviceProvider = autofacServiceProviderFactory.CreateServiceProvider(builder);
                 IocHelper.Default.ConfigureServices(serviceProvider);
-
+                #endregion
+                #region 初始化UiLog
+                LogHelper.RegisterUiLogEvent(new System.Action<object?, log4net.Core.LoggingEvent>((sender, e) =>
+                        {
+                            if (UiLogViewModel.LogSource.Count <= 0 || UiLogViewModel.LogSource.Last().RenderedMessage != e.RenderedMessage)
+                            {
+                                if (UiLogViewModel.LogSource.Count > 999)
+                                {
+                                    UiLogViewModel.LogSource.RemoveAt(0);
+                                }
+                                Application.Current.Dispatcher.Invoke(() =>
+                                UiLogViewModel.LogSource.Add(e));
+                            }
+                        })); 
                 #endregion
             }
             catch (Exception err)
@@ -55,8 +69,6 @@ namespace Com.RePower.Ocv.Ui.WuWei
             var dataAccess = Assembly.GetExecutingAssembly();
             builder.RegisterAssemblyTypes(dataAccess).Where(t => t.Name.EndsWith("ViewModel") || t.Name.EndsWith("View"))
                 .AsSelf();
-
-            builder.RegisterType<BatteryViewModel>().AsSelf();
 
             builder.RegisterModule<DevicesControllerModule>();
             builder.RegisterModule<DMMModule>();

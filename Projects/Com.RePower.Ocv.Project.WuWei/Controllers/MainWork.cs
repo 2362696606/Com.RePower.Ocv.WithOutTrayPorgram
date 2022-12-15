@@ -1,4 +1,5 @@
 ﻿using Com.RePower.Ocv.Model;
+using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.WuWei.Model;
 using Com.RePower.WpfBase;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -82,7 +83,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                             var result = DoWork();
                             if(result.IsFailed)
                             {
-                                //ToDo:流程错误返回处理
+                                LogHelper.UiLog.Warn(result.Message);
                             }
                         }
                         catch (Exception e)
@@ -93,7 +94,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                             }
                             else
                             {
-                                //ToDo:流程执行时异常处理
+                                LogHelper.UiLog.Error(e.Message);
                             }
                         }
                         finally
@@ -130,6 +131,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 CancelToken.ThrowIfCancellationRequested();
                 ResetEvent.WaitOne();
 
+                LogHelper.UiLog.Info("等待本地Plc[Read_1] = 1");
                 var wait1 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["Read_1"], (short)1);
                 if(wait1.IsFailed)
                 {
@@ -141,11 +143,13 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 do
                 {
                     reReadTimes++;
+                    LogHelper.UiLog.Info("等待物流Plc[握手类型] = 1");
                     var wait2 = DevicesController.LogisticsPlc.Wait(DevicesController.LogisticsPlcAddressCache["握手类型"], 1);
                     if (wait2.IsFailed)
                     {
                         return OperateResult.CreateFailedResult(wait2.Message ?? "等待物流Plc[握手类型] = 1失败", wait2.ErrorCode);
                     }
+                    LogHelper.UiLog.Info("读取物流Plc[托盘条码]");
                     var read1 = DevicesController.LogisticsPlc.ReadString(DevicesController.LogisticsPlcAddressCache["托盘条码"], 20);
                     if (read1.IsFailed)
                     {
@@ -156,6 +160,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     validateResult = ValidateBatteryCode(batteryCode);
                     if (!validateResult)
                     {
+                        LogHelper.UiLog.Info("写入物流Plc[握手确认] = 2");
                         var write1 = DevicesController.LogisticsPlc.Write(DevicesController.LogisticsPlcAddressCache["握手确认"], 2);
                         if (write1.IsFailed)
                         {
@@ -169,6 +174,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     return OperateResult.CreateFailedResult($"读取托盘条码失败,{batteryCode}不合规");
                 }
 
+                LogHelper.UiLog.Info("写入本地Plc[Send_1] = 1");
                 var write2 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_1"], (short)1);
                 if (write2.IsFailed)
                 {
@@ -178,6 +184,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 do
                 {
                     reTestTimes++;
+                    LogHelper.UiLog.Info("等待本地Plc[Read_1] = 2");
                     var wait3 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["Read_1"], (short)2);
                     if (wait3.IsFailed)
                     {
@@ -188,14 +195,16 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     {
                         return test1;
                     }
+                    LogHelper.UiLog.Info("写入本地Plc[Send_1] = 2");
                     var write3 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_1"], (short)2);
                     if (write3.IsFailed)
                     {
                         return OperateResult.CreateFailedResult(write3.Message ?? "写入本地Plc[Send_1] = 2失败", write3.ErrorCode);
                     }
                     ValidateNgResult();
-                    if (NgInfo.IsNg && IsDoRetest && reReadTimes < RetestTimes) 
+                    if (NgInfo.IsNg && IsDoRetest && reReadTimes < RetestTimes)
                     {
+                        LogHelper.UiLog.Info("写入本地Plc[Send_2] = 2");
                         var write4 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)2);
                         if (write4.IsFailed)
                         {
@@ -204,6 +213,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     }
                     else if(NgInfo.IsNg)
                     {
+                        LogHelper.UiLog.Info("写入本地Plc[Send_3] = 2");
                         var write4 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)2);
                         if (write4.IsFailed)
                         {
@@ -213,6 +223,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     }
                     else
                     {
+                        LogHelper.UiLog.Info("写入本地Plc[Send_3] = 1");
                         var write5 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)1);
                         if (write5.IsFailed)
                         {
@@ -221,6 +232,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                         break;
                     }
                 } while (IsDoRetest && reTestTimes < RetestTimes);
+                LogHelper.UiLog.Info("写入本地Plc[Send_1] = 1");
                 var write6 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)1);
                 if (write6.IsFailed)
                 {
@@ -242,6 +254,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     return result;
                 }
             }
+            LogHelper.UiLog.Info("读取电压");
             var read1 = DevicesController.DMM.ReadDc();
             if(read1.IsFailed)
             {
@@ -273,20 +286,23 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             NgInfo.Battery = new Battery();
             NgInfo.NgDescription = string.Empty;
             NgInfo.IsNg = false;
+            LogHelper.UiLog.Info("写入本地Plc[Send_1] = 0");
             var write1 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_1"], (short)0);
             if (write1.IsFailed)
             {
                 return OperateResult.CreateFailedResult(write1.Message ?? "写入本地Plc[Send_1] = 0失败", write1.ErrorCode);
             }
+            LogHelper.UiLog.Info("写入本地Plc[Send_2] = 0");
             var write2 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)0);
             if (write2.IsFailed)
             {
-                return OperateResult.CreateFailedResult(write2.Message ?? "写入本地Plc[Send_1] = 0失败", write2.ErrorCode);
+                return OperateResult.CreateFailedResult(write2.Message ?? "写入本地Plc[Send_2] = 0失败", write2.ErrorCode);
             }
+            LogHelper.UiLog.Info("写入本地Plc[Send_3] = 0");
             var write3 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)0);
             if (write3.IsFailed)
             {
-                return OperateResult.CreateFailedResult(write3.Message ?? "写入本地Plc[Send_1] = 0失败", write3.ErrorCode);
+                return OperateResult.CreateFailedResult(write3.Message ?? "写入本地Plc[Send_3] = 0失败", write3.ErrorCode);
             }
             return OperateResult.CreateSuccessResult();
         }
