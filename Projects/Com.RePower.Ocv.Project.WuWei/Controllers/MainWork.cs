@@ -261,6 +261,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 return OperateResult.CreateFailedResult(read1.Message ?? "读取电压失败", read1.ErrorCode);
             }
             Battery.PVolValue = read1.Content;
+            Battery.TestTime = DateTime.Now;
             return OperateResult.CreateSuccessResult();
         }
         private void ValidateNgResult()
