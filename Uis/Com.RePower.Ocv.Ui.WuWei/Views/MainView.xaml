@@ -46,6 +46,7 @@
                         <RowDefinition Height="0.6*" />
                     </Grid.RowDefinitions>
                     <views:BatteryView />
+                    <views:MonitorView Grid.Row="1" />
                 </Grid>
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>

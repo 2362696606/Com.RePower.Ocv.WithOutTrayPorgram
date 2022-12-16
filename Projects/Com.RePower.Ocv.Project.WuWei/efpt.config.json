@@ -1,0 +1,61 @@
+﻿{
+   "CodeGenerationMode": 3,
+   "ContextClassName": "D:\\Code\\Com.RePower.Ocv.WithOutTrayPorgram\\Projects\\Com.RePower.Ocv.Project.WuWei\\OcvData.dbContext",
+   "ContextNamespace": "DataBaseContext",
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": true,
+   "ModelNamespace": "Models",
+   "OutputContextPath": "DataBaseContext",
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "Com.RePower.Ocv.Project.WuWei",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "Name": "[dbo].[rn_db_dcir]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[rn_db_ocv1]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[rn_db_ocv2]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[rn_db_ocv3]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[rn_db_ocv4]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[rn_db_ocv5]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "TQZ-PC.OcvData",
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoConstructor": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": true,
+   "UseSchemaFolders": false,
+   "UseSpatial": true,
+   "UseT4": false
+}

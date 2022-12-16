@@ -181,7 +181,7 @@
         /// <typeparam name="T">参数类型</typeparam>
         /// <param name="value">类型的值对象</param>
         /// <returns>成功的结果对象</returns>
-        public static OperateResult<T> CreateSuccessResult<T>(T value)
+        public static OperateResult<T> CreateSuccessResult<T>(T? value)
         {
             return new OperateResult<T>()
             {

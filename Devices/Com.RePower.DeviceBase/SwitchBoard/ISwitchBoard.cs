@@ -19,58 +19,58 @@ namespace Com.RePower.DeviceBase.SwitchBoard
         /// </summary>
         /// <param name="channel">通道号</param>
         /// <returns>开启结果</returns>
-        OperateResult OpenChannel(int channel);
+        OperateResult OpenChannel(int boardIndex, int channel);
         /// <summary>
         /// 异步打开单个通道
         /// </summary>
         /// <param name="channel">通道号</param>
         /// <returns>开启结果</returns>
-        Task<OperateResult> OpenChannelAsync(int channel);
+        Task<OperateResult> OpenChannelAsync(int boardIndex, int channel);
         /// <summary>
         /// 打开多个通道
         /// </summary>
         /// <param name="channels">通道号数组</param>
         /// <returns>开启结果</returns>
-        OperateResult OpenChannels(int[] channels);
+        OperateResult OpenChannels(int boardIndex, int[] channels);
         /// <summary>
         /// 异步打开多个通道
         /// </summary>
         /// <param name="channels">通道号数组</param>
         /// <returns>开启结果</returns>
-        Task<OperateResult> OpenChannelsAsync(int[] channels);
+        Task<OperateResult> OpenChannelsAsync(int boardIndex, int[] channels);
         /// <summary>
         /// 关闭单个通道
         /// </summary>
         /// <param name="channel">通道号</param>
         /// <returns>关闭结果</returns>
-        OperateResult CloseChannel(int channel);
+        OperateResult CloseChannel(int boardIndex, int channel);
         /// <summary>
         /// 异步关闭单个通道
         /// </summary>
         /// <param name="channel">通道号</param>
         /// <returns>关闭结果</returns>
-        Task<OperateResult> CloseChannelAsync(int channel);
+        Task<OperateResult> CloseChannelAsync(int boardIndex, int channel);
         /// <summary>
         /// 关闭多个通道
         /// </summary>
         /// <param name="channels">通道号数组</param>
         /// <returns>关闭结果</returns>
-        OperateResult CloseChannels(int[] channels);
+        OperateResult CloseChannels(int boardIndex, int[] channels);
         /// <summary>
         /// 异步关闭多个通道
         /// </summary>
         /// <param name="channels">通道号数组</param>
         /// <returns>关闭结果</returns>
-        Task<OperateResult> CloseChannelsAsync(int[] channels);
+        Task<OperateResult> CloseChannelsAsync(int boardIndex, int[] channels);
         /// <summary>
         /// 关闭所有通道
         /// </summary>
         /// <returns>关闭结果</returns>
-        OperateResult CloseAllChannels();
+        OperateResult CloseAllChannels(int boardIndex);
         /// <summary>
         /// 异步关闭所有通道
         /// </summary>
         /// <returns>关闭结果</returns>
-        Task<OperateResult> CloseAllChannelsAsync();
+        Task<OperateResult> CloseAllChannelsAsync(int boardIndex);
     }
 }

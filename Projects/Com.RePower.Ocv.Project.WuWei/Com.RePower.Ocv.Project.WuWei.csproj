@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Com.RePower.Ocv.Model\Com.RePower.Ocv.Model.csproj" />
     <ProjectReference Include="..\..\Devices\Com.RePower.Device.DMM\Com.RePower.Device.DMM.csproj" />
     <ProjectReference Include="..\..\Devices\Com.RePower.Device.Plc\Com.RePower.Device.Plc.csproj" />
