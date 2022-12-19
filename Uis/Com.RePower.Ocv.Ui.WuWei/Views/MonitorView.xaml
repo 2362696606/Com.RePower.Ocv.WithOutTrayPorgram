@@ -19,11 +19,11 @@
                 CanUserAddRows="False"
                 IsReadOnly="False"
                 ItemsSource="{Binding LocalPlcCacheValues}" />
-            <DataGrid
+            <!--<DataGrid
                 Grid.Row="1"
                 CanUserAddRows="False"
                 IsReadOnly="False"
-                ItemsSource="{Binding LogisticsPlcCacheValues}" />
+                ItemsSource="{Binding LogisticsPlcCacheValues}" />-->
         </Grid>
     </materialDesign:Card>
 </UserControl>

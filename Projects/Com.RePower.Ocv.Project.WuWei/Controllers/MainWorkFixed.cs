@@ -1,8 +1,11 @@
 ﻿using Com.RePower.Ocv.Model;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.WuWei.Model;
+using Com.RePower.Ocv.Project.WuWei.Serivces;
+using Com.RePower.Ocv.Project.WuWei.Serivces.Dto;
 using Com.RePower.WpfBase;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +14,6 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Project.WuWei.Controllers
 {
-    /*
     public partial class MainWorkFixed : ObservableObject, IProjectMainWork
     {
         private int _workStatus;
@@ -20,13 +22,15 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             , FlowController flowController
             , Tray tray
             , BatteryNgCriteria batteryNgCriteria
-            , TestOption testOption)
+            , TestOption testOption
+            , IWmsService wmsService)
         {
             DevicesController = devicesController;
             FlowController = flowController;
             Tray = tray;
             BatteryNgCriteria = batteryNgCriteria;
             TestOption = testOption;
+            WmsService = wmsService;
         }
 
         public int WorkStatus
@@ -40,6 +44,8 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         public Tray Tray { get; }
         public BatteryNgCriteria BatteryNgCriteria { get; }
         public TestOption TestOption { get; }
+        public IWmsService WmsService { get; }
+
         public bool IsDoUploadToMes
         {
             get { return TestOption.IsDoUploadToMes; }
@@ -153,43 +159,54 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 #endregion
                 #region 读取托盘条码
                 bool validateResult = false;
-                int reReadTimes = 0;
-                string batteryCode = string.Empty;
-                do
+                string trayCode = string.Empty;
+                LogHelper.UiLog.Info("读取物流Plc[托盘条码]");
+                var read1 = DevicesController.LocalPlc.ReadString(DevicesController.LocalPlcAddressCache["Read_2"], 20);
+                if (read1.IsFailed)
                 {
-                    reReadTimes++;
-                    LogHelper.UiLog.Info("等待物流Plc[握手类型] = 1");
-                    var wait2 = DevicesController.LogisticsPlc.Wait(DevicesController.LogisticsPlcAddressCache["握手类型"], 1);
-                    if (wait2.IsFailed)
-                    {
-                        return OperateResult.CreateFailedResult(wait2.Message ?? "等待物流Plc[握手类型] = 1失败", wait2.ErrorCode);
-                    }
-                    LogHelper.UiLog.Info("读取物流Plc[托盘条码]");
-                    var read1 = DevicesController.LogisticsPlc.ReadString(DevicesController.LogisticsPlcAddressCache["托盘条码"], 20);
-                    if (read1.IsFailed)
-                    {
-                        return OperateResult.CreateFailedResult(read1.Message ?? "读取物流Plc[托盘条码]失败", read1.ErrorCode);
-                    }
-                    batteryCode = read1.Content ?? string.Empty;
-                    Battery.BarCode = batteryCode;
-                    validateResult = ValidateBatteryCode(batteryCode);
-                    if (!validateResult)
-                    {
-                        LogHelper.UiLog.Info("写入物流Plc[握手确认] = 2");
-                        var write1 = DevicesController.LogisticsPlc.Write(DevicesController.LogisticsPlcAddressCache["握手确认"], 2);
-                        if (write1.IsFailed)
-                        {
-                            return OperateResult.CreateFailedResult(write1.Message ?? "写入物流Plc[握手确认] = 2失败", wait2.ErrorCode);
-                        }
-                    }
+                    return OperateResult.CreateFailedResult(read1.Message ?? "读取物流Plc[托盘条码]失败", read1.ErrorCode);
                 }
-                while (reReadTimes < 5 && !validateResult);
+                trayCode = read1.Content ?? string.Empty;
+                Tray.TrayCode = trayCode;
+                validateResult = ValidateBatteryCode(trayCode);
                 if (!validateResult)
                 {
-                    return OperateResult.CreateFailedResult($"读取托盘条码失败,{batteryCode}不合规");
+                    return OperateResult.CreateFailedResult($"读取托盘条码失败,{trayCode}不合规");
                 }
                 #endregion
-
+                #region 请求电芯条码
+                LogHelper.UiLog.Info("请求电芯条码");
+                var getBatteriesInfoResult = WmsService.GetBatteriesInfo();
+                if (getBatteriesInfoResult.IsFailed)
+                {
+                    return getBatteriesInfoResult;
+                }
+                string content = getBatteriesInfoResult?.Content ?? string.Empty;
+                var resultObj = JsonConvert.DeserializeObject<WmsBatteriesInfoDto>(content);
+                if (resultObj == null)
+                {
+                    return OperateResult.CreateFailedResult("请求电芯条码返回值为null");
+                }
+                if (resultObj.Result == 0)
+                {
+                    return OperateResult.CreateSuccessResult($"请求电芯条码失败，原因是{resultObj.Message}");
+                }
+                if (resultObj.PileContent == null)
+                {
+                    return OperateResult.CreateFailedResult($"请求电芯条码失败，主体为null");
+                }
+                if (resultObj.PileContent.PilletBarcode != Tray.TrayCode)
+                {
+                    return OperateResult.CreateFailedResult($"请求电芯条码失败，WMS返回托盘条码{resultObj.PileContent.PilletBarcode}与本地托盘条码{Tray.TrayCode}不一致");
+                }
+                foreach (var item in resultObj.PileContent.Batterys)
+                {
+                    NgInfo ngInfo = new NgInfo();
+                    ngInfo.Battery.BarCode = item.BatteryBarcode;
+                    ngInfo.Battery.Position = item.PalletIndex;
+                    Tray.NgInfos.Add(ngInfo);
+                } 
+                #endregion
                 LogHelper.UiLog.Info("写入本地Plc[Send_1] = 1");
                 var write2 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_1"], (short)1);
                 if (write2.IsFailed)
@@ -207,7 +224,8 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                         return OperateResult.CreateFailedResult(wait3.Message ?? "等待本地Plc[Read_1] = 2失败", wait3.ErrorCode);
                     }
                     //测试电池
-                    var test1 = TestBattery();
+                    LogHelper.UiLog.Info("开始测试电池");
+                    var test1 = TestBatteries();
                     if (test1.IsFailed)
                     {
                         return test1;
@@ -220,7 +238,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     }
                     //验证ng结果
                     ValidateNgResult();
-                    if (NgInfo.IsNg && IsDoRetest && reReadTimes < RetestTimes)
+                    if (Tray.NgInfos.Any(x=>x.IsNg) && IsDoRetest && reTestTimes < RetestTimes)
                     {
                         LogHelper.UiLog.Info("写入本地Plc[Send_2] = 2");
                         var write4 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)2);
@@ -229,16 +247,16 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                             return OperateResult.CreateFailedResult(write4.Message ?? "写入本地Plc[Send_2] = 2失败", write4.ErrorCode);
                         }
                     }
-                    else if (NgInfo.IsNg)
-                    {
-                        LogHelper.UiLog.Info("写入本地Plc[Send_3] = 2");
-                        var write4 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)2);
-                        if (write4.IsFailed)
-                        {
-                            return OperateResult.CreateFailedResult(write4.Message ?? "写入本地Plc[Send_3] = 2失败", write4.ErrorCode);
-                        }
-                        return OperateResult.CreateFailedResult("电芯异常，已停止测试");
-                    }
+                    //else if (Tray.NgInfos.Any(x => x.IsNg))
+                    //{
+                    //    LogHelper.UiLog.Info("写入本地Plc[Send_3] = 2");
+                    //    var write4 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)2);
+                    //    if (write4.IsFailed)
+                    //    {
+                    //        return OperateResult.CreateFailedResult(write4.Message ?? "写入本地Plc[Send_3] = 2失败", write4.ErrorCode);
+                    //    }
+                    //    return OperateResult.CreateFailedResult("电芯异常，已停止测试");
+                    //}
                     else
                     {
                         LogHelper.UiLog.Info("写入本地Plc[Send_3] = 1");
@@ -262,8 +280,16 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         {
             return true;
         }
-        private OperateResult TestBattery()
+        private OperateResult TestBatteries()
         {
+            if (DevicesController.SwitchBoard.IsConnected == false)
+            {
+                var result = DevicesController.SwitchBoard.Connect();
+                if (result.IsFailed)
+                {
+                    return result;
+                }
+            }
             if (DevicesController.DMM.IsConnected == false)
             {
                 var result = DevicesController.DMM.Connect();
@@ -272,39 +298,79 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     return result;
                 }
             }
+            foreach(var item in Tray.NgInfos)
+            {
+                var result = TestOneBattery(item);
+                if(result.IsFailed)
+                {
+                    return result;
+                }
+            }
+            return OperateResult.CreateSuccessResult();
+            //LogHelper.UiLog.Info("读取电压");
+            //var read1 = DevicesController.DMM.ReadDc();
+            //if (read1.IsFailed)
+            //{
+            //    return OperateResult.CreateFailedResult(read1.Message ?? "读取电压失败", read1.ErrorCode);
+            //}
+            //Battery.PVolValue = read1.Content;
+            //Battery.TestTime = DateTime.Now;
+            //return OperateResult.CreateSuccessResult();
+        }
+        private OperateResult TestOneBattery(NgInfo ngInfo)
+        {
+            var battery = ngInfo.Battery;
+            LogHelper.UiLog.Info($"开始测试电池{battery.Position}");
+            if (battery.IsTested && !ngInfo.IsNg) 
+            {
+                return OperateResult.CreateSuccessResult();
+            }
+            if(battery.Position<=20)
+            {
+                //ToDo:确定通道是否正确;
+                int[] channels = new int[] { battery.Position, 22, 24 };
+                DevicesController.SwitchBoard.OpenChannels(1, channels);
+            }
+            else
+            {
+                int[] channels = new int[] { battery.Position - 20, 22, 24 };
+                DevicesController.SwitchBoard.OpenChannels(2, channels);
+            }
             LogHelper.UiLog.Info("读取电压");
             var read1 = DevicesController.DMM.ReadDc();
             if (read1.IsFailed)
             {
                 return OperateResult.CreateFailedResult(read1.Message ?? "读取电压失败", read1.ErrorCode);
             }
-            Battery.PVolValue = read1.Content;
-            Battery.TestTime = DateTime.Now;
+            battery.PVolValue = read1.Content;
+            battery.IsTested = true;
+            battery.TestTime = DateTime.Now;
             return OperateResult.CreateSuccessResult();
         }
         private void ValidateNgResult()
         {
-            if (Battery.PVolValue > BatteryNgCriteria.MaxPVol)
+            foreach (var ngInfo in Tray.NgInfos)
             {
-                NgInfo.NgDescription = "电压过高";
-                NgInfo.IsNg = true;
-            }
-            else if (Battery.PVolValue < BatteryNgCriteria.MinPVol)
-            {
-                NgInfo.NgDescription = "电压过低";
-                NgInfo.IsNg = true;
-            }
-            else
-            {
-                NgInfo.NgDescription = string.Empty;
-                NgInfo.IsNg = false;
+                if (ngInfo.Battery.PVolValue > BatteryNgCriteria.MaxPVol)
+                {
+                    ngInfo.NgDescription = "电压过高";
+                    ngInfo.IsNg = true;
+                }
+                else if (ngInfo.Battery.PVolValue < BatteryNgCriteria.MinPVol)
+                {
+                    ngInfo.NgDescription = "电压过低";
+                    ngInfo.IsNg = true;
+                }
+                else
+                {
+                    ngInfo.NgDescription = string.Empty;
+                    ngInfo.IsNg = false;
+                }
             }
         }
         private OperateResult InitWork()
         {
-            NgInfo.Battery = new Battery();
-            NgInfo.NgDescription = string.Empty;
-            NgInfo.IsNg = false;
+            Tray.NgInfos = new System.Collections.ObjectModel.ObservableCollection<NgInfo>();
             LogHelper.UiLog.Info("写入本地Plc[Send_1] = 0");
             var write1 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_1"], (short)0);
             if (write1.IsFailed)
@@ -326,5 +392,4 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             return OperateResult.CreateSuccessResult();
         }
     }
-*/
 }

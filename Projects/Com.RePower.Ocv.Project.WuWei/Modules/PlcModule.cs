@@ -37,23 +37,23 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                         }
                     }
                 }
-                var logisticsPlcSettingObj = settingContext.SettingItems.First(x => x.SettingName == "物流Plc");
-                if (logisticsPlcSettingObj != null)
-                {
-                    var logisticsPlcSettingJson = logisticsPlcSettingObj.JsonValue;
-                    if (!string.IsNullOrEmpty(logisticsPlcSettingJson))
-                    {
-                        var obj = JsonConvert.DeserializeObject<Siemens_S1500Impl>(logisticsPlcSettingJson);
-                        if (obj != null)
-                        {
-                            builder.RegisterInstance<Siemens_S1500Impl>(obj)
-                                .AsSelf()
-                                .As<IPlc>()
-                                .As<IDevice>()
-                                .Keyed<IPlc>(PlcDeviceEnum.LogisticsPlc);
-                        }
-                    }
-                }
+                //var logisticsPlcSettingObj = settingContext.SettingItems.First(x => x.SettingName == "物流Plc");
+                //if (logisticsPlcSettingObj != null)
+                //{
+                //    var logisticsPlcSettingJson = logisticsPlcSettingObj.JsonValue;
+                //    if (!string.IsNullOrEmpty(logisticsPlcSettingJson))
+                //    {
+                //        var obj = JsonConvert.DeserializeObject<Siemens_S1500Impl>(logisticsPlcSettingJson);
+                //        if (obj != null)
+                //        {
+                //            builder.RegisterInstance<Siemens_S1500Impl>(obj)
+                //                .AsSelf()
+                //                .As<IPlc>()
+                //                .As<IDevice>()
+                //                .Keyed<IPlc>(PlcDeviceEnum.LogisticsPlc);
+                //        }
+                //    }
+                //}
             }
             builder.RegisterDecorator<PlcDecorator, IPlc>();
         }

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Project.WuWei.Controllers
 {
+    /*
     public partial class MainWork : ObservableObject,IProjectMainWork
     {
         private int _workStatus;
@@ -330,5 +331,5 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             }
             return OperateResult.CreateSuccessResult();
         }
-    }
+    }*/
 }
