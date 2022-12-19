@@ -3,7 +3,6 @@ using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.WuWei.Model;
 using Com.RePower.WpfBase;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,19 +11,20 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Project.WuWei.Controllers
 {
-    public partial class MainWork : ObservableObject,IProjectMainWork
+    /*
+    public partial class MainWorkFixed : ObservableObject, IProjectMainWork
     {
         private int _workStatus;
 
-        public MainWork(DevicesController devicesController
-            ,FlowController flowController
-            ,NgInfo ngInfo
-            ,BatteryNgCriteria batteryNgCriteria
-            ,TestOption testOption)
+        public MainWorkFixed(DevicesController devicesController
+            , FlowController flowController
+            , Tray tray
+            , BatteryNgCriteria batteryNgCriteria
+            , TestOption testOption)
         {
             DevicesController = devicesController;
             FlowController = flowController;
-            NgInfo = ngInfo;
+            Tray = tray;
             BatteryNgCriteria = batteryNgCriteria;
             TestOption = testOption;
         }
@@ -32,22 +32,17 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         public int WorkStatus
         {
             get { return _workStatus; }
-            set { SetProperty(ref _workStatus,value); }
+            set { SetProperty(ref _workStatus, value); }
         }
 
         public DevicesController DevicesController { get; }
         public FlowController FlowController { get; }
-        public NgInfo NgInfo { get; }
+        public Tray Tray { get; }
         public BatteryNgCriteria BatteryNgCriteria { get; }
         public TestOption TestOption { get; }
         public bool IsDoUploadToMes
         {
             get { return TestOption.IsDoUploadToMes; }
-        }
-
-        public Battery Battery 
-        {
-            get { return NgInfo.Battery; } 
         }
 
         /// <summary>
@@ -75,7 +70,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         }
         public CancellationToken CancelToken
         {
-            get { return FlowController.CancelToken;} 
+            get { return FlowController.CancelToken; }
         }
 
         public async void PauseWorkAsync()
@@ -93,33 +88,33 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             {
                 WorkStatus = 1;
                 await Task.Run(() =>
+                {
+                    try
                     {
-                        try
+                        var result = DoWork();
+                        if (result.IsFailed)
                         {
-                            var result = DoWork();
-                            if(result.IsFailed)
-                            {
-                                LogHelper.UiLog.Warn(result.Message);
-                            }
+                            LogHelper.UiLog.Warn(result.Message);
                         }
-                        catch (Exception e)
+                    }
+                    catch (Exception e)
+                    {
+                        if (e.GetType() == typeof(OperationCanceledException))
                         {
-                            if(e.GetType() == typeof(OperationCanceledException))
-                            {
-                                FlowController.CancelTokenSource = new CancellationTokenSource();
-                            }
-                            else
-                            {
-                                LogHelper.UiLog.Error(e.Message);
-                            }
+                            FlowController.CancelTokenSource = new CancellationTokenSource();
                         }
-                        finally
+                        else
                         {
-                            WorkStatus = 0;
+                            LogHelper.UiLog.Error(e.Message);
                         }
-                    }); 
+                    }
+                    finally
+                    {
+                        WorkStatus = 0;
+                    }
+                });
             }
-            else if(WorkStatus == 2)
+            else if (WorkStatus == 2)
             {
                 WorkStatus = 1;
                 ResetEvent.Reset();
@@ -137,7 +132,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
 
         private OperateResult DoWork()
         {
-            while(true)
+            while (true)
             {
                 #region 初始化Plc
                 var init1 = InitWork();
@@ -146,7 +141,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     return init1;
                 }
                 CancelToken.ThrowIfCancellationRequested();
-                ResetEvent.WaitOne(); 
+                ResetEvent.WaitOne();
                 #endregion
                 #region 等待测试准备信号
                 LogHelper.UiLog.Info("等待本地Plc[Read_1] = 1");
@@ -154,7 +149,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 if (wait1.IsFailed)
                 {
                     return OperateResult.CreateFailedResult(wait1.Message ?? "等待本地Plc[Read_1] = 1失败", wait1.ErrorCode);
-                } 
+                }
                 #endregion
                 #region 读取托盘条码
                 bool validateResult = false;
@@ -272,14 +267,14 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             if (DevicesController.DMM.IsConnected == false)
             {
                 var result = DevicesController.DMM.Connect();
-                if(result.IsFailed)
+                if (result.IsFailed)
                 {
                     return result;
                 }
             }
             LogHelper.UiLog.Info("读取电压");
             var read1 = DevicesController.DMM.ReadDc();
-            if(read1.IsFailed)
+            if (read1.IsFailed)
             {
                 return OperateResult.CreateFailedResult(read1.Message ?? "读取电压失败", read1.ErrorCode);
             }
@@ -289,12 +284,12 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         }
         private void ValidateNgResult()
         {
-            if(Battery.PVolValue>BatteryNgCriteria.MaxPVol)
+            if (Battery.PVolValue > BatteryNgCriteria.MaxPVol)
             {
                 NgInfo.NgDescription = "电压过高";
                 NgInfo.IsNg = true;
             }
-            else if(Battery.PVolValue<BatteryNgCriteria.MinPVol)
+            else if (Battery.PVolValue < BatteryNgCriteria.MinPVol)
             {
                 NgInfo.NgDescription = "电压过低";
                 NgInfo.IsNg = true;
@@ -302,7 +297,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             else
             {
                 NgInfo.NgDescription = string.Empty;
-                NgInfo.IsNg= false;
+                NgInfo.IsNg = false;
             }
         }
         private OperateResult InitWork()
@@ -331,4 +326,5 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             return OperateResult.CreateSuccessResult();
         }
     }
+*/
 }

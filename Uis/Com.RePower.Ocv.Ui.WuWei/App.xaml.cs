@@ -4,6 +4,7 @@ using Com.RePower.DeviceBase.Plc;
 using Com.RePower.Ocv.Model;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project;
+using Com.RePower.Ocv.Project.WuWei.Controllers;
 using Com.RePower.Ocv.Project.WuWei.Modules;
 using Com.RePower.Ocv.Ui.WuWei.ViewModels;
 using Com.RePower.Ocv.Ui.WuWei.Views;
@@ -54,7 +55,7 @@ namespace Com.RePower.Ocv.Ui.WuWei
                                 Application.Current.Dispatcher.Invoke(() =>
                                 UiLogViewModel.LogSource.Add(e));
                             }
-                        })); 
+                        }));
                 #endregion
             }
             catch (Exception err)
@@ -76,6 +77,9 @@ namespace Com.RePower.Ocv.Ui.WuWei
             builder.RegisterModule<WorkModule>();
             builder.RegisterModule<FlowControllerModule>();
             builder.RegisterModule<NgInfoModule>();
+            //builder.RegisterModule<TrayModule>();
+            builder.RegisterModule<SwitchBoardModul>();
+            builder.RegisterModule<TestOptionModule>();
             builder.RegisterModule<BatteryNgCriteriaModule>();
         }
     }

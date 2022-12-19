@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <Reference Include="HslCommunication">
-      <HintPath>Libs\HslCommunication.dll</HintPath>
+      <HintPath>..\..\Com.RePower.Device.Plc\Libs\HslCommunication.dll</HintPath>
     </Reference>
   </ItemGroup>
 

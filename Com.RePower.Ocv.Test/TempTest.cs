@@ -1,4 +1,5 @@
-﻿using HslCommunication.Profinet.Inovance;
+﻿using HslCommunication;
+using HslCommunication.Profinet.Inovance;
 using Xunit.Abstractions;
 
 namespace Com.RePower.Ocv.Test
@@ -13,8 +14,8 @@ namespace Com.RePower.Ocv.Test
         [Fact]
         public void PraseInovanceAMAddressTest()
         {
-            var result = InovanceHelper.PraseInovanceAMAddress("MB100.0", 16);
-            OutputHelper.WriteLine(result.Content);
+            int[] a = { 1, 2, 3, };
+            OutputHelper.WriteLine(a.ToArrayString());
         }
     }
 }

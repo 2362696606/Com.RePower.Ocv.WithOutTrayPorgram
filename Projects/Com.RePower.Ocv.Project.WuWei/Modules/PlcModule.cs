@@ -3,6 +3,7 @@ using Com.RePower.Device.Plc.Impl;
 using Com.RePower.DeviceBase;
 using Com.RePower.DeviceBase.Plc;
 using Com.RePower.Ocv.Model.DataBaseContext;
+using Com.RePower.Ocv.Project.WuWei.Decorators;
 using Com.RePower.Ocv.Project.WuWei.Enum;
 using Newtonsoft.Json;
 using System;
@@ -54,6 +55,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                     }
                 }
             }
+            builder.RegisterDecorator<PlcDecorator, IPlc>();
         }
     }
 }

@@ -20,5 +20,34 @@ namespace Com.RePower.DeviceBase.Extensions
             }
             return subAryList;
         }
+        public static string ArrayFormat<T>(T[] array, string format)
+        {
+            if (array == null)
+            {
+                return "NULL";
+            }
+
+            StringBuilder stringBuilder = new StringBuilder("[");
+            for (int i = 0; i < array.Length; i++)
+            {
+                stringBuilder.Append(string.IsNullOrEmpty(format) ? array[i]!.ToString() : string.Format(format, array[i]));
+                if (i != array.Length - 1)
+                {
+                    stringBuilder.Append(",");
+                }
+            }
+
+            stringBuilder.Append("]");
+            return stringBuilder.ToString();
+        }
+
+        public static string ArrayFormat<T>(T[] array)
+        {
+            return ArrayFormat(array, string.Empty);
+        }
+        public static string ToArrayString<T>(this T[] value)
+        {
+            return ArrayFormat(value);
+        }
     }
 }

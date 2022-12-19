@@ -1,6 +1,7 @@
 ﻿using Autofac.Features.AttributeFilters;
 using Com.RePower.DeviceBase.DMM;
 using Com.RePower.DeviceBase.Plc;
+using Com.RePower.DeviceBase.SwitchBoard;
 using Com.RePower.Ocv.Project.WuWei.Enum;
 using System;
 using System.Collections.Generic;
@@ -12,11 +13,15 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
 {
     public class DevicesController
     {
-        public DevicesController([KeyFilter(PlcDeviceEnum.LocalPlc)]IPlc localPlc, [KeyFilter(PlcDeviceEnum.LogisticsPlc)]IPlc logisticsPlc,IDMM dMM)
+        public DevicesController([KeyFilter(PlcDeviceEnum.LocalPlc)]IPlc localPlc
+            , [KeyFilter(PlcDeviceEnum.LogisticsPlc)]IPlc logisticsPlc
+            ,IDMM dMM
+            ,ISwitchBoard switchBoard)
         {
             LocalPlc = localPlc;
             LogisticsPlc = logisticsPlc;
             DMM = dMM;
+            SwitchBoard = switchBoard;
             this.LocalPlcAddressCache = new Dictionary<string, string>();
             this.LogisticsPlcAddressCache = new Dictionary<string, string>();
         }
@@ -32,6 +37,8 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// 万用表
         /// </summary>
         public IDMM DMM { get; }
+        public ISwitchBoard SwitchBoard { get; }
+
         /// <summary>
         /// Plc地址映射字典
         /// </summary>

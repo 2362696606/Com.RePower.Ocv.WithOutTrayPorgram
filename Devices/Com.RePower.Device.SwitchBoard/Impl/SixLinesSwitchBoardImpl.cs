@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Device.SwitchBoard.Impl
 {
-    public class NomalSwitchBoard : SwitchBoardAbstract
+    public class SixLinesSwitchBoardImpl : SwitchBoardAbstract
     {
         public override OperateResult CloseAllChannels(int boardIndex)
         {
