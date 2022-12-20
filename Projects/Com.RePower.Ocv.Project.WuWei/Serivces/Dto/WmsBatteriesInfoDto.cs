@@ -14,7 +14,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Serivces.Dto
     }
     public class PileContent
     {
-        public string PilletBarcode { get; set; } = string.Empty;
+        public string PalletBarcode { get; set; } = string.Empty;
         public string FileName { get; set; } = string.Empty;
         public string BatteryType { get; set; } = string.Empty;
         public List<OneBattery> Batterys { get; set; } = new List<OneBattery>();

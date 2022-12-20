@@ -5,11 +5,13 @@ using Com.RePower.Ocv.Project.WuWei.Serivces;
 using Com.RePower.Ocv.Project.WuWei.Serivces.Dto;
 using Com.RePower.WpfBase;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Project.WuWei.Controllers
@@ -167,6 +169,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     return OperateResult.CreateFailedResult(read1.Message ?? "读取物流Plc[托盘条码]失败", read1.ErrorCode);
                 }
                 trayCode = read1.Content ?? string.Empty;
+                trayCode = Regex.Match(read1.Content ?? string.Empty, @"[0-9\.a-zA-Z_-]+").Value;
                 Tray.TrayCode = trayCode;
                 validateResult = ValidateBatteryCode(trayCode);
                 if (!validateResult)
@@ -195,17 +198,20 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 {
                     return OperateResult.CreateFailedResult($"请求电芯条码失败，主体为null");
                 }
-                if (resultObj.PileContent.PilletBarcode != Tray.TrayCode)
+                if (resultObj.PileContent.PalletBarcode != Tray.TrayCode)
                 {
-                    return OperateResult.CreateFailedResult($"请求电芯条码失败，WMS返回托盘条码{resultObj.PileContent.PilletBarcode}与本地托盘条码{Tray.TrayCode}不一致");
+                    return OperateResult.CreateFailedResult($"请求电芯条码失败，WMS返回托盘条码{resultObj.PileContent.PalletBarcode}与本地托盘条码{Tray.TrayCode}不一致");
                 }
+                var tempNgInfos = new System.Collections.ObjectModel.ObservableCollection<NgInfo>();
                 foreach (var item in resultObj.PileContent.Batterys)
                 {
                     NgInfo ngInfo = new NgInfo();
                     ngInfo.Battery.BarCode = item.BatteryBarcode;
                     ngInfo.Battery.Position = item.PalletIndex;
-                    Tray.NgInfos.Add(ngInfo);
-                } 
+                    ngInfo.Battery.BatteryType = resultObj.PileContent.BatteryType == "102" ? 1 : 0;
+                    tempNgInfos.Add(ngInfo);
+                }
+                Tray.NgInfos = tempNgInfos;
                 #endregion
                 LogHelper.UiLog.Info("写入本地Plc[Send_1] = 1");
                 var write2 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_1"], (short)1);
@@ -325,16 +331,21 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             {
                 return OperateResult.CreateSuccessResult();
             }
+            OperateResult openResult;
             if(battery.Position<=20)
             {
                 //ToDo:确定通道是否正确;
-                int[] channels = new int[] { battery.Position, 22, 24 };
-                DevicesController.SwitchBoard.OpenChannels(1, channels);
+                int[] channels = new int[] { battery.Position, 21, 23 };
+                openResult = DevicesController.SwitchBoard.OpenChannels(1, channels);
             }
             else
             {
-                int[] channels = new int[] { battery.Position - 20, 22, 24 };
-                DevicesController.SwitchBoard.OpenChannels(2, channels);
+                int[] channels = new int[] { battery.Position - 20, 21, 23 };
+                openResult = DevicesController.SwitchBoard.OpenChannels(2, channels);
+            }
+            if(openResult.IsFailed)
+            {
+                return openResult;
             }
             LogHelper.UiLog.Info("读取电压");
             var read1 = DevicesController.DMM.ReadDc();

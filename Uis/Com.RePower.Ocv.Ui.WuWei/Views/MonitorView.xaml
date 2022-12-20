@@ -13,11 +13,11 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition />
-                <RowDefinition />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <DataGrid
                 CanUserAddRows="False"
-                IsReadOnly="False"
+                IsReadOnly="True"
                 ItemsSource="{Binding LocalPlcCacheValues}" />
             <!--<DataGrid
                 Grid.Row="1"
