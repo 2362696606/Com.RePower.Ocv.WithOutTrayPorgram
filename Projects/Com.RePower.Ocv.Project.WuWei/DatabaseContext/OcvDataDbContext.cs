@@ -2,6 +2,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using Com.RePower.Ocv.Model.DataBaseContext;
 using Com.RePower.Ocv.Project.WuWei.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,18 +21,30 @@ public partial class OcvDataDbContext : DbContext
 
     public virtual DbSet<RnDbDcir> RnDbDcir { get; set; }
 
-    public virtual DbSet<RnDbOcv1> RnDbOcv1 { get; set; }
+    public virtual DbSet<RnDbOcv> RnDbOcv0 { get; set; }
 
-    public virtual DbSet<RnDbOcv2> RnDbOcv2 { get; set; }
+    public virtual DbSet<RnDbOcv> RnDbOcv1 { get; set; }
 
-    public virtual DbSet<RnDbOcv3> RnDbOcv3 { get; set; }
+    public virtual DbSet<RnDbOcv> RnDbOcv2 { get; set; }
 
-    public virtual DbSet<RnDbOcv4> RnDbOcv4 { get; set; }
+    public virtual DbSet<RnDbOcv> RnDbOcv3 { get; set; }
 
-    public virtual DbSet<RnDbOcv5> RnDbOcv5 { get; set; }
+    public virtual DbSet<RnDbOcv> RnDbOcv4 { get; set; }
+
+    public virtual DbSet<RnDbOcv> RnDbOcv5 { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Data Source=localHost;Initial Catalog=OcvData;User ID=sa;Password=0528");
+    {
+        string connectString = string.Empty;
+        using (var settingContext = new OcvSettingDbContext())
+        {
+            var item = settingContext.SettingItems.First(x => x.SettingName == "MES数据库连接字符串");
+            connectString = item.JsonValue;
+        }
+        optionsBuilder.UseSqlServer(connectString);
+        optionsBuilder.UseLazyLoadingProxies();
+        base.OnConfiguring(optionsBuilder);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -115,7 +128,7 @@ public partial class OcvDataDbContext : DbContext
                 .HasColumnName("TRAY_ID");
         });
 
-        modelBuilder.Entity<RnDbOcv1>(entity =>
+        modelBuilder.Entity<RnDbOcv>(entity =>
         {
             entity.ToTable("rn_db_ocv1");
 
@@ -260,7 +273,7 @@ public partial class OcvDataDbContext : DbContext
                 .HasColumnName("V_DROP_RESULT_DESC");
         });
 
-        modelBuilder.Entity<RnDbOcv2>(entity =>
+        modelBuilder.Entity<RnDbOcv>(entity =>
         {
             entity.ToTable("rn_db_ocv2");
 
@@ -405,7 +418,7 @@ public partial class OcvDataDbContext : DbContext
                 .HasColumnName("V_DROP_RESULT_DESC");
         });
 
-        modelBuilder.Entity<RnDbOcv3>(entity =>
+        modelBuilder.Entity<RnDbOcv>(entity =>
         {
             entity.ToTable("rn_db_ocv3");
 
@@ -550,7 +563,7 @@ public partial class OcvDataDbContext : DbContext
                 .HasColumnName("V_DROP_RESULT_DESC");
         });
 
-        modelBuilder.Entity<RnDbOcv4>(entity =>
+        modelBuilder.Entity<RnDbOcv>(entity =>
         {
             entity.ToTable("rn_db_ocv4");
 
@@ -695,7 +708,7 @@ public partial class OcvDataDbContext : DbContext
                 .HasColumnName("V_DROP_RESULT_DESC");
         });
 
-        modelBuilder.Entity<RnDbOcv5>(entity =>
+        modelBuilder.Entity<RnDbOcv>(entity =>
         {
             entity.ToTable("rn_db_ocv5");
 

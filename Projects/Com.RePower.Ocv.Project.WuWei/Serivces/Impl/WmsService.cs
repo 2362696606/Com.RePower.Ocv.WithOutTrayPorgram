@@ -35,7 +35,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Serivces.Impl
             if(result.IsSuccessStatusCode)
             {
                 string strResult = result.Content.ReadAsStringAsync().Result;
-                LogHelper.WmsServiceLog.Info($"请求电芯条码，请求内容{jStr},返回{strResult}");
+                LogHelper.WmsServiceLog.Info($"请求电芯条码，请求地址{result.RequestMessage?.RequestUri}，请求内容{jStr},返回{strResult}");
                 if(string.IsNullOrEmpty(strResult))
                 {
                     return OperateResult.CreateFailedResult<string>("请求电芯条码失败，返回为空或null");
