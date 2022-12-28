@@ -20,5 +20,9 @@ namespace Com.RePower.Ocv.Project.WuWei.Model
         /// 是否上传结果到mes
         /// </summary>
         public bool IsDoUploadToMes { get; set; }
+        /// <summary>
+        /// Ocv类型
+        /// </summary>
+        public string OcvType { get; set; } = "OCV3";
     }
 }

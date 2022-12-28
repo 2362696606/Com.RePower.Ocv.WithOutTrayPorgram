@@ -1,0 +1,1 @@
+"ID"	"Eqp_ID"	"PC_ID"	"OPERATION"	"IS_TRANS"	"TRAY_ID"	"CELL_ID"	"BATTERY_POS"	"MODEL_NO"	"OpenVoltage"	"D_DCIR"	"C_DCIR"	"TC_D_DCIR"	"TC_C_DCIR"	"D_EndVoltage"	"C_EndVoltage"	"D_EndCurrent"	"C_EndCurrent"	"D_DCIR_Delta"	"NG_CODE"	"AnodeTemp"	"CathodeTemp"	"Max_AnodeTemp"	"Max_CathodeTemp"	"END_DATE_TIME"

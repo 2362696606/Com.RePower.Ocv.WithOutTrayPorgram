@@ -7,7 +7,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="clr-namespace:Com.RePower.Ocv.Ui.WuWei.Views"
-    Title="MainWindow"
+    Title="瑞能OCV"
     Width="1920"
     Height="1080"
     WindowState="Maximized"
@@ -42,10 +42,10 @@
                 </Grid.ColumnDefinitions>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="0.4*" />
                         <RowDefinition Height="0.6*" />
+                        <RowDefinition Height="0.4*" />
                     </Grid.RowDefinitions>
-                    <views:BatteryView />
+                    <views:TrayView />
                     <views:MonitorView Grid.Row="1" />
                 </Grid>
                 <Grid Grid.Column="1">

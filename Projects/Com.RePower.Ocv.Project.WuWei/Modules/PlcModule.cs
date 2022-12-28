@@ -27,7 +27,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                     if(!string.IsNullOrEmpty(localPlcSettingJson))
                     {
                         var obj = JsonConvert.DeserializeObject<InovanceTcpNetPlcImpl>(localPlcSettingJson);
-                        if(obj!=null)
+                        if (obj != null)
                         {
                             builder.RegisterInstance<InovanceTcpNetPlcImpl>(obj)
                                 .AsSelf()
@@ -35,25 +35,34 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                                 .As<IDevice>()
                                 .Keyed<IPlc>(PlcDeviceEnum.LocalPlc);
                         }
+                        //var obj = JsonConvert.DeserializeObject<PlcNetSimulator>(localPlcSettingJson);
+                        //if (obj != null)
+                        //{
+                        //    builder.RegisterInstance<PlcNetSimulator>(obj)
+                        //        .AsSelf()
+                        //        .As<IPlc>()
+                        //        .As<IDevice>()
+                        //        .Keyed<IPlc>(PlcDeviceEnum.LocalPlc);
+                        //}
                     }
                 }
-                var logisticsPlcSettingObj = settingContext.SettingItems.First(x => x.SettingName == "物流Plc");
-                if (logisticsPlcSettingObj != null)
-                {
-                    var logisticsPlcSettingJson = logisticsPlcSettingObj.JsonValue;
-                    if (!string.IsNullOrEmpty(logisticsPlcSettingJson))
-                    {
-                        var obj = JsonConvert.DeserializeObject<Siemens_S1500Impl>(logisticsPlcSettingJson);
-                        if (obj != null)
-                        {
-                            builder.RegisterInstance<Siemens_S1500Impl>(obj)
-                                .AsSelf()
-                                .As<IPlc>()
-                                .As<IDevice>()
-                                .Keyed<IPlc>(PlcDeviceEnum.LogisticsPlc);
-                        }
-                    }
-                }
+                //var logisticsPlcSettingObj = settingContext.SettingItems.First(x => x.SettingName == "物流Plc");
+                //if (logisticsPlcSettingObj != null)
+                //{
+                //    var logisticsPlcSettingJson = logisticsPlcSettingObj.JsonValue;
+                //    if (!string.IsNullOrEmpty(logisticsPlcSettingJson))
+                //    {
+                //        var obj = JsonConvert.DeserializeObject<Siemens_S1500Impl>(logisticsPlcSettingJson);
+                //        if (obj != null)
+                //        {
+                //            builder.RegisterInstance<Siemens_S1500Impl>(obj)
+                //                .AsSelf()
+                //                .As<IPlc>()
+                //                .As<IDevice>()
+                //                .Keyed<IPlc>(PlcDeviceEnum.LogisticsPlc);
+                //        }
+                //    }
+                //}
             }
             builder.RegisterDecorator<PlcDecorator, IPlc>();
         }

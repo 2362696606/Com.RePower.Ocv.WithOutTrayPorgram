@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using Com.RePower.DeviceBase.Plc;
 using Com.RePower.Ocv.Model;
@@ -37,6 +38,7 @@ namespace Com.RePower.Ocv.Ui.WuWei
             {
                 #region 初始化IOC容器
                 var serviceCollection = new ServiceCollection();
+                serviceCollection.AddHttpClient();
                 var autofacServiceProviderFactory = new AutofacServiceProviderFactory();
                 var builder = autofacServiceProviderFactory.CreateBuilder(serviceCollection);
                 IocRegister(builder);
@@ -48,12 +50,14 @@ namespace Com.RePower.Ocv.Ui.WuWei
                         {
                             if (UiLogViewModel.LogSource.Count <= 0 || UiLogViewModel.LogSource.Last().RenderedMessage != e.RenderedMessage)
                             {
-                                if (UiLogViewModel.LogSource.Count > 999)
+                                Application.Current.Dispatcher.Invoke(() => 
                                 {
-                                    UiLogViewModel.LogSource.RemoveAt(0);
-                                }
-                                Application.Current.Dispatcher.Invoke(() =>
-                                UiLogViewModel.LogSource.Add(e));
+                                    if (UiLogViewModel.LogSource.Count > 999)
+                                    {
+                                        UiLogViewModel.LogSource.RemoveAt(0);
+                                    }
+                                    UiLogViewModel.LogSource.Add(e);
+                                });
                             }
                         }));
                 #endregion
@@ -76,11 +80,13 @@ namespace Com.RePower.Ocv.Ui.WuWei
             builder.RegisterModule<PlcModule>();
             builder.RegisterModule<WorkModule>();
             builder.RegisterModule<FlowControllerModule>();
-            builder.RegisterModule<NgInfoModule>();
-            //builder.RegisterModule<TrayModule>();
+            //builder.RegisterModule<NgInfoModule>();
+            builder.RegisterModule<TrayModule>();
             builder.RegisterModule<SwitchBoardModul>();
             builder.RegisterModule<TestOptionModule>();
             builder.RegisterModule<BatteryNgCriteriaModule>();
+            builder.RegisterModule<ProjectModule>();
+            builder.RegisterModule<WmsModule>();
         }
     }
 }

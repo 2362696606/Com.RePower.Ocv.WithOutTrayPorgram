@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Project.WuWei.Controllers
 {
+    /*
     public partial class MainWork : ObservableObject,IProjectMainWork
     {
         private int _workStatus;
@@ -50,16 +51,16 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             get { return NgInfo.Battery; } 
         }
 
-        /// <summary>
-        /// 是否复测
-        /// </summary>
+        / <summary>
+        / 是否复测
+        / </summary>
         public bool IsDoRetest
         {
             get { return TestOption.IsDoRetest; }
         }
-        /// <summary>
-        /// 复测次数
-        /// </summary>
+        / <summary>
+        / 复测次数
+        / </summary>
         public int RetestTimes
         {
             get { return TestOption.RetestTimes; }
@@ -211,7 +212,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     {
                         return OperateResult.CreateFailedResult(wait3.Message ?? "等待本地Plc[Read_1] = 2失败", wait3.ErrorCode);
                     }
-                    //测试电池
+                    测试电池
                     var test1 = TestBattery();
                     if (test1.IsFailed)
                     {
@@ -223,7 +224,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     {
                         return OperateResult.CreateFailedResult(write3.Message ?? "写入本地Plc[Send_1] = 2失败", write3.ErrorCode);
                     }
-                    //验证ng结果
+                    验证ng结果
                     ValidateNgResult();
                     if (NgInfo.IsNg && IsDoRetest && reReadTimes < RetestTimes)
                     {
@@ -330,5 +331,5 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             }
             return OperateResult.CreateSuccessResult();
         }
-    }
+    }*/
 }

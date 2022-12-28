@@ -45,6 +45,14 @@ namespace Com.RePower.Ocv.Model.Dto
         /// </summary>
         public double NTemp { get; set; }
         /// <summary>
+        /// K值
+        /// </summary>
+        public double KValue { get; set; }
+        /// <summary>
+        /// 电池类型
+        /// </summary>
+        public int BatteryType { get; set; }
+        /// <summary>
         /// 测试时间
         /// </summary>
         public DateTime TestTime { get; set; }

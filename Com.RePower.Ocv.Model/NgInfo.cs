@@ -20,7 +20,7 @@ namespace Com.RePower.Ocv.Model
         [ObservableProperty]
         private string _ngDescription = string.Empty;
         /// <summary>
-        /// 是否ng
+        /// 是否ng true为ng，false为非ng
         /// </summary>
         [ObservableProperty]
         private bool _isNg = false;
