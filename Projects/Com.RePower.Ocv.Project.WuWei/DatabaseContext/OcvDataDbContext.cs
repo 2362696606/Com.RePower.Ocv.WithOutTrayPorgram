@@ -128,12 +128,8 @@ public partial class OcvDataDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("TRAY_ID");
         });
-<<<<<<< HEAD
         #endregion
         #region
-=======
-
->>>>>>> c2a4f75c91e95df1589ceddac95690adb12970ec
         modelBuilder.Entity<RnDbOcv>(entity =>
         {
             entity.ToTable("rn_db_ocv1");

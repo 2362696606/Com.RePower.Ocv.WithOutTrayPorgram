@@ -3,7 +3,6 @@ using Com.RePower.Ocv.Model;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.WuWei.DataBaseContext;
 using Com.RePower.Ocv.Project.WuWei.Model;
-<<<<<<< HEAD
 using Com.RePower.Ocv.Project.WuWei.Models;
 using Com.RePower.Ocv.Project.WuWei.Serivces;
 using Com.RePower.Ocv.Project.WuWei.Serivces.Dto;
@@ -12,12 +11,6 @@ using Com.RePower.WpfBase;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design.Internal;
-=======
-using Com.RePower.Ocv.Project.WuWei.Serivces;
-using Com.RePower.Ocv.Project.WuWei.Serivces.Dto;
-using Com.RePower.WpfBase;
-using CommunityToolkit.Mvvm.ComponentModel;
->>>>>>> c2a4f75c91e95df1589ceddac95690adb12970ec
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using System;
@@ -204,34 +197,22 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 var resultObj = JsonConvert.DeserializeObject<WmsBatteriesInfoDto>(content);
                 if (resultObj == null)
                 {
-<<<<<<< HEAD
                     SetAlarm();
-=======
->>>>>>> c2a4f75c91e95df1589ceddac95690adb12970ec
                     return OperateResult.CreateFailedResult("请求电芯条码返回值为null");
                 }
                 if (resultObj.Result == 0)
                 {
-<<<<<<< HEAD
                     SetAlarm();
-=======
->>>>>>> c2a4f75c91e95df1589ceddac95690adb12970ec
                     return OperateResult.CreateSuccessResult($"请求电芯条码失败，原因是{resultObj.Message}");
                 }
                 if (resultObj.PileContent == null)
                 {
-<<<<<<< HEAD
                     SetAlarm();
-=======
->>>>>>> c2a4f75c91e95df1589ceddac95690adb12970ec
                     return OperateResult.CreateFailedResult($"请求电芯条码失败，主体为null");
                 }
                 if (resultObj.PileContent.PalletBarcode != Tray.TrayCode)
                 {
-<<<<<<< HEAD
                     SetAlarm();
-=======
->>>>>>> c2a4f75c91e95df1589ceddac95690adb12970ec
                     return OperateResult.CreateFailedResult($"请求电芯条码失败，WMS返回托盘条码{resultObj.PileContent.PalletBarcode}与本地托盘条码{Tray.TrayCode}不一致");
                 }
                 var tempNgInfos = new System.Collections.ObjectModel.ObservableCollection<NgInfo>();
@@ -243,10 +224,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     ngInfo.Battery.BatteryType = resultObj.PileContent.BatteryType == "102" ? 1 : 0;
                     tempNgInfos.Add(ngInfo);
                 }
-<<<<<<< HEAD
                 
-=======
->>>>>>> c2a4f75c91e95df1589ceddac95690adb12970ec
                 Tray.NgInfos = tempNgInfos;
                 #endregion
                 LogHelper.UiLog.Info("写入本地Plc[Send_1] = 1");
@@ -280,11 +258,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     }
                     //验证ng结果
                     ValidateNgResult();
-<<<<<<< HEAD
-                    if (Tray.NgInfos.Any(x => x.IsNg) && IsDoRetest && reTestTimes < RetestTimes)
-=======
-                    if (Tray.NgInfos.Any(x=>x.IsNg) && IsDoRetest && reTestTimes < RetestTimes)
->>>>>>> c2a4f75c91e95df1589ceddac95690adb12970ec
+                    if (Tray.NgInfos.Any(x => x.IsNg) && IsDoRetest && reTestTimes < RetestTimes) 
                     {
                         LogHelper.UiLog.Info("写入本地Plc[Send_2] = 2");
                         var write4 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)2);
@@ -293,10 +267,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                             return OperateResult.CreateFailedResult(write4.Message ?? "写入本地Plc[Send_2] = 2失败", write4.ErrorCode);
                         }
                     }
-<<<<<<< HEAD
                     #region 注释
-=======
->>>>>>> c2a4f75c91e95df1589ceddac95690adb12970ec
                     //else if (Tray.NgInfos.Any(x => x.IsNg))
                     //{
                     //    LogHelper.UiLog.Info("写入本地Plc[Send_3] = 2");
@@ -307,10 +278,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     //    }
                     //    return OperateResult.CreateFailedResult("电芯异常，已停止测试");
                     //}
-<<<<<<< HEAD
                     #endregion
-=======
->>>>>>> c2a4f75c91e95df1589ceddac95690adb12970ec
                     else
                     {
                         if (IsDoUploadToMes)
@@ -375,17 +343,10 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     return result;
                 }
             }
-<<<<<<< HEAD
             foreach (var item in Tray.NgInfos)
             {
                 var result = TestOneBattery(item);
                 if (result.IsFailed)
-=======
-            foreach(var item in Tray.NgInfos)
-            {
-                var result = TestOneBattery(item);
-                if(result.IsFailed)
->>>>>>> c2a4f75c91e95df1589ceddac95690adb12970ec
                 {
                     return result;
                 }
@@ -403,7 +364,6 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         }
         private OperateResult TestOneBattery(NgInfo ngInfo)
         {
-<<<<<<< HEAD
             var closeResult = DevicesController.SwitchBoard.CloseAllChannels(1);
             if (closeResult.IsFailed)
             {
@@ -417,20 +377,11 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             var battery = ngInfo.Battery;
             LogHelper.UiLog.Info($"开始测试电池{battery.Position}");
             if (battery.IsTested && !ngInfo.IsNg)
-=======
-            var battery = ngInfo.Battery;
-            LogHelper.UiLog.Info($"开始测试电池{battery.Position}");
-            if (battery.IsTested && !ngInfo.IsNg) 
->>>>>>> c2a4f75c91e95df1589ceddac95690adb12970ec
             {
                 return OperateResult.CreateSuccessResult();
             }
             OperateResult openResult;
-<<<<<<< HEAD
             if (battery.Position <= 20)
-=======
-            if(battery.Position<=20)
->>>>>>> c2a4f75c91e95df1589ceddac95690adb12970ec
             {
                 //ToDo:确定通道是否正确;
                 int[] channels = new int[] { battery.Position, 21, 23 };
@@ -441,11 +392,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 int[] channels = new int[] { battery.Position - 20, 21, 23 };
                 openResult = DevicesController.SwitchBoard.OpenChannels(2, channels);
             }
-<<<<<<< HEAD
             if (openResult.IsFailed)
-=======
-            if(openResult.IsFailed)
->>>>>>> c2a4f75c91e95df1589ceddac95690adb12970ec
             {
                 return openResult;
             }
