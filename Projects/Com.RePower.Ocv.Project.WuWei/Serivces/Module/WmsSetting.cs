@@ -19,7 +19,11 @@ namespace Com.RePower.Ocv.Project.WuWei.Serivces.Module
         /// <summary>
         /// 基础地址
         /// </summary>
+<<<<<<< HEAD
         public string BaseAddress { get; set; } = "http://172.17.20.6:8082/swagger/index.html/api/MERequest"; //"https://da49d2a1-05ff-4fcd-b537-2f74d2290138.mock.pstmn.io";
+=======
+        public string BaseAddress { get; set; } = "https://da49d2a1-05ff-4fcd-b537-2f74d2290138.mock.pstmn.io";
+>>>>>>> c2a4f75c91e95df1589ceddac95690adb12970ec
         /// <summary>
         /// 工艺号
         /// </summary>

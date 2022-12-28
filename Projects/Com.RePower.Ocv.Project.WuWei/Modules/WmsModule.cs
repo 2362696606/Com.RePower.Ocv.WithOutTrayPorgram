@@ -29,6 +29,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                     {
                         builder.RegisterInstance<WmsSetting>(obj);
                     }
+<<<<<<< HEAD
                     builder.RegisterType<WmsService>()
                         .AsSelf()
                         .As<IWmsService>();
@@ -36,6 +37,21 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                     //    .AsSelf()
                     //    .As<IWmsService>();
 
+=======
+                    //var jObj = JToken.Parse(wmsJsonStr);
+                    //string getBatteryInfoUrl = jObj.Value<string>("GetBatteryInfoUrl") ??string.Empty;
+                    //string uploadTestResultUrl = jObj.Value<string>("UploadTestResultUrl") ??string.Empty;
+                    //string baseAddress = jObj.Value<string>("BaseAddress") ??string.Empty;
+                    //string equipmentCode = jObj.Value<string>("EquipmentCode") ??string.Empty;
+                    builder.RegisterType<WmsService>()
+                        .AsSelf()
+                        .As<IWmsService>();
+                        //.WithProperty("GetBatteryInfoUrl", getBatteryInfoUrl)
+                        //.WithProperty("UploadTestResultUrl", uploadTestResultUrl)
+                        //.WithProperty("BaseAddress", baseAddress)
+                        //.WithProperty("EquipmentCode", equipmentCode);
+                        
+>>>>>>> c2a4f75c91e95df1589ceddac95690adb12970ec
                 }
             }
         }
