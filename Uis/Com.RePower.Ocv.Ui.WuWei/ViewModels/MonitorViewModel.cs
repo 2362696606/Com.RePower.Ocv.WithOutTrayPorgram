@@ -21,11 +21,11 @@ namespace Com.RePower.Ocv.Ui.WuWei.ViewModels
         public MonitorViewModel()
         {
             this.LocalPlcCacheValues = new ObservableCollection<PlcCacheValue>();
-            this.LogisticsPlcCacheValues = new ObservableCollection<PlcCacheValue>();
+            //this.LogisticsPlcCacheValues = new ObservableCollection<PlcCacheValue>();
             InitCacheValues();
         }
         public ObservableCollection<PlcCacheValue> LocalPlcCacheValues { get; set; }
-        public ObservableCollection<PlcCacheValue> LogisticsPlcCacheValues{ get; set; }
+        //public ObservableCollection<PlcCacheValue> LogisticsPlcCacheValues{ get; set; }
         private async void InitCacheValues()
         {
             List<PlcCacheValue> tempLocal = new List<PlcCacheValue>();
@@ -52,33 +52,33 @@ namespace Com.RePower.Ocv.Ui.WuWei.ViewModels
                         }
                     }
 
-                    var logisticsPlcAddressCacheSettingObj = settingContext.SettingItems.First(x => x.SettingName == "物流Plc缓存");
-                    if (logisticsPlcAddressCacheSettingObj != null)
-                    {
-                        var logisticsPlcAddressCacheSettingJson = logisticsPlcAddressCacheSettingObj.JsonValue;
-                        if (!string.IsNullOrEmpty(logisticsPlcAddressCacheSettingJson))
-                        {
-                            JArray logisticsPlcAddressCacheSettingArray = JArray.Parse(logisticsPlcAddressCacheSettingJson);
-                            foreach (var item in logisticsPlcAddressCacheSettingArray)
-                            {
-                                var obj = item.ToObject<PlcCacheValue>();
-                                if(obj!=null)
-                                {
-                                    tempLogistics.Add(obj);
-                                }
-                            }
-                        }
-                    }
+                    //var logisticsPlcAddressCacheSettingObj = settingContext.SettingItems.First(x => x.SettingName == "物流Plc缓存");
+                    //if (logisticsPlcAddressCacheSettingObj != null)
+                    //{
+                    //    var logisticsPlcAddressCacheSettingJson = logisticsPlcAddressCacheSettingObj.JsonValue;
+                    //    if (!string.IsNullOrEmpty(logisticsPlcAddressCacheSettingJson))
+                    //    {
+                    //        JArray logisticsPlcAddressCacheSettingArray = JArray.Parse(logisticsPlcAddressCacheSettingJson);
+                    //        foreach (var item in logisticsPlcAddressCacheSettingArray)
+                    //        {
+                    //            var obj = item.ToObject<PlcCacheValue>();
+                    //            if(obj!=null)
+                    //            {
+                    //                tempLogistics.Add(obj);
+                    //            }
+                    //        }
+                    //    }
+                    //}
                 }
             });
             foreach(var item in tempLocal)
             {
                 LocalPlcCacheValues.Add(item);
             }
-            foreach(var item in tempLogistics)
-            {
-                LogisticsPlcCacheValues.Add(item);
-            }
+            //foreach(var item in tempLogistics)
+            //{
+            //    LogisticsPlcCacheValues.Add(item);
+            //}
             this.ShowWaitDialog = false;
         }
     }

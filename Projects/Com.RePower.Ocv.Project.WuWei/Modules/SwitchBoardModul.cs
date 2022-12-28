@@ -34,6 +34,14 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                                 .As<ISwitchBoard>()
                                 .As<IDevice>();
                         }
+                        //var obj = JsonConvert.DeserializeObject<SwitchBoardSimulator>(switchBoardSettingJson);
+                        //if (obj != null)
+                        //{
+                        //    builder.RegisterInstance<SwitchBoardSimulator>(obj)
+                        //        .AsSelf()
+                        //        .As<ISwitchBoard>()
+                        //        .As<IDevice>();
+                        //}
                     }
                 }
             }

@@ -41,29 +41,29 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                         }
                     }
                 }
-                var logisticsPlcAddressCacheSettingObj = settingContext.SettingItems.First(x => x.SettingName == "物流Plc缓存");
-                if (logisticsPlcAddressCacheSettingObj != null)
-                {
-                    var logisticsPlcAddressCacheSettingJson = logisticsPlcAddressCacheSettingObj.JsonValue;
-                    if (!string.IsNullOrEmpty(logisticsPlcAddressCacheSettingJson))
-                    {
-                        JArray logisticsPlcAddressCacheSettingArray = JArray.Parse(logisticsPlcAddressCacheSettingJson);
-                        foreach (var item in logisticsPlcAddressCacheSettingArray)
-                        {
-                            var name = item.Value<string>("Name");
-                            var address = item.Value<string>("Address");
-                            if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(address))
-                            {
-                                logisticsPlcAddressCache.Add(name, address);
-                            }
-                        }
-                    }
-                }
+                //var logisticsPlcAddressCacheSettingObj = settingContext.SettingItems.First(x => x.SettingName == "物流Plc缓存");
+                //if (logisticsPlcAddressCacheSettingObj != null)
+                //{
+                //    var logisticsPlcAddressCacheSettingJson = logisticsPlcAddressCacheSettingObj.JsonValue;
+                //    if (!string.IsNullOrEmpty(logisticsPlcAddressCacheSettingJson))
+                //    {
+                //        JArray logisticsPlcAddressCacheSettingArray = JArray.Parse(logisticsPlcAddressCacheSettingJson);
+                //        foreach (var item in logisticsPlcAddressCacheSettingArray)
+                //        {
+                //            var name = item.Value<string>("Name");
+                //            var address = item.Value<string>("Address");
+                //            if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(address))
+                //            {
+                //                logisticsPlcAddressCache.Add(name, address);
+                //            }
+                //        }
+                //    }
+                //}
                 builder.RegisterType<DevicesController>()
                     .AsSelf()
                     .WithAttributeFiltering()
-                    .WithProperty("LocalPlcAddressCache", localPlcAddressCache)
-                    .WithProperty("LogisticsPlcAddressCache", logisticsPlcAddressCache);
+                    .WithProperty("LocalPlcAddressCache", localPlcAddressCache);
+                    //.WithProperty("LogisticsPlcAddressCache", logisticsPlcAddressCache);
             }
         }
     }

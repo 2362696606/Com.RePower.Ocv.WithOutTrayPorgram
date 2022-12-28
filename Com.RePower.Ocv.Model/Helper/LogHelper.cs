@@ -19,6 +19,14 @@ namespace Com.RePower.Ocv.Model.Helper
 		{
 			get { return _uiLog; }
 		}
+        private static ILog _wmsServiceLog = Log.getMessageFile("WmsLog");
+
+        public static ILog WmsServiceLog
+        {
+            get { return _wmsServiceLog; }
+            set { _wmsServiceLog = value; }
+        }
+
 
         public static void RegisterUiLogEvent(Action<object?, LoggingEvent> action)
         {

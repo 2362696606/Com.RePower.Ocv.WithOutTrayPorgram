@@ -13,26 +13,20 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
 {
     public class DevicesController
     {
-        public DevicesController([KeyFilter(PlcDeviceEnum.LocalPlc)]IPlc localPlc
-            , [KeyFilter(PlcDeviceEnum.LogisticsPlc)]IPlc logisticsPlc
+        public DevicesController(IPlc localPlc
             ,IDMM dMM
             ,ISwitchBoard switchBoard)
         {
             LocalPlc = localPlc;
-            LogisticsPlc = logisticsPlc;
             DMM = dMM;
             SwitchBoard = switchBoard;
             this.LocalPlcAddressCache = new Dictionary<string, string>();
-            this.LogisticsPlcAddressCache = new Dictionary<string, string>();
+            //this.LogisticsPlcAddressCache = new Dictionary<string, string>();
         }
         /// <summary>
         /// 本地Plc
         /// </summary>
         public IPlc LocalPlc { get; }
-        /// <summary>
-        /// 物流Plc
-        /// </summary>
-        public IPlc LogisticsPlc { get; }
         /// <summary>
         /// 万用表
         /// </summary>
@@ -43,6 +37,6 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// Plc地址映射字典
         /// </summary>
         public Dictionary<string,string> LocalPlcAddressCache { get; set; }
-        public Dictionary<string,string> LogisticsPlcAddressCache { get; set; }
+        //public Dictionary<string,string> LogisticsPlcAddressCache { get; set; }
     }
 }

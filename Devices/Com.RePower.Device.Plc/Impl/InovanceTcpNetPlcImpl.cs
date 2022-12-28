@@ -13,6 +13,7 @@ namespace Com.RePower.Device.Plc.Impl
         {
             var device = new HslCommunication.Profinet.Inovance.InovanceTcpNet();
             device.DataFormat = HslCommunication.Core.DataFormat.DCBA;
+            device.IsStringReverse = true;
             netWorkDeviceBase = device;
             OnDeviceCreated();
         }

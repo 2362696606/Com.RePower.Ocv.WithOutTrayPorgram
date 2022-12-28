@@ -13,17 +13,17 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition />
-                <RowDefinition />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <DataGrid
                 CanUserAddRows="False"
-                IsReadOnly="False"
+                IsReadOnly="True"
                 ItemsSource="{Binding LocalPlcCacheValues}" />
-            <DataGrid
+            <!--<DataGrid
                 Grid.Row="1"
                 CanUserAddRows="False"
                 IsReadOnly="False"
-                ItemsSource="{Binding LogisticsPlcCacheValues}" />
+                ItemsSource="{Binding LogisticsPlcCacheValues}" />-->
         </Grid>
     </materialDesign:Card>
 </UserControl>

@@ -50,6 +50,21 @@ namespace Com.RePower.Ocv.Model
         [ObservableProperty]
         private double _nTemp;
         /// <summary>
+        /// K值
+        /// </summary>
+        [ObservableProperty]
+        private double _kValue;
+        /// <summary>
+        /// 电池类型
+        /// </summary>
+        [ObservableProperty]
+        private int _batteryType;
+        /// <summary>
+        /// 是否已经测试
+        /// </summary>
+        [ObservableProperty]
+        private bool _isTested = false;
+        /// <summary>
         /// 测试时间
         /// </summary>
         [ObservableProperty]

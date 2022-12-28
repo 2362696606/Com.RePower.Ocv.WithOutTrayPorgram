@@ -16,8 +16,11 @@ namespace Com.RePower.Device.SwitchBoard.Impl
             {
                 return OperateResult.CreateFailedResult($"箱号{boardIndex}不合规");
             }
-            var cmd = new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, Convert.ToByte(boardIndex), 0x29, 0x05, 0x00, 0x00, 0x00, 0x00 };
-            var result = SendCmd(cmd);
+            var baseCmd = new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, Convert.ToByte(boardIndex), 0x29, 0x05, 0x00, 0x00, 0x00, 0x00 };
+            byte xor = baseCmd.GetCheckXor();
+            List<byte> cmd = baseCmd.ToList();
+            cmd.Add(xor);
+            var result = SendCmd(cmd.ToArray());
             if (result.IsFailed)
             {
                 return OperateResult.CreateFailedResult(result.Message ?? "打开通道失败");

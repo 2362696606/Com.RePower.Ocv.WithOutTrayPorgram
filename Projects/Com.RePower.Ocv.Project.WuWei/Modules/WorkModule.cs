@@ -12,9 +12,9 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<MainWork>()
+            builder.RegisterType<MainWorkFixed>()
                 .AsSelf()
-                .As<IProjectMainWork>();
+                .As<IProjectMainWork>();  
         }
     }
 }
