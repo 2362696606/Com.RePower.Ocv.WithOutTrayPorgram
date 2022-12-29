@@ -1,10 +1,6 @@
-﻿using Com.RePower.DeviceBase.Extensions;
+﻿using Com.RePower.Ocv.WpfBase.Extensions;
 using Com.RePower.WpfBase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Com.RePower.WpfBase.Extensions;
 
 namespace Com.RePower.Device.SwitchBoard.Impl
 {

@@ -1,12 +1,9 @@
 ﻿using Autofac.Features.Decorators;
-using Com.RePower.DeviceBase.Extensions;
 using Com.RePower.DeviceBase.Plc;
 using Com.RePower.Ocv.Model.Helper;
+using Com.RePower.Ocv.WpfBase.Extensions;
 using Com.RePower.WpfBase;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,25 +31,25 @@ namespace Com.RePower.Ocv.Project.YiWei.Decorators
             set { plc.DeviceName = value; }
         }
 
-        public WpfBase.OperateResult Connect()
+        public OperateResult Connect()
         {
             LogHelper.UiLog.Debug("连接Plc");
             return plc.Connect();
         }
 
-        public Task<WpfBase.OperateResult> ConnectAsync()
+        public Task<OperateResult> ConnectAsync()
         {
             LogHelper.UiLog.Debug("异步连接Plc");
             return plc.ConnectAsync();
         }
 
-        public WpfBase.OperateResult DisConnect()
+        public OperateResult DisConnect()
         {
             LogHelper.UiLog.Debug("Plc断开连接");
             return plc.DisConnect();
         }
 
-        public Task<WpfBase.OperateResult> DisConnectAsync()
+        public Task<OperateResult> DisConnectAsync()
         {
             LogHelper.UiLog.Debug("Plc异步断开连接");
             return plc.DisConnectAsync();
@@ -63,357 +60,357 @@ namespace Com.RePower.Ocv.Project.YiWei.Decorators
             plc.Dispose();
         }
 
-        public WpfBase.OperateResult<byte[]> Read(string address, ushort length)
+        public OperateResult<byte[]> Read(string address, ushort length)
         {
             var result =  plc.Read(address, length);
             LogHelper.UiLog.Debug($"读取byte[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<byte[]>> ReadAsync(string address, ushort length)
+        public async Task<OperateResult<byte[]>> ReadAsync(string address, ushort length)
         {
             var result = await plc.ReadAsync(address, length);
             LogHelper.UiLog.Debug($"异步读取bte[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public WpfBase.OperateResult<bool[]> ReadBool(string address, ushort length)
+        public OperateResult<bool[]> ReadBool(string address, ushort length)
         {
             var result = plc.ReadBool(address, length);
             LogHelper.UiLog.Debug($"读取bool[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public WpfBase.OperateResult<bool> ReadBool(string address)
+        public OperateResult<bool> ReadBool(string address)
         {
             var result = plc.ReadBool(address);
             LogHelper.UiLog.Debug($"读取bool,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<bool[]>> ReadBoolAsync(string address, ushort length)
+        public async Task<OperateResult<bool[]>> ReadBoolAsync(string address, ushort length)
         {
             var result = await plc.ReadBoolAsync(address, length);
             LogHelper.UiLog.Debug($"异步读取bool[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<bool>> ReadBoolAsync(string address)
+        public async Task<OperateResult<bool>> ReadBoolAsync(string address)
         {
             var result = await plc.ReadBoolAsync(address);
             LogHelper.UiLog.Debug($"异步读取bool,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public WpfBase.OperateResult<double> ReadDouble(string address)
+        public OperateResult<double> ReadDouble(string address)
         {
             var result = plc.ReadDouble(address);
             LogHelper.UiLog.Debug($"读取double,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public WpfBase.OperateResult<double[]> ReadDouble(string address, ushort length)
+        public OperateResult<double[]> ReadDouble(string address, ushort length)
         {
             var result = plc.ReadDouble(address,length);
             LogHelper.UiLog.Debug($"读取double[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<double>> ReadDoubleAsync(string address)
+        public async Task<OperateResult<double>> ReadDoubleAsync(string address)
         {
             var result = await plc.ReadDoubleAsync(address);
             LogHelper.UiLog.Debug($"异步读取double,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<double[]>> ReadDoubleAsync(string address, ushort length)
+        public async Task<OperateResult<double[]>> ReadDoubleAsync(string address, ushort length)
         {
             var result = await plc.ReadDoubleAsync(address, length);
             LogHelper.UiLog.Debug($"异步读取double[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public WpfBase.OperateResult<float> ReadFloat(string address)
+        public OperateResult<float> ReadFloat(string address)
         {
             var result = plc.ReadFloat(address);
             LogHelper.UiLog.Debug($"读取float,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public WpfBase.OperateResult<float[]> ReadFloat(string address, ushort length)
+        public OperateResult<float[]> ReadFloat(string address, ushort length)
         {
             var result = plc.ReadFloat(address, length);
             LogHelper.UiLog.Debug($"读取float[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<float>> ReadFloatAsync(string address)
+        public async Task<OperateResult<float>> ReadFloatAsync(string address)
         {
             var result = await plc.ReadFloatAsync(address);
             LogHelper.UiLog.Debug($"异步读取float,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<float[]>> ReadFloatAsync(string address, ushort length)
+        public async Task<OperateResult<float[]>> ReadFloatAsync(string address, ushort length)
         {
             var result = await plc.ReadFloatAsync(address, length);
             LogHelper.UiLog.Debug($"异步读取float[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public WpfBase.OperateResult<short> ReadInt16(string address)
+        public OperateResult<short> ReadInt16(string address)
         {
             var result = plc.ReadInt16(address);
             LogHelper.UiLog.Debug($"读取int16,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public WpfBase.OperateResult<short[]> ReadInt16(string address, ushort length)
+        public OperateResult<short[]> ReadInt16(string address, ushort length)
         {
             var result = plc.ReadInt16(address, length);
             LogHelper.UiLog.Debug($"读取int16[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<short>> ReadInt16Async(string address)
+        public async Task<OperateResult<short>> ReadInt16Async(string address)
         {
             var result = await plc.ReadInt16Async(address);
             LogHelper.UiLog.Debug($"异步读取int16,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<short[]>> ReadInt16Async(string address, ushort length)
+        public async Task<OperateResult<short[]>> ReadInt16Async(string address, ushort length)
         {
             var result = await plc.ReadInt16Async(address, length);
             LogHelper.UiLog.Debug($"异步读取int16[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public WpfBase.OperateResult<int> ReadInt32(string address)
+        public OperateResult<int> ReadInt32(string address)
         {
             var result = plc.ReadInt32(address);
             LogHelper.UiLog.Debug($"读取int32,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public WpfBase.OperateResult<int[]> ReadInt32(string address, ushort length)
+        public OperateResult<int[]> ReadInt32(string address, ushort length)
         {
             var result = plc.ReadInt32(address, length);
             LogHelper.UiLog.Debug($"读取int32[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<int>> ReadInt32Async(string address)
+        public async Task<OperateResult<int>> ReadInt32Async(string address)
         {
             var result = await plc.ReadInt32Async(address);
             LogHelper.UiLog.Debug($"异步读取int32,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<int[]>> ReadInt32Async(string address, ushort length)
+        public async Task<OperateResult<int[]>> ReadInt32Async(string address, ushort length)
         {
             var result = await plc.ReadInt32Async(address, length);
             LogHelper.UiLog.Debug($"异步读取int32[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public WpfBase.OperateResult<long> ReadInt64(string address)
+        public OperateResult<long> ReadInt64(string address)
         {
             var result = plc.ReadInt64(address);
             LogHelper.UiLog.Debug($"读取int64,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public WpfBase.OperateResult<long[]> ReadInt64(string address, ushort length)
+        public OperateResult<long[]> ReadInt64(string address, ushort length)
         {
             var result = plc.ReadInt64(address, length);
             LogHelper.UiLog.Debug($"读取int64[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<long>> ReadInt64Async(string address)
+        public async Task<OperateResult<long>> ReadInt64Async(string address)
         {
             var result = await plc.ReadInt64Async(address);
             LogHelper.UiLog.Debug($"异步读取int64,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<long[]>> ReadInt64Async(string address, ushort length)
+        public async Task<OperateResult<long[]>> ReadInt64Async(string address, ushort length)
         {
             var result = await plc.ReadInt64Async(address, length);
             LogHelper.UiLog.Debug($"异步读取int64[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public WpfBase.OperateResult<string> ReadString(string address, ushort length)
+        public OperateResult<string> ReadString(string address, ushort length)
         {
             var result = plc.ReadString(address, length);
             LogHelper.UiLog.Debug($"读取string,地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public WpfBase.OperateResult<string> ReadString(string address, ushort length, Encoding encoding)
+        public OperateResult<string> ReadString(string address, ushort length, Encoding encoding)
         {
             var result = plc.ReadString(address, length);
             LogHelper.UiLog.Debug($"读取string,地址为{address},长度为{length},编码格式为{encoding},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<string>> ReadStringAsync(string address, ushort length)
+        public async Task<OperateResult<string>> ReadStringAsync(string address, ushort length)
         {
             var result = await plc.ReadStringAsync(address, length);
             LogHelper.UiLog.Debug($"异步读取string,地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<string>> ReadStringAsync(string address, ushort length, Encoding encoding)
+        public async Task<OperateResult<string>> ReadStringAsync(string address, ushort length, Encoding encoding)
         {
             var result = await plc.ReadStringAsync(address, length);
             LogHelper.UiLog.Debug($"异步读取string,地址为{address},长度为{length},编码格式为{encoding},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public WpfBase.OperateResult<ushort> ReadUInt16(string address)
+        public OperateResult<ushort> ReadUInt16(string address)
         {
             var result = plc.ReadUInt16(address);
             LogHelper.UiLog.Debug($"读取uint16,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public WpfBase.OperateResult<ushort[]> ReadUInt16(string address, ushort length)
+        public OperateResult<ushort[]> ReadUInt16(string address, ushort length)
         {
             var result = plc.ReadUInt16(address, length);
             LogHelper.UiLog.Debug($"读取uint16[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<ushort>> ReadUInt16Async(string address)
+        public async Task<OperateResult<ushort>> ReadUInt16Async(string address)
         {
             var result = await plc.ReadUInt16Async(address);
             LogHelper.UiLog.Debug($"异步读取uint16,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<ushort[]>> ReadUInt16Async(string address, ushort length)
+        public async Task<OperateResult<ushort[]>> ReadUInt16Async(string address, ushort length)
         {
             var result = await plc.ReadUInt16Async(address, length);
             LogHelper.UiLog.Debug($"异步读取uint16[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public WpfBase.OperateResult<uint> ReadUInt32(string address)
+        public OperateResult<uint> ReadUInt32(string address)
         {
             var result = plc.ReadUInt32(address);
             LogHelper.UiLog.Debug($"读取uint32,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public WpfBase.OperateResult<uint[]> ReadUInt32(string address, ushort length)
+        public OperateResult<uint[]> ReadUInt32(string address, ushort length)
         {
             var result = plc.ReadUInt32(address, length);
             LogHelper.UiLog.Debug($"读取uint32[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<uint>> ReadUInt32Async(string address)
+        public async Task<OperateResult<uint>> ReadUInt32Async(string address)
         {
             var result = await plc.ReadUInt32Async(address);
             LogHelper.UiLog.Debug($"异步读取uint32,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<uint[]>> ReadUInt32Async(string address, ushort length)
+        public async Task<OperateResult<uint[]>> ReadUInt32Async(string address, ushort length)
         {
             var result = await plc.ReadUInt32Async(address, length);
             LogHelper.UiLog.Debug($"异步读取uint32[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public WpfBase.OperateResult<ulong> ReadUInt64(string address)
+        public OperateResult<ulong> ReadUInt64(string address)
         {
             var result = plc.ReadUInt64(address);
             LogHelper.UiLog.Debug($"读取uint64,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public WpfBase.OperateResult<ulong[]> ReadUInt64(string address, ushort length)
+        public OperateResult<ulong[]> ReadUInt64(string address, ushort length)
         {
             var result = plc.ReadUInt64(address, length);
             LogHelper.UiLog.Debug($"读取uint64[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<ulong>> ReadUInt64Async(string address)
+        public async Task<OperateResult<ulong>> ReadUInt64Async(string address)
         {
             var result = await plc.ReadUInt64Async(address);
             LogHelper.UiLog.Debug($"异步读取uint64,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<ulong[]>> ReadUInt64Async(string address, ushort length)
+        public async Task<OperateResult<ulong[]>> ReadUInt64Async(string address, ushort length)
         {
             var result = await plc.ReadUInt64Async(address, length);
             LogHelper.UiLog.Debug($"异步读取uint64[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
-        public WpfBase.OperateResult<TimeSpan> Wait(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1)
+        public OperateResult<TimeSpan> Wait(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
-        public WpfBase.OperateResult<TimeSpan> Wait(string address, short waitValue, int readInterval = 100, int waitTimeout = -1)
+        public OperateResult<TimeSpan> Wait(string address, short waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
-        public WpfBase.OperateResult<TimeSpan> Wait(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1)
+        public OperateResult<TimeSpan> Wait(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
-        public WpfBase.OperateResult<TimeSpan> Wait(string address, int waitValue, int readInterval = 100, int waitTimeout = -1)
+        public OperateResult<TimeSpan> Wait(string address, int waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
-        public WpfBase.OperateResult<TimeSpan> Wait(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1)
+        public OperateResult<TimeSpan> Wait(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
-        public WpfBase.OperateResult<TimeSpan> Wait(string address, long waitValue, int readInterval = 100, int waitTimeout = -1)
+        public OperateResult<TimeSpan> Wait(string address, long waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
-        public WpfBase.OperateResult<TimeSpan> Wait(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1)
+        public OperateResult<TimeSpan> Wait(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1)
+        public async Task<OperateResult<TimeSpan>> WaitAsync(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
-        public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, short waitValue, int readInterval = 100, int waitTimeout = -1)
+        public async Task<OperateResult<TimeSpan>> WaitAsync(string address, short waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");

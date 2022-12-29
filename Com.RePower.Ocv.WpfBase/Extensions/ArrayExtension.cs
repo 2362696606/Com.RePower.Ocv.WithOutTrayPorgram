@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Com.RePower.DeviceBase.Extensions
+namespace Com.RePower.Ocv.WpfBase.Extensions
 {
     public static class ArrayExtension
     {

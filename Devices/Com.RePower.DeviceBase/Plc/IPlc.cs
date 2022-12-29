@@ -1,5 +1,6 @@
 ﻿using Com.RePower.DeviceBase.Attribute;
 using Com.RePower.DeviceBase.Models;
+using Com.RePower.Ocv.WpfBase;
 using Com.RePower.WpfBase;
 using System.Text;
 
