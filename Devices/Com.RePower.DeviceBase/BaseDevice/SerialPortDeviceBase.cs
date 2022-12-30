@@ -103,20 +103,12 @@ namespace Com.RePower.DeviceBase.BaseDevice
 
         public async Task<OperateResult> ConnectAsync(string portName, int baudRate)
         {
-            var result = await Task.Run<OperateResult>(() =>
-            {
-                return Connect(portName, baudRate);
-            });
-            return result;
+            return await Task.Run(() => Connect(portName, baudRate));
         }
 
         public async Task<OperateResult> ConnectAsync()
         {
-            var result = await Task.Run<OperateResult>(() =>
-            {
-                return Connect();
-            });
-            return result;
+            return await Task.Run(() => Connect());
         }
 
         public OperateResult DisConnect()
@@ -131,10 +123,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
 
         public async Task<OperateResult> DisConnectAsync()
         {
-            return await Task.Run<OperateResult>(() =>
-            {
-                return DisConnect();
-            });
+            return await Task.Run(() => DisConnect());
         }
 
         protected virtual void Dispose(bool disposing)
@@ -189,10 +178,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
 
         public async Task<OperateResult<byte[]>> SendCmdAsync(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
         {
-            return await Task.Run(() =>
-            {
-                return SendCmd(cmd, timeout, isNeedRecovery);
-            });
+            return await Task.Run(() => SendCmd(cmd, timeout, isNeedRecovery));
         }
     }
 }

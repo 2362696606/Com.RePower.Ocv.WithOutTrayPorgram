@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.DeviceBase.BaseDevice
 {
-    public class TcpNetDeviceBase : INetDevice
+    public class TcpNetDeviceBase : INetDeviceBase
     {
         private TcpClient _tcpClient = new TcpClient();
 
@@ -155,18 +155,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
 
         public async Task<OperateResult> DisConnectAsync()
         {
-            try
-            {
-                await Task.Run(() =>
-                {
-                    TcpClient.Close();
-                });
-                return OperateResult.CreateSuccessResult();
-            }
-            catch (Exception err)
-            {
-                return OperateResult.CreateFailedResult(err.Message, err.HResult);
-            }
+            return await Task.Run(() => DisConnect());
         }
 
         protected virtual void Dispose(bool disposing)
@@ -197,6 +186,16 @@ namespace Com.RePower.DeviceBase.BaseDevice
             // 不要更改此代码。请将清理代码放入“Dispose(bool disposing)”方法中
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
+        }
+
+        public OperateResult<byte[]> SendCmd(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<OperateResult<byte[]>> SendCmdAsync(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
+        {
+            throw new NotImplementedException();
         }
     }
 }

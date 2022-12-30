@@ -12,6 +12,22 @@ namespace Com.RePower.DeviceBase.Helper
 {
     public class SerialPortHelper : SerialPort
     {
+        public SerialPortHelper() : base()
+        { }
+        public SerialPortHelper(System.ComponentModel.IContainer container):base(container)
+        { }
+        public SerialPortHelper(string portName):base(portName)
+        { }
+        public SerialPortHelper(string portName, int baudRate) : base(portName, baudRate)
+        { }
+        public SerialPortHelper(string portName, int baudRate, System.IO.Ports.Parity parity):base(portName,baudRate, parity)
+        { 
+        }
+        public SerialPortHelper(string portName, int baudRate, System.IO.Ports.Parity parity, int dataBits):base(portName,baudRate,parity)
+        { }
+        public SerialPortHelper(string portName, int baudRate, System.IO.Ports.Parity parity, int dataBits, System.IO.Ports.StopBits stopBits):base(portName, baudRate, parity, dataBits, stopBits)
+        { }
+
         /// <summary>
         /// 等待收到消息
         /// </summary>
