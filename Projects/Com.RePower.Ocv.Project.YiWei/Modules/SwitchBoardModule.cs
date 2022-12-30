@@ -12,9 +12,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Com.RePower.Ocv.Project.WuWei.Modules
+namespace Com.RePower.Ocv.Project.YiWei.Modules
 {
-    public class SwitchBoardModul:Module
+    public class SwitchBoardModule:Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -27,6 +27,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                     if (!string.IsNullOrEmpty(switchBoardSettingJson))
                     {
                         var obj = JsonConvert.DeserializeObject<GeneralSwitchBoardImpl>(switchBoardSettingJson);
+                        //var obj = JsonConvert.DeserializeObject<GeneralSwitchBoardSimulator>(switchBoardSettingJson);
                         if (obj != null)
                         {
                             builder.RegisterInstance(obj)
@@ -34,14 +35,6 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                                 .As<ISwitchBoard>()
                                 .As<IDevice>();
                         }
-                        //var obj = JsonConvert.DeserializeObject<SwitchBoardSimulator>(switchBoardSettingJson);
-                        //if (obj != null)
-                        //{
-                        //    builder.RegisterInstance<SwitchBoardSimulator>(obj)
-                        //        .AsSelf()
-                        //        .As<ISwitchBoard>()
-                        //        .As<IDevice>();
-                        //}
                     }
                 }
             }

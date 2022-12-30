@@ -22,7 +22,6 @@ namespace Com.RePower.Ocv.Project.YiWei.Modules
             using (OcvSettingDbContext settingContext = new OcvSettingDbContext())
             {
                 Dictionary<string,string> localPlcAddressCache = new Dictionary<string,string>();
-                Dictionary<string,string> logisticsPlcAddressCache = new Dictionary<string,string>();
                 var localPlcAddressCacheSettingObj = settingContext.SettingItems.First(x => x.SettingName == "本地Plc缓存");
                 if (localPlcAddressCacheSettingObj != null)
                 {
@@ -41,24 +40,6 @@ namespace Com.RePower.Ocv.Project.YiWei.Modules
                         }
                     }
                 }
-                //var logisticsPlcAddressCacheSettingObj = settingContext.SettingItems.First(x => x.SettingName == "物流Plc缓存");
-                //if (logisticsPlcAddressCacheSettingObj != null)
-                //{
-                //    var logisticsPlcAddressCacheSettingJson = logisticsPlcAddressCacheSettingObj.JsonValue;
-                //    if (!string.IsNullOrEmpty(logisticsPlcAddressCacheSettingJson))
-                //    {
-                //        JArray logisticsPlcAddressCacheSettingArray = JArray.Parse(logisticsPlcAddressCacheSettingJson);
-                //        foreach (var item in logisticsPlcAddressCacheSettingArray)
-                //        {
-                //            var name = item.Value<string>("Name");
-                //            var address = item.Value<string>("Address");
-                //            if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(address))
-                //            {
-                //                logisticsPlcAddressCache.Add(name, address);
-                //            }
-                //        }
-                //    }
-                //}
                 builder.RegisterType<DevicesController>()
                     .AsSelf()
                     .WithAttributeFiltering()

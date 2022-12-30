@@ -343,6 +343,18 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     return result;
                 }
             }
+            //关闭所有通道
+            var closeResult = DevicesController.SwitchBoard.CloseAllChannels(1);
+            if(closeResult.IsFailed)
+            {
+                return closeResult;
+            }
+            closeResult = DevicesController.SwitchBoard.CloseAllChannels(2);
+            if(closeResult.IsFailed)
+            {
+                return closeResult;
+            }
+
             foreach (var item in Tray.NgInfos)
             {
                 var result = TestOneBattery(item);
@@ -364,39 +376,30 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         }
         private OperateResult TestOneBattery(NgInfo ngInfo)
         {
-            var closeResult = DevicesController.SwitchBoard.CloseAllChannels(1);
-            if (closeResult.IsFailed)
-            {
-                return closeResult;
-            }
-            closeResult = DevicesController.SwitchBoard.CloseAllChannels(2);
-            if (closeResult.IsFailed)
-            {
-                return closeResult;
-            }
+            //var closeResult = DevicesController.SwitchBoard.CloseAllChannels(1);
+            //if (closeResult.IsFailed)
+            //{
+            //    return closeResult;
+            //}
+            //closeResult = DevicesController.SwitchBoard.CloseAllChannels(2);
+            //if (closeResult.IsFailed)
+            //{
+            //    return closeResult;
+            //}
             var battery = ngInfo.Battery;
             LogHelper.UiLog.Info($"开始测试电池{battery.Position}");
             if (battery.IsTested && !ngInfo.IsNg)
             {
                 return OperateResult.CreateSuccessResult();
             }
-            OperateResult openResult;
-            if (battery.Position <= 20)
-            {
-                //ToDo:确定通道是否正确;
-                int[] channels = new int[] { battery.Position, 21, 23 };
-                openResult = DevicesController.SwitchBoard.OpenChannels(1, channels);
-            }
-            else
-            {
-                int[] channels = new int[] { battery.Position - 20, 21, 23 };
-                openResult = DevicesController.SwitchBoard.OpenChannels(2, channels);
-            }
+            //打开对应通道
+            var openResult = SwitchChannel(battery.Position);
             if (openResult.IsFailed)
             {
                 return openResult;
             }
             LogHelper.UiLog.Info("读取电压");
+            //Thread.Sleep(1000);
             var read1 = DevicesController.DMM.ReadDc();
             if (read1.IsFailed)
             {
@@ -405,7 +408,45 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             battery.PVolValue = read1.Content;
             battery.IsTested = true;
             battery.TestTime = DateTime.Now;
+            //关闭对应通道
+            var closeResult = SwitchChannel(battery.Position,false);
+            if (closeResult.IsFailed)
+            {
+                return closeResult;
+            }
             return OperateResult.CreateSuccessResult();
+        }
+        private OperateResult SwitchChannel(int channel,bool open=true)
+        {
+            OperateResult openResult;
+            if (channel <= 19)
+            {
+                //ToDo:确定通道是否正确;
+                //int[] channels = new int[] { battery.Position, 21, 23 };
+                //openResult = DevicesController.SwitchBoard.OpenChannels(1, channels);
+                if (open)
+                {
+                    openResult = DevicesController.SwitchBoard.OpenChannel(1, channel);
+                }
+                else
+                {
+                    openResult = DevicesController.SwitchBoard.CloseChannel(1, channel);
+                }
+            }
+            else
+            {
+                //int[] channels = new int[] { battery.Position - 20, 21, 23 };
+                //openResult = DevicesController.SwitchBoard.OpenChannels(2, channels);
+                if (open)
+                {
+                    openResult = DevicesController.SwitchBoard.OpenChannel(2, channel - 19);
+                }
+                else
+                {
+                    openResult = DevicesController.SwitchBoard.CloseChannel(2, channel - 19);
+                }
+            }
+            return openResult;
         }
         private void ValidateNgResult()
         {

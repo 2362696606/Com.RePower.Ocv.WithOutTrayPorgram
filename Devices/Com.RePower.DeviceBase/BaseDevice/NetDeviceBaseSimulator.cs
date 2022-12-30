@@ -2,39 +2,33 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Com.RePower.DeviceBase.BaseDevice
 {
-    public class SerialPortDeviceBaseSimulator : ISerialPortDeviceBase
+    public class NetDeviceBaseSimulator : INetDeviceBase
     {
         private bool disposedValue;
-        public SerialPortDeviceBaseSimulator()
-        {
-            Model = SerialPortSimulatorDeviceModel.SwitchBoard;
-        }
-        /// <summary>
-        /// 模拟构造
-        /// </summary>
-        /// <param name="module">1为切换板，2为内阻仪</param>
-        public SerialPortDeviceBaseSimulator(SerialPortSimulatorDeviceModel model)
+
+        public NetDeviceBaseSimulator(NetSimulatorDeviceModel model)
         {
             Model = model;
         }
 
-        public string PortName { get; set; } = "COM1";
-        public int BaudRate { get; set; } = 5002;
+        public string IpAddress { get; set; } = "127.0.0.1";
+        public int Port { get; set; } = 5020;
 
-        public bool IsConnected { get; set; }
+        public bool IsConnected { get; private set; }= false;
 
         public string DeviceName { get; set; } = "UnnamedDevice";
-        public SerialPortSimulatorDeviceModel Model { get; } = SerialPortSimulatorDeviceModel.SwitchBoard;
+        public NetSimulatorDeviceModel Model { get; } = NetSimulatorDeviceModel.DMM;
 
-        public OperateResult Connect(string portName, int baudRate)
+        public OperateResult Connect(string ipAddress, int port)
         {
-            this.PortName = portName;
-            this.BaudRate = baudRate;
+            this.IpAddress = ipAddress;
+            this.Port = port;
             this.IsConnected = true;
             return OperateResult.CreateSuccessResult();
         }
@@ -45,9 +39,9 @@ namespace Com.RePower.DeviceBase.BaseDevice
             return OperateResult.CreateSuccessResult();
         }
 
-        public async Task<OperateResult> ConnectAsync(string portName, int baudRate)
+        public async Task<OperateResult> ConnectAsync(string ipAddress, int port)
         {
-            return await Task.Run(() => Connect(portName, baudRate));
+            return await Task.Run(() => Connect(ipAddress,port));
         }
 
         public async Task<OperateResult> ConnectAsync()
@@ -71,10 +65,10 @@ namespace Com.RePower.DeviceBase.BaseDevice
             if (isNeedRecovery)
             {
                 byte[] returnResult = cmd;
-                if (Model == SerialPortSimulatorDeviceModel.Ohm)
+                if (Model == NetSimulatorDeviceModel.DMM)
                 {
                     var random = new Random();
-                    var randNum = random.NextDouble() * (0.001 - 0.0001) + 0.00001;
+                    var randNum = random.NextDouble() * (4000 - 2000) + 2000;
 
                     returnResult = Encoding.ASCII.GetBytes(randNum.ToString("f" + 6));
                 }
@@ -108,7 +102,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
         }
 
         // // TODO: 仅当“Dispose(bool disposing)”拥有用于释放未托管资源的代码时才替代终结器
-        // ~SerialPortDeviceSimulatorBase()
+        // ~NetDeviceBaseSimulator()
         // {
         //     // 不要更改此代码。请将清理代码放入“Dispose(bool disposing)”方法中
         //     Dispose(disposing: false);

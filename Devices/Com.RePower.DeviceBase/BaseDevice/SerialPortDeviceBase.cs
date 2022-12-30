@@ -1,5 +1,7 @@
-﻿using Com.RePower.DeviceBase.Helper;
+﻿using CLDC.Framework.Log;
+using Com.RePower.DeviceBase.Helper;
 using Com.RePower.WpfBase;
+using Com.RePower.WpfBase.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
@@ -21,6 +23,16 @@ namespace Com.RePower.DeviceBase.BaseDevice
             protected set { _serialPort = value; }
         }
 
+        public RecoveryModel RecoveryModel
+        {
+            get { return _serialPort.RecoveryModel; }
+            set { _serialPort.RecoveryModel = value; }
+        }
+        public int ReadDelay
+        {
+            get { return _serialPort.ReadDelay; }
+            set { _serialPort.ReadDelay = value; }
+        }
 
         private string _deviceName = "UnnamedDevice";
         public string PortName
@@ -55,6 +67,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
         {
             try
             {
+                SerialPort = SerialPort ?? new SerialPortHelper();
                 SerialPort.BaudRate = baudRate;
                 SerialPort.PortName = portName;
                 SerialPort.Open();
@@ -74,6 +87,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
         {
             try
             {
+                SerialPort = SerialPort ?? new SerialPortHelper();
                 SerialPort.Open();
                 if (!IsConnected)
                 {

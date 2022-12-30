@@ -28,9 +28,10 @@ namespace Com.RePower.Ocv.Project.YiWei.Modules
                     if (!string.IsNullOrEmpty(dmmSettingJson))
                     {
                         var obj = JsonConvert.DeserializeObject<Keysight_34461A>(dmmSettingJson);
+                        //var obj = JsonConvert.DeserializeObject<DmmSimulator>(dmmSettingJson);
                         if (obj != null)
                         {
-                            builder.RegisterInstance<Keysight_34461A>(obj)
+                            builder.RegisterInstance(obj)
                                 .AsSelf()
                                 .As<IDMM>()
                                 .As<IDevice>();

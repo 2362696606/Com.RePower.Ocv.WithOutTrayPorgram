@@ -15,8 +15,8 @@ namespace Com.RePower.Ocv.Model.DataBaseContext
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //string connectString = @"data source=D:\项目\OCV\Com.RePower.Ocv.WithOutTrayPorgram\Projects\Com.RePower.Ocv.Project.YiWei\OcvSetting.dbs";
-            string connectString = @"data source=D:\项目\OCV\Com.RePower.Ocv.WithOutTrayPorgram\Projects\Com.RePower.Ocv.Project.WuWei\OcvSetting.dbs";
-            //string connectString = @"data source=.\OcvSetting.dbs";
+            //string connectString = @"data source=D:\项目\OCV\Com.RePower.Ocv.WithOutTrayPorgram\Projects\Com.RePower.Ocv.Project.WuWei\OcvSetting.dbs";
+            string connectString = @"data source=.\OcvSetting.dbs";
             optionsBuilder.UseSqlite(connectString);
             optionsBuilder.UseLazyLoadingProxies();
             base.OnConfiguring(optionsBuilder);

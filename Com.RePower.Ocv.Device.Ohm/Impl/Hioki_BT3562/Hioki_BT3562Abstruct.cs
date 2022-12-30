@@ -34,8 +34,9 @@ namespace Com.RePower.Ocv.Device.Ohm.Impl.Hioki_BT3562
                 {
                     string[] values = value.Split(',');
                     //转换为毫安
-                    double parseDoubleVal = (double)decimal.Parse(values[0],
-                        System.Globalization.NumberStyles.Float) * 1000;
+                    //double parseDoubleVal = (double)decimal.Parse(values[0],
+                    //    System.Globalization.NumberStyles.Float) * 1000;
+                    var parseDoubleVal = double.Parse(values[0]) * 1000;
                     return OperateResult.CreateSuccessResult(parseDoubleVal);
                 }
             }

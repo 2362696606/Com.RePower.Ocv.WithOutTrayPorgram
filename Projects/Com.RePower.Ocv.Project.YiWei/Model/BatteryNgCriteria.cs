@@ -9,12 +9,20 @@ namespace Com.RePower.Ocv.Project.YiWei.Model
     public class BatteryNgCriteria
     {
         /// <summary>
-        /// 最大正极侧边电压
+        /// 最大电压
         /// </summary>
-        public double MaxPVol { get; set; }
+        public double MaxVol { get; set; }
         /// <summary>
-        /// 最小正极侧边电压
+        /// 最小电压
         /// </summary>
-        public double MinPVol { get; set; }
+        public double MinVol { get; set; }
+        /// <summary>
+        /// 最大内阻
+        /// </summary>
+        public double MaxRes { get; set; }
+        /// <summary>
+        /// 最小内阻
+        /// </summary>
+        public double MinRes { get; set; }
     }
 }

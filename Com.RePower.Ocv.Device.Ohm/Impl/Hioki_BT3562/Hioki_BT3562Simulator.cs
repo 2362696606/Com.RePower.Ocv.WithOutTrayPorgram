@@ -11,7 +11,8 @@ namespace Com.RePower.Ocv.Device.Ohm.Impl.Hioki_BT3562
     {
         public Hioki_BT3562Simulator()
         {
-            this.deviceBase = new SerialPortDeviceBaseSimulator();
+            this.deviceBase = new SerialPortDeviceBaseSimulator(SerialPortSimulatorDeviceModel.Ohm);
         }
+        public override int ReadDelay { get ; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Com.RePower.DeviceBase.BaseDevice;
+using Com.RePower.DeviceBase.Helper;
 using Com.RePower.DeviceBase.Ohm;
 using Com.RePower.WpfBase;
 using System;
@@ -15,6 +16,27 @@ namespace Com.RePower.Ocv.Device.Ohm.Impl.Hioki_BT3562
         public Hioki_BT3562Impl()
         {
             this.deviceBase = new SerialPortDeviceBase();
+            var dev = deviceBase as SerialPortDeviceBase;
+            if(dev!=null)
+            {
+                dev.RecoveryModel = RecoveryModel.Manual;
+            }
+        }
+        public virtual int ReadDelay
+        {
+            get 
+            {
+                var dev = deviceBase as SerialPortDeviceBase;
+                return dev?.ReadDelay ?? -1;
+            }
+            set
+            {
+                var dev = deviceBase as SerialPortDeviceBase;
+                if (dev != null)
+                {
+                    dev.ReadDelay = value;
+                }
+            }
         }
         public string PortName
         {

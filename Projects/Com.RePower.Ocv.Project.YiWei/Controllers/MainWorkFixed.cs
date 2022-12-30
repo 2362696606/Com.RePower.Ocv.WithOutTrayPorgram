@@ -163,6 +163,49 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                 ResetEvent.WaitOne();
                 #endregion
                 #region 等待测试准备信号
+
+                //LogHelper.UiLog.Info("连接PLC");
+                if (!DevicesController.LocalPlc.IsConnected)
+                {
+                    var result = DevicesController.LocalPlc.Connect();
+                    if (result.IsFailed)
+                    {
+                        return result;
+                    }
+                }
+
+                if (DevicesController.SwitchBoard.IsConnected == false)
+                {
+                    var result = DevicesController.SwitchBoard.Connect();//切换板
+                    if (result.IsFailed)
+                    {
+                        return result;
+                    }
+                }
+                if (DevicesController.DMM.IsConnected == false)
+                {
+                    var result = DevicesController.DMM.Connect();//万用表
+                    if (result.IsFailed)
+                    {
+                        return result;
+                    }
+                }
+                if (DevicesController.Ohm.IsConnected == false)
+                {
+                    var result = DevicesController.Ohm.Connect();//万用表
+                    if (result.IsFailed)
+                    {
+                        return result;
+                    }
+                }
+
+
+                LogHelper.UiLog.Info("等待Plc[上位机交互] = 0");
+                var wait0 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["上位机交互"], 0);
+                if (wait0.IsFailed)
+                {
+                    return OperateResult.CreateFailedResult(wait0.Message ?? "等待本地Plc[上位机交互] = 5失败", wait0.ErrorCode);
+                }
                 LogHelper.UiLog.Info("等待Plc[上位机交互] = 5");
                 var wait1 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["上位机交互"], 5);
                 if (wait1.IsFailed)
@@ -172,29 +215,44 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                 #endregion
                 var tempNgInfos = new System.Collections.ObjectModel.ObservableCollection<NgInfo>();
                 #region 读取电池条码1
-                string trayCode = string.Empty;
+                string batteryCode = string.Empty;
                 LogHelper.UiLog.Info("读取PLC[电池条码1]");
                 var read1 = DevicesController.LocalPlc.ReadString(DevicesController.LocalPlcAddressCache["电池条码1"], 50);
                 if (read1.IsFailed)
                 {
                     return OperateResult.CreateFailedResult(read1.Message ?? "读取Plc[电池条码1]失败", read1.ErrorCode);
                 }
-                trayCode = read1.Content ?? string.Empty;
-                trayCode = Regex.Match(read1.Content ?? string.Empty, @"[0-9\.a-zA-Z_-]+").Value;
-                Tray.TrayCode = trayCode;
-                tempNgInfos.Add(tempNgInfo(trayCode,1));
+                batteryCode = read1.Content ?? string.Empty;
+                batteryCode = Regex.Match(read1.Content ?? string.Empty, @"[0-9\.a-zA-Z_-]+").Value;
+                if(string.IsNullOrEmpty(batteryCode))
+                {
+                    return OperateResult.CreateFailedResult("电池条码1为空");
+                }
+                var ngInfo = new NgInfo();
+                ngInfo.Battery.BarCode = batteryCode;
+                ngInfo.Battery.Position = 1;
+                tempNgInfos.Add(ngInfo);
                 #endregion
                 #region 读取电池条码2
-                trayCode = string.Empty;
+                batteryCode = string.Empty;
                 LogHelper.UiLog.Info("读取PLC[电池条码2]");
                 var read2 = DevicesController.LocalPlc.ReadString(DevicesController.LocalPlcAddressCache["电池条码2"], 50);
                 if (read2.IsFailed)
                 {
                     return OperateResult.CreateFailedResult(read2.Message ?? "读取Plc[电池条码2]失败", read2.ErrorCode);
                 }
-                trayCode = read2.Content ?? string.Empty;
-                Tray.TrayCode = trayCode;
-                tempNgInfos.Add(tempNgInfo(trayCode,2));
+                batteryCode = read2.Content ?? string.Empty;
+                batteryCode = Regex.Match(batteryCode ?? string.Empty, @"[0-9\.a-zA-Z_-]+").Value;
+                if(string.IsNullOrEmpty(batteryCode))
+                {
+                    return OperateResult.CreateFailedResult("电池条码2为空");
+                }
+                ngInfo = new NgInfo();
+                ngInfo.Battery.BarCode = batteryCode;
+                ngInfo.Battery.Position = 2;
+                tempNgInfos.Add(ngInfo);
+                Tray.TrayCode = "null";
+                Tray.NgInfos = tempNgInfos;
                 #endregion
                 int reTestTimes = 0;
                 do
@@ -250,14 +308,14 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
         }
         private OperateResult TestBatteries()
         {
-            //if (DevicesController.SwitchBoard.IsConnected == false)
-            //{
-            //    var result = DevicesController.SwitchBoard.Connect();//切换板
-            //    if (result.IsFailed)
-            //    {
-            //        return result;
-            //    }
-           // }
+            if (DevicesController.SwitchBoard.IsConnected == false)
+            {
+                var result = DevicesController.SwitchBoard.Connect();//切换板
+                if (result.IsFailed)
+                {
+                    return result;
+                }
+            }
             if (DevicesController.DMM.IsConnected == false)
             {
                 var result = DevicesController.DMM.Connect();//万用表
@@ -266,6 +324,23 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                     return result;
                 }
             }
+            if(DevicesController.Ohm.IsConnected == false)
+            {
+                var result = DevicesController.Ohm.Connect();//万用表
+                if (result.IsFailed)
+                {
+                    return result;
+                }
+            }
+
+
+            //关闭所有通道
+            var closeResult = DevicesController.SwitchBoard.CloseAllChannels(2);
+            if (closeResult.IsFailed)
+            {
+                return closeResult;
+            }
+
             foreach (var item in Tray.NgInfos)
             {
                 var result = TestOneBattery(item);
@@ -287,61 +362,99 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
         }
         private OperateResult TestOneBattery(NgInfo ngInfo)
         {
+            CancelToken.ThrowIfCancellationRequested();
+            ResetEvent.WaitOne();
             var battery = ngInfo.Battery;
             LogHelper.UiLog.Info($"开始测试电池{battery.Position}");
             if (battery.IsTested && !ngInfo.IsNg)
             {
                 return OperateResult.CreateSuccessResult();
             }
-            //OperateResult openResult;
             #region
 
-            //if (battery.Position <= 20)
-            //{
-            //    //ToDo:确定通道是否正确;
-            //    int[] channels = new int[] { battery.Position, 21, 23 };
-            //    openResult = DevicesController.SwitchBoard.OpenChannels(1, channels);
-            //}
-            //else
-            //{
-            //    int[] channels = new int[] { battery.Position - 20, 21, 23 };
-            //    openResult = DevicesController.SwitchBoard.OpenChannels(2, channels);
-            //}
-            //if (openResult.IsFailed)
-            //{
-            //    return openResult;
-            //}
-
+            //打开对应通道
+            var openResult = SwitchChannel(battery.Position);
+            if (openResult.IsFailed)
+            {
+                return openResult;
+            }
+            Thread.Sleep(1000);
             #endregion
             LogHelper.UiLog.Info("读取电压");
             var read1 = DevicesController.DMM.ReadDc();
             if (read1.IsFailed)
             {
-                return OperateResult.CreateFailedResult(read1.Message ?? "读取电压失败", read1.ErrorCode);
+                return OperateResult.CreateFailedResult($"读取电压失败{read1.Message ?? "未知原因"}", read1.ErrorCode);
             }
-            battery.PVolValue = read1.Content;
+            battery.VolValue = read1.Content;
+            var read2 = DevicesController.Ohm.ReadRes();
+            if(read2.IsFailed)
+            {
+                return OperateResult.CreateFailedResult($"读取内阻失败{read2.Message ?? "未知原因"}", read2.ErrorCode);
+            }
+            battery.Res = read2.Content;
             battery.IsTested = true;
             battery.TestTime = DateTime.Now;
+            //打开对应通道
+            var closeResult = SwitchChannel(battery.Position,false);
+            if (closeResult.IsFailed)
+            {
+                return closeResult;
+            }
             return OperateResult.CreateSuccessResult();
+        }
+        private OperateResult SwitchChannel(int channel, bool open = true)
+        {
+            OperateResult openResult;
+            if (channel <= 19)
+            {
+                if (open)
+                {
+                    openResult = DevicesController.SwitchBoard.OpenChannel(2, channel);
+                }
+                else
+                {
+                    openResult = DevicesController.SwitchBoard.CloseChannel(2, channel);
+                }
+            }
+            else
+            {
+                if (open)
+                {
+                    openResult = DevicesController.SwitchBoard.OpenChannel(2, channel - 19);
+                }
+                else
+                {
+                    openResult = DevicesController.SwitchBoard.CloseChannel(2, channel - 19);
+                }
+            }
+            return openResult;
         }
         private void ValidateNgResult()
         {
             foreach (var ngInfo in Tray.NgInfos)
             {
-                if (ngInfo.Battery.PVolValue > BatteryNgCriteria.MaxPVol)
+                ngInfo.NgDescription = string.Empty;
+                ngInfo.IsNg = false;
+                if (ngInfo.Battery.VolValue > BatteryNgCriteria.MaxVol)
                 {
                     ngInfo.NgDescription = "电压过高";
                     ngInfo.IsNg = true;
                 }
-                else if (ngInfo.Battery.PVolValue < BatteryNgCriteria.MinPVol)
+                else if (ngInfo.Battery.VolValue < BatteryNgCriteria.MinVol)
                 {
                     ngInfo.NgDescription = "电压过低";
                     ngInfo.IsNg = true;
                 }
-                else
+                if(ngInfo.Battery.Res>BatteryNgCriteria.MaxRes)
                 {
-                    ngInfo.NgDescription = string.Empty;
-                    ngInfo.IsNg = false;
+                    ngInfo.NgDescription = String.IsNullOrEmpty(ngInfo.NgDescription) ? "内阻过高" : "|内阻过高";
+                    ngInfo.IsNg = true;
+                }
+                else if (ngInfo.Battery.Res > BatteryNgCriteria.MaxRes)
+                {
+                    ngInfo.NgDescription = String.IsNullOrEmpty(ngInfo.NgDescription) ? "内阻过低" : "|内阻过低";
+                    ngInfo.IsNg = true;
                 }
             }
         }
@@ -420,13 +533,13 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                 return result;
             }
         }
-        public NgInfo tempNgInfo(string Cellode,int Position) {
+        //public NgInfo tempNgInfo(string Cellode,int Position) {
         
-           NgInfo result = new NgInfo();
-           result.Battery.BarCode=Cellode;
-            result.Battery.Position = Position;
-            return result;
-        }
+        //   NgInfo result = new NgInfo();
+        //   result.Battery.BarCode=Cellode;
+        //    result.Battery.Position = Position;
+        //    return result;
+        //}
 
         #region 保存测试结果到本地Excel文件中
 

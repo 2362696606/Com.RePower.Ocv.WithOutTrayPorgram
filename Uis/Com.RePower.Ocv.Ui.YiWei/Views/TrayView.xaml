@@ -24,12 +24,14 @@
                 Grid.Row="1"
                 AutoGenerateColumns="False"
                 CanUserAddRows="False"
+                FontSize="16"
                 IsReadOnly="True"
-                ItemsSource="{Binding Tray.NgInfos}" FontSize="16">
+                ItemsSource="{Binding Tray.NgInfos}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Battery.Position}" Header="电芯位置" />
                     <DataGridTextColumn Binding="{Binding Battery.BarCode}" Header="电芯条码" />
-                    <DataGridTextColumn Binding="{Binding Battery.PVolValue}" Header="正极壳体电压" />
+                    <DataGridTextColumn Binding="{Binding Battery.VolValue}" Header="电压" />
+                    <DataGridTextColumn Binding="{Binding Battery.Res}" Header="内阻" />
                     <DataGridTextColumn Binding="{Binding NgDescription}" Header="Ng描述" />
                 </DataGrid.Columns>
             </DataGrid>
