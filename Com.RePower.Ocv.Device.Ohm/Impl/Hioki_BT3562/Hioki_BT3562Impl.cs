@@ -16,11 +16,6 @@ namespace Com.RePower.Ocv.Device.Ohm.Impl.Hioki_BT3562
         public Hioki_BT3562Impl()
         {
             this.deviceBase = new SerialPortDeviceBase();
-            var dev = deviceBase as SerialPortDeviceBase;
-            if(dev!=null)
-            {
-                dev.RecoveryModel = RecoveryModel.Manual;
-            }
         }
         public virtual int ReadDelay
         {

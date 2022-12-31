@@ -30,6 +30,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
 
         public string DeviceName { get; set; } = "UnnamedDevice";
         public SerialPortSimulatorDeviceModel Model { get; } = SerialPortSimulatorDeviceModel.SwitchBoard;
+        public int ReadDelay { get; set; }
 
         public OperateResult Connect(string portName, int baudRate)
         {
@@ -68,6 +69,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
 
         public OperateResult<byte[]> SendCmd(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
         {
+            Thread.Sleep(ReadDelay);
             if (isNeedRecovery)
             {
                 byte[] returnResult = cmd;

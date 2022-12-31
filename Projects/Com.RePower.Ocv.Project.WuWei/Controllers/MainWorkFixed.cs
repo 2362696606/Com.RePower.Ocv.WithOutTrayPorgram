@@ -224,7 +224,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     ngInfo.Battery.BatteryType = resultObj.PileContent.BatteryType == "102" ? 1 : 0;
                     tempNgInfos.Add(ngInfo);
                 }
-                
+                tempNgInfos.OrderBy(x => x.Battery.Position);
                 Tray.NgInfos = tempNgInfos;
                 #endregion
                 LogHelper.UiLog.Info("写入本地Plc[Send_1] = 1");
@@ -399,7 +399,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 return openResult;
             }
             LogHelper.UiLog.Info("读取电压");
-            //Thread.Sleep(1000);
+            Thread.Sleep(1000);
             var read1 = DevicesController.DMM.ReadDc();
             if (read1.IsFailed)
             {
@@ -414,6 +414,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             {
                 return closeResult;
             }
+            Thread.Sleep(200);
             return OperateResult.CreateSuccessResult();
         }
         private OperateResult SwitchChannel(int channel,bool open=true)

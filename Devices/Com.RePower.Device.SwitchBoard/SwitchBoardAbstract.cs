@@ -8,7 +8,7 @@ namespace Com.RePower.Device.SwitchBoard
 {
     public abstract class SwitchBoardAbstract : ISwitchBoardSerialPort
     {
-        private SerialPortHelper serialPort = new SerialPortHelper();
+        private SerialPort serialPort = new SerialPort();
 
         private string _deviceName = "UnnamedDevice";
         public string PortName 

@@ -15,24 +15,17 @@ namespace Com.RePower.DeviceBase.BaseDevice
     {
         private bool disposedValue;
 
-        private SerialPortHelper _serialPort = new SerialPortHelper();
+        private SerialPort _serialPort = new SerialPort();
 
-        public SerialPortHelper SerialPort
+        public SerialPort SerialPort
         {
             get { return _serialPort; }
             protected set { _serialPort = value; }
         }
-
-        public RecoveryModel RecoveryModel
-        {
-            get { return _serialPort.RecoveryModel; }
-            set { _serialPort.RecoveryModel = value; }
-        }
-        public int ReadDelay
-        {
-            get { return _serialPort.ReadDelay; }
-            set { _serialPort.ReadDelay = value; }
-        }
+        /// <summary>
+        /// 读取延迟
+        /// </summary>
+        public int ReadDelay { get; set; }
 
         private string _deviceName = "UnnamedDevice";
         public string PortName
@@ -67,7 +60,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
         {
             try
             {
-                SerialPort = SerialPort ?? new SerialPortHelper();
+                SerialPort = SerialPort ?? new SerialPort();
                 SerialPort.BaudRate = baudRate;
                 SerialPort.PortName = portName;
                 SerialPort.Open();
@@ -87,7 +80,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
         {
             try
             {
-                SerialPort = SerialPort ?? new SerialPortHelper();
+                SerialPort = SerialPort ?? new SerialPort();
                 SerialPort.Open();
                 if (!IsConnected)
                 {
@@ -162,7 +155,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
             {
                 if (isNeedRecovery)
                 {
-                    return SerialPort.SendAndRecovery(cmd, timeout);
+                    return SerialPort.SendAndRecovery(cmd, timeout, ReadDelay);
                 }
                 else
                 {
