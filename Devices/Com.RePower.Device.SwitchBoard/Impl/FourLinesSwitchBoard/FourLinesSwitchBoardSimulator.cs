@@ -7,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Com.RePower.Device.SwitchBoard.Impl
+namespace Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard
 {
-    public class GeneralSwitchBoardSimulator : GeneralSwitchBoardImpl
+    public class FourLinesSwitchBoardSimulator : FourLinesSwitchBoardImpl
     {
-        public GeneralSwitchBoardSimulator()
+        public FourLinesSwitchBoardSimulator()
         {
-            this.deviceBase = new SerialPortDeviceBaseSimulator();
+            deviceBase = new SerialPortDeviceBaseSimulator();
         }
     }
 }

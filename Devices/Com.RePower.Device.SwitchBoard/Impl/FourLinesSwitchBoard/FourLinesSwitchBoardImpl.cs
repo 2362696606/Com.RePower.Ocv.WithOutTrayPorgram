@@ -8,20 +8,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Com.RePower.Device.SwitchBoard.Impl
+namespace Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard
 {
-    public class GeneralSwitchBoardImpl : GeneralSwitchBoardAbstract,ISwitchBoardSerialPort
+    public class FourLinesSwitchBoardImpl : GeneralSwitchBoardAbstract, ISwitchBoardSerialPort
     {
         protected ISerialPortDeviceBase deviceBase;
 
-        public GeneralSwitchBoardImpl()
+        public FourLinesSwitchBoardImpl()
         {
-            this.deviceBase = new SerialPortDeviceBase();
+            deviceBase = new SerialPortDeviceBase();
         }
 
         public override bool IsConnected { get { return deviceBase.IsConnected; } }
 
-        public override string DeviceName 
+        public override string DeviceName
         {
             get { return deviceBase.DeviceName; }
             set { deviceBase.DeviceName = value; }
@@ -50,7 +50,7 @@ namespace Com.RePower.Device.SwitchBoard.Impl
 
         public Task<OperateResult> ConnectAsync(string portName, int baudRate)
         {
-            return deviceBase.ConnectAsync(portName,baudRate);
+            return deviceBase.ConnectAsync(portName, baudRate);
         }
 
         public override OperateResult DisConnect()

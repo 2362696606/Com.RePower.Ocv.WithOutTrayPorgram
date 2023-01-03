@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using Com.RePower.Device.DMM.Impl;
-using Com.RePower.Device.SwitchBoard.Impl;
+using Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard;
 using Com.RePower.DeviceBase;
 using Com.RePower.DeviceBase.DMM;
 using Com.RePower.DeviceBase.SwitchBoard;
@@ -26,7 +26,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                     var switchBoardSettingJson = switchBoardSettingObj.JsonValue;
                     if (!string.IsNullOrEmpty(switchBoardSettingJson))
                     {
-                        var obj = JsonConvert.DeserializeObject<GeneralSwitchBoardImpl>(switchBoardSettingJson);
+                        var obj = JsonConvert.DeserializeObject<FourLinesSwitchBoardImpl>(switchBoardSettingJson);
                         if (obj != null)
                         {
                             builder.RegisterInstance(obj)

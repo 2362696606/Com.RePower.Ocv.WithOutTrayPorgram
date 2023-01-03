@@ -55,7 +55,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
             set { _port = value; }
         }
 
-        public int ReadDelay { get; set; }
+        public int ReadDelay { get; set; } = 1000;
 
         public OperateResult Connect()
         {

@@ -63,14 +63,6 @@ namespace Com.RePower.DeviceBase.BaseDevice
             Thread.Sleep(ReadDelay);
             if (isNeedRecovery)
             {
-                //byte[] returnResult = cmd;
-                //if (Model == NetSimulatorDeviceModel.DMM)
-                //{
-                //    var random = new Random();
-                //    var randNum = random.NextDouble() * (4000 - 2000) + 2000;
-
-                //    returnResult = Encoding.ASCII.GetBytes(randNum.ToString("f" + 6));
-                //}
                 var returnResult = RecoveryMethod?.Invoke() ?? cmd;
                 return OperateResult.CreateSuccessResult(returnResult);
             }

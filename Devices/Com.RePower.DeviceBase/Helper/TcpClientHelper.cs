@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Threading;
 using System.Net.Http;
+using System.Net;
 
 namespace Com.RePower.DeviceBase.Helper
 {
@@ -19,6 +20,9 @@ namespace Com.RePower.DeviceBase.Helper
         {
             try
             {
+                string ip = ((IPEndPoint?)tcpClient.Client.RemoteEndPoint)?.Address.ToString()??"未知IP";
+                string port = ((IPEndPoint?)tcpClient.Client.RemoteEndPoint)?.Port.ToString() ?? "未知端口";
+                Log.getMessageFile("tcp通讯日志").Info($"IP:{ip},端口:{port},发送:{bytes.ToHexString(',')}");
                 tcpClient.GetStream().Write(bytes, 0, bytes.Length);
                 byte[] rBuffer = new byte[1024 * 64];//接收临时缓存数组
                 tcpClient.ReceiveTimeout = timeOut;
@@ -28,6 +32,7 @@ namespace Com.RePower.DeviceBase.Helper
                 int leg = tcpClient.GetStream().Read(rBuffer, 0, rBuffer.Length);
                 byte[] buffer = new byte[leg];//实际接收数据大小
                 Array.Copy(rBuffer, 0, buffer, 0, leg);
+                Log.getMessageFile("tcp通讯日志").Info($"IP:{ip},端口:{port},收到回复:{buffer.ToHexString(',')}");
                 return OperateResult.CreateSuccessResult(buffer);
             }
             catch (Exception err)
@@ -40,6 +45,9 @@ namespace Com.RePower.DeviceBase.Helper
         {
             try
             {
+                string ip = ((IPEndPoint?)tcpClient.Client.RemoteEndPoint)?.Address.ToString() ?? "未知IP";
+                string port = ((IPEndPoint?)tcpClient.Client.RemoteEndPoint)?.Port.ToString() ?? "未知端口";
+                Log.getMessageFile("tcp通讯日志").Info($"IP:{ip},端口:{port},发送:{bytes.ToHexString(',')}");
                 await tcpClient.GetStream().WriteAsync(bytes, 0, bytes.Length);
                 byte[] rBuffer = new byte[1024 * 64];//接收临时缓存数组
                 tcpClient.ReceiveTimeout = timeOut;
@@ -49,6 +57,7 @@ namespace Com.RePower.DeviceBase.Helper
                 int leg = await tcpClient.GetStream().ReadAsync(rBuffer, 0, rBuffer.Length);
                 byte[] buffer = new byte[leg];//实际接收数据大小
                 Array.Copy(rBuffer, 0, buffer, 0, leg);
+                Log.getMessageFile("tcp通讯日志").Info($"IP:{ip},端口:{port},收到回复:{buffer.ToHexString(',')}");
                 return OperateResult.CreateSuccessResult(buffer);
             }
             catch (Exception err)

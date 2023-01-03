@@ -1,7 +1,7 @@
 ﻿using Com.RePower.WpfBase;
 using Com.RePower.WpfBase.Extensions;
 
-namespace Com.RePower.Device.SwitchBoard
+namespace Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard
 {
     public abstract class GeneralSwitchBoardAbstract : SwitcbBoardBase
     {
@@ -92,10 +92,10 @@ namespace Com.RePower.Device.SwitchBoard
 
         public override OperateResult OpenChannels(int boardIndex, int[] channels)
         {
-            foreach(var item in channels)
+            foreach (var item in channels)
             {
                 var result = OpenChannel(boardIndex, item);
-                if(result.IsFailed)
+                if (result.IsFailed)
                 {
                     return result;
                 }

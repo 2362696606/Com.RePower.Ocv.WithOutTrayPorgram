@@ -53,7 +53,7 @@ namespace Com.RePower.Device.DMM
 
         public abstract OperateResult<byte[]> SendCmd(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true);
 
-        public Task<OperateResult<byte[]>> SendCmdAsync(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
+        public virtual Task<OperateResult<byte[]>> SendCmdAsync(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
         {
             return Task.Run(() => SendCmd(cmd, timeout, isNeedRecovery));
         }

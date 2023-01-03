@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Com.RePower.DeviceBase.DMM;
 using Com.RePower.Device.DMM.Impl;
+using Com.RePower.Device.DMM.Impl.Keysight_34461A;
 
 namespace Com.RePower.Ocv.Project.WuWei.Modules
 {
@@ -27,10 +28,10 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                     var dmmSettingJson = dmmSettingObj.JsonValue;
                     if (!string.IsNullOrEmpty(dmmSettingJson))
                     {
-                        var obj = JsonConvert.DeserializeObject<Keysight_34461A>(dmmSettingJson);
+                        var obj = JsonConvert.DeserializeObject<Keysight_34461AImpl>(dmmSettingJson);
                         if (obj != null)
                         {
-                            builder.RegisterInstance<Keysight_34461A>(obj)
+                            builder.RegisterInstance(obj)
                                 .AsSelf()
                                 .As<IDMM>()
                                 .As<IDevice>();
