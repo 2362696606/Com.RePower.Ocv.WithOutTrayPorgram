@@ -8,22 +8,20 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.DeviceBase.BaseDevice
 {
-    public class NetDeviceBaseSimulator : INetDeviceBase
+    public class NetDeviceBaseSimulator : INetDeviceBase,ISimulatorRecovery
     {
         private bool disposedValue;
 
-        public NetDeviceBaseSimulator(NetSimulatorDeviceModel model)
-        {
-            Model = model;
-        }
-
         public string IpAddress { get; set; } = "127.0.0.1";
+
         public int Port { get; set; } = 5020;
 
         public bool IsConnected { get; private set; }= false;
 
         public string DeviceName { get; set; } = "UnnamedDevice";
-        public NetSimulatorDeviceModel Model { get; } = NetSimulatorDeviceModel.DMM;
+
+        public int ReadDelay { get; set ; }
+        public Func<byte[]>? RecoveryMethod { get ; set; }
 
         public OperateResult Connect(string ipAddress, int port)
         {
@@ -62,17 +60,18 @@ namespace Com.RePower.DeviceBase.BaseDevice
 
         public OperateResult<byte[]> SendCmd(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
         {
+            Thread.Sleep(ReadDelay);
             if (isNeedRecovery)
             {
-                byte[] returnResult = cmd;
-                if (Model == NetSimulatorDeviceModel.DMM)
-                {
-                    var random = new Random();
-                    var randNum = random.NextDouble() * (4000 - 2000) + 2000;
+                //byte[] returnResult = cmd;
+                //if (Model == NetSimulatorDeviceModel.DMM)
+                //{
+                //    var random = new Random();
+                //    var randNum = random.NextDouble() * (4000 - 2000) + 2000;
 
-                    returnResult = Encoding.ASCII.GetBytes(randNum.ToString("f" + 6));
-                }
-
+                //    returnResult = Encoding.ASCII.GetBytes(randNum.ToString("f" + 6));
+                //}
+                var returnResult = RecoveryMethod?.Invoke() ?? cmd;
                 return OperateResult.CreateSuccessResult(returnResult);
             }
             else

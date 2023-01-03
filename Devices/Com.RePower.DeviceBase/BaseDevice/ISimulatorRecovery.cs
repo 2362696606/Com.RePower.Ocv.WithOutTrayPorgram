@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.DeviceBase.BaseDevice
 {
-    public enum SerialPortSimulatorDeviceModel
+    public interface ISimulatorRecovery
     {
-        SwitchBoard,
-        Ohm
+        public Func<byte[]>? RecoveryMethod { get; set; }
     }
 }

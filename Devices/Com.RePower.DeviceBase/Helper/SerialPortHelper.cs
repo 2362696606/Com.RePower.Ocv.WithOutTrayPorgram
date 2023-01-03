@@ -20,7 +20,7 @@ namespace Com.RePower.DeviceBase.Helper
         /// <param name="timeOut">超时时间，-1为无限等待，只有自动模式才有效</param>
         /// <param name="readDelay">读取延迟，-1为默认延迟，只有手动模式才有效</param>
         /// <returns></returns>
-        public static OperateResult<byte[]> SendAndRecovery(this SerialPort serialPort, byte[] bytes, int timeOut = 1000,int readDelay = -1)
+        public static OperateResult<byte[]> SendAndRecovery(this SerialPort serialPort, byte[] bytes, int timeOut = 10000,int readDelay = -1)
         {
             Log.getMessageFile("串口日志").Info($"串口:{serialPort.PortName}发送{bytes.ToHexString(',')}");
 
@@ -54,11 +54,11 @@ namespace Com.RePower.DeviceBase.Helper
             return OperateResult.CreateSuccessResult<byte[]>(result);
         }
 
-        public static async Task<OperateResult<byte[]>> SendAndRecoveryAsync(this SerialPort serialPort, byte[] bytes, int timeOut)
+        public static async Task<OperateResult<byte[]>> SendAndRecoveryAsync(this SerialPort serialPort, byte[] bytes, int timeOut = 10000, int readDelay = -1)
         {
             return await Task.Run<OperateResult<byte[]>>(() =>
             {
-                return serialPort.SendAndRecovery(bytes, timeOut);
+                return serialPort.SendAndRecovery(bytes, timeOut, readDelay);
             });
         }
     }

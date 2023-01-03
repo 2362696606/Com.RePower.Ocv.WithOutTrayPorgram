@@ -218,9 +218,7 @@ namespace Com.RePower.Device.DMM
                 {
                     byte[] rBuffer = new byte[1024 * 64];//接收临时缓存数组
                     tcpClient.ReceiveTimeout = timeout;
-
                     Thread.Sleep(1000);
-
                     int leg = tcpClient.GetStream().Read(rBuffer, 0, rBuffer.Length);
                     byte[] buffer = new byte[leg];//实际接收数据大小
                     Array.Copy(rBuffer, 0, buffer, 0, leg);

@@ -1,6 +1,8 @@
-﻿using Com.RePower.WpfBase;
+﻿using Com.RePower.DeviceBase.Helper;
+using Com.RePower.WpfBase;
 using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -24,6 +26,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
         private string _ipAddress = "127.0.0.1";
 
         private int _port = 502;
+
         private bool disposedValue;
 
         public bool IsConnected
@@ -51,6 +54,8 @@ namespace Com.RePower.DeviceBase.BaseDevice
             get { return _port; }
             set { _port = value; }
         }
+
+        public int ReadDelay { get; set; }
 
         public OperateResult Connect()
         {
@@ -190,12 +195,42 @@ namespace Com.RePower.DeviceBase.BaseDevice
 
         public OperateResult<byte[]> SendCmd(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (isNeedRecovery)
+                {
+                    return TcpClient.SendAndRecovery(cmd, timeout, ReadDelay);
+                }
+                else
+                {
+                    TcpClient.GetStream().Write(cmd, 0, cmd.Length);
+                    return OperateResult.CreateSuccessResult<byte[]>(null);
+                }
+            }
+            catch (Exception err)
+            {
+                return OperateResult.CreateFailedResult<byte[]>(err.Message, err.HResult);
+            }
         }
 
-        public Task<OperateResult<byte[]>> SendCmdAsync(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
+        public async Task<OperateResult<byte[]>> SendCmdAsync(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (isNeedRecovery)
+                {
+                    return await TcpClient.SendAndRecoveryAsync(cmd, timeout, ReadDelay);
+                }
+                else
+                {
+                    await TcpClient.GetStream().WriteAsync(cmd, 0, cmd.Length);
+                    return OperateResult.CreateSuccessResult<byte[]>(null);
+                }
+            }
+            catch (Exception err)
+            {
+                return OperateResult.CreateFailedResult<byte[]>(err.Message, err.HResult);
+            }
         }
     }
 }

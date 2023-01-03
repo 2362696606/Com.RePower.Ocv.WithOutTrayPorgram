@@ -7,29 +7,20 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.DeviceBase.BaseDevice
 {
-    public class SerialPortDeviceBaseSimulator : ISerialPortDeviceBase
+    public class SerialPortDeviceBaseSimulator : ISerialPortDeviceBase,ISimulatorRecovery
     {
         private bool disposedValue;
-        public SerialPortDeviceBaseSimulator()
-        {
-            Model = SerialPortSimulatorDeviceModel.SwitchBoard;
-        }
-        /// <summary>
-        /// 模拟构造
-        /// </summary>
-        /// <param name="module">1为切换板，2为内阻仪</param>
-        public SerialPortDeviceBaseSimulator(SerialPortSimulatorDeviceModel model)
-        {
-            Model = model;
-        }
+
+        public Func<byte[]>? RecoveryMethod { get; set; }
 
         public string PortName { get; set; } = "COM1";
+
         public int BaudRate { get; set; } = 5002;
 
         public bool IsConnected { get; set; }
 
         public string DeviceName { get; set; } = "UnnamedDevice";
-        public SerialPortSimulatorDeviceModel Model { get; } = SerialPortSimulatorDeviceModel.SwitchBoard;
+
         public int ReadDelay { get; set; }
 
         public OperateResult Connect(string portName, int baudRate)
@@ -72,15 +63,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
             Thread.Sleep(ReadDelay);
             if (isNeedRecovery)
             {
-                byte[] returnResult = cmd;
-                if (Model == SerialPortSimulatorDeviceModel.Ohm)
-                {
-                    var random = new Random();
-                    var randNum = random.NextDouble() * (0.001 - 0.0001) + 0.00001;
-
-                    returnResult = Encoding.ASCII.GetBytes(randNum.ToString("f" + 6));
-                }
-
+                var returnResult = RecoveryMethod?.Invoke() ?? cmd;
                 return OperateResult.CreateSuccessResult(returnResult);
             }
             else
