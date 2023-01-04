@@ -11,10 +11,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace Com.RePower.Ocv.Model
+namespace Com.RePower.Ocv.Model.Extensions
 {
     public static class ObjectExtensions
-    { 
+    {
         /// <summary>
         /// 返回对象格式化后的Json字符串
         /// </summary>
@@ -33,7 +33,7 @@ namespace Com.RePower.Ocv.Model
                 StringWriter textWriter = new StringWriter();
                 JsonTextWriter jsonWriter = new JsonTextWriter(textWriter)
                 {
-                    Formatting = Newtonsoft.Json.Formatting.Indented,
+                    Formatting = Formatting.Indented,
                     Indentation = 4,
                     IndentChar = ' '
                 };
@@ -63,7 +63,7 @@ namespace Com.RePower.Ocv.Model
         }
         public static bool IsDefault<T>(this T obj)
         {
-            T theDefault = default(T);
+            T theDefault = default;
             if (obj == null && theDefault == null)
             {
                 return true;

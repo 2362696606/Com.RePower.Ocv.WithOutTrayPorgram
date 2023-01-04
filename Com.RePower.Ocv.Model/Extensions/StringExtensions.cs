@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Operators;
 
-namespace Com.RePower.Ocv.Model
+namespace Com.RePower.Ocv.Model.Extensions
 {
     public static class StringExtensions
     {
@@ -225,7 +225,7 @@ namespace Com.RePower.Ocv.Model
             {
                 return JsonConvert.DeserializeObject<T>(str);
             }
-            return default(T);
+            return default;
         }
         /// <summary>
         /// 把压缩版的Json字符串转换成标准版的Json字符串
@@ -248,14 +248,14 @@ namespace Com.RePower.Ocv.Model
             if (str != null)
             {
                 MD5 md5 = new MD5CryptoServiceProvider();
-                byte[] result = md5.ComputeHash(System.Text.Encoding.ASCII.GetBytes(str));
-                return System.Text.Encoding.ASCII.GetString(result);
+                byte[] result = md5.ComputeHash(Encoding.ASCII.GetBytes(str));
+                return Encoding.ASCII.GetString(result);
             }
             return null;
         }
         public static string FormatWith(this string str, params object[] args)
         {
-            return String.Format(str, args);
+            return string.Format(str, args);
         }
         public static string FormatWith2(this string str, params object[] arr)
         {
@@ -403,7 +403,7 @@ namespace Com.RePower.Ocv.Model
         /// <returns></returns>
         public static string GetFileExtention(this string path)
         {
-            return System.IO.Path.GetExtension(path);
+            return Path.GetExtension(path);
         }
         /// <summary>
         ///   D:\Backup\my.txt  => my
@@ -412,7 +412,7 @@ namespace Com.RePower.Ocv.Model
         /// <returns></returns>
         public static string GetFileNameWithoutExtension(this string path)
         {
-            return System.IO.Path.GetFileNameWithoutExtension(path);
+            return Path.GetFileNameWithoutExtension(path);
         }
         /// <summary>
         /// 检测文件filepath是否存在:  如:  D:\1.txt
@@ -596,7 +596,7 @@ namespace Com.RePower.Ocv.Model
             long sum = 0;
             foreach (char t in str)
             {
-                sum = (long)((16 * sum) ^ Convert.ToUInt32(t));
+                sum = 16 * sum ^ Convert.ToUInt32(t);
                 var overflow = (byte)(sum / 4294967296);
                 sum -= overflow * 4294967296;
                 sum ^= overflow;
@@ -625,7 +625,7 @@ namespace Com.RePower.Ocv.Model
         public static string GetRandomString(this string randomString, int length, bool useNum, bool useLow, bool useUpp, bool useSpe, string custom)
         {
             byte[] b = new byte[4];
-            new System.Security.Cryptography.RNGCryptoServiceProvider().GetBytes(b);
+            new RNGCryptoServiceProvider().GetBytes(b);
             Random r = new Random(BitConverter.ToInt32(b, 0));
             string s = null, str = custom;
             if (useNum == true) { str += "0123456789"; }
@@ -641,7 +641,7 @@ namespace Com.RePower.Ocv.Model
 
         public static string Add4(this string str)
         {
-            return str + GetRandomString("", 4, true, true, true, false, "");
+            return str + "".GetRandomString(4, true, true, true, false, "");
         }
         /// <summary>
         /// 把16进制字符串转化成byte[]
@@ -686,7 +686,7 @@ namespace Com.RePower.Ocv.Model
             List<MethodInfo> list = type.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).ToList();
             MethodInfo method = list.FirstOrDefault(p =>
             {
-                System.ComponentModel.DescriptionAttribute item = (System.ComponentModel.DescriptionAttribute)p.GetCustomAttributes(typeof(System.ComponentModel.DescriptionAttribute)).FirstOrDefault();
+                DescriptionAttribute item = (DescriptionAttribute)p.GetCustomAttributes(typeof(DescriptionAttribute)).FirstOrDefault();
                 if (item != null && item.Description == str)
                 {
                     return true;
@@ -730,7 +730,7 @@ namespace Com.RePower.Ocv.Model
             List<byte> list = new List<byte>();
             foreach (Match match in matches)
             {
-                byte hexStringToByte = HexStringToByte(match.Value);
+                byte hexStringToByte = match.Value.HexStringToByte();
                 list.Add(hexStringToByte);
             }
 
@@ -768,7 +768,7 @@ namespace Com.RePower.Ocv.Model
         /// <param name="str"></param>
         /// <param name="appendString"></param>
         /// <returns></returns>
-        public static string App(this string str,string appendString)
+        public static string App(this string str, string appendString)
         {
             return str + appendString;
         }
@@ -810,7 +810,7 @@ namespace Com.RePower.Ocv.Model
         /// <param name="path1"></param>
         /// <param name="path2"></param>
         /// <returns></returns>
-        public static string PathCombine(this  string path1,string path2)
+        public static string PathCombine(this string path1, string path2)
         {
             return Path.Combine(path1, path2);
         }

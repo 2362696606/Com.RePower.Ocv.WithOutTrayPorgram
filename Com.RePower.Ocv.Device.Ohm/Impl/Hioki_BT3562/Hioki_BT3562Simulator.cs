@@ -20,7 +20,7 @@ namespace Com.RePower.Ocv.Device.Ohm.Impl.Hioki_BT3562
         {
 
             var random = new Random();
-            var randNum = random.NextDouble() * (0.001 - 0.0001) + 0.00001;
+            var randNum = random.NextDouble() * (0.001 - 0.0001) + 0.0001;
             var returnResult = Encoding.ASCII.GetBytes(randNum.ToString("f" + 6));
             return returnResult;
         }

@@ -1,5 +1,6 @@
 ﻿using HslCommunication;
 using HslCommunication.Profinet.Inovance;
+using Newtonsoft.Json;
 using System.Diagnostics;
 using System.IO.Ports;
 using System.Text;
@@ -69,5 +70,25 @@ namespace Com.RePower.Ocv.Test
                 OutputHelper.WriteLine("超时");
             }
         }
+        [Fact]
+        public void JsonConvertTest()
+        {
+            var testEntity = new TestClass();
+            string jsonStr = JsonConvert.SerializeObject(testEntity);
+            OutputHelper.WriteLine(jsonStr);
+            string jsonStr1 = "{\"StringValue\":\"\",\"EnumValue\":\"Ω\",\"IntValue\":0}";
+            var obj = JsonConvert.DeserializeObject<TestClass>(jsonStr1);
+        }
+    }
+    public class TestClass
+    {
+        public string StringValue { get; set; } = string.Empty;
+        public TestEnum EnumValue { get; set; } = TestEnum.mΩ;
+        public int IntValue { get; set; }
+    }
+    public enum TestEnum
+    {
+        mΩ,
+        Ω
     }
 }

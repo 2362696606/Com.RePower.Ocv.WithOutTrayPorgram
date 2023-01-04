@@ -11,6 +11,11 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
     public abstract class Keysight_34461AAbstract : DMMBase
     {
         /// <summary>
+        /// 当前测试模式
+        /// </summary>
+        private TestModel model = TestModel.Unknow;
+
+        /// <summary>
         /// 直流电压量程
         /// </summary>
         public string DcRange { get; set; } = "auto on";
@@ -34,15 +39,22 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
         /// 电阻NPLC
         /// </summary>
         public string ResNplc { get; set; } = "1";
+
         /// <summary>
         /// 读取延迟
         /// </summary>
         public abstract int ReadDelay { get; set; }
 
         /// <summary>
-        /// 当前测试模式
+        /// 测量结果单位
         /// </summary>
-        private TestModel model = TestModel.Unknow;
+        public ResultUnit ResultUnit { get; set; } = ResultUnit.mV;
+
+        /// <summary>
+        /// 保留小数位
+        /// </summary>
+        public int Digits { get; set; } = 3;
+
         protected virtual OperateResult<double> ReadValue(byte[] cmd)
         {
             var result = SendCmd(cmd);
@@ -102,7 +114,19 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
 
         protected virtual double TranslateToDouble(byte[] bytes)
         {
-            return (double)Decimal.Parse(Encoding.ASCII.GetString(bytes), System.Globalization.NumberStyles.Float);
+            var value = (double)Decimal.Parse(Encoding.ASCII.GetString(bytes), System.Globalization.NumberStyles.Float);
+            switch(ResultUnit)
+            {
+                default:
+                case ResultUnit.mV:
+                    value = value * 1000;
+                    value = Math.Round(value, Digits);
+                    break;
+                case ResultUnit.V:
+                    value = Math.Round(value, Digits);
+                    break;
+            }
+            return value;
         }
         public override OperateResult<double> ReadAc()
         {

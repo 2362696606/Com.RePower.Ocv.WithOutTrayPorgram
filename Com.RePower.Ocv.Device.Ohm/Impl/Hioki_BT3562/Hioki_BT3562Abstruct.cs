@@ -10,6 +10,15 @@ namespace Com.RePower.Ocv.Device.Ohm.Impl.Hioki_BT3562
 {
     public abstract class Hioki_BT3562Abstruct : OhmBase
     {
+        /// <summary>
+        /// 结果单位
+        /// </summary>
+        public ResultUnit ResultUnit { get; set; } = ResultUnit.mΩ;
+
+        /// <summary>
+        /// 保留小数位
+        /// </summary>
+        public int Digits { get; set; } = 3;
         public override OperateResult<double> ReadRes()
         {
             byte[] cmd = Encoding.ASCII.GetBytes(":READ?" + "\r\n");
@@ -36,10 +45,28 @@ namespace Com.RePower.Ocv.Device.Ohm.Impl.Hioki_BT3562
                     //转换为毫安
                     //double parseDoubleVal = (double)decimal.Parse(values[0],
                     //    System.Globalization.NumberStyles.Float) * 1000;
-                    var parseDoubleVal = double.Parse(values[0]) * 1000;
+                    //var parseDoubleVal = double.Parse(values[0]) * 1000;
+                    var parseDoubleVal = TranslateToDouble(values[0]);
                     return OperateResult.CreateSuccessResult(parseDoubleVal);
                 }
             }
+        }
+        protected virtual double TranslateToDouble(string valueSource)
+        {
+            //var value = (double)Decimal.Parse(Encoding.ASCII.GetString(bytes), System.Globalization.NumberStyles.Float);
+            var value = double.Parse(valueSource);
+            switch(ResultUnit)
+            {
+                default:
+                case ResultUnit.mΩ:
+                    value = value * 1000;
+                    value = Math.Round(value, Digits);
+                    break;
+                case ResultUnit.Ω:
+                    value = Math.Round(value, Digits);
+                    break;
+            }
+            return value;
         }
     }
 }

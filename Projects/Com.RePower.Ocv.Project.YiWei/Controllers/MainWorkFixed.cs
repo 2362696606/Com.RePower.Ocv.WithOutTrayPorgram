@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Com.RePower.Ocv.Model;
+using Com.RePower.Ocv.Model.Extensions;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.YiWei.DataBaseContext;
 using Com.RePower.Ocv.Project.YiWei.Model;
@@ -567,54 +568,54 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
             return (savePath, title);
         }
 
-        /// <summary>
-        /// 保存新DataGridView结果到Excel文件
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="testResult"></param>
-        /// <returns></returns>
-        private (DataTable, Dictionary<string, string>) GetDataTableAndDicFromTestResult<T>(List<T> testResult) where T : class
-        {
-            DataTable dt = new DataTable();
-            Type type = typeof(T);
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            List<PropertyInfo> propertyInfos = type.GetProperties(BindingFlags.Instance | BindingFlags.Public).ToList();
-            foreach (PropertyInfo propertyInfo in propertyInfos)
-            {
-                var attr = propertyInfo.GetCustomAttribute(typeof(TableColumnNameAttribute))?.As<TableColumnNameAttribute>();
-                if (attr != null && attr.Enable)
-                {
-                    if (propertyInfo.GetCustomAttribute(typeof(IgnoreWhenOutputExcelAttribute)) == null)
-                    {
-                        dic.Add(propertyInfo.Name, attr.ColumnName);
-                        dt.Columns.Add(propertyInfo.Name, typeof(string));
-                    }
-                }
-            }
-            foreach (var item in testResult)
-            {
-                DataRow row = dt.NewRow();
-                foreach (PropertyInfo propertyInfo in propertyInfos)
-                {
-                    var attr = propertyInfo.GetCustomAttribute(typeof(TableColumnNameAttribute))?.As<TableColumnNameAttribute>();
-                    if (attr != null && attr.Enable)
-                    {
-                        if (propertyInfo.GetCustomAttribute(typeof(IgnoreWhenOutputExcelAttribute)) == null)
-                        {
-                            PropertyInfo findProperty = item.GetPropertyObj(propertyInfo.Name);
-                            if (findProperty != null)
-                            {
-                                var obj = item.GetPropertyByName<object>(propertyInfo.Name);
-                                row[propertyInfo.Name] = obj + "";
-                            }
-                        }
-                    }
-                }
+        ///// <summary>
+        ///// 保存新DataGridView结果到Excel文件
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="testResult"></param>
+        ///// <returns></returns>
+        //private (DataTable, Dictionary<string, string>) GetDataTableAndDicFromTestResult<T>(List<T> testResult) where T : class
+        //{
+        //    DataTable dt = new DataTable();
+        //    Type type = typeof(T);
+        //    Dictionary<string, string> dic = new Dictionary<string, string>();
+        //    List<PropertyInfo> propertyInfos = type.GetProperties(BindingFlags.Instance | BindingFlags.Public).ToList();
+        //    foreach (PropertyInfo propertyInfo in propertyInfos)
+        //    {
+        //        var attr = propertyInfo.GetCustomAttribute(typeof(TableColumnNameAttribute))?.As<TableColumnNameAttribute>();
+        //        if (attr != null && attr.Enable)
+        //        {
+        //            if (propertyInfo.GetCustomAttribute(typeof(IgnoreWhenOutputExcelAttribute)) == null)
+        //            {
+        //                dic.Add(propertyInfo.Name, attr.ColumnName);
+        //                dt.Columns.Add(propertyInfo.Name, typeof(string));
+        //            }
+        //        }
+        //    }
+        //    foreach (var item in testResult)
+        //    {
+        //        DataRow row = dt.NewRow();
+        //        foreach (PropertyInfo propertyInfo in propertyInfos)
+        //        {
+        //            var attr = propertyInfo.GetCustomAttribute(typeof(TableColumnNameAttribute))?.As<TableColumnNameAttribute>();
+        //            if (attr != null && attr.Enable)
+        //            {
+        //                if (propertyInfo.GetCustomAttribute(typeof(IgnoreWhenOutputExcelAttribute)) == null)
+        //                {
+        //                    PropertyInfo findProperty = item.GetPropertyObj(propertyInfo.Name);
+        //                    if (findProperty != null)
+        //                    {
+        //                        var obj = item.GetPropertyByName<object>(propertyInfo.Name);
+        //                        row[propertyInfo.Name] = obj + "";
+        //                    }
+        //                }
+        //            }
+        //        }
 
-                dt.Rows.Add(row);
-            }
-            return (dt, dic);
-        }
+        //        dt.Rows.Add(row);
+        //    }
+        //    return (dt, dic);
+        //}
 
         /// <summary>
         /// 保存测试结果

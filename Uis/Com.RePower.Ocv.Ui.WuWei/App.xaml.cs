@@ -10,6 +10,7 @@ using Com.RePower.Ocv.Project.WuWei.Modules;
 using Com.RePower.Ocv.Ui.WuWei.ViewModels;
 using Com.RePower.Ocv.Ui.WuWei.Views;
 using Com.RePower.WpfBase;
+using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -74,6 +75,7 @@ namespace Com.RePower.Ocv.Ui.WuWei
             var dataAccess = Assembly.GetExecutingAssembly();
             builder.RegisterAssemblyTypes(dataAccess).Where(t => t.Name.EndsWith("ViewModel") || t.Name.EndsWith("View"))
                 .AsSelf();
+            builder.RegisterType<SnackbarMessageQueue>().As<ISnackbarMessageQueue>();
 
             builder.RegisterModule<DevicesControllerModule>();
             builder.RegisterModule<DMMModule>();

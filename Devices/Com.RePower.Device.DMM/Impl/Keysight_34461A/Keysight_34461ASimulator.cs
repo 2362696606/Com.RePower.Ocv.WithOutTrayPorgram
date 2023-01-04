@@ -19,7 +19,7 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
         private byte[] RecoveryMethod()
         {
             var random = new Random();
-            var randNum = random.NextDouble() * (4000 - 2000) + 2000;
+            var randNum = random.NextDouble() * (4.0 - 2.0) + 2.0;
             var returnResult = Encoding.ASCII.GetBytes(randNum.ToString("f" + 6));
             return returnResult;
         }

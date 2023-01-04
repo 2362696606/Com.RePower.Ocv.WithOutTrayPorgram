@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Com.RePower.Ocv.Model;
+using Com.RePower.Ocv.Model.Extensions;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.WuWei.DataBaseContext;
 using Com.RePower.Ocv.Project.WuWei.Model;
@@ -44,6 +45,9 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             WmsService = wmsService;
         }
 
+        /// <summary>
+        /// 工作状态
+        /// </summary>
         public int WorkStatus
         {
             get { return _workStatus; }
@@ -57,6 +61,9 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         public TestOption TestOption { get; }
         public IWmsService WmsService { get; }
 
+        /// <summary>
+        /// 是否上传到Mes
+        /// </summary>
         public bool IsDoUploadToMes
         {
             get { return TestOption.IsDoUploadToMes; }
@@ -69,6 +76,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         {
             get { return TestOption.IsDoRetest; }
         }
+
         /// <summary>
         /// 复测次数
         /// </summary>
@@ -77,28 +85,45 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             get { return TestOption.RetestTimes; }
         }
 
+        /// <summary>
+        /// 暂停标志
+        /// </summary>
         public ManualResetEvent ResetEvent
         {
             get { return FlowController.ResetEvent; }
         }
+
+        /// <summary>
+        /// 停止标志源
+        /// </summary>
         public CancellationTokenSource CancelTokenSource
         {
             get { return FlowController.CancelTokenSource; }
         }
+
+        /// <summary>
+        /// 停止标志
+        /// </summary>
         public CancellationToken CancelToken
         {
             get { return FlowController.CancelToken; }
         }
 
+        /// <summary>
+        /// 暂停测试
+        /// </summary>
         public async void PauseWorkAsync()
         {
             WorkStatus = 2;
             await Task.Run(() =>
             {
-                ResetEvent.Set();
+                ResetEvent.Reset();
             });
         }
 
+        /// <summary>
+        /// 开始测试
+        /// </summary>
         public async void StartWorkAsync()
         {
             if (WorkStatus == 0)
@@ -108,6 +133,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 {
                     try
                     {
+                        ResetEvent.Set();
                         var result = DoWork();
                         if (result.IsFailed)
                         {
@@ -134,10 +160,13 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             else if (WorkStatus == 2)
             {
                 WorkStatus = 1;
-                ResetEvent.Reset();
+                ResetEvent.Set();
             }
         }
 
+        /// <summary>
+        /// 停止测试
+        /// </summary>
         public async void StopWorkAsync()
         {
             WorkStatus = 0;
@@ -147,6 +176,10 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             });
         }
 
+        /// <summary>
+        /// 测试工作流
+        /// </summary>
+        /// <returns>测试结果</returns>
         private OperateResult DoWork()
         {
             while (true)
@@ -157,174 +190,268 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 //{
                 //    return init1;
                 //}
+                #endregion
+                #region 停止或暂停
                 CancelToken.ThrowIfCancellationRequested();
                 ResetEvent.WaitOne();
                 #endregion
                 #region 等待测试准备信号
-                LogHelper.UiLog.Info("等待本地Plc[Read_1] = 1");
+                LogHelper.UiLog.Info("等待Plc[Read_1] = 1");
                 var wait1 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["Read_1"], (short)1);
                 if (wait1.IsFailed)
                 {
-                    return OperateResult.CreateFailedResult(wait1.Message ?? "等待本地Plc[Read_1] = 1失败", wait1.ErrorCode);
+                    return OperateResult.CreateFailedResult(wait1.Message ?? "等待Plc[Read_1] = 1失败", wait1.ErrorCode);
                 }
+                #endregion
+                #region 停止或暂停
+                CancelToken.ThrowIfCancellationRequested();
+                ResetEvent.WaitOne();
                 #endregion
                 #region 读取托盘条码
-                bool validateResult = false;
-                string trayCode = string.Empty;
-                LogHelper.UiLog.Info("读取物流Plc[托盘条码]");
-                var read1 = DevicesController.LocalPlc.ReadString(DevicesController.LocalPlcAddressCache["Read_2"], 20);
-                if (read1.IsFailed)
-                {
-                    return OperateResult.CreateFailedResult(read1.Message ?? "读取物流Plc[托盘条码]失败", read1.ErrorCode);
-                }
-                trayCode = read1.Content ?? string.Empty;
-                trayCode = Regex.Match(read1.Content ?? string.Empty, @"[0-9\.a-zA-Z_-]+").Value;
-                Tray.TrayCode = trayCode;
-                validateResult = ValidateBatteryCode(trayCode);
-                if (!validateResult)
-                {
-                    return OperateResult.CreateFailedResult($"读取托盘条码失败,{trayCode}不合规");
-                }
+                var readTrayCodeResult = ReadTrayCode();
+                if (readTrayCodeResult.IsFailed)
+                    return readTrayCodeResult; 
                 #endregion
-                #region 请求电芯条码
-                LogHelper.UiLog.Info("请求电芯条码");
-                var getBatteriesInfoResult = WmsService.GetBatteriesInfo();
-                if (getBatteriesInfoResult.IsFailed)
-                {
-                    return getBatteriesInfoResult;
-                }
-                string content = getBatteriesInfoResult?.Content ?? string.Empty;
-                var resultObj = JsonConvert.DeserializeObject<WmsBatteriesInfoDto>(content);
-                if (resultObj == null)
-                {
-                    SetAlarm();
-                    return OperateResult.CreateFailedResult("请求电芯条码返回值为null");
-                }
-                if (resultObj.Result == 0)
-                {
-                    SetAlarm();
-                    return OperateResult.CreateSuccessResult($"请求电芯条码失败，原因是{resultObj.Message}");
-                }
-                if (resultObj.PileContent == null)
-                {
-                    SetAlarm();
-                    return OperateResult.CreateFailedResult($"请求电芯条码失败，主体为null");
-                }
-                if (resultObj.PileContent.PalletBarcode != Tray.TrayCode)
-                {
-                    SetAlarm();
-                    return OperateResult.CreateFailedResult($"请求电芯条码失败，WMS返回托盘条码{resultObj.PileContent.PalletBarcode}与本地托盘条码{Tray.TrayCode}不一致");
-                }
-                var tempNgInfos = new System.Collections.ObjectModel.ObservableCollection<NgInfo>();
-                foreach (var item in resultObj.PileContent.Batterys)
-                {
-                    NgInfo ngInfo = new NgInfo();
-                    ngInfo.Battery.BarCode = item.BatteryBarcode;
-                    ngInfo.Battery.Position = item.PalletIndex;
-                    ngInfo.Battery.BatteryType = resultObj.PileContent.BatteryType == "102" ? 1 : 0;
-                    tempNgInfos.Add(ngInfo);
-                }
-                tempNgInfos.OrderBy(x => x.Battery.Position);
-                Tray.NgInfos = tempNgInfos;
+                #region 停止或暂停
+                CancelToken.ThrowIfCancellationRequested();
+                ResetEvent.WaitOne();
                 #endregion
-                LogHelper.UiLog.Info("写入本地Plc[Send_1] = 1");
+                #region 获取电芯条码
+                var getBatterysCodeResult = GetBatterysCode();
+                if (getBatterysCodeResult.IsFailed)
+                    return getBatterysCodeResult;
+                #endregion
+                #region 停止或暂停
+                CancelToken.ThrowIfCancellationRequested();
+                ResetEvent.WaitOne();
+                #endregion
+                #region 下发可以开始测试
+                LogHelper.UiLog.Info("写入Plc[Send_1] = 1");
                 var write2 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_1"], (short)1);
                 if (write2.IsFailed)
                 {
-                    return OperateResult.CreateFailedResult(write2.Message ?? "写入本地Plc[Send_1] = 1失败", write2.ErrorCode);
+                    return OperateResult.CreateFailedResult($"写入Plc[Send_1] = 1失败{write2.Message ?? "未知原因"}", write2.ErrorCode);
                 }
+                #endregion
                 int reTestTimes = 0;
                 do
                 {
                     reTestTimes++;
+                    #region 停止或暂停
+                    CancelToken.ThrowIfCancellationRequested();
+                    ResetEvent.WaitOne();
+                    #endregion
+                    #region 等待气缸伸出到位
                     LogHelper.UiLog.Info("等待本地Plc[Read_1] = 2");
                     var wait3 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["Read_1"], (short)2);
                     if (wait3.IsFailed)
                     {
-                        return OperateResult.CreateFailedResult(wait3.Message ?? "等待本地Plc[Read_1] = 2失败", wait3.ErrorCode);
+                        return OperateResult.CreateFailedResult($"等待Plc[Read_1] = 2失败:{wait3.Message ?? "未知原因"}", wait3.ErrorCode);
                     }
-                    //测试电池
+                    #endregion
+                    #region 停止或暂停
+                    CancelToken.ThrowIfCancellationRequested();
+                    ResetEvent.WaitOne();
+                    #endregion
+                    #region 测试电池
                     LogHelper.UiLog.Info("开始测试电池");
                     var test1 = TestBatteries();
                     if (test1.IsFailed)
                     {
                         return test1;
                     }
+                    #endregion
+                    #region 停止或暂停
+                    CancelToken.ThrowIfCancellationRequested();
+                    ResetEvent.WaitOne();
+                    #endregion
+                    #region 下发测试完成
                     LogHelper.UiLog.Info("写入本地Plc[Send_1] = 2");
                     var write3 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_1"], (short)2);
                     if (write3.IsFailed)
                     {
-                        return OperateResult.CreateFailedResult(write3.Message ?? "写入本地Plc[Send_1] = 2失败", write3.ErrorCode);
+                        return OperateResult.CreateFailedResult(write3.Message ?? "写入Plc[Send_1] = 2失败", write3.ErrorCode);
                     }
+                    #endregion
+                    #region 停止或暂停
+                    CancelToken.ThrowIfCancellationRequested();
+                    ResetEvent.WaitOne();
+                    #endregion
                     //验证ng结果
                     ValidateNgResult();
-                    if (Tray.NgInfos.Any(x => x.IsNg) && IsDoRetest && reTestTimes < RetestTimes) 
+                    #region 复测或下发结果
+                    #region 复测
+                    if (Tray.NgInfos.Any(x => x.IsNg) && IsDoRetest && reTestTimes < RetestTimes)
                     {
-                        LogHelper.UiLog.Info("写入本地Plc[Send_2] = 2");
+                        LogHelper.UiLog.Info("写入Plc[Send_2] = 2");
                         var write4 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)2);
                         if (write4.IsFailed)
                         {
-                            return OperateResult.CreateFailedResult(write4.Message ?? "写入本地Plc[Send_2] = 2失败", write4.ErrorCode);
+                            return OperateResult.CreateFailedResult(write4.Message ?? "写入Plc[Send_2] = 2失败", write4.ErrorCode);
                         }
                     }
-                    #region 注释
-                    //else if (Tray.NgInfos.Any(x => x.IsNg))
-                    //{
-                    //    LogHelper.UiLog.Info("写入本地Plc[Send_3] = 2");
-                    //    var write4 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)2);
-                    //    if (write4.IsFailed)
-                    //    {
-                    //        return OperateResult.CreateFailedResult(write4.Message ?? "写入本地Plc[Send_3] = 2失败", write4.ErrorCode);
-                    //    }
-                    //    return OperateResult.CreateFailedResult("电芯异常，已停止测试");
-                    //}
                     #endregion
+                    #region 下发测试结果
                     else
                     {
-                        if (IsDoUploadToMes)
+                        if (Tray.NgInfos.Any(x => x.IsNg))
                         {
-                            var mesResult = UpLoadMesResult();
-                            if (!mesResult.IsSuccess)
+                            LogHelper.UiLog.Info("写入本地Plc[Send_3] = 2");
+                            var write5 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)2);
+                            if (write5.IsFailed)
                             {
-                                SetAlarm();
-                                return OperateResult.CreateFailedResult("上传到MES数据库失败," + mesResult.Message);
+                                return OperateResult.CreateFailedResult($"写入Plc[Send_3] = 2失败:{write5.Message ?? "未知原因"}", write5.ErrorCode);
                             }
-                            LogHelper.UiLog.Info("上传到MES数据库成功！");
                         }
-                        var getupResult = WmsService.UploadTestResult();
-                        if (getupResult.IsFailed)
+                        else
                         {
-                            SetAlarm();
-                            return OperateResult.CreateFailedResult("上传调度OCV数据失败," + getupResult.Message);
-                        }
-                        LogHelper.UiLog.Info("上传调度OCV数据成功！");
-
-                        LogHelper.UiLog.Info("写入本地Plc[Send_3] = 1");
-                        var write5 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)1);
-                        if (write5.IsFailed)
-                        {
-                            return OperateResult.CreateFailedResult(write5.Message ?? "写入本地Plc[Send_3] = 1失败", write5.ErrorCode);
+                            LogHelper.UiLog.Info("写入本地Plc[Send_3] = 1");
+                            var write5 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)1);
+                            if (write5.IsFailed)
+                            {
+                                return OperateResult.CreateFailedResult($"写入Plc[Send_3] = 1失败:{write5.Message ?? "未知原因"}", write5.ErrorCode);
+                            }
                         }
                         break;
                     }
-                } while (IsDoRetest && reTestTimes < RetestTimes);
-                LogHelper.UiLog.Info("写入本地Plc[Send_2] = 1");
+                    #endregion 
+                    #endregion
+                    #region 停止或暂停
+                    CancelToken.ThrowIfCancellationRequested();
+                    ResetEvent.WaitOne();
+                    #endregion
+                } while (IsDoRetest && reTestTimes <= RetestTimes);
+                #region 上传结果
+                if (IsDoUploadToMes)
+                {
+                    var mesResult = UpLoadMesResult();
+                    if (!mesResult.IsSuccess)
+                    {
+                        SetAlarm();
+                        return OperateResult.CreateFailedResult("上传到MES数据库失败," + mesResult.Message);
+                    }
+                    LogHelper.UiLog.Info("上传到MES数据库成功！");
+                }
+                var getupResult = WmsService.UploadTestResult();
+                if (getupResult.IsFailed)
+                {
+                    SetAlarm();
+                    return OperateResult.CreateFailedResult("上传调度OCV数据失败," + getupResult.Message);
+                }
+                LogHelper.UiLog.Info("上传调度OCV数据成功！");
+                #endregion
+                #region 停止或暂停
+                CancelToken.ThrowIfCancellationRequested();
+                ResetEvent.WaitOne();
+                #endregion
+                #region 下发放行电池
+                LogHelper.UiLog.Info("写入Plc[Send_2] = 1");
                 var write6 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)1);
                 if (write6.IsFailed)
                 {
-                    return OperateResult.CreateFailedResult(write6.Message ?? "写入本地Plc[Send_1] = 1失败", write6.ErrorCode);
+                    return OperateResult.CreateFailedResult(write6.Message ?? "写入Plc[Send_1] = 1失败", write6.ErrorCode);
                 }
                 write6 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)1);
                 if (write6.IsFailed)
                 {
-                    return OperateResult.CreateFailedResult(write6.Message ?? "写入本地Plc[Send_1] = 1失败", write6.ErrorCode);
-                }
+                    return OperateResult.CreateFailedResult(write6.Message ?? "写入Plc[Send_1] = 1失败", write6.ErrorCode);
+                } 
+                #endregion
             }
         }
-        private bool ValidateBatteryCode(string batteryCode)
+
+        /// <summary>
+        /// 获取托盘条码
+        /// </summary>
+        /// <returns>操作结果</returns>
+        private OperateResult ReadTrayCode()
+        {
+            #region 读取托盘条码
+            bool validateResult = false;
+            string trayCode = string.Empty;
+            LogHelper.UiLog.Info("读取Plc[Read_2]");
+            var read1 = DevicesController.LocalPlc.ReadString(DevicesController.LocalPlcAddressCache["Read_2"], 20);
+            if (read1.IsFailed)
+            {
+                return OperateResult.CreateFailedResult($"读取物流Plc[托盘条码]失败{read1.Message ?? "未知原因"}", read1.ErrorCode);
+            }
+            trayCode = read1.Content ?? string.Empty;
+            trayCode = Regex.Match(read1.Content ?? string.Empty, @"[0-9\.a-zA-Z_-]+").Value;
+            Tray.TrayCode = trayCode;
+            validateResult = ValidateTrayCode(trayCode);
+            if (!validateResult)
+            {
+                return OperateResult.CreateFailedResult($"读取托盘条码失败,{trayCode}不合规");
+            }
+            return OperateResult.CreateSuccessResult();
+            #endregion
+        }
+
+        /// <summary>
+        /// 请求电芯条码
+        /// </summary>
+        /// <returns>操作结果</returns>
+        private OperateResult GetBatterysCode()
+        {
+
+            #region 请求电芯条码
+            LogHelper.UiLog.Info("请求电芯条码");
+            var getBatteriesInfoResult = WmsService.GetBatteriesInfo();
+            if (getBatteriesInfoResult.IsFailed)
+            {
+                return getBatteriesInfoResult;
+            }
+            string content = getBatteriesInfoResult?.Content ?? string.Empty;
+            var resultObj = JsonConvert.DeserializeObject<WmsBatteriesInfoDto>(content);
+            if (resultObj == null)
+            {
+                SetAlarm();
+                return OperateResult.CreateFailedResult("请求电芯条码返回值为null");
+            }
+            if (resultObj.Result == 0)
+            {
+                SetAlarm();
+                return OperateResult.CreateSuccessResult($"请求电芯条码失败:{resultObj.Message??"未知原因"}");
+            }
+            if (resultObj.PileContent == null)
+            {
+                SetAlarm();
+                return OperateResult.CreateFailedResult($"请求电芯条码失败，主体为null");
+            }
+            if (resultObj.PileContent.PalletBarcode != Tray.TrayCode)
+            {
+                SetAlarm();
+                return OperateResult.CreateFailedResult($"请求电芯条码失败，WMS返回托盘条码{resultObj.PileContent.PalletBarcode}与本地托盘条码{Tray.TrayCode}不一致");
+            }
+            var tempNgInfos = new System.Collections.ObjectModel.ObservableCollection<NgInfo>();
+            foreach (var item in resultObj.PileContent.Batterys)
+            {
+                NgInfo ngInfo = new NgInfo();
+                ngInfo.Battery.BarCode = item.BatteryBarcode;
+                ngInfo.Battery.Position = item.PalletIndex;
+                ngInfo.Battery.BatteryType = resultObj.PileContent.BatteryType == "102" ? 1 : 0;
+                tempNgInfos.Add(ngInfo);
+            }
+            tempNgInfos.OrderBy(x => x.Battery.Position);
+            Tray.NgInfos = tempNgInfos;
+            return OperateResult.CreateSuccessResult();
+            #endregion
+        }
+
+        /// <summary>
+        /// 校验电芯条码是否合规
+        /// </summary>
+        /// <param name="batteryCode">电芯条码</param>
+        /// <returns>验证结果</returns>
+        private bool ValidateTrayCode(string batteryCode)
         {
             return true;
         }
+
+        /// <summary>
+        /// 测试所有电池
+        /// </summary>
+        /// <returns>操作结果</returns>
         private OperateResult TestBatteries()
         {
             if (DevicesController.SwitchBoard.IsConnected == false)
@@ -365,6 +492,12 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             }
             return OperateResult.CreateSuccessResult();
         }
+
+        /// <summary>
+        /// 测试单个电池
+        /// </summary>
+        /// <param name="ngInfo">单个电池ngInfo</param>
+        /// <returns>操作结果</returns>
         private OperateResult TestOneBattery(NgInfo ngInfo)
         {
             var battery = ngInfo.Battery;
@@ -398,6 +531,13 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             Thread.Sleep(TestOption.SwitchDelay);
             return OperateResult.CreateSuccessResult();
         }
+
+        /// <summary>
+        /// 切换通道
+        /// </summary>
+        /// <param name="channel">通道号</param>
+        /// <param name="open">开或关</param>
+        /// <returns>操作结果</returns>
         private OperateResult SwitchChannel(int channel,bool open=true)
         {
             OperateResult openResult;
@@ -425,6 +565,10 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             }
             return openResult;
         }
+
+        /// <summary>
+        /// 验证电池Ng情况
+        /// </summary>
         private void ValidateNgResult()
         {
             foreach (var ngInfo in Tray.NgInfos)
@@ -446,6 +590,11 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 }
             }
         }
+
+        /// <summary>
+        /// 初始化Plc
+        /// </summary>
+        /// <returns></returns>
         private OperateResult InitWork()
         {
             Tray.NgInfos = new System.Collections.ObjectModel.ObservableCollection<NgInfo>();
@@ -470,6 +619,10 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             return OperateResult.CreateSuccessResult();
         }
 
+        /// <summary>
+        /// 上传Mes
+        /// </summary>
+        /// <returns></returns>
         private OperateResult UpLoadMesResult()
         {
             OperateResult result = OperateResult.CreateFailedResult();
@@ -533,110 +686,112 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 return result;
             }
         }
+
         /// <summary>
         /// 报警
         /// </summary>
-        /// <returns></returns>
+        /// <returns>操作结果</returns>
         private OperateResult SetAlarm()
         {
             var write3 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)2);
             return write3;
         }
-       
+
+
 
 
         #region 保存测试结果到本地Excel文件中
 
-        public OperateResult SaveTestResultToExcel()
-        {
-            return SaveTestData(Tray.TrayCode);
-        }
+        //public OperateResult SaveTestResultToExcel()
+        //{
+        //    return SaveTestData(Tray.TrayCode);
+        //}
 
-        /// <summary>
-        /// 获取保存路径字符串
-        /// </summary>
-        /// <returns></returns>
-        private (string savePath, string title) GetSaveExcelFilePath(string trayCode)
-        {
-            var saveDir = @"D:\OCV\OCV测试数据"; //OcvConfigFromJson.OcvResultSaveExcelPath;
-            string dateTimeString = DateTime.Now.ToString("yyyy-MM-dd_HH_mm_ss");
-            saveDir = Path.Combine(saveDir, DateTime.Now.ToString("yyyy-MM-dd"));
-            if (!Directory.Exists(saveDir))
-            {
-                Directory.CreateDirectory(saveDir);
-            }
+        ///// <summary>
+        ///// 获取保存路径字符串
+        ///// </summary>
+        ///// <returns></returns>
+        //private (string savePath, string title) GetSaveExcelFilePath(string trayCode)
+        //{
+        //    var saveDir = @"D:\OCV\OCV测试数据"; //OcvConfigFromJson.OcvResultSaveExcelPath;
+        //    string dateTimeString = DateTime.Now.ToString("yyyy-MM-dd_HH_mm_ss");
+        //    saveDir = Path.Combine(saveDir, DateTime.Now.ToString("yyyy-MM-dd"));
+        //    if (!Directory.Exists(saveDir))
+        //    {
+        //        Directory.CreateDirectory(saveDir);
+        //    }
 
-            string savePath = Path.Combine(saveDir, $@"{TestOption.OcvType}_{trayCode}_{dateTimeString}.xlsx");
-            string title = $"{TestOption.OcvType}_测试结果_{dateTimeString}";
-            return (savePath, title);
-        }
+        //    string savePath = Path.Combine(saveDir, $@"{TestOption.OcvType}_{trayCode}_{dateTimeString}.xlsx");
+        //    string title = $"{TestOption.OcvType}_测试结果_{dateTimeString}";
+        //    return (savePath, title);
+        //}
 
-        /// <summary>
-        /// 保存新DataGridView结果到Excel文件
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="testResult"></param>
-        /// <returns></returns>
-        private (DataTable, Dictionary<string, string>) GetDataTableAndDicFromTestResult<T>(List<T> testResult) where T : class
-        {
-            DataTable dt = new DataTable();
-            Type type = typeof(T);
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            List<PropertyInfo> propertyInfos = type.GetProperties(BindingFlags.Instance | BindingFlags.Public).ToList();
-            foreach (PropertyInfo propertyInfo in propertyInfos)
-            {
-                var attr = propertyInfo.GetCustomAttribute(typeof(TableColumnNameAttribute))?.As<TableColumnNameAttribute>();
-                if (attr != null && attr.Enable)
-                {
-                    if (propertyInfo.GetCustomAttribute(typeof(IgnoreWhenOutputExcelAttribute)) == null)
-                    {
-                        dic.Add(propertyInfo.Name, attr.ColumnName);
-                        dt.Columns.Add(propertyInfo.Name, typeof(string));
-                    }
-                }
-            }
-            foreach (var item in testResult)
-            {
-                DataRow row = dt.NewRow();
-                foreach (PropertyInfo propertyInfo in propertyInfos)
-                {
-                    var attr = propertyInfo.GetCustomAttribute(typeof(TableColumnNameAttribute))?.As<TableColumnNameAttribute>();
-                    if (attr != null && attr.Enable)
-                    {
-                        if (propertyInfo.GetCustomAttribute(typeof(IgnoreWhenOutputExcelAttribute)) == null)
-                        {
-                            PropertyInfo findProperty = item.GetPropertyObj(propertyInfo.Name);
-                            if (findProperty != null)
-                            {
-                                var obj = item.GetPropertyByName<object>(propertyInfo.Name);
-                                row[propertyInfo.Name] = obj + "";
-                            }
-                        }
-                    }
-                }
+        ///// <summary>
+        ///// 保存新DataGridView结果到Excel文件
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="testResult"></param>
+        ///// <returns></returns>
+        //private (DataTable, Dictionary<string, string>) GetDataTableAndDicFromTestResult<T>(List<T> testResult) where T : class
+        //{
+        //    DataTable dt = new DataTable();
+        //    Type type = typeof(T);
+        //    Dictionary<string, string> dic = new Dictionary<string, string>();
+        //    List<PropertyInfo> propertyInfos = type.GetProperties(BindingFlags.Instance | BindingFlags.Public).ToList();
+        //    foreach (PropertyInfo propertyInfo in propertyInfos)
+        //    {
+        //        var attr = propertyInfo.GetCustomAttribute(typeof(TableColumnNameAttribute))?.As<TableColumnNameAttribute>();
+        //        if (attr != null && attr.Enable)
+        //        {
+        //            if (propertyInfo.GetCustomAttribute(typeof(IgnoreWhenOutputExcelAttribute)) == null)
+        //            {
+        //                dic.Add(propertyInfo.Name, attr.ColumnName);
+        //                dt.Columns.Add(propertyInfo.Name, typeof(string));
+        //            }
+        //        }
+        //    }
+        //    foreach (var item in testResult)
+        //    {
+        //        DataRow row = dt.NewRow();
+        //        foreach (PropertyInfo propertyInfo in propertyInfos)
+        //        {
+        //            var attr = propertyInfo.GetCustomAttribute(typeof(TableColumnNameAttribute))?.As<TableColumnNameAttribute>();
+        //            if (attr != null && attr.Enable)
+        //            {
+        //                if (propertyInfo.GetCustomAttribute(typeof(IgnoreWhenOutputExcelAttribute)) == null)
+        //                {
+        //                    PropertyInfo findProperty = item.GetPropertyObj(propertyInfo.Name);
+        //                    if (findProperty != null)
+        //                    {
+        //                        var obj = item.GetPropertyByName<object>(propertyInfo.Name);
+        //                        row[propertyInfo.Name] = obj + "";
+        //                    }
+        //                }
+        //            }
+        //        }
 
-                dt.Rows.Add(row);
-            }
-            return (dt, dic);
-        }
+        //        dt.Rows.Add(row);
+        //    }
+        //    return (dt, dic);
+        //}
 
-        /// <summary>
-        /// 保存测试结果
-        /// </summary>
-        private OperateResult SaveTestData(string trayCode)
-        {
-            var pathTuple = GetSaveExcelFilePath(trayCode);
-            try
-            {
-                //(DataTable, Dictionary<string, string>) formatData = GetDataTableAndDicFromTestResult(_work.TrayModel.BatteryCells);
-                //NpoiHelperFromCommon.ExportDTtoExcel(formatData.Item1, pathTuple.title, pathTuple.savePath, formatData.Item2, false, 5000);
-                return OperateResult.CreateSuccessResult();
-            }
-            catch (Exception ex)
-            {
-                return OperateResult.CreateFailedResult($"SaveTestData异常：{ex.Message}\r\n{ex.StackTrace}");
-            }
-        }
+        ///// <summary>
+        ///// 保存测试结果
+        ///// </summary>
+        //private OperateResult SaveTestData(string trayCode)
+        //{
+        //    var pathTuple = GetSaveExcelFilePath(trayCode);
+        //    try
+        //    {
+        //        //(DataTable, Dictionary<string, string>) formatData = GetDataTableAndDicFromTestResult(_work.TrayModel.BatteryCells);
+        //        //NpoiHelperFromCommon.ExportDTtoExcel(formatData.Item1, pathTuple.title, pathTuple.savePath, formatData.Item2, false, 5000);
+        //        return OperateResult.CreateSuccessResult();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return OperateResult.CreateFailedResult($"SaveTestData异常：{ex.Message}\r\n{ex.StackTrace}");
+        //    }
+        //}
 
         #endregion 保存测试结果到本地Excel文件中
     }
