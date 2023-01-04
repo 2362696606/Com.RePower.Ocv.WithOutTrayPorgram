@@ -1,4 +1,5 @@
 ﻿using Com.RePower.DeviceBase.BaseDevice;
+using Com.RePower.DeviceBase.DMM;
 using Com.RePower.WpfBase;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
 {
-    public class Keysight_34461AImpl : Keysight_34461AAbstract
+    public class Keysight_34461AImpl : Keysight_34461AAbstract,IDMMNet
     {
         protected INetDeviceBase netDeviceBase;
         public Keysight_34461AImpl()
@@ -30,6 +31,17 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
         {
             get { return netDeviceBase.ReadDelay;}
             set { netDeviceBase.ReadDelay = value;}
+        }
+
+        public string IpAddress
+        {
+            get { return netDeviceBase.IpAddress;}
+            set { netDeviceBase.IpAddress = value;}
+        }
+        public int Port
+        {
+            get { return netDeviceBase.Port;}
+            set { netDeviceBase.Port = value;}
         }
 
         public override OperateResult Connect()

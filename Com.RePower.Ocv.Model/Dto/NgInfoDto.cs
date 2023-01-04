@@ -8,14 +8,15 @@ namespace Com.RePower.Ocv.Model.Dto
 {
     public class NgInfoDto
     {
+        public long Id { get; set; }
         /// <summary>
         /// 对应电池
         /// </summary>
-        public BatteryDto Battery { get; set; } = new BatteryDto();
+        public virtual BatteryDto Battery { get; set; } = new BatteryDto();
         /// <summary>
         /// mg描述
         /// </summary>
-        public string NgDescription { get; set; } = string.Empty;
+        public string? NgDescription { get; set; }
         /// <summary>
         /// 是否ng
         /// </summary>
@@ -23,6 +24,6 @@ namespace Com.RePower.Ocv.Model.Dto
         /// <summary>
         /// ng类型
         /// </summary>
-        public int NgType { get; set; }
+        public int? NgType { get; set; }
     }
 }

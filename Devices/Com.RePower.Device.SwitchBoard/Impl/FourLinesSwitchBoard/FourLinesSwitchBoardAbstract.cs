@@ -3,8 +3,9 @@ using Com.RePower.WpfBase.Extensions;
 
 namespace Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard
 {
-    public abstract class GeneralSwitchBoardAbstract : SwitcbBoardBase
+    public abstract class FourLinesSwitchBoardAbstract : SwitcbBoardBase
     {
+        public abstract int ReadDelay { get; set; }
         public override OperateResult CloseAllChannels(int boardIndex)
         {
             if (boardIndex > 2 || boardIndex < 1)

@@ -1,4 +1,5 @@
-﻿using Com.RePower.WpfBase;
+﻿using Com.RePower.DeviceBase;
+using Com.RePower.WpfBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,9 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
         /// 电阻NPLC
         /// </summary>
         public string ResNplc { get; set; } = "1";
-
+        /// <summary>
+        /// 读取延迟
+        /// </summary>
         public abstract int ReadDelay { get; set; }
 
         /// <summary>
@@ -151,6 +154,16 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
             string s = string.Join("", cmdlist);
             byte[] command = ASCIIEncoding.ASCII.GetBytes(s);
             return ReadValue(command);
+        }
+
+        public OperateResult Connect(string ipAddress, int port)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<OperateResult> ConnectAsync(string ipAddress, int port)
+        {
+            throw new NotImplementedException();
         }
     }
 }

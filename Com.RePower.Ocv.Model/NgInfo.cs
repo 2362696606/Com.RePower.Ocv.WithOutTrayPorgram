@@ -18,7 +18,7 @@ namespace Com.RePower.Ocv.Model
         /// ng描述
         /// </summary>
         [ObservableProperty]
-        private string _ngDescription = string.Empty;
+        private string? _ngDescription;
         /// <summary>
         /// 是否ng true为ng，false为非ng
         /// </summary>
@@ -28,6 +28,6 @@ namespace Com.RePower.Ocv.Model
         /// ng类型
         /// </summary>
         [ObservableProperty]
-        private int _ngType;
+        private int? _ngType;
     }
 }

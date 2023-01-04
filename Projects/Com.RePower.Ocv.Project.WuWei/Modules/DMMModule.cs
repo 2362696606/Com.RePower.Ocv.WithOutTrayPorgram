@@ -36,14 +36,6 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                                 .As<IDMM>()
                                 .As<IDevice>();
                         }
-                        //var obj = JsonConvert.DeserializeObject<DmmSimulator>(dmmSettingJson);
-                        //if (obj != null)
-                        //{
-                        //    builder.RegisterInstance<DmmSimulator>(obj)
-                        //        .AsSelf()
-                        //        .As<IDMM>()
-                        //        .As<IDevice>();
-                        //}
                     }
                 }
             }

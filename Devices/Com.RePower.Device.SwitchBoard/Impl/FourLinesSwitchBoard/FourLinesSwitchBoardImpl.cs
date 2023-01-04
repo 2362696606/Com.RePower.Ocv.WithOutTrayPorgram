@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard
 {
-    public class FourLinesSwitchBoardImpl : GeneralSwitchBoardAbstract, ISwitchBoardSerialPort
+    public class FourLinesSwitchBoardImpl : FourLinesSwitchBoardAbstract, ISwitchBoardSerialPort
     {
         protected ISerialPortDeviceBase deviceBase;
 
@@ -36,6 +36,14 @@ namespace Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard
         {
             get { return deviceBase.BaudRate; }
             set { deviceBase.BaudRate = value; }
+        }
+        /// <summary>
+        /// 读取延迟
+        /// </summary>
+        public override int ReadDelay
+        {
+            get { return deviceBase.ReadDelay;}
+            set { deviceBase.ReadDelay = value;}
         }
 
         public override OperateResult Connect()

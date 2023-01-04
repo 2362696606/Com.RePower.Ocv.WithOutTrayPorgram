@@ -13,6 +13,7 @@ using System.Windows;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Ui.YiWei.ViewModels;
 using Com.RePower.Ocv.Project.YiWei.Modules;
+using Com.RePower.Ocv.Model.DataBaseContext;
 
 namespace Com.RePower.Ocv.Ui.YiWei
 {
@@ -33,11 +34,16 @@ namespace Com.RePower.Ocv.Ui.YiWei
                 #region 初始化IOC容器
                 var serviceCollection = new ServiceCollection();
                 serviceCollection.AddHttpClient();
+                serviceCollection.AddDbContext<LocalTestResultDbContext>();
                 var autofacServiceProviderFactory = new AutofacServiceProviderFactory();
                 var builder = autofacServiceProviderFactory.CreateBuilder(serviceCollection);
                 IocRegister(builder);
                 var serviceProvider = autofacServiceProviderFactory.CreateServiceProvider(builder);
                 IocHelper.Default.ConfigureServices(serviceProvider);
+                #endregion
+                #region 创建本地存储数据库
+                var localDb = IocHelper.Default.GetService<LocalTestResultDbContext>();
+                localDb?.Database.EnsureCreated(); 
                 #endregion
                 #region 初始化UiLog
                 LogHelper.RegisterUiLogEvent(new System.Action<object?, log4net.Core.LoggingEvent>((sender, e) =>

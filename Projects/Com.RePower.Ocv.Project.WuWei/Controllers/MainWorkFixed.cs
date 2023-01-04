@@ -364,28 +364,9 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 }
             }
             return OperateResult.CreateSuccessResult();
-            //LogHelper.UiLog.Info("读取电压");
-            //var read1 = DevicesController.DMM.ReadDc();
-            //if (read1.IsFailed)
-            //{
-            //    return OperateResult.CreateFailedResult(read1.Message ?? "读取电压失败", read1.ErrorCode);
-            //}
-            //Battery.PVolValue = read1.Content;
-            //Battery.TestTime = DateTime.Now;
-            //return OperateResult.CreateSuccessResult();
         }
         private OperateResult TestOneBattery(NgInfo ngInfo)
         {
-            //var closeResult = DevicesController.SwitchBoard.CloseAllChannels(1);
-            //if (closeResult.IsFailed)
-            //{
-            //    return closeResult;
-            //}
-            //closeResult = DevicesController.SwitchBoard.CloseAllChannels(2);
-            //if (closeResult.IsFailed)
-            //{
-            //    return closeResult;
-            //}
             var battery = ngInfo.Battery;
             LogHelper.UiLog.Info($"开始测试电池{battery.Position}");
             if (battery.IsTested && !ngInfo.IsNg)
@@ -399,7 +380,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 return openResult;
             }
             LogHelper.UiLog.Info("读取电压");
-            Thread.Sleep(1000);
+            Thread.Sleep(TestOption.DMMReadDelayWhenSwitch);
             var read1 = DevicesController.DMM.ReadDc();
             if (read1.IsFailed)
             {
@@ -414,7 +395,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             {
                 return closeResult;
             }
-            Thread.Sleep(200);
+            Thread.Sleep(TestOption.SwitchDelay);
             return OperateResult.CreateSuccessResult();
         }
         private OperateResult SwitchChannel(int channel,bool open=true)
@@ -422,9 +403,6 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             OperateResult openResult;
             if (channel <= 19)
             {
-                //ToDo:确定通道是否正确;
-                //int[] channels = new int[] { battery.Position, 21, 23 };
-                //openResult = DevicesController.SwitchBoard.OpenChannels(1, channels);
                 if (open)
                 {
                     openResult = DevicesController.SwitchBoard.OpenChannel(1, channel);
@@ -436,8 +414,6 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             }
             else
             {
-                //int[] channels = new int[] { battery.Position - 20, 21, 23 };
-                //openResult = DevicesController.SwitchBoard.OpenChannels(2, channels);
                 if (open)
                 {
                     openResult = DevicesController.SwitchBoard.OpenChannel(2, channel - 19);
@@ -540,7 +516,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
 
                     foreach (var item in listrnDbs)
                     {
-                        context.Set<RnDbOcv>().Add(item);
+                        context.RnDbOcv0.Add(item);
                     }
                     context.SaveChanges();
 

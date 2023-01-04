@@ -24,5 +24,13 @@ namespace Com.RePower.Ocv.Project.WuWei.Model
         /// Ocv类型
         /// </summary>
         public string OcvType { get; set; } = "OCV3";
+        /// <summary>
+        /// 切换版切换延迟
+        /// </summary>
+        public int SwitchDelay { get; set; }
+        /// <summary>
+        /// 万用表在切换通道后延迟读取
+        /// </summary>
+        public int DMMReadDelayWhenSwitch { get; set; }
     }
 }

@@ -6,19 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Com.RePower.Ocv.Model
+namespace Com.RePower.Ocv.Model.Dto
 {
-    public partial class Tray:ObservableObject
+    public class TrayDto
     {
+        public long Id { get; set; }
         /// <summary>
         /// 托盘条码
         /// </summary>
-        [ObservableProperty]
-        private string _trayCode = string.Empty;
+        public string TrayCode { get; set; } = string.Empty;
         /// <summary>
         /// Ng结果
         /// </summary>
-        [ObservableProperty]
-        private ObservableCollection<NgInfo> _ngInfos = new ObservableCollection<NgInfo>();
+        public virtual List<NgInfoDto> NgInfos { get; set; } = new List<NgInfoDto>();
     }
 }
