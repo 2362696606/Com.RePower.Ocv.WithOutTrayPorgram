@@ -42,6 +42,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         [ObservableProperty]
         private bool _msaFlag;
 
+
         public MainWorkFixed(DevicesController devicesController
             , FlowController flowController
             , Tray tray
@@ -129,11 +130,15 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// </summary>
         public async void PauseWorkAsync()
         {
-            WorkStatus = 2;
-            await Task.Run(() =>
+            if (WorkStatus != 2)
             {
-                ResetEvent.Reset();
-            });
+                await Task.Run(() =>
+                {
+                    ResetEvent.Reset();
+                    LogHelper.UiLog.Warn($"Pause");
+                });
+            }
+            WorkStatus = 2;
         }
 
         /// <summary>
@@ -141,41 +146,44 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// </summary>
         public async void StartWorkAsync()
         {
-            if (WorkStatus == 0)
+            if (WorkStatus != 1)
             {
-                WorkStatus = 1;
-                await Task.Run(() =>
+                if (WorkStatus == 0)
                 {
-                    try
+                    WorkStatus = 1;
+                    await Task.Run(() =>
                     {
-                        ResetEvent.Set();
-                        var result = DoWork();
-                        if (result.IsFailed)
+                        try
                         {
-                            LogHelper.UiLog.Warn(result.Message);
+                            ResetEvent.Set();
+                            var result = DoWork();
+                            if (result.IsFailed)
+                            {
+                                LogHelper.UiLog.Warn(result.Message);
+                            }
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        if (e.GetType() == typeof(OperationCanceledException))
+                        catch (Exception e)
                         {
-                            FlowController.CancelTokenSource = new CancellationTokenSource();
+                            if (e.GetType() == typeof(OperationCanceledException))
+                            {
+                                FlowController.CancelTokenSource = new CancellationTokenSource();
+                            }
+                            else
+                            {
+                                LogHelper.UiLog.Error(e.Message);
+                            }
                         }
-                        else
+                        finally
                         {
-                            LogHelper.UiLog.Error(e.Message);
+                            WorkStatus = 0;
                         }
-                    }
-                    finally
-                    {
-                        WorkStatus = 0;
-                    }
-                });
-            }
-            else if (WorkStatus == 2)
-            {
-                WorkStatus = 1;
-                ResetEvent.Set();
+                    });
+                }
+                else if (WorkStatus == 2)
+                {
+                    WorkStatus = 1;
+                    ResetEvent.Set();
+                }
             }
         }
 
@@ -184,11 +192,19 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// </summary>
         public async void StopWorkAsync()
         {
-            WorkStatus = 0;
-            await Task.Run(() =>
+            if (WorkStatus != 0)
             {
-                CancelTokenSource.Cancel();
-            });
+                await Task.Run(() =>
+                {
+                    CancelTokenSource.Cancel();
+                    if (WorkStatus == 2)
+                    {
+                        ResetEvent.Set();
+                    }
+                    LogHelper.UiLog.Warn($"Stop");
+                });
+            }
+            WorkStatus = 0;
         }
 
         /// <summary>
@@ -206,9 +222,9 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 //    return init1;
                 //}
                 #endregion
-                #region 停止或暂停
-                CancelToken.ThrowIfCancellationRequested();
+                #region 暂停或停止
                 ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
                 #endregion
                 #region 等待测试准备信号
                 LogHelper.UiLog.Info("等待Plc[Read_1] = 1");
@@ -218,27 +234,27 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     return OperateResult.CreateFailedResult(wait1.Message ?? "等待Plc[Read_1] = 1失败", wait1.ErrorCode);
                 }
                 #endregion
-                #region 停止或暂停
-                CancelToken.ThrowIfCancellationRequested();
+                #region 暂停或停止
                 ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
                 #endregion
                 #region 读取托盘条码
                 var readTrayCodeResult = ReadTrayCode();
                 if (readTrayCodeResult.IsFailed)
-                    return readTrayCodeResult; 
+                    return readTrayCodeResult;
                 #endregion
-                #region 停止或暂停
-                CancelToken.ThrowIfCancellationRequested();
+                #region 暂停或停止
                 ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
                 #endregion
                 #region 获取电芯条码
                 var getBatterysCodeResult = GetBatterysCode();
                 if (getBatterysCodeResult.IsFailed)
                     return getBatterysCodeResult;
                 #endregion
-                #region 停止或暂停
-                CancelToken.ThrowIfCancellationRequested();
+                #region 暂停或停止
                 ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
                 #endregion
                 #region 下发可以开始测试
                 LogHelper.UiLog.Info("写入Plc[Send_1] = 1");
@@ -252,47 +268,22 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 do
                 {
                     reTestTimes++;
-                    #region 停止或暂停
-                    CancelToken.ThrowIfCancellationRequested();
+                    #region 暂停或停止
                     ResetEvent.WaitOne();
+                    CancelToken.ThrowIfCancellationRequested();
                     #endregion
-                    #region 等待气缸伸出到位
-                    LogHelper.UiLog.Info("等待本地Plc[Read_1] = 2");
-                    var wait3 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["Read_1"], (short)2, cancellation: this.CancelToken);
-                    if (wait3.IsFailed)
+                    #region 执行测试
+                    var testResult = DoTest();
+                    if (testResult.IsFailed)
                     {
-                        return OperateResult.CreateFailedResult($"等待Plc[Read_1] = 2失败:{wait3.Message ?? "未知原因"}", wait3.ErrorCode);
-                    }
+                        return testResult;
+                    } 
                     #endregion
-                    #region 停止或暂停
-                    CancelToken.ThrowIfCancellationRequested();
+                    #region 暂停或停止
                     ResetEvent.WaitOne();
-                    #endregion
-                    #region 测试电池
-                    LogHelper.UiLog.Info("开始测试电池");
-                    var test1 = TestBatteries();
-                    if (test1.IsFailed)
-                    {
-                        return test1;
-                    }
-                    #endregion
-                    #region 停止或暂停
                     CancelToken.ThrowIfCancellationRequested();
-                    ResetEvent.WaitOne();
                     #endregion
-                    #region 下发测试完成
-                    LogHelper.UiLog.Info("写入本地Plc[Send_1] = 2");
-                    var write3 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_1"], (short)2);
-                    if (write3.IsFailed)
-                    {
-                        return OperateResult.CreateFailedResult(write3.Message ?? "写入Plc[Send_1] = 2失败", write3.ErrorCode);
-                    }
-                    #endregion
-                    #region 停止或暂停
-                    CancelToken.ThrowIfCancellationRequested();
-                    ResetEvent.WaitOne();
-                    #endregion
-                    //验证ng结果
+                    //验证ng
                     ValidateNgResult();
                     #region 复测或下发结果
                     #region 复测
@@ -329,11 +320,11 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                         }
                         break;
                     }
-                    #endregion 
                     #endregion
-                    #region 停止或暂停
-                    CancelToken.ThrowIfCancellationRequested();
+                    #endregion
+                    #region 暂停或停止
                     ResetEvent.WaitOne();
+                    CancelToken.ThrowIfCancellationRequested();
                     #endregion
                 } while (IsDoRetest && reTestTimes <= RetestTimes);
                 #region 上传结果
@@ -355,9 +346,9 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 }
                 LogHelper.UiLog.Info("上传调度OCV数据成功！");
                 #endregion
-                #region 停止或暂停
-                CancelToken.ThrowIfCancellationRequested();
+                #region 暂停或停止
                 ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
                 #endregion
                 #region 下发放行电池
                 LogHelper.UiLog.Info("写入Plc[Send_2] = 1");
@@ -375,6 +366,96 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
 
                 this._doMsa = MsaFlag;
             }
+        }
+        /// <summary>
+        /// 执行复测逻辑
+        /// </summary>
+        /// <returns></returns>
+        private OperateResult Retest()
+        {
+            if(IsDoRetest)
+            {
+                int retestTimes = 0;
+                while(retestTimes < RetestTimes)
+                {
+                    if(Tray.NgInfos.Any(x => x.IsNg))
+                    {
+                        #region 下发复测信号
+                        LogHelper.UiLog.Info("写入Plc[Send_2] = 2");
+                        var write4 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)2);
+                        if (write4.IsFailed)
+                        {
+                            return OperateResult.CreateFailedResult(write4.Message ?? "写入Plc[Send_2] = 2失败", write4.ErrorCode);
+                        }
+                        #endregion
+                        #region 暂停或停止
+                        ResetEvent.WaitOne();
+                        CancelToken.ThrowIfCancellationRequested();
+                        #endregion
+                        #region 执行测试
+                        var testResult = DoTest();
+                        if (testResult.IsFailed)
+                        {
+                            return testResult;
+                        }
+                        #endregion
+                        #region 暂停或停止
+                        ResetEvent.WaitOne();
+                        CancelToken.ThrowIfCancellationRequested();
+                        #endregion
+                        //验证ng
+                        ValidateNgResult();
+                        retestTimes++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            return OperateResult.CreateSuccessResult();
+        }
+
+        /// <summary>
+        /// 执行测试逻辑
+        /// </summary>
+        /// <returns>操作结果</returns>
+        private OperateResult DoTest()
+        {
+
+            #region 等待气缸伸出到位
+            LogHelper.UiLog.Info("等待本地Plc[Read_1] = 2");
+            var wait3 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["Read_1"], (short)2, cancellation: this.CancelToken);
+            if (wait3.IsFailed)
+            {
+                return OperateResult.CreateFailedResult($"等待Plc[Read_1] = 2失败:{wait3.Message ?? "未知原因"}", wait3.ErrorCode);
+            }
+            #endregion
+            #region 暂停或停止
+            ResetEvent.WaitOne();
+            CancelToken.ThrowIfCancellationRequested();
+            #endregion
+            #region 测试电池
+            LogHelper.UiLog.Info("开始测试电池");
+            var test1 = TestBatteries();
+            if (test1.IsFailed)
+            {
+                return test1;
+            }
+            #endregion
+            #region 暂停或停止
+            ResetEvent.WaitOne();
+            CancelToken.ThrowIfCancellationRequested();
+            #endregion
+            #region 下发测试完成
+            LogHelper.UiLog.Info("写入本地Plc[Send_1] = 2");
+            var write3 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_1"], (short)2);
+            if (write3.IsFailed)
+            {
+                return OperateResult.CreateFailedResult(write3.Message ?? "写入Plc[Send_1] = 2失败", write3.ErrorCode);
+            }
+            #endregion
+            return OperateResult.CreateSuccessResult();
         }
 
         /// <summary>
@@ -501,9 +582,9 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
 
             foreach (var item in Tray.NgInfos)
             {
-                #region 停止或暂停
-                CancelToken.ThrowIfCancellationRequested();
+                #region 暂停或停止
                 ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
                 #endregion
                 var result = TestOneBattery(item);
                 if (result.IsFailed)

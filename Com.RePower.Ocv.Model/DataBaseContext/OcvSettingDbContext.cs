@@ -11,7 +11,14 @@ namespace Com.RePower.Ocv.Model.DataBaseContext
 {
     public class OcvSettingDbContext:DbContext
     {
+        /// <summary>
+        /// 配置表
+        /// </summary>
         public DbSet<OcvSettingItemDto> SettingItems { get; set; }
+        /// <summary>
+        /// 缓存表
+        /// </summary>
+        public DbSet<OcvCacheValue> CacheValues { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //string connectString = @"data source=D:\项目\OCV\Com.RePower.Ocv.WithOutTrayPorgram\Projects\Com.RePower.Ocv.Project.YiWei\OcvSetting.dbs";

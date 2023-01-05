@@ -6,6 +6,7 @@ using Com.RePower.DeviceBase.DMM;
 using Com.RePower.DeviceBase.SwitchBoard;
 using Com.RePower.Ocv.Model.DataBaseContext;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,22 +27,24 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                     var switchBoardSettingJson = switchBoardSettingObj.JsonValue;
                     if (!string.IsNullOrEmpty(switchBoardSettingJson))
                     {
-                        var obj = JsonConvert.DeserializeObject<FourLinesSwitchBoardImpl>(switchBoardSettingJson);
-                        if (obj != null)
+                        var jObj = JObject.Parse(switchBoardSettingJson);
+                        bool isReal = jObj.Value<bool>("IsReal");
+                        ISwitchBoard? obj = null;
+                        if (isReal)
+                        {
+                            obj = JsonConvert.DeserializeObject<FourLinesSwitchBoardImpl>(switchBoardSettingJson);
+                        }
+                        else
+                        {
+                            obj = JsonConvert.DeserializeObject<FourLinesSwitchBoardSimulator>(switchBoardSettingJson);
+                        }
+                        if (obj is { })
                         {
                             builder.RegisterInstance(obj)
                                 .AsSelf()
                                 .As<ISwitchBoard>()
                                 .As<IDevice>();
                         }
-                        //var obj = JsonConvert.DeserializeObject<SwitchBoardSimulator>(switchBoardSettingJson);
-                        //if (obj != null)
-                        //{
-                        //    builder.RegisterInstance<SwitchBoardSimulator>(obj)
-                        //        .AsSelf()
-                        //        .As<ISwitchBoard>()
-                        //        .As<IDevice>();
-                        //}
                     }
                 }
             }

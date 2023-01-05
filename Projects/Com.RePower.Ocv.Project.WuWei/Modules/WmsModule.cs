@@ -27,14 +27,22 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                     var obj = JsonConvert.DeserializeObject<WmsSetting>(wmsJsonStr);
                     if (obj != null)
                     {
-                        builder.RegisterInstance<WmsSetting>(obj);
+                        builder.RegisterInstance(obj);
                     }
-                    builder.RegisterType<WmsService>()
-                        .AsSelf()
-                        .As<IWmsService>();
-                    //builder.RegisterType<WmsSimulator>()
-                    //    .AsSelf()
-                    //    .As<IWmsService>();
+                    var jObj = JObject.Parse(wmsJsonStr);
+                    bool isReal = jObj.Value<bool>("IsReal");
+                    if (isReal)
+                    {
+                        builder.RegisterType<WmsService>()
+                            .AsSelf()
+                            .As<IWmsService>();
+                    }
+                    else
+                    {
+                        builder.RegisterType<WmsSimulator>()
+                            .AsSelf()
+                            .As<IWmsService>();
+                    }
 
                 }
             }

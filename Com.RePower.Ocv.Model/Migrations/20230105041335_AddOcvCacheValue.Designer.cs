@@ -3,6 +3,7 @@ using System;
 using Com.RePower.Ocv.Model.DataBaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Com.RePower.Ocv.Model.Migrations
 {
     [DbContext(typeof(OcvSettingDbContext))]
-    partial class OcvSettingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230105041335_AddOcvCacheValue")]
+    partial class AddOcvCacheValue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

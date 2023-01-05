@@ -13,7 +13,10 @@
     WindowState="Maximized"
     mc:Ignorable="d">
     <Viewbox Stretch="Fill">
-        <materialDesign:DialogHost Identifier="MainDialog" DialogTheme="Inherit" SnackbarMessageQueue="{Binding ElementName=MainSnackbar,Path=MessageQueue}">
+        <materialDesign:DialogHost
+            DialogTheme="Inherit"
+            Identifier="MainDialog"
+            SnackbarMessageQueue="{Binding ElementName=MainSnackbar, Path=MessageQueue}">
             <materialDesign:ColorZone Width="2560" Height="1440">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -31,13 +34,17 @@
                     </Grid>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="0.7*" />
-                            <RowDefinition Height="0.3*" />
+                            <RowDefinition Height="0.8*" />
+                            <RowDefinition Height="0.2*" />
                         </Grid.RowDefinitions>
                         <views:UiLogView />
                         <views:ControlView Grid.Row="1" />
                     </Grid>
-                    <materialDesign:Snackbar x:Name="MainSnackbar" MessageQueue="{materialDesign:MessageQueue}" Grid.ColumnSpan="2" Margin="16"/>
+                    <materialDesign:Snackbar
+                        x:Name="MainSnackbar"
+                        Grid.ColumnSpan="2"
+                        Margin="16"
+                        MessageQueue="{materialDesign:MessageQueue}" />
                 </Grid>
             </materialDesign:ColorZone>
         </materialDesign:DialogHost>

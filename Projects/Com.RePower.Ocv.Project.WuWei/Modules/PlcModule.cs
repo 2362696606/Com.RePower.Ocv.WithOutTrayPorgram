@@ -6,6 +6,7 @@ using Com.RePower.Ocv.Model.DataBaseContext;
 using Com.RePower.Ocv.Project.WuWei.Decorators;
 using Com.RePower.Ocv.Project.WuWei.Enum;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,10 +27,20 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                     var localPlcSettingJson = localPlcSettingObj.JsonValue;
                     if(!string.IsNullOrEmpty(localPlcSettingJson))
                     {
-                        var obj = JsonConvert.DeserializeObject<InovanceTcpNetPlcImpl>(localPlcSettingJson);
-                        if (obj != null)
+                        var jObj = JObject.Parse(localPlcSettingJson);
+                        bool isReal = jObj.Value<bool>("IsReal");
+                        IPlc? obj = null;
+                        if (isReal)
                         {
-                            builder.RegisterInstance<InovanceTcpNetPlcImpl>(obj)
+                            obj = JsonConvert.DeserializeObject<InovanceTcpNetPlcImpl>(localPlcSettingJson);
+                        }
+                        else
+                        {
+                            obj = JsonConvert.DeserializeObject<PlcNetSimulator>(localPlcSettingJson);
+                        }
+                        if (obj is { })
+                        {
+                            builder.RegisterInstance(obj)
                                 .AsSelf()
                                 .As<IPlc>()
                                 .As<IDevice>()

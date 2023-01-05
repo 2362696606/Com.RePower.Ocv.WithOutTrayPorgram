@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="OcvSetting.dbs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Resources\Images\Logo.ico" />
   </ItemGroup>
 
@@ -25,6 +29,12 @@
     <ProjectReference Include="..\..\Com.RePower.Ocv.Controller\Com.RePower.Ocv.Controller.csproj" />
     <ProjectReference Include="..\..\Com.RePower.Ocv.WpfBase\Com.RePower.Ocv.WpfBase.csproj" />
     <ProjectReference Include="..\..\Projects\Com.RePower.Ocv.Project.WuWei\Com.RePower.Ocv.Project.WuWei.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="OcvSetting.dbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
