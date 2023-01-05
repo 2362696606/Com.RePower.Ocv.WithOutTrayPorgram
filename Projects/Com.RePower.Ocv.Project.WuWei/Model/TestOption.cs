@@ -32,5 +32,9 @@ namespace Com.RePower.Ocv.Project.WuWei.Model
         /// 万用表在切换通道后延迟读取
         /// </summary>
         public int DMMReadDelayWhenSwitch { get; set; }
+        /// <summary>
+        /// Msa执行次数
+        /// </summary>
+        public int MsaTimes { get; set; } = 25;
     }
 }

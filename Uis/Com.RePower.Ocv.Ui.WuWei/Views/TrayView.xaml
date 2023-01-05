@@ -29,7 +29,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Battery.Position}" Header="电芯位置" />
                     <DataGridTextColumn Binding="{Binding Battery.BarCode}" Header="电芯条码" />
-                    <DataGridTextColumn Binding="{Binding Battery.PVolValue}" Header="正极壳体电压" />
+                    <DataGridTextColumn Binding="{Binding Battery.NVolValue}" Header="负极壳体电压" />
                     <DataGridTextColumn Binding="{Binding NgDescription}" Header="Ng描述" />
                 </DataGrid.Columns>
             </DataGrid>

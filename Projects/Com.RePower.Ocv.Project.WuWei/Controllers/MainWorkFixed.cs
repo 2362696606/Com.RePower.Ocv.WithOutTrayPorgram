@@ -3,6 +3,7 @@ using Com.RePower.Ocv.Model;
 using Com.RePower.Ocv.Model.Extensions;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.WuWei.DataBaseContext;
+using Com.RePower.Ocv.Project.WuWei.Dto;
 using Com.RePower.Ocv.Project.WuWei.Model;
 using Com.RePower.Ocv.Project.WuWei.Models;
 using Com.RePower.Ocv.Project.WuWei.Serivces;
@@ -15,9 +16,11 @@ using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
+using Npoi.Mapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing.Text;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -31,10 +34,15 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
     {
         private int _workStatus;
 
+        ///// <summary>
+        ///// 执行MSA
+        ///// </summary>
+        //private bool _doMsa;
+
         /// <summary>
-        /// 执行MSA
+        /// 是否已经出库
         /// </summary>
-        private bool _doMsa;
+        private bool _isOutPutTray = true;
 
         /// <summary>
         /// MSA标志
@@ -215,47 +223,51 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         {
             while (true)
             {
-                #region 初始化Plc
-                //var init1 = InitWork();
-                //if (init1.IsFailed)
-                //{
-                //    return init1;
-                //}
-                #endregion
-                #region 暂停或停止
-                ResetEvent.WaitOne();
-                CancelToken.ThrowIfCancellationRequested();
-                #endregion
-                #region 等待测试准备信号
-                LogHelper.UiLog.Info("等待Plc[Read_1] = 1");
-                var wait1 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["Read_1"], (short)1, cancellation: this.CancelToken);
-                if (wait1.IsFailed)
+                if (_isOutPutTray)
                 {
-                    return OperateResult.CreateFailedResult(wait1.Message ?? "等待Plc[Read_1] = 1失败", wait1.ErrorCode);
+                    #region 初始化Plc
+                    //var init1 = InitWork();
+                    //if (init1.IsFailed)
+                    //{
+                    //    return init1;
+                    //}
+                    #endregion
+                    #region 暂停或停止
+                    ResetEvent.WaitOne();
+                    CancelToken.ThrowIfCancellationRequested();
+                    #endregion
+                    #region 等待测试准备信号
+                    LogHelper.UiLog.Info("等待Plc[Read_1] = 1");
+                    var wait1 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["Read_1"], (short)1, cancellation: this.CancelToken);
+                    if (wait1.IsFailed)
+                    {
+                        return OperateResult.CreateFailedResult(wait1.Message ?? "等待Plc[Read_1] = 1失败", wait1.ErrorCode);
+                    }
+                    #endregion
+                    #region 暂停或停止
+                    ResetEvent.WaitOne();
+                    CancelToken.ThrowIfCancellationRequested();
+                    #endregion
+                    #region 读取托盘条码
+                    var readTrayCodeResult = ReadTrayCode();
+                    if (readTrayCodeResult.IsFailed)
+                        return readTrayCodeResult;
+                    #endregion
+                    #region 暂停或停止
+                    ResetEvent.WaitOne();
+                    CancelToken.ThrowIfCancellationRequested();
+                    #endregion
+                    #region 获取电芯条码
+                    var getBatterysCodeResult = GetBatterysCode();
+                    if (getBatterysCodeResult.IsFailed)
+                        return getBatterysCodeResult;
+                    #endregion
+                    #region 暂停或停止
+                    ResetEvent.WaitOne();
+                    CancelToken.ThrowIfCancellationRequested();
+                    #endregion
                 }
-                #endregion
-                #region 暂停或停止
-                ResetEvent.WaitOne();
-                CancelToken.ThrowIfCancellationRequested();
-                #endregion
-                #region 读取托盘条码
-                var readTrayCodeResult = ReadTrayCode();
-                if (readTrayCodeResult.IsFailed)
-                    return readTrayCodeResult;
-                #endregion
-                #region 暂停或停止
-                ResetEvent.WaitOne();
-                CancelToken.ThrowIfCancellationRequested();
-                #endregion
-                #region 获取电芯条码
-                var getBatterysCodeResult = GetBatterysCode();
-                if (getBatterysCodeResult.IsFailed)
-                    return getBatterysCodeResult;
-                #endregion
-                #region 暂停或停止
-                ResetEvent.WaitOne();
-                CancelToken.ThrowIfCancellationRequested();
-                #endregion
+                _isOutPutTray = false;
                 #region 下发可以开始测试
                 LogHelper.UiLog.Info("写入Plc[Send_1] = 1");
                 var write2 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_1"], (short)1);
@@ -264,108 +276,287 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     return OperateResult.CreateFailedResult($"写入Plc[Send_1] = 1失败{write2.Message ?? "未知原因"}", write2.ErrorCode);
                 }
                 #endregion
-                int reTestTimes = 0;
-                do
+                #region 暂停或停止
+                ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
+                #endregion
+                if (MsaFlag)
                 {
-                    reTestTimes++;
-                    #region 暂停或停止
-                    ResetEvent.WaitOne();
-                    CancelToken.ThrowIfCancellationRequested();
-                    #endregion
-                    #region 执行测试
-                    var testResult = DoTest();
-                    if (testResult.IsFailed)
+                    var msaResult = DoMsaTest();
+                    LogHelper.UiLog.Info("MSA测试完成");
+                    if(msaResult.IsSuccess)
                     {
-                        return testResult;
-                    } 
-                    #endregion
-                    #region 暂停或停止
-                    ResetEvent.WaitOne();
-                    CancelToken.ThrowIfCancellationRequested();
-                    #endregion
-                    //验证ng
-                    ValidateNgResult();
-                    #region 复测或下发结果
-                    #region 复测
-                    if (Tray.NgInfos.Any(x => x.IsNg) && IsDoRetest && reTestTimes < RetestTimes)
-                    {
-                        LogHelper.UiLog.Info("写入Plc[Send_2] = 2");
-                        var write4 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)2);
-                        if (write4.IsFailed)
-                        {
-                            return OperateResult.CreateFailedResult(write4.Message ?? "写入Plc[Send_2] = 2失败", write4.ErrorCode);
-                        }
+                        MsaFlag = false;
                     }
-                    #endregion
-                    #region 下发测试结果
-                    else
-                    {
-                        if (Tray.NgInfos.Any(x => x.IsNg))
-                        {
-                            LogHelper.UiLog.Info("写入本地Plc[Send_3] = 2");
-                            var write5 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)2);
-                            if (write5.IsFailed)
-                            {
-                                return OperateResult.CreateFailedResult($"写入Plc[Send_3] = 2失败:{write5.Message ?? "未知原因"}", write5.ErrorCode);
-                            }
-                        }
-                        else
-                        {
-                            LogHelper.UiLog.Info("写入本地Plc[Send_3] = 1");
-                            var write5 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)1);
-                            if (write5.IsFailed)
-                            {
-                                return OperateResult.CreateFailedResult($"写入Plc[Send_3] = 1失败:{write5.Message ?? "未知原因"}", write5.ErrorCode);
-                            }
-                        }
-                        break;
-                    }
-                    #endregion
-                    #endregion
-                    #region 暂停或停止
-                    ResetEvent.WaitOne();
-                    CancelToken.ThrowIfCancellationRequested();
-                    #endregion
-                } while (IsDoRetest && reTestTimes <= RetestTimes);
-                #region 上传结果
-                if (IsDoUploadToMes)
-                {
-                    var mesResult = UpLoadMesResult();
-                    if (!mesResult.IsSuccess)
-                    {
-                        SetAlarm();
-                        return OperateResult.CreateFailedResult("上传到MES数据库失败," + mesResult.Message);
-                    }
-                    LogHelper.UiLog.Info("上传到MES数据库成功！");
+                    return msaResult;
                 }
-                var getupResult = WmsService.UploadTestResult();
-                if (getupResult.IsFailed)
+                else
+                {
+                    var normalTestResult = DoNormalTest();
+                    if(normalTestResult.IsFailed)
+                    {
+                        return normalTestResult;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 正常测试
+        /// </summary>
+        /// <returns></returns>
+        private OperateResult DoNormalTest()
+        {
+            #region 暂停或停止
+            ResetEvent.WaitOne();
+            CancelToken.ThrowIfCancellationRequested();
+            #endregion
+            #region 执行测试
+            var testResult = DoTest();
+            if (testResult.IsFailed)
+            {
+                return testResult;
+            }
+            #endregion
+            #region 暂停或停止
+            ResetEvent.WaitOne();
+            CancelToken.ThrowIfCancellationRequested();
+            #endregion
+            //验证ng
+            ValidateNgResult();
+            #region 复测
+            var retestResult = Retest();
+            if (retestResult.IsFailed)
+            {
+                return retestResult;
+            }
+            #endregion
+            #region 暂停或停止
+            ResetEvent.WaitOne();
+            CancelToken.ThrowIfCancellationRequested();
+            #endregion
+            #region 下发测试结果
+            var sendTestResultToPlcResult = SendTestResultToPlc();
+            if (sendTestResultToPlcResult.IsFailed)
+            {
+                return sendTestResultToPlcResult;
+            }
+            #endregion
+            #region 暂停或停止
+            ResetEvent.WaitOne();
+            CancelToken.ThrowIfCancellationRequested();
+            #endregion
+            #region 保存到本地excel
+            var saveResult = SaveTestData();
+            if (saveResult.IsFailed)
+            {
+                return saveResult;
+            }
+            #endregion
+            #region 暂停或停止
+            ResetEvent.WaitOne();
+            CancelToken.ThrowIfCancellationRequested();
+            #endregion
+            #region 上传结果
+            if (IsDoUploadToMes)
+            {
+                var mesResult = UpLoadMesResult();
+                if (!mesResult.IsSuccess)
                 {
                     SetAlarm();
-                    return OperateResult.CreateFailedResult("上传调度OCV数据失败," + getupResult.Message);
+                    return OperateResult.CreateFailedResult("上传到MES数据库失败," + mesResult.Message);
                 }
-                LogHelper.UiLog.Info("上传调度OCV数据成功！");
+                LogHelper.UiLog.Info("上传到MES数据库成功！");
+            }
+            var getupResult = WmsService.UploadTestResult();
+            if (getupResult.IsFailed)
+            {
+                SetAlarm();
+                return OperateResult.CreateFailedResult("上传调度OCV数据失败," + getupResult.Message);
+            }
+            LogHelper.UiLog.Info("上传调度OCV数据成功！");
+            #endregion
+            #region 暂停或停止
+            ResetEvent.WaitOne();
+            CancelToken.ThrowIfCancellationRequested();
+            #endregion
+            #region 下发放行电池
+            var outPutResult = SendOutPutTray();
+            if(outPutResult.IsFailed)
+            {
+                return OperateResult.CreateFailedResult();
+            }
+            #endregion
+            return OperateResult.CreateSuccessResult();
+        }
+
+        public OperateResult SendOutPutTray()
+        {
+            if (_isOutPutTray == false)
+            {
+                LogHelper.UiLog.Info("写入Plc[Send_2] = 1");
+                var write6 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)1);
+                if (write6.IsFailed)
+                {
+                    return OperateResult.CreateFailedResult(write6.Message ?? "写入Plc[Send_2] = 1失败", write6.ErrorCode);
+                }
+                write6 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)1);
+                if (write6.IsFailed)
+                {
+                    return OperateResult.CreateFailedResult(write6.Message ?? "写入Plc[Send_2] = 1失败", write6.ErrorCode);
+                }
+            }
+            _isOutPutTray = true;
+            return OperateResult.CreateSuccessResult();
+        }
+
+        /// <summary>
+        /// MSA测试
+        /// </summary>
+        /// <returns></returns>
+        private OperateResult DoMsaTest()
+        {
+            for(int msatestTimes = 0;msatestTimes<TestOption.MsaTimes; msatestTimes++)
+            {
+
+                #region 暂停或停止
+                ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
+                #endregion
+                #region 执行测试
+                var testResult = DoTest(false);
+                if (testResult.IsFailed)
+                {
+                    return testResult;
+                }
                 #endregion
                 #region 暂停或停止
                 ResetEvent.WaitOne();
                 CancelToken.ThrowIfCancellationRequested();
                 #endregion
-                #region 下发放行电池
-                LogHelper.UiLog.Info("写入Plc[Send_2] = 1");
-                var write6 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)1);
-                if (write6.IsFailed)
+                //验证测试结果
+                ValidateNgResult();
+                var saveResult = SaveMsaData(msatestTimes);
+                if(saveResult.IsFailed)
                 {
-                    return OperateResult.CreateFailedResult(write6.Message ?? "写入Plc[Send_1] = 1失败", write6.ErrorCode);
+                    return saveResult;
                 }
-                write6 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)1);
-                if (write6.IsFailed)
+                if (msatestTimes<TestOption.MsaTimes-1)
                 {
-                    return OperateResult.CreateFailedResult(write6.Message ?? "写入Plc[Send_1] = 1失败", write6.ErrorCode);
+                    #region 下发复测信号
+                    LogHelper.UiLog.Info("写入Plc[Send_2] = 2");
+                    var write4 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)2);
+                    if (write4.IsFailed)
+                    {
+                        return OperateResult.CreateFailedResult(write4.Message ?? "写入Plc[Send_2] = 2失败", write4.ErrorCode);
+                    }
+                    #endregion
                 }
-                #endregion
-
-                this._doMsa = MsaFlag;
             }
+            return OperateResult.CreateSuccessResult();
+        }
+
+        private OperateResult SaveMsaData(int msaTimes)
+        {
+            List<ExcelSaveDto> saveDtos = new List<ExcelSaveDto>();
+            foreach (var item in Tray.NgInfos)
+            {
+                ExcelSaveDto temp = new ExcelSaveDto();
+                temp.Position = item.Battery.Position;
+                temp.BarCode = item.Battery.BarCode;
+                temp.NVolValue = item.Battery.NVolValue ?? 0;
+                temp.NgResult = item.IsNg ? "Ng" : "OK";
+                temp.NgDescription = item.NgDescription ?? string.Empty;
+                saveDtos.Add(temp);
+            }
+
+            var exMapper = new Mapper();
+            exMapper.Map<ExcelSaveDto>("位置", n => n.Position)
+                .Map<ExcelSaveDto>("电芯条码", n => n.BarCode)
+                .Map<ExcelSaveDto>("负极壳体电压", n => n.NVolValue)
+                .Map<ExcelSaveDto>("测试结果", n => n.NgResult)
+                .Map<ExcelSaveDto>("Ng原因", n => n.NgDescription);
+            try
+            {
+                string dir = @$"./正常数据文件夹_msa/{Tray.TrayCode}";
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+                exMapper.Save(@$"./正常数据文件夹_msa/{Tray.TrayCode}/{Tray.TrayCode}_{msaTimes}.xlsx", saveDtos, "sheet1", overwrite: true, xlsx: true);
+                return OperateResult.CreateSuccessResult();
+            }
+            catch (Exception e)
+            {
+                return OperateResult.CreateFailedResult($"保存失败：{e.Message}");
+                throw;
+            }
+        }
+        private OperateResult SaveTestData()
+        {
+            List<ExcelSaveDto> saveDtos = new List<ExcelSaveDto>();
+            foreach(var item in Tray.NgInfos)
+            {
+                ExcelSaveDto temp = new ExcelSaveDto();
+                temp.Position = item.Battery.Position;
+                temp.BarCode = item.Battery.BarCode;
+                temp.NVolValue = item.Battery.NVolValue ?? 0;
+                temp.NgResult = item.IsNg ? "Ng" : "OK";
+                temp.NgDescription = item.NgDescription ?? string.Empty;
+                saveDtos.Add(temp);
+            }
+
+            var exMapper = new Mapper();
+            exMapper.Map<ExcelSaveDto>("位置", n => n.Position)
+                .Map<ExcelSaveDto>("电芯条码", n => n.BarCode)
+                .Map<ExcelSaveDto>("负极壳体电压", n => n.NVolValue)
+                .Map<ExcelSaveDto>("测试结果", n => n.NgResult)
+                .Map<ExcelSaveDto>("Ng原因", n => n.NgDescription);
+            try
+            {
+                string dir = @$"./正常数据文件夹_normal";
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+                exMapper.Save(@$"./正常数据文件夹_normal/{Tray.TrayCode}.xlsx", saveDtos, "sheet1", overwrite: true, xlsx: true);
+                return OperateResult.CreateSuccessResult();
+            }
+            catch (Exception e)
+            {
+                return OperateResult.CreateFailedResult($"保存失败：{e.Message}");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 下发测试结果
+        /// </summary>
+        /// <returns>操作结果</returns>
+        private OperateResult SendTestResultToPlc()
+        {
+            #region 下发测试结果
+            if (Tray.NgInfos.Any(x => x.IsNg))
+            {
+                LogHelper.UiLog.Info("下发测试结果");
+                LogHelper.UiLog.Info("写入本地Plc[Send_3] = 2");
+                var write5 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)2);
+                if (write5.IsFailed)
+                {
+                    return OperateResult.CreateFailedResult($"写入Plc[Send_3] = 2失败:{write5.Message ?? "未知原因"}", write5.ErrorCode);
+                }
+            }
+            else
+            {
+                LogHelper.UiLog.Info("写入本地Plc[Send_3] = 1");
+                var write5 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)1);
+                if (write5.IsFailed)
+                {
+                    return OperateResult.CreateFailedResult($"写入Plc[Send_3] = 1失败:{write5.Message ?? "未知原因"}", write5.ErrorCode);
+                }
+            }
+            #endregion
+            return OperateResult.CreateSuccessResult();
         }
         /// <summary>
         /// 执行复测逻辑
@@ -375,10 +566,15 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         {
             if(IsDoRetest)
             {
+                LogHelper.UiLog.Info("开始执行复测");
                 int retestTimes = 0;
                 while(retestTimes < RetestTimes)
                 {
-                    if(Tray.NgInfos.Any(x => x.IsNg))
+                    #region 暂停或停止
+                    ResetEvent.WaitOne();
+                    CancelToken.ThrowIfCancellationRequested();
+                    #endregion
+                    if (Tray.NgInfos.Any(x => x.IsNg))
                     {
                         #region 下发复测信号
                         LogHelper.UiLog.Info("写入Plc[Send_2] = 2");
@@ -420,7 +616,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// 执行测试逻辑
         /// </summary>
         /// <returns>操作结果</returns>
-        private OperateResult DoTest()
+        private OperateResult DoTest(bool doNgCheck = true)
         {
 
             #region 等待气缸伸出到位
@@ -437,7 +633,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             #endregion
             #region 测试电池
             LogHelper.UiLog.Info("开始测试电池");
-            var test1 = TestBatteries();
+            var test1 = TestBatteries(doNgCheck);
             if (test1.IsFailed)
             {
                 return test1;
@@ -448,6 +644,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             CancelToken.ThrowIfCancellationRequested();
             #endregion
             #region 下发测试完成
+            LogHelper.UiLog.Info("下发测试完成");
             LogHelper.UiLog.Info("写入本地Plc[Send_1] = 2");
             var write3 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_1"], (short)2);
             if (write3.IsFailed)
@@ -550,7 +747,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// 测试所有电池
         /// </summary>
         /// <returns>操作结果</returns>
-        private OperateResult TestBatteries()
+        private OperateResult TestBatteries(bool doNgCheck = true)
         {
             if (DevicesController.SwitchBoard.IsConnected == false)
             {
@@ -586,7 +783,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 ResetEvent.WaitOne();
                 CancelToken.ThrowIfCancellationRequested();
                 #endregion
-                var result = TestOneBattery(item);
+                var result = TestOneBattery(item,doNgCheck);
                 if (result.IsFailed)
                 {
                     return result;
@@ -600,11 +797,11 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// </summary>
         /// <param name="ngInfo">单个电池ngInfo</param>
         /// <returns>操作结果</returns>
-        private OperateResult TestOneBattery(NgInfo ngInfo)
+        private OperateResult TestOneBattery(NgInfo ngInfo,bool doNgCheck = true)
         {
             var battery = ngInfo.Battery;
             LogHelper.UiLog.Info($"开始测试电池{battery.Position}");
-            if (battery.IsTested && !ngInfo.IsNg)
+            if (doNgCheck && battery.IsTested && !ngInfo.IsNg)
             {
                 return OperateResult.CreateSuccessResult();
             }
@@ -621,7 +818,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             {
                 return OperateResult.CreateFailedResult(read1.Message ?? "读取电压失败", read1.ErrorCode);
             }
-            battery.PVolValue = read1.Content;
+            battery.NVolValue = read1.Content;
             battery.IsTested = true;
             battery.TestTime = DateTime.Now;
             //关闭对应通道
@@ -675,12 +872,12 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         {
             foreach (var ngInfo in Tray.NgInfos)
             {
-                if (ngInfo.Battery.PVolValue > BatteryNgCriteria.MaxPVol)
+                if (ngInfo.Battery.NVolValue > BatteryNgCriteria.MaxPVol)
                 {
                     ngInfo.NgDescription = "电压过高";
                     ngInfo.IsNg = true;
                 }
-                else if (ngInfo.Battery.PVolValue < BatteryNgCriteria.MinPVol)
+                else if (ngInfo.Battery.NVolValue < BatteryNgCriteria.MinPVol)
                 {
                     ngInfo.NgDescription = "电压过低";
                     ngInfo.IsNg = true;

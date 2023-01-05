@@ -43,7 +43,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Serivces.Dto
         /// <summary>
         /// 0:Ng,1:Ok
         /// </summary>
-        public int Rseult { get; set; }
+        public int Result { get; set; }
         /// <summary>
         /// NG代码
         /// </summary>

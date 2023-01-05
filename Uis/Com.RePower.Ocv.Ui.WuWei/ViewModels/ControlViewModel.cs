@@ -45,5 +45,10 @@ namespace Com.RePower.Ocv.Ui.WuWei.ViewModels
         {
             Work?.StopWorkAsync();
         }
+        [RelayCommand]
+        private void OutPutTray()
+        {
+            Work?.SendOutPutTray();
+        }
     }
 }
