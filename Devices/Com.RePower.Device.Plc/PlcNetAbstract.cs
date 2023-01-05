@@ -1,4 +1,5 @@
 ﻿using Com.RePower.Device.Plc.Extensions;
+using Com.RePower.Device.Plc.Helper;
 using Com.RePower.DeviceBase.Plc;
 using Com.RePower.WpfBase;
 using HslCommunication;
@@ -403,103 +404,103 @@ namespace Com.RePower.Device.Plc
             return result.DoConvert();
         }
 
-        public WpfBase.OperateResult<TimeSpan> Wait(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1)
-        {
-            var result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout);
-            ChangeConnectedStatus(result);
-            return result.DoConvert();
-        }
+        //public WpfBase.OperateResult<TimeSpan> Wait(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    var result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout);
+        //    ChangeConnectedStatus(result);
+        //    return result.DoConvert();
+        //}
 
-        public WpfBase.OperateResult<TimeSpan> Wait(string address, short waitValue, int readInterval = 100, int waitTimeout = -1)
-        {
-            var result = netWorkDeviceBase.Wait(address,waitValue, readInterval, waitTimeout);
-            ChangeConnectedStatus(result);
-            return result.DoConvert();
-        }
+        //public WpfBase.OperateResult<TimeSpan> Wait(string address, short waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    var result = netWorkDeviceBase.Wait(address,waitValue, readInterval, waitTimeout);
+        //    ChangeConnectedStatus(result);
+        //    return result.DoConvert();
+        //}
 
-        public WpfBase.OperateResult<TimeSpan> Wait(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1)
-        {
-            var result = netWorkDeviceBase.Wait(address,waitValue,readInterval,waitTimeout);
-            ChangeConnectedStatus(result);
-            return result.DoConvert();
-        }
+        //public WpfBase.OperateResult<TimeSpan> Wait(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    var result = netWorkDeviceBase.Wait(address,waitValue,readInterval,waitTimeout);
+        //    ChangeConnectedStatus(result);
+        //    return result.DoConvert();
+        //}
 
-        public WpfBase.OperateResult<TimeSpan> Wait(string address, int waitValue, int readInterval = 100, int waitTimeout = -1)
-        {
-            var result = netWorkDeviceBase.Wait(address,waitValue,readInterval,waitTimeout);
-            ChangeConnectedStatus(result);
-            return result.DoConvert();
-        }
+        //public WpfBase.OperateResult<TimeSpan> Wait(string address, int waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    var result = netWorkDeviceBase.Wait(address,waitValue,readInterval,waitTimeout);
+        //    ChangeConnectedStatus(result);
+        //    return result.DoConvert();
+        //}
 
-        public WpfBase.OperateResult<TimeSpan> Wait(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1)
-        {
-            var result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout);
-            ChangeConnectedStatus(result);
-            return result.DoConvert();
-        }
+        //public WpfBase.OperateResult<TimeSpan> Wait(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    var result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout);
+        //    ChangeConnectedStatus(result);
+        //    return result.DoConvert();
+        //}
 
-        public WpfBase.OperateResult<TimeSpan> Wait(string address, long waitValue, int readInterval = 100, int waitTimeout = -1)
-        {
-            var result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout);
-            ChangeConnectedStatus(result);
-            return result.DoConvert();
-        }
+        //public WpfBase.OperateResult<TimeSpan> Wait(string address, long waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    var result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout);
+        //    ChangeConnectedStatus(result);
+        //    return result.DoConvert();
+        //}
 
-        public WpfBase.OperateResult<TimeSpan> Wait(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1)
-        {
-            var result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout);
-            ChangeConnectedStatus(result);
-            return result.DoConvert();
-        }
+        //public WpfBase.OperateResult<TimeSpan> Wait(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    var result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout);
+        //    ChangeConnectedStatus(result);
+        //    return result.DoConvert();
+        //}
 
-        public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1)
-        {
-            var result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout);
-            ChangeConnectedStatus(result);
-            return result.DoConvert();
-        }
+        //public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    var result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout);
+        //    ChangeConnectedStatus(result);
+        //    return result.DoConvert();
+        //}
 
-        public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, short waitValue, int readInterval = 100, int waitTimeout = -1)
-        {
-            var result = await netWorkDeviceBase.WaitAsync(address,waitValue, readInterval, waitTimeout);
-            ChangeConnectedStatus(result);
-            return result.DoConvert();
-        }
+        //public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, short waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    var result = await netWorkDeviceBase.WaitAsync(address,waitValue, readInterval, waitTimeout);
+        //    ChangeConnectedStatus(result);
+        //    return result.DoConvert();
+        //}
 
-        public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1)
-        {
-            var result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout);
-            ChangeConnectedStatus(result);
-            return result.DoConvert();
-        }
+        //public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    var result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout);
+        //    ChangeConnectedStatus(result);
+        //    return result.DoConvert();
+        //}
 
-        public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, int waitValue, int readInterval = 100, int waitTimeout = -1)
-        {
-            var result = await netWorkDeviceBase.WaitAsync(address,waitValue,readInterval, waitTimeout);
-            ChangeConnectedStatus(result);
-            return result.DoConvert();
-        }
+        //public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, int waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    var result = await netWorkDeviceBase.WaitAsync(address,waitValue,readInterval, waitTimeout);
+        //    ChangeConnectedStatus(result);
+        //    return result.DoConvert();
+        //}
 
-        public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1)
-        {
-            var result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout);
-            ChangeConnectedStatus(result);
-            return result.DoConvert();
-        }
+        //public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    var result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout);
+        //    ChangeConnectedStatus(result);
+        //    return result.DoConvert();
+        //}
 
-        public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, long waitValue, int readInterval = 100, int waitTimeout = -1)
-        {
-            var result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout);
-            ChangeConnectedStatus(result);
-            return result.DoConvert();
-        }
+        //public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, long waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    var result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout);
+        //    ChangeConnectedStatus(result);
+        //    return result.DoConvert();
+        //}
 
-        public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1)
-        {
-            var result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout);
-            ChangeConnectedStatus(result);
-            return result.DoConvert();
-        }
+        //public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    var result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout);
+        //    ChangeConnectedStatus(result);
+        //    return result.DoConvert();
+        //}
 
         public WpfBase.OperateResult Write(string address, byte[] value)
         {
@@ -843,6 +844,216 @@ namespace Com.RePower.Device.Plc
             {
                 IsConnected = true;
             }
+        }
+
+        public WpfBase.OperateResult<TimeSpan> Wait(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            HslCommunication.OperateResult<TimeSpan> result = new HslCommunication.OperateResult<TimeSpan>();
+            if (cancellation is { } cancel)
+            {
+                result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout, cancel);
+            }
+            else
+            {
+                result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout);
+            }
+            ChangeConnectedStatus(result);
+            return result.DoConvert();
+        }
+
+        public WpfBase.OperateResult<TimeSpan> Wait(string address, short waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            HslCommunication.OperateResult<TimeSpan> result = new HslCommunication.OperateResult<TimeSpan>();
+            if (cancellation is { } cancel)
+            {
+                result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout, cancel);
+            }
+            else
+            {
+                result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout);
+            }
+            ChangeConnectedStatus(result);
+            return result.DoConvert();
+        }
+
+        public WpfBase.OperateResult<TimeSpan> Wait(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            HslCommunication.OperateResult<TimeSpan> result = new HslCommunication.OperateResult<TimeSpan>();
+            if (cancellation is { } cancel)
+            {
+                result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout, cancel);
+            }
+            else
+            {
+                result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout);
+            }
+            ChangeConnectedStatus(result);
+            return result.DoConvert();
+        }
+
+        public WpfBase.OperateResult<TimeSpan> Wait(string address, int waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            HslCommunication.OperateResult<TimeSpan> result = new HslCommunication.OperateResult<TimeSpan>();
+            if (cancellation is { } cancel)
+            {
+                result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout, cancel);
+            }
+            else
+            {
+                result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout);
+            }
+            ChangeConnectedStatus(result);
+            return result.DoConvert();
+        }
+
+        public WpfBase.OperateResult<TimeSpan> Wait(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            HslCommunication.OperateResult<TimeSpan> result = new HslCommunication.OperateResult<TimeSpan>();
+            if (cancellation is { } cancel)
+            {
+                result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout, cancel);
+            }
+            else
+            {
+                result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout);
+            }
+            ChangeConnectedStatus(result);
+            return result.DoConvert();
+        }
+
+        public WpfBase.OperateResult<TimeSpan> Wait(string address, long waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            HslCommunication.OperateResult<TimeSpan> result = new HslCommunication.OperateResult<TimeSpan>();
+            if (cancellation is { } cancel)
+            {
+                result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout, cancel);
+            }
+            else
+            {
+                result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout);
+            }
+            ChangeConnectedStatus(result);
+            return result.DoConvert();
+        }
+
+        public WpfBase.OperateResult<TimeSpan> Wait(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            HslCommunication.OperateResult<TimeSpan> result = new HslCommunication.OperateResult<TimeSpan>();
+            if (cancellation is { } cancel)
+            {
+                result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout, cancel);
+            }
+            else
+            {
+                result = netWorkDeviceBase.Wait(address, waitValue, readInterval, waitTimeout);
+            }
+            ChangeConnectedStatus(result);
+            return result.DoConvert();
+        }
+
+        public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            HslCommunication.OperateResult<TimeSpan> result = new HslCommunication.OperateResult<TimeSpan>();
+            if (cancellation is { } cancel)
+            {
+                result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout, cancel);
+            }
+            else
+            {
+                result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout);
+            }
+            ChangeConnectedStatus(result);
+            return result.DoConvert();
+        }
+
+        public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, short waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            HslCommunication.OperateResult<TimeSpan> result = new HslCommunication.OperateResult<TimeSpan>();
+            if (cancellation is { } cancel)
+            {
+                result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout, cancel);
+            }
+            else
+            {
+                result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout);
+            }
+            ChangeConnectedStatus(result);
+            return result.DoConvert();
+        }
+
+        public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            HslCommunication.OperateResult<TimeSpan> result = new HslCommunication.OperateResult<TimeSpan>();
+            if (cancellation is { } cancel)
+            {
+                result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout, cancel);
+            }
+            else
+            {
+                result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout);
+            }
+            ChangeConnectedStatus(result);
+            return result.DoConvert();
+        }
+
+        public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, int waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            HslCommunication.OperateResult<TimeSpan> result = new HslCommunication.OperateResult<TimeSpan>();
+            if (cancellation is { } cancel)
+            {
+                result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout, cancel);
+            }
+            else
+            {
+                result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout);
+            }
+            ChangeConnectedStatus(result);
+            return result.DoConvert();
+        }
+
+        public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            HslCommunication.OperateResult<TimeSpan> result = new HslCommunication.OperateResult<TimeSpan>();
+            if (cancellation is { } cancel)
+            {
+                result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout, cancel);
+            }
+            else
+            {
+                result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout);
+            }
+            ChangeConnectedStatus(result);
+            return result.DoConvert();
+        }
+
+        public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, long waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            HslCommunication.OperateResult<TimeSpan> result = new HslCommunication.OperateResult<TimeSpan>();
+            if (cancellation is { } cancel)
+            {
+                result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout, cancel);
+            }
+            else
+            {
+                result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout);
+            }
+            ChangeConnectedStatus(result);
+            return result.DoConvert();
+        }
+
+        public async Task<WpfBase.OperateResult<TimeSpan>> WaitAsync(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            HslCommunication.OperateResult<TimeSpan> result = new HslCommunication.OperateResult<TimeSpan>();
+            if (cancellation is { } cancel)
+            {
+                result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout, cancel);
+            }
+            else
+            {
+                result = await netWorkDeviceBase.WaitAsync(address, waitValue, readInterval, waitTimeout);
+            }
+            ChangeConnectedStatus(result);
+            return result.DoConvert();
         }
     }
 }

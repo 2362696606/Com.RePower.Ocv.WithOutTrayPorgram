@@ -12,6 +12,7 @@ using Com.RePower.WpfBase;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design.Internal;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using System;
@@ -29,6 +30,17 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
     public partial class MainWorkFixed : ObservableObject, IProjectMainWork
     {
         private int _workStatus;
+
+        /// <summary>
+        /// 执行MSA
+        /// </summary>
+        private bool _doMsa;
+
+        /// <summary>
+        /// MSA标志
+        /// </summary>
+        [ObservableProperty]
+        private bool _msaFlag;
 
         public MainWorkFixed(DevicesController devicesController
             , FlowController flowController
@@ -60,6 +72,9 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         public BatteryNgCriteria BatteryNgCriteria { get; }
         public TestOption TestOption { get; }
         public IWmsService WmsService { get; }
+
+        
+
 
         /// <summary>
         /// 是否上传到Mes
@@ -197,7 +212,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 #endregion
                 #region 等待测试准备信号
                 LogHelper.UiLog.Info("等待Plc[Read_1] = 1");
-                var wait1 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["Read_1"], (short)1);
+                var wait1 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["Read_1"], (short)1, cancellation: this.CancelToken);
                 if (wait1.IsFailed)
                 {
                     return OperateResult.CreateFailedResult(wait1.Message ?? "等待Plc[Read_1] = 1失败", wait1.ErrorCode);
@@ -243,7 +258,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     #endregion
                     #region 等待气缸伸出到位
                     LogHelper.UiLog.Info("等待本地Plc[Read_1] = 2");
-                    var wait3 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["Read_1"], (short)2);
+                    var wait3 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["Read_1"], (short)2, cancellation: this.CancelToken);
                     if (wait3.IsFailed)
                     {
                         return OperateResult.CreateFailedResult($"等待Plc[Read_1] = 2失败:{wait3.Message ?? "未知原因"}", wait3.ErrorCode);
@@ -355,8 +370,10 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 if (write6.IsFailed)
                 {
                     return OperateResult.CreateFailedResult(write6.Message ?? "写入Plc[Send_1] = 1失败", write6.ErrorCode);
-                } 
+                }
                 #endregion
+
+                this._doMsa = MsaFlag;
             }
         }
 
@@ -484,6 +501,10 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
 
             foreach (var item in Tray.NgInfos)
             {
+                #region 停止或暂停
+                CancelToken.ThrowIfCancellationRequested();
+                ResetEvent.WaitOne();
+                #endregion
                 var result = TestOneBattery(item);
                 if (result.IsFailed)
                 {

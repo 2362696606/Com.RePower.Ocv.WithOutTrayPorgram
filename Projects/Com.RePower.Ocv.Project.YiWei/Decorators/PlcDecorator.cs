@@ -5,6 +5,7 @@ using Com.RePower.Ocv.WpfBase.Extensions;
 using Com.RePower.WpfBase;
 using System;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Project.YiWei.Decorators
@@ -354,6 +355,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Decorators
             return result;
         }
 
+        [Obsolete("使用 Wait(string,bool,int,int,CancellationToken?)", true)]
         public OperateResult<TimeSpan> Wait(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
@@ -361,6 +363,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Decorators
             return result;
         }
 
+        [Obsolete("使用 Wait(string,short,int,int,CancellationToken?)", true)]
         public OperateResult<TimeSpan> Wait(string address, short waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
@@ -368,6 +371,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Decorators
             return result;
         }
 
+        [Obsolete("使用 Wait(string,ushort,int,int,CancellationToken?)", true)]
         public OperateResult<TimeSpan> Wait(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
@@ -375,6 +379,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Decorators
             return result;
         }
 
+        [Obsolete("使用 Wait(string,int,int,int,CancellationToken?)", true)]
         public OperateResult<TimeSpan> Wait(string address, int waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
@@ -382,6 +387,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Decorators
             return result;
         }
 
+        [Obsolete("使用 Wait(string,uint,int,int,CancellationToken?)", true)]
         public OperateResult<TimeSpan> Wait(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
@@ -389,6 +395,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Decorators
             return result;
         }
 
+        [Obsolete("使用 Wait(string,long,int,int,CancellationToken?)", true)]
         public OperateResult<TimeSpan> Wait(string address, long waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
@@ -396,6 +403,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Decorators
             return result;
         }
 
+        [Obsolete("使用 Wait(string,ulong,int,int,CancellationToken?)", true)]
         public OperateResult<TimeSpan> Wait(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
@@ -403,6 +411,56 @@ namespace Com.RePower.Ocv.Project.YiWei.Decorators
             return result;
         }
 
+        public OperateResult<TimeSpan> Wait(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            var result = plc.Wait(address, waitValue, readInterval, waitTimeout, cancellation);
+            LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            return result;
+        }
+
+        public OperateResult<TimeSpan> Wait(string address, short waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            var result = plc.Wait(address, waitValue, readInterval, waitTimeout, cancellation);
+            LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            return result;
+        }
+
+        public OperateResult<TimeSpan> Wait(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            var result = plc.Wait(address, waitValue, readInterval, waitTimeout, cancellation);
+            LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            return result;
+        }
+
+        public OperateResult<TimeSpan> Wait(string address, int waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            var result = plc.Wait(address, waitValue, readInterval, waitTimeout, cancellation);
+            LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            return result;
+        }
+
+        public OperateResult<TimeSpan> Wait(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            var result = plc.Wait(address, waitValue, readInterval, waitTimeout, cancellation);
+            LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            return result;
+        }
+
+        public OperateResult<TimeSpan> Wait(string address, long waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            var result = plc.Wait(address, waitValue, readInterval, waitTimeout, cancellation);
+            LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            return result;
+        }
+
+        public OperateResult<TimeSpan> Wait(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            var result = plc.Wait(address, waitValue, readInterval, waitTimeout, cancellation);
+            LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            return result;
+        }
+
+        [Obsolete("使用 WaitAsync(string,bool,int,int,CancellationToken?)", true)]
         public async Task<OperateResult<TimeSpan>> WaitAsync(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout);
@@ -410,6 +468,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Decorators
             return result;
         }
 
+        [Obsolete("使用 WaitAsync(string,short,int,int,CancellationToken?)", true)]
         public async Task<OperateResult<TimeSpan>> WaitAsync(string address, short waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout);
@@ -417,6 +476,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Decorators
             return result;
         }
 
+        [Obsolete("使用 WaitAsync(string,ushort,int,int,CancellationToken?)", true)]
         public async Task<OperateResult<TimeSpan>> WaitAsync(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout);
@@ -424,6 +484,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Decorators
             return result;
         }
 
+        [Obsolete("使用 WaitAsync(string,int,int,int,CancellationToken?)", true)]
         public async Task<OperateResult<TimeSpan>> WaitAsync(string address, int waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout);
@@ -431,6 +492,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Decorators
             return result;
         }
 
+        [Obsolete("使用 WaitAsync(string,uint,int,int,CancellationToken?)", true)]
         public async Task<OperateResult<TimeSpan>> WaitAsync(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout);
@@ -438,6 +500,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Decorators
             return result;
         }
 
+        [Obsolete("使用 WaitAsync(string,long,int,int,CancellationToken?)", true)]
         public async Task<OperateResult<TimeSpan>> WaitAsync(string address, long waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout);
@@ -445,9 +508,59 @@ namespace Com.RePower.Ocv.Project.YiWei.Decorators
             return result;
         }
 
+        [Obsolete("使用 WaitAsync(string,ulong,int,int,CancellationToken?)", true)]
         public async Task<OperateResult<TimeSpan>> WaitAsync(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1)
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout);
+            LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            return result;
+        }
+
+        public async Task<OperateResult<TimeSpan>> WaitAsync(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout, cancellation);
+            LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            return result;
+        }
+
+        public async Task<OperateResult<TimeSpan>> WaitAsync(string address, short waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout, cancellation);
+            LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            return result;
+        }
+
+        public async Task<OperateResult<TimeSpan>> WaitAsync(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout, cancellation);
+            LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            return result;
+        }
+
+        public async Task<OperateResult<TimeSpan>> WaitAsync(string address, int waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout, cancellation);
+            LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            return result;
+        }
+
+        public async Task<OperateResult<TimeSpan>> WaitAsync(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout, cancellation);
+            LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            return result;
+        }
+
+        public async Task<OperateResult<TimeSpan>> WaitAsync(string address, long waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout, cancellation);
+            LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            return result;
+        }
+
+        public async Task<OperateResult<TimeSpan>> WaitAsync(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
+        {
+            var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout, cancellation);
             LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
@@ -773,5 +886,6 @@ namespace Com.RePower.Ocv.Project.YiWei.Decorators
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},编码格式{encoding},长度{length},结果{result.IsSuccess}");
             return result;
         }
+
     }
 }

@@ -268,72 +268,142 @@ namespace Com.RePower.Device.Plc.Impl
             throw new NotImplementedException();
         }
 
-        public OperateResult<TimeSpan> Wait(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1)
+        //public OperateResult<TimeSpan> Wait(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    return OperateResult.CreateSuccessResult(new TimeSpan(10));
+        //}
+
+        //public OperateResult<TimeSpan> Wait(string address, short waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    return OperateResult.CreateSuccessResult(new TimeSpan(10));
+        //}
+
+        //public OperateResult<TimeSpan> Wait(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    return OperateResult.CreateSuccessResult(new TimeSpan(10));
+        //}
+
+        //public OperateResult<TimeSpan> Wait(string address, int waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    return OperateResult.CreateSuccessResult(new TimeSpan(10));
+        //}
+
+        //public OperateResult<TimeSpan> Wait(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    return OperateResult.CreateSuccessResult(new TimeSpan(10));
+        //}
+
+        //public OperateResult<TimeSpan> Wait(string address, long waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    return OperateResult.CreateSuccessResult(new TimeSpan(10));
+        //}
+
+        //public OperateResult<TimeSpan> Wait(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    return OperateResult.CreateSuccessResult(new TimeSpan(10));
+        //}
+
+        public OperateResult<TimeSpan> Wait(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
         {
             return OperateResult.CreateSuccessResult(new TimeSpan(10));
         }
 
-        public OperateResult<TimeSpan> Wait(string address, short waitValue, int readInterval = 100, int waitTimeout = -1)
+        public OperateResult<TimeSpan> Wait(string address, short waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
         {
             return OperateResult.CreateSuccessResult(new TimeSpan(10));
         }
 
-        public OperateResult<TimeSpan> Wait(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1)
+        public OperateResult<TimeSpan> Wait(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
         {
             return OperateResult.CreateSuccessResult(new TimeSpan(10));
         }
 
-        public OperateResult<TimeSpan> Wait(string address, int waitValue, int readInterval = 100, int waitTimeout = -1)
+        public OperateResult<TimeSpan> Wait(string address, int waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
         {
             return OperateResult.CreateSuccessResult(new TimeSpan(10));
         }
 
-        public OperateResult<TimeSpan> Wait(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1)
+        public OperateResult<TimeSpan> Wait(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
         {
             return OperateResult.CreateSuccessResult(new TimeSpan(10));
         }
 
-        public OperateResult<TimeSpan> Wait(string address, long waitValue, int readInterval = 100, int waitTimeout = -1)
+        public OperateResult<TimeSpan> Wait(string address, long waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
         {
             return OperateResult.CreateSuccessResult(new TimeSpan(10));
         }
 
-        public OperateResult<TimeSpan> Wait(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1)
+        public OperateResult<TimeSpan> Wait(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
         {
             return OperateResult.CreateSuccessResult(new TimeSpan(10));
         }
 
-        public Task<OperateResult<TimeSpan>> WaitAsync(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1)
+        //public Task<OperateResult<TimeSpan>> WaitAsync(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<OperateResult<TimeSpan>> WaitAsync(string address, short waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<OperateResult<TimeSpan>> WaitAsync(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<OperateResult<TimeSpan>> WaitAsync(string address, int waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<OperateResult<TimeSpan>> WaitAsync(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<OperateResult<TimeSpan>> WaitAsync(string address, long waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<OperateResult<TimeSpan>> WaitAsync(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public Task<OperateResult<TimeSpan>> WaitAsync(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<OperateResult<TimeSpan>> WaitAsync(string address, short waitValue, int readInterval = 100, int waitTimeout = -1)
+        public Task<OperateResult<TimeSpan>> WaitAsync(string address, short waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<OperateResult<TimeSpan>> WaitAsync(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1)
+        public Task<OperateResult<TimeSpan>> WaitAsync(string address, ushort waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<OperateResult<TimeSpan>> WaitAsync(string address, int waitValue, int readInterval = 100, int waitTimeout = -1)
+        public Task<OperateResult<TimeSpan>> WaitAsync(string address, int waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<OperateResult<TimeSpan>> WaitAsync(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1)
+        public Task<OperateResult<TimeSpan>> WaitAsync(string address, uint waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<OperateResult<TimeSpan>> WaitAsync(string address, long waitValue, int readInterval = 100, int waitTimeout = -1)
+        public Task<OperateResult<TimeSpan>> WaitAsync(string address, long waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<OperateResult<TimeSpan>> WaitAsync(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1)
+        public Task<OperateResult<TimeSpan>> WaitAsync(string address, ulong waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
         {
             throw new NotImplementedException();
         }
