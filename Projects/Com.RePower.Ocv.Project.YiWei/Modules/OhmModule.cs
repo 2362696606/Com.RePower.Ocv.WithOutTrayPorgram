@@ -1,16 +1,10 @@
 ﻿using Autofac;
-using Com.RePower.Device.SwitchBoard.Impl;
-using Com.RePower.DeviceBase.SwitchBoard;
 using Com.RePower.DeviceBase;
 using Com.RePower.Ocv.Model.DataBaseContext;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Com.RePower.Ocv.Device.Ohm.Impl.Hioki_BT3562;
 using Com.RePower.DeviceBase.Ohm;
+using Com.RePower.Device.Ohm.Impl.Hioki_BT3562;
 
 namespace Com.RePower.Ocv.Project.YiWei.Modules
 {

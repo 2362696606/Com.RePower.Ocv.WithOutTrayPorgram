@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
@@ -14,12 +14,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Com.RePower.Ocv.Device.Ohm\Com.RePower.Ocv.Device.Ohm.csproj" />
     <ProjectReference Include="..\..\Com.RePower.Ocv.Model\Com.RePower.Ocv.Model.csproj" />
     <ProjectReference Include="..\..\Devices\Com.RePower.Device.DMM\Com.RePower.Device.DMM.csproj" />
+    <ProjectReference Include="..\..\Devices\Com.RePower.Device.Ohm\Com.RePower.Device.Ohm.csproj" />
     <ProjectReference Include="..\..\Devices\Com.RePower.Device.Plc\Com.RePower.Device.Plc.csproj" />
     <ProjectReference Include="..\..\Devices\Com.RePower.Device.SwitchBoard\Com.RePower.Device.SwitchBoard.csproj" />
     <ProjectReference Include="..\Com.RePower.Ocv.Project\Com.RePower.Ocv.Project.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Documents\" />
   </ItemGroup>
 
 </Project>

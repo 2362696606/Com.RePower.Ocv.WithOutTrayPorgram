@@ -26,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Com.RePower.Ocv.Controller\Com.RePower.Ocv.Controller.csproj" />
     <ProjectReference Include="..\..\Com.RePower.Ocv.WpfBase\Com.RePower.Ocv.WpfBase.csproj" />
     <ProjectReference Include="..\..\Projects\Com.RePower.Ocv.Project.WuWei\Com.RePower.Ocv.Project.WuWei.csproj" />
   </ItemGroup>

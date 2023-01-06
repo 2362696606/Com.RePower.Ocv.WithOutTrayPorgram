@@ -92,62 +92,86 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
         {
             get { return FlowController.CancelToken; }
         }
-
+        /// <summary>
+        /// 暂停测试
+        /// </summary>
         public async void PauseWorkAsync()
         {
-            WorkStatus = 2;
-            await Task.Run(() =>
+            if (WorkStatus != 2)
             {
-                ResetEvent.Set();
-            });
-        }
-
-        public async void StartWorkAsync()
-        {
-            if (WorkStatus == 0)
-            {
-                WorkStatus = 1;
                 await Task.Run(() =>
                 {
-                    try
-                    {
-                        var result = DoWork();
-                        if (result.IsFailed)
-                        {
-                            LogHelper.UiLog.Warn(result.Message);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        if (e.GetType() == typeof(OperationCanceledException))
-                        {
-                            FlowController.CancelTokenSource = new CancellationTokenSource();
-                        }
-                        else
-                        {
-                            LogHelper.UiLog.Error(e.Message);
-                        }
-                    }
-                    finally
-                    {
-                        WorkStatus = 0;
-                    }
+                    ResetEvent.Reset();
+                    LogHelper.UiLog.Warn($"Pause");
                 });
             }
-            else if (WorkStatus == 2)
+            WorkStatus = 2;
+        }
+
+        /// <summary>
+        /// 开始测试
+        /// </summary>
+        public async void StartWorkAsync()
+        {
+            if (WorkStatus != 1)
             {
-                WorkStatus = 1;
-                ResetEvent.Reset();
+                if (WorkStatus == 0)
+                {
+                    WorkStatus = 1;
+                    await Task.Run(() =>
+                    {
+                        try
+                        {
+                            ResetEvent.Set();
+                            var result = DoWork();
+                            if (result.IsFailed)
+                            {
+                                LogHelper.UiLog.Warn(result.Message);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            if (e.GetType() == typeof(OperationCanceledException))
+                            {
+                                FlowController.CancelTokenSource = new CancellationTokenSource();
+                            }
+                            else
+                            {
+                                LogHelper.UiLog.Error(e.Message);
+                            }
+                        }
+                        finally
+                        {
+                            WorkStatus = 0;
+                        }
+                    });
+                }
+                else if (WorkStatus == 2)
+                {
+                    WorkStatus = 1;
+                    ResetEvent.Set();
+                }
             }
         }
 
+        /// <summary>
+        /// 停止测试
+        /// </summary>
         public async void StopWorkAsync()
         {
-            WorkStatus = 0;
-            await Task.Run(() =>
+            if (WorkStatus != 0)
             {
-                CancelTokenSource.Cancel();
-            });
+                await Task.Run(() =>
+                {
+                    CancelTokenSource.Cancel();
+                    if (WorkStatus == 2)
+                    {
+                        ResetEvent.Set();
+                    }
+                    LogHelper.UiLog.Warn($"Stop");
+                });
+            }
+            WorkStatus = 0;
         }
 
         private OperateResult DoWork()
@@ -160,12 +184,15 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                 //{
                 //    return init1;
                 //}
-                CancelToken.ThrowIfCancellationRequested();
+                #region 暂停或停止
                 ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
+                #endregion
                 #endregion
                 #region 等待测试准备信号
 
                 //LogHelper.UiLog.Info("连接PLC");
+                #region 链接设备
                 if (!DevicesController.LocalPlc.IsConnected)
                 {
                     var result = DevicesController.LocalPlc.Connect();
@@ -174,7 +201,6 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                         return result;
                     }
                 }
-
                 if (DevicesController.SwitchBoard.IsConnected == false)
                 {
                     var result = DevicesController.SwitchBoard.Connect();//切换板
@@ -199,14 +225,23 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                         return result;
                     }
                 }
+                #endregion
 
-
+                #region 暂停或停止
+                ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
+                #endregion
                 LogHelper.UiLog.Info("等待Plc[上位机交互] = 0");
                 var wait0 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["上位机交互"], 0);
                 if (wait0.IsFailed)
                 {
                     return OperateResult.CreateFailedResult(wait0.Message ?? "等待本地Plc[上位机交互] = 5失败", wait0.ErrorCode);
                 }
+
+                #region 暂停或停止
+                ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
+                #endregion
                 LogHelper.UiLog.Info("等待Plc[上位机交互] = 5");
                 var wait1 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["上位机交互"], 5);
                 if (wait1.IsFailed)
@@ -215,6 +250,12 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                 }
                 #endregion
                 var tempNgInfos = new System.Collections.ObjectModel.ObservableCollection<NgInfo>();
+
+                #region 暂停或停止
+                ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
+                #endregion
+
                 #region 读取电池条码1
                 string batteryCode = string.Empty;
                 LogHelper.UiLog.Info("读取PLC[电池条码1]");
@@ -234,6 +275,12 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                 ngInfo.Battery.Position = 1;
                 tempNgInfos.Add(ngInfo);
                 #endregion
+
+                #region 暂停或停止
+                ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
+                #endregion
+
                 #region 读取电池条码2
                 batteryCode = string.Empty;
                 LogHelper.UiLog.Info("读取PLC[电池条码2]");
@@ -255,9 +302,15 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                 Tray.TrayCode = "null";
                 Tray.NgInfos = tempNgInfos;
                 #endregion
+
                 int reTestTimes = 0;
                 do
                 {
+                    #region 暂停或停止
+                    ResetEvent.WaitOne();
+                    CancelToken.ThrowIfCancellationRequested();
+                    #endregion
+
                     reTestTimes++;
                     //测试电池
                     LogHelper.UiLog.Info("开始测试电池");
@@ -268,33 +321,14 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                     }
                     //验证ng结果
                     ValidateNgResult();
-                    #region 数据上传
-                    //if (IsDoUploadToMes)
-                    //    {
-                    //        var mesResult = UpLoadMesResult();
-                    //        if (!mesResult.IsSuccess)
-                    //        {
-                    //            return OperateResult.CreateFailedResult("上传到MES数据库失败," + mesResult.Message);
-                    //        }
-                    //        LogHelper.UiLog.Info("上传到MES数据库成功！");
-                    //    }
-                    //    var getupResult = WmsService.UploadTestResult();
-                    //    if (getupResult.IsFailed)
-                    //    {
-                    //        return OperateResult.CreateFailedResult("上传调度OCV数据失败," + getupResult.Message);
-                    //    }
-                    //    LogHelper.UiLog.Info("上传调度OCV数据成功！");
-
-                    //    LogHelper.UiLog.Info("写入本地Plc[Send_3] = 1");
-                    //    var write5 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)1);
-                    //    if (write5.IsFailed)
-                    //    {
-                    //        return OperateResult.CreateFailedResult(write5.Message ?? "写入本地Plc[Send_3] = 1失败", write5.ErrorCode);
-                    //    }
-                    #endregion
                     break;
                     
                 } while (IsDoRetest && reTestTimes < RetestTimes);
+
+                #region 暂停或停止
+                ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
+                #endregion
                 LogHelper.UiLog.Info("写入Plc[上位机交互] = 10");
                 var write6 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["上位机交互"], 10);
                 if (write6.IsFailed)
@@ -344,6 +378,12 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
 
             foreach (var item in Tray.NgInfos)
             {
+
+                #region 暂停或停止
+                ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
+                #endregion
+
                 var result = TestOneBattery(item);
                 if (result.IsFailed)
                 {
@@ -544,96 +584,96 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
 
         #region 保存测试结果到本地Excel文件中
 
-        public OperateResult SaveTestResultToExcel()
-        {
-            return SaveTestData(Tray.TrayCode);
-        }
-
-        /// <summary>
-        /// 获取保存路径字符串
-        /// </summary>
-        /// <returns></returns>
-        private (string savePath, string title) GetSaveExcelFilePath(string trayCode)
-        {
-            var saveDir = @"D:\OCV\OCV测试数据"; //OcvConfigFromJson.OcvResultSaveExcelPath;
-            string dateTimeString = DateTime.Now.ToString("yyyy-MM-dd_HH_mm_ss");
-            saveDir = Path.Combine(saveDir, DateTime.Now.ToString("yyyy-MM-dd"));
-            if (!Directory.Exists(saveDir))
-            {
-                Directory.CreateDirectory(saveDir);
-            }
-
-            string savePath = Path.Combine(saveDir, $@"{TestOption.OcvType}_{trayCode}_{dateTimeString}.xlsx");
-            string title = $"{TestOption.OcvType}_测试结果_{dateTimeString}";
-            return (savePath, title);
-        }
-
-        ///// <summary>
-        ///// 保存新DataGridView结果到Excel文件
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="testResult"></param>
-        ///// <returns></returns>
-        //private (DataTable, Dictionary<string, string>) GetDataTableAndDicFromTestResult<T>(List<T> testResult) where T : class
+        //public OperateResult SaveTestResultToExcel()
         //{
-        //    DataTable dt = new DataTable();
-        //    Type type = typeof(T);
-        //    Dictionary<string, string> dic = new Dictionary<string, string>();
-        //    List<PropertyInfo> propertyInfos = type.GetProperties(BindingFlags.Instance | BindingFlags.Public).ToList();
-        //    foreach (PropertyInfo propertyInfo in propertyInfos)
-        //    {
-        //        var attr = propertyInfo.GetCustomAttribute(typeof(TableColumnNameAttribute))?.As<TableColumnNameAttribute>();
-        //        if (attr != null && attr.Enable)
-        //        {
-        //            if (propertyInfo.GetCustomAttribute(typeof(IgnoreWhenOutputExcelAttribute)) == null)
-        //            {
-        //                dic.Add(propertyInfo.Name, attr.ColumnName);
-        //                dt.Columns.Add(propertyInfo.Name, typeof(string));
-        //            }
-        //        }
-        //    }
-        //    foreach (var item in testResult)
-        //    {
-        //        DataRow row = dt.NewRow();
-        //        foreach (PropertyInfo propertyInfo in propertyInfos)
-        //        {
-        //            var attr = propertyInfo.GetCustomAttribute(typeof(TableColumnNameAttribute))?.As<TableColumnNameAttribute>();
-        //            if (attr != null && attr.Enable)
-        //            {
-        //                if (propertyInfo.GetCustomAttribute(typeof(IgnoreWhenOutputExcelAttribute)) == null)
-        //                {
-        //                    PropertyInfo findProperty = item.GetPropertyObj(propertyInfo.Name);
-        //                    if (findProperty != null)
-        //                    {
-        //                        var obj = item.GetPropertyByName<object>(propertyInfo.Name);
-        //                        row[propertyInfo.Name] = obj + "";
-        //                    }
-        //                }
-        //            }
-        //        }
-
-        //        dt.Rows.Add(row);
-        //    }
-        //    return (dt, dic);
+        //    return SaveTestData(Tray.TrayCode);
         //}
 
-        /// <summary>
-        /// 保存测试结果
-        /// </summary>
-        private OperateResult SaveTestData(string trayCode)
-        {
-            var pathTuple = GetSaveExcelFilePath(trayCode);
-            try
-            {
-               // (DataTable, Dictionary<string, string>) formatData = GetDataTableAndDicFromTestResult(_work.TrayModel.BatteryCells);
-                //NpoiHelperFromCommon.ExportDTtoExcel(formatData.Item1, pathTuple.title, pathTuple.savePath, formatData.Item2, false, 5000);
-                return OperateResult.CreateSuccessResult();
-            }
-            catch (Exception ex)
-            {
-                return OperateResult.CreateFailedResult($"SaveTestData异常：{ex.Message}\r\n{ex.StackTrace}");
-            }
-        }
+        ///// <summary>
+        ///// 获取保存路径字符串
+        ///// </summary>
+        ///// <returns></returns>
+        //private (string savePath, string title) GetSaveExcelFilePath(string trayCode)
+        //{
+        //    var saveDir = @"D:\OCV\OCV测试数据"; //OcvConfigFromJson.OcvResultSaveExcelPath;
+        //    string dateTimeString = DateTime.Now.ToString("yyyy-MM-dd_HH_mm_ss");
+        //    saveDir = Path.Combine(saveDir, DateTime.Now.ToString("yyyy-MM-dd"));
+        //    if (!Directory.Exists(saveDir))
+        //    {
+        //        Directory.CreateDirectory(saveDir);
+        //    }
+
+        //    string savePath = Path.Combine(saveDir, $@"{TestOption.OcvType}_{trayCode}_{dateTimeString}.xlsx");
+        //    string title = $"{TestOption.OcvType}_测试结果_{dateTimeString}";
+        //    return (savePath, title);
+        //}
+
+        /////// <summary>
+        /////// 保存新DataGridView结果到Excel文件
+        /////// </summary>
+        /////// <typeparam name="T"></typeparam>
+        /////// <param name="testResult"></param>
+        /////// <returns></returns>
+        ////private (DataTable, Dictionary<string, string>) GetDataTableAndDicFromTestResult<T>(List<T> testResult) where T : class
+        ////{
+        ////    DataTable dt = new DataTable();
+        ////    Type type = typeof(T);
+        ////    Dictionary<string, string> dic = new Dictionary<string, string>();
+        ////    List<PropertyInfo> propertyInfos = type.GetProperties(BindingFlags.Instance | BindingFlags.Public).ToList();
+        ////    foreach (PropertyInfo propertyInfo in propertyInfos)
+        ////    {
+        ////        var attr = propertyInfo.GetCustomAttribute(typeof(TableColumnNameAttribute))?.As<TableColumnNameAttribute>();
+        ////        if (attr != null && attr.Enable)
+        ////        {
+        ////            if (propertyInfo.GetCustomAttribute(typeof(IgnoreWhenOutputExcelAttribute)) == null)
+        ////            {
+        ////                dic.Add(propertyInfo.Name, attr.ColumnName);
+        ////                dt.Columns.Add(propertyInfo.Name, typeof(string));
+        ////            }
+        ////        }
+        ////    }
+        ////    foreach (var item in testResult)
+        ////    {
+        ////        DataRow row = dt.NewRow();
+        ////        foreach (PropertyInfo propertyInfo in propertyInfos)
+        ////        {
+        ////            var attr = propertyInfo.GetCustomAttribute(typeof(TableColumnNameAttribute))?.As<TableColumnNameAttribute>();
+        ////            if (attr != null && attr.Enable)
+        ////            {
+        ////                if (propertyInfo.GetCustomAttribute(typeof(IgnoreWhenOutputExcelAttribute)) == null)
+        ////                {
+        ////                    PropertyInfo findProperty = item.GetPropertyObj(propertyInfo.Name);
+        ////                    if (findProperty != null)
+        ////                    {
+        ////                        var obj = item.GetPropertyByName<object>(propertyInfo.Name);
+        ////                        row[propertyInfo.Name] = obj + "";
+        ////                    }
+        ////                }
+        ////            }
+        ////        }
+
+        ////        dt.Rows.Add(row);
+        ////    }
+        ////    return (dt, dic);
+        ////}
+
+        ///// <summary>
+        ///// 保存测试结果
+        ///// </summary>
+        //private OperateResult SaveTestData(string trayCode)
+        //{
+        //    var pathTuple = GetSaveExcelFilePath(trayCode);
+        //    try
+        //    {
+        //       // (DataTable, Dictionary<string, string>) formatData = GetDataTableAndDicFromTestResult(_work.TrayModel.BatteryCells);
+        //        //NpoiHelperFromCommon.ExportDTtoExcel(formatData.Item1, pathTuple.title, pathTuple.savePath, formatData.Item2, false, 5000);
+        //        return OperateResult.CreateSuccessResult();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return OperateResult.CreateFailedResult($"SaveTestData异常：{ex.Message}\r\n{ex.StackTrace}");
+        //    }
+        //}
 
         #endregion 保存测试结果到本地Excel文件中
     }
