@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using Com.RePower.Ocv.Model.Dto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Com.RePower.Ocv.Model.Entity;
 
 namespace Com.RePower.Ocv.Model.Mapper
 {

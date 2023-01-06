@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Com.RePower.Ocv.Model\Com.RePower.Ocv.Model.csproj" />
     <ProjectReference Include="..\Com.RePower.Ocv.WpfBase\Com.RePower.Ocv.WpfBase.csproj" />
     <ProjectReference Include="..\Devices\Com.RePower.Device.Plc\Com.RePower.Device.Plc.csproj" />
     <ProjectReference Include="..\Devices\Com.RePower.DeviceBase\Com.RePower.DeviceBase.csproj" />

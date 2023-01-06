@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Com.RePower.Ocv.Model;
+using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.WuWei.Serivces.Dto;
 using Com.RePower.Ocv.Project.WuWei.Serivces.Module;

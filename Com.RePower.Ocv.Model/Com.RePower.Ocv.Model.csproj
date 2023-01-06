@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Plc\**" />
+    <EmbeddedResource Remove="Plc\**" />
+    <None Remove="Plc\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.1" />
   </ItemGroup>

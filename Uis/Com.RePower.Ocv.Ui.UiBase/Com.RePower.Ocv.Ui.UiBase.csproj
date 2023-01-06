@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Com.RePower.Ocv.Model\Com.RePower.Ocv.Model.csproj" />
+    <ProjectReference Include="..\..\Com.RePower.Ocv.WpfBase\Com.RePower.Ocv.WpfBase.csproj" />
+  </ItemGroup>
+
+</Project>

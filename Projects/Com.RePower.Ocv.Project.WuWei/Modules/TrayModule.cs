@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Com.RePower.Ocv.Model;
+using Com.RePower.Ocv.Model.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -14,7 +14,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
         {
             builder.RegisterType<MainWorkFixed>()
                 .AsSelf()
-                .As<IProjectMainWork>();  
+                .As<IProjectMainWork>();
         }
     }
 }

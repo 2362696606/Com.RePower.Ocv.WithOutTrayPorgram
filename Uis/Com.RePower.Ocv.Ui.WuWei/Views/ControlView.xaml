@@ -65,8 +65,8 @@
                     Style="{StaticResource ButtonStyle}" />
                 <ToggleButton Content="MSA" IsChecked="{Binding Work.MsaFlag}" />
                 <Button
-                    Command="{Binding OutPutTrayCommand}"
-                    Content="出库"
+                    Command="{Binding ReSetPlcCommand}"
+                    Content="复位"
                     Style="{StaticResource ButtonStyle}" />
                 <!--<ToggleButton Content="正常测试" IsChecked="{Binding Work.MsaFlag}" />-->
             </UniformGrid>

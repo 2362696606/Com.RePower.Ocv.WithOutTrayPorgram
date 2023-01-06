@@ -1,4 +1,5 @@
 ﻿using Com.RePower.Ocv.Model;
+using Com.RePower.Ocv.Model.Entity;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;

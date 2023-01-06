@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,10 +46,31 @@ namespace Com.RePower.Ocv.Ui.WuWei.ViewModels
         {
             Work?.StopWorkAsync();
         }
-        [RelayCommand]
-        private void OutPutTray()
+        //[RelayCommand]
+        //private void OutPutTray()
+        //{
+        //    Work?.SendOutPutTray();
+        //}
+        [RelayCommand(CanExecute = nameof(CanReSetPlc))]
+        private async void ReSetPlc()
         {
-            Work?.SendOutPutTray();
+            if(Work is { })
+            {
+                var result = await Work.ReSetPlcAsync();
+                if(result.IsFailed)
+                {
+                    WeakReferenceMessenger.Default.Send($"发送复位信号失败:{result.Message}", "MainSnackbar");
+                }
+            }
+        }
+
+        private bool CanReSetPlc()
+        {
+            if(Work?.WorkStatus == 1)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

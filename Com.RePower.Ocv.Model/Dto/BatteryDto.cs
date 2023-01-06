@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,18 @@ namespace Com.RePower.Ocv.Model.Dto
         /// 电池位置
         /// </summary>
         public int Position { get; set; }
+        /// <summary>
+        /// 电池类型
+        /// </summary>
+        public int? BatteryType { get; set; }
+        /// <summary>
+        /// Ocv类型
+        /// </summary>
+        public string? OcvType { get; set; }
+        /// <summary>
+        /// Ocv工站名
+        /// </summary>
+        public string? OcvStationName{ get; set; }
         /// <summary>
         /// 电压
         /// </summary>
@@ -65,10 +78,6 @@ namespace Com.RePower.Ocv.Model.Dto
         /// K值5
         /// </summary>
         public double? KValue5 { get; set; }
-        /// <summary>
-        /// 电池类型
-        /// </summary>
-        public int? BatteryType { get; set; }
         /// <summary>
         /// 测试时间
         /// </summary>

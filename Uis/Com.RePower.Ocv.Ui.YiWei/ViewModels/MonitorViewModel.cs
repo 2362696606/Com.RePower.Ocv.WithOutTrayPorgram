@@ -1,5 +1,6 @@
 ﻿using Com.RePower.Ocv.Model;
 using Com.RePower.Ocv.Model.DataBaseContext;
+using Com.RePower.Ocv.Model.Entity;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

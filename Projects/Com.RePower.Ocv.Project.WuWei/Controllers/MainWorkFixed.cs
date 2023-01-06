@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Com.RePower.Ocv.Model;
+using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Model.Extensions;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.WuWei.DataBaseContext;
@@ -39,10 +40,6 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         ///// </summary>
         //private bool _doMsa;
 
-        /// <summary>
-        /// 是否已经出库
-        /// </summary>
-        private bool _isOutPutTray = true;
 
         /// <summary>
         /// MSA标志
@@ -223,8 +220,6 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         {
             while (true)
             {
-                if (_isOutPutTray)
-                {
                     #region 初始化Plc
                     //var init1 = InitWork();
                     //if (init1.IsFailed)
@@ -266,8 +261,6 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     ResetEvent.WaitOne();
                     CancelToken.ThrowIfCancellationRequested();
                     #endregion
-                }
-                _isOutPutTray = false;
                 #region 下发可以开始测试
                 LogHelper.UiLog.Info("写入Plc[Send_1] = 1");
                 var write2 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_1"], (short)1);
@@ -390,23 +383,43 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             return OperateResult.CreateSuccessResult();
         }
 
+        /// <summary>
+        /// 重置PLC
+        /// </summary>
+        /// <returns></returns>
+        public async Task<OperateResult> ReSetPlcAsync()
+        {
+            var result = await Task.Run<OperateResult>(() =>
+            {
+                var result1 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_4"], (short)1);
+                if (result1.IsFailed)
+                {
+                    return result1;
+                }
+                Thread.Sleep(3000);
+                var result2 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_4"], (short)0);
+                if (result2.IsFailed)
+                {
+                    return result2;
+                }
+                return OperateResult.CreateSuccessResult();
+            });
+            return result;
+        }
+
         public OperateResult SendOutPutTray()
         {
-            if (_isOutPutTray == false)
+            LogHelper.UiLog.Info("写入Plc[Send_2] = 1");
+            var write6 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)1);
+            if (write6.IsFailed)
             {
-                LogHelper.UiLog.Info("写入Plc[Send_2] = 1");
-                var write6 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)1);
-                if (write6.IsFailed)
-                {
-                    return OperateResult.CreateFailedResult(write6.Message ?? "写入Plc[Send_2] = 1失败", write6.ErrorCode);
-                }
-                write6 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)1);
-                if (write6.IsFailed)
-                {
-                    return OperateResult.CreateFailedResult(write6.Message ?? "写入Plc[Send_2] = 1失败", write6.ErrorCode);
-                }
+                return OperateResult.CreateFailedResult(write6.Message ?? "写入Plc[Send_2] = 1失败", write6.ErrorCode);
             }
-            _isOutPutTray = true;
+            write6 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)1);
+            if (write6.IsFailed)
+            {
+                return OperateResult.CreateFailedResult(write6.Message ?? "写入Plc[Send_2] = 1失败", write6.ErrorCode);
+            }
             return OperateResult.CreateSuccessResult();
         }
 
@@ -957,7 +970,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     rnDbOcv.EndDateTime = item.Battery.TestTime;
                     rnDbOcv.InsertTime = DateTime.Now;
                     rnDbOcv.TestMode = "自动";
-                    rnDbOcv.PostiveShellVoltage = Convert.ToDecimal(item.Battery.PVolValue);
+                    rnDbOcv.PostiveShellVoltage = Convert.ToDecimal(item.Battery.NVolValue);
                     rnDbOcv.PostiveSvResult = item.IsNg == true ? "NG" : "OK";
                     listrnDbs.Add(rnDbOcv);
                 }
