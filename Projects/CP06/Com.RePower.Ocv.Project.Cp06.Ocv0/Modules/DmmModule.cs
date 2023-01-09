@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Com.RePower.Device.DMM.Impl.Keysight_34461A;
+using Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers;
 
 namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Modules
 {
@@ -25,8 +26,9 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Modules
                     var dmmSettingJson = dmmSettingObj.JsonValue;
                     if (!string.IsNullOrEmpty(dmmSettingJson))
                     {
-                        JObject jObj = JObject.Parse(dmmSettingJson);
-                        bool isReal = jObj.Value<bool>("IsReal");
+                        var fObj = settingContext.SettingItems.First(x => x.SettingName == "FacticityManager");
+                        FacticityManager? facticityManager = JsonConvert.DeserializeObject<FacticityManager>(fObj.JsonValue);
+                        bool isReal = facticityManager?.IsRealDmm ?? false;
                         IDMM? obj = null;
                         if (isReal)
                         {

@@ -11,11 +11,11 @@ namespace Com.RePower.Ocv.Project.WuWei.Serivces.Module
         /// <summary>
         /// 获取托盘条码接口
         /// </summary>
-        public string GetBatteryInfoUrl { get; set; } = "RequetEquipmentStationBingAsset";
+        public string GetBatteryInfoUrl { get; set; } = "OcvGetTrayInfo ";
         /// <summary>
         /// 上传测试结果接口
         /// </summary>
-        public string UploadTestResultUrl { get; set; } = "UploadOCVTestResult";
+        public string UploadTestResultUrl { get; set; } = "UploadOcvResult";
         /// <summary>
         /// 基础地址
         /// </summary>

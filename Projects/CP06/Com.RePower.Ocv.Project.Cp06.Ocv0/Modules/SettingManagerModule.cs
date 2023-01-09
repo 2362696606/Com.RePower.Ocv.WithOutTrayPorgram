@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Modules
 {
-    public class DevicesContorllerModules:Module
+    public class SettingManagerModule:Module
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<DevicesController>();
+            builder.RegisterType<SettingManager>();
         }
     }
 }

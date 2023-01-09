@@ -20,10 +20,30 @@
             SnackbarMessageQueue="{Binding ElementName=MainSnackbar, Path=MessageQueue}">
             <materialDesign:ColorZone Width="2560" Height="1440">
                 <Grid>
-                    <views:MonitorView />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.7*" />
+                            <ColumnDefinition Width="0.3*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.6*" />
+                                <RowDefinition Height="0.4*" />
+                            </Grid.RowDefinitions>
+                            <views:TrayView />
+                            <views:MonitorView Grid.Row="1" />
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.7*" />
+                                <RowDefinition Height="0.3*" />
+                            </Grid.RowDefinitions>
+                            <uiBaseViews:UiLogView />
+                            <views:ControlView Grid.Row="1" />
+                        </Grid>
+                    </Grid>
                     <materialDesign:Snackbar
                         x:Name="MainSnackbar"
-                        Grid.ColumnSpan="2"
                         Margin="16"
                         MessageQueue="{materialDesign:MessageQueue}" />
                 </Grid>

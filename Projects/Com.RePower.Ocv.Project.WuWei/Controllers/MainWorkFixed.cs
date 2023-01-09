@@ -971,7 +971,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     rnDbOcv.EndDateTime = item.Battery.TestTime;
                     rnDbOcv.InsertTime = DateTime.Now;
                     rnDbOcv.TestMode = "自动";
-                    rnDbOcv.PostiveShellVoltage = Convert.ToDecimal(item.Battery.NVolValue);
+                    rnDbOcv.ShellVoltage = Convert.ToDecimal(item.Battery.NVolValue);
                     rnDbOcv.PostiveSvResult = item.IsNg == true ? "NG" : "OK";
                     listrnDbs.Add(rnDbOcv);
                 }
