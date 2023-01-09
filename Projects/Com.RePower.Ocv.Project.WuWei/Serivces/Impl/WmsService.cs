@@ -69,7 +69,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Serivces.Impl
             {
                 OneBatteryTestResult tempResult = new OneBatteryTestResult();
                 tempResult.BatteryBarcode = item.Battery.BarCode;
-                tempResult.BatteryNGCode = string.Empty;
+                tempResult.BatteryNGCode = item.IsNg?"Ng":"Ok";
                 tempResult.Result = item.IsNg ? 0 : 1;
                 tempResult.BatteryIndex = item.Battery.Position;
                 dto.BatteryTestResults.Add(tempResult);

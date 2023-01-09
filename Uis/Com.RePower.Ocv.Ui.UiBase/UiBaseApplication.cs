@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Com.RePower.Ocv.Model.DataBaseContext;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Ui.UiBase.ViewModels;
 using Com.RePower.WpfBase;
@@ -37,6 +38,10 @@ namespace Com.RePower.Ocv.Ui.UiBase
                 var serviceProvider = autofacServiceProviderFactory.CreateServiceProvider(builder);
                 IocHelper.Default.ConfigureServices(serviceProvider);
                 #endregion
+                #region 创建本地存储数据库
+                var localDb = IocHelper.Default.GetService<LocalTestResultDbContext>();
+                localDb?.Database.EnsureCreated();
+                #endregion
                 #region 初始化UiLog
                 LogHelper.RegisterUiLogEvent(new System.Action<object?, log4net.Core.LoggingEvent>((sender, e) =>
                 {
@@ -68,8 +73,12 @@ namespace Com.RePower.Ocv.Ui.UiBase
         {
             //var dataAccess = Assembly.GetExecutingAssembly();
             var dataAccess = Assembly.GetEntryAssembly();
-            builder.RegisterAssemblyTypes(dataAccess).Where(t => t.Name.EndsWith("ViewModel") || t.Name.EndsWith("View"))
-                .AsSelf();
+            if (dataAccess is { })
+            {
+                builder.RegisterAssemblyTypes(dataAccess)
+                    .Where(t => t.Name.EndsWith("ViewModel") || t.Name.EndsWith("View"))
+                    .AsSelf();
+            }
             builder.RegisterType<UiLogViewModel>();
         }
     }

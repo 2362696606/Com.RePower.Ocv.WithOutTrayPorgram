@@ -220,47 +220,47 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         {
             while (true)
             {
-                    #region 初始化Plc
-                    //var init1 = InitWork();
-                    //if (init1.IsFailed)
-                    //{
-                    //    return init1;
-                    //}
-                    #endregion
-                    #region 暂停或停止
-                    ResetEvent.WaitOne();
-                    CancelToken.ThrowIfCancellationRequested();
-                    #endregion
-                    #region 等待测试准备信号
-                    LogHelper.UiLog.Info("等待Plc[Read_1] = 1");
-                    var wait1 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["Read_1"], (short)1, cancellation: this.CancelToken);
-                    if (wait1.IsFailed)
-                    {
-                        return OperateResult.CreateFailedResult(wait1.Message ?? "等待Plc[Read_1] = 1失败", wait1.ErrorCode);
-                    }
-                    #endregion
-                    #region 暂停或停止
-                    ResetEvent.WaitOne();
-                    CancelToken.ThrowIfCancellationRequested();
-                    #endregion
-                    #region 读取托盘条码
-                    var readTrayCodeResult = ReadTrayCode();
-                    if (readTrayCodeResult.IsFailed)
-                        return readTrayCodeResult;
-                    #endregion
-                    #region 暂停或停止
-                    ResetEvent.WaitOne();
-                    CancelToken.ThrowIfCancellationRequested();
-                    #endregion
-                    #region 获取电芯条码
-                    var getBatterysCodeResult = GetBatterysCode();
-                    if (getBatterysCodeResult.IsFailed)
-                        return getBatterysCodeResult;
-                    #endregion
-                    #region 暂停或停止
-                    ResetEvent.WaitOne();
-                    CancelToken.ThrowIfCancellationRequested();
-                    #endregion
+                #region 初始化Plc
+                //var init1 = InitWork();
+                //if (init1.IsFailed)
+                //{
+                //    return init1;
+                //}
+                #endregion
+                #region 暂停或停止
+                ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
+                #endregion
+                #region 等待测试准备信号
+                LogHelper.UiLog.Info("等待Plc[Read_1] = 1");
+                var wait1 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["Read_1"], (short)1, cancellation: this.CancelToken);
+                if (wait1.IsFailed)
+                {
+                    return OperateResult.CreateFailedResult(wait1.Message ?? "等待Plc[Read_1] = 1失败", wait1.ErrorCode);
+                }
+                #endregion
+                #region 暂停或停止
+                ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
+                #endregion
+                #region 读取托盘条码
+                var readTrayCodeResult = ReadTrayCode();
+                if (readTrayCodeResult.IsFailed)
+                    return readTrayCodeResult;
+                #endregion
+                #region 暂停或停止
+                ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
+                #endregion
+                #region 获取电芯条码
+                var getBatterysCodeResult = GetBatterysCode();
+                if (getBatterysCodeResult.IsFailed)
+                    return getBatterysCodeResult;
+                #endregion
+                #region 暂停或停止
+                ResetEvent.WaitOne();
+                CancelToken.ThrowIfCancellationRequested();
+                #endregion
                 #region 下发可以开始测试
                 LogHelper.UiLog.Info("写入Plc[Send_1] = 1");
                 var write2 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_1"], (short)1);
@@ -277,7 +277,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 {
                     var msaResult = DoMsaTest();
                     LogHelper.UiLog.Info("MSA测试完成");
-                    if(msaResult.IsSuccess)
+                    if (msaResult.IsSuccess)
                     {
                         MsaFlag = false;
                     }
@@ -286,7 +286,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 else
                 {
                     var normalTestResult = DoNormalTest();
-                    if(normalTestResult.IsFailed)
+                    if (normalTestResult.IsFailed)
                     {
                         return normalTestResult;
                     }
@@ -551,13 +551,14 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             #region 下发测试结果
             if (Tray.NgInfos.Any(x => x.IsNg))
             {
-                LogHelper.UiLog.Info("下发测试结果");
-                LogHelper.UiLog.Info("写入本地Plc[Send_3] = 2");
-                var write5 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)2);
-                if (write5.IsFailed)
-                {
-                    return OperateResult.CreateFailedResult($"写入Plc[Send_3] = 2失败:{write5.Message ?? "未知原因"}", write5.ErrorCode);
-                }
+                //LogHelper.UiLog.Info("下发测试结果");
+                //LogHelper.UiLog.Info("写入本地Plc[Send_3] = 2");
+                //var write5 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)2);
+                //if (write5.IsFailed)
+                //{
+                //    return OperateResult.CreateFailedResult($"写入Plc[Send_3] = 2失败:{write5.Message ?? "未知原因"}", write5.ErrorCode);
+                //}
+                LogHelper.UiLog.Info("取消向PLC下发ng结果");
             }
             else
             {
@@ -719,7 +720,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             if (resultObj.Result == 0)
             {
                 SetAlarm();
-                return OperateResult.CreateSuccessResult($"请求电芯条码失败:{resultObj.Message??"未知原因"}");
+                return OperateResult.CreateFailedResult($"请求电芯条码失败:{resultObj.Message??"未知原因"}");
             }
             if (resultObj.PileContent == null)
             {

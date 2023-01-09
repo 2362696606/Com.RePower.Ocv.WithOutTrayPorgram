@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
 {
-    public partial class MainWorkForOcv0 : MainWorkAbstract
+    public partial class MainWork : MainWorkAbstract
     {
         protected override OperateResult DoWork()
         {
