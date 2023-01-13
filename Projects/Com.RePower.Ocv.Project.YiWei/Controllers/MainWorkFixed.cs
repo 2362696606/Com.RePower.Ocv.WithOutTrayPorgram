@@ -37,15 +37,14 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
             , FlowController flowController
             , Tray tray
             , BatteryNgCriteria batteryNgCriteria
-            , TestOption testOption
-            , IWmsService wmsService)
+            , TestOption testOption)
         {
             DevicesController = devicesController;
             FlowController = flowController;
             Tray = tray;
             BatteryNgCriteria = batteryNgCriteria;
             TestOption = testOption;
-            WmsService = wmsService;
+            //WmsService = wmsService;
         }
 
         public int WorkStatus
@@ -59,7 +58,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
         public Tray Tray { get; }
         public BatteryNgCriteria BatteryNgCriteria { get; }
         public TestOption TestOption { get; }
-        public IWmsService WmsService { get; }
+        //public IWmsService WmsService { get; }
 
         public bool IsDoUploadToMes
         {
@@ -250,7 +249,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                     return OperateResult.CreateFailedResult(wait1.Message ?? "等待本地Plc[上位机交互] = 5失败", wait1.ErrorCode);
                 }
                 #endregion
-                var tempNgInfos = new System.Collections.ObjectModel.ObservableCollection<NgInfo>();
+                var tempNgInfos = new List<NgInfo>();
 
                 #region 暂停或停止
                 ResetEvent.WaitOne();
@@ -502,7 +501,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
         }
         private OperateResult InitWork()
         {
-            Tray.NgInfos = new System.Collections.ObjectModel.ObservableCollection<NgInfo>();
+            Tray.NgInfos = new List<NgInfo>();
             LogHelper.UiLog.Info("写入本地Plc[上位机交互] = 0");
             var write1 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["上位机交互"], 0);
             if (write1.IsFailed)

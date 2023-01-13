@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Com.RePower.Device.Ohm.Impl.Hioki_BT3562;
 using Com.RePower.DeviceBase.DMM;
 using Newtonsoft.Json.Linq;
+using Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers;
 
 namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Modules
 {
@@ -26,8 +27,9 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Modules
                     var ohmSettingJson = ohmSettingObj.JsonValue;
                     if (!string.IsNullOrEmpty(ohmSettingJson))
                     {
-                        JObject jObj = JObject.Parse(ohmSettingJson);
-                        bool isReal = jObj.Value<bool>("IsReal");
+                        var fObj = settingContext.SettingItems.First(x => x.SettingName == "FacticityManager");
+                        FacticityManager? facticityManager = JsonConvert.DeserializeObject<FacticityManager>(fObj.JsonValue);
+                        bool isReal = facticityManager?.IsRealOhm ?? false;
                         IOhm? obj = null;
                         if(isReal)
                         {

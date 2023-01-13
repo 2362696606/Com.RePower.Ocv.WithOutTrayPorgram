@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Com.RePower.Ocv.Model.DataBaseContext;
 using Com.RePower.Ocv.Model.Dto;
+using Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Enums;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Setting;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms;
@@ -37,25 +38,41 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Modules
             //});
             using (var settingContext = new OcvSettingDbContext())
             {
-                OcvSettingItemDto? wmsItem = null;
+                //OcvSettingItemDto? wmsItem = null;
 
-                wmsItem = settingContext.SettingItems.First(x => x.SettingName == "Wms");
-                string wmsJsonStr = wmsItem.JsonValue;
-                if(!string.IsNullOrEmpty(wmsJsonStr))
+                //wmsItem = settingContext.SettingItems.First(x => x.SettingName == "Wms");
+                //string wmsJsonStr = wmsItem.JsonValue;
+                //if(!string.IsNullOrEmpty(wmsJsonStr))
+                //{
+                //    var jObj = JObject.Parse(wmsJsonStr);
+                //    bool isReal = jObj.Value<bool>("IsReal");
+                //    if(isReal)
+                //    {
+                //        builder.RegisterType<WmsImpl>()
+                //            .AsSelf()
+                //            .As<IWmsService>();
+                //        return;
+                //    }
+                //}
+                //builder.RegisterType<WmsSimulator>()
+                //            .AsSelf()
+                //            .As<IWmsService>();
+
+                var fObj = settingContext.SettingItems.First(x => x.SettingName == "FacticityManager");
+                FacticityManager? facticityManager = JsonConvert.DeserializeObject<FacticityManager>(fObj.JsonValue);
+                bool isReal = facticityManager?.IsRealWms ?? false;
+                if (isReal)
                 {
-                    var jObj = JObject.Parse(wmsJsonStr);
-                    bool isReal = jObj.Value<bool>("IsReal");
-                    if(isReal)
-                    {
-                        builder.RegisterType<WmsImpl>()
-                            .AsSelf()
-                            .As<IWmsService>();
-                        return;
-                    }
+                    builder.RegisterType<WmsImpl>()
+                        .AsSelf()
+                        .As<IWmsService>();
                 }
-                builder.RegisterType<WmsSimulator>()
-                            .AsSelf()
-                            .As<IWmsService>();
+                else
+                {
+                    builder.RegisterType<WmsSimulator>()
+                        .AsSelf()
+                        .As<IWmsService>();
+                }
             }
         }
     }

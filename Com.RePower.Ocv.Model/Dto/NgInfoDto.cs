@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,10 @@ namespace Com.RePower.Ocv.Model.Dto
         /// mg描述
         /// </summary>
         public string? NgDescription { get; set; }
+        /// <summary>
+        /// 附加Ng描述
+        /// </summary>
+        private string? ExtraNgDescription { get; set; }
         /// <summary>
         /// 是否ng
         /// </summary>

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard;
+using Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers;
 
 namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Modules
 {
@@ -25,8 +26,9 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Modules
                     var switchBoardSettingJson = switchBoardSettingObj.JsonValue;
                     if (!string.IsNullOrEmpty(switchBoardSettingJson))
                     {
-                        var jObj = JObject.Parse(switchBoardSettingJson);
-                        bool isReal = jObj.Value<bool>("IsReal");
+                        var fObj = settingContext.SettingItems.First(x => x.SettingName == "FacticityManager");
+                        FacticityManager? facticityManager = JsonConvert.DeserializeObject<FacticityManager>(fObj.JsonValue);
+                        bool isReal = facticityManager?.IsRealSwitchBoard ?? false;
                         ISwitchBoard? obj = null;
                         if (isReal)
                         {

@@ -15,11 +15,12 @@ namespace Com.RePower.Ocv.Ui.Cp06.Ocv0.ViewModels
     {
         public ControlViewModel(IProjectMainWork work)
         {
-            this._work = work as MainWork;
+            //this._work = work as MainWork;
+            this._work = work;
         }
-        private MainWork? _work;
+        private IProjectMainWork? _work;
 
-        public MainWork? Work
+        public IProjectMainWork? Work
         {
             get
             {

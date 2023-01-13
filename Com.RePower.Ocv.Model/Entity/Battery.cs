@@ -90,6 +90,16 @@ namespace Com.RePower.Ocv.Model.Entity
         [ObservableProperty]
         private bool _isTested = false;
         /// <summary>
+        /// 电芯是否存在
+        /// </summary>
+        [ObservableProperty]
+        private bool _isExsit = true;
+        /// <summary>
+        /// 电芯是否为真
+        /// </summary>
+        [ObservableProperty]
+        private bool _isReal = true;
+        /// <summary>
         /// 测试时间
         /// </summary>
         [ObservableProperty]

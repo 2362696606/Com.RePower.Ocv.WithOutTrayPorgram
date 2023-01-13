@@ -27,22 +27,18 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Setting
         /// <summary>
         /// 工站号
         /// </summary>
-        public string RequestLocation { get; set; } = string.Empty;
+        public string RequestLocation { get; set; } = "FrontOcvStation:1_1_1_F01";
         /// <summary>
         /// 库房编号
         /// </summary>
-        public string WhCode { get; set; } = string.Empty;
+        public string WhCode { get; set; } = "F";
         /// <summary>
-        /// OCV0 OCV1 OCV2 OCV3
+        /// 请求位置
         /// </summary>
-        public string DeviceName { get; set; } = "OCV0";
-        ///// <summary>
-        ///// 工艺号
-        ///// </summary>
-        //public string FileName { get; set; } = string.Empty;
-        ///// <summary>
-        ///// 工位号
-        ///// </summary>
-        //public string EquipmentCode { get; set; } = string.Empty;
+        public string? Location { get; set; }
+        /// <summary>
+        /// 项目编号
+        /// </summary>
+        public string? ProjectCode { get; set; }
     }
 }

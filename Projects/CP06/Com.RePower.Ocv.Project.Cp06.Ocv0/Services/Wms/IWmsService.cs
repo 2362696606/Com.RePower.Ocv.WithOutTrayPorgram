@@ -13,5 +13,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms
         Task<OperateResult<string>> GetBatteriesInfoAsync();
         OperateResult<string> UploadTestResult();
         Task<OperateResult<string>> UploadTestResultAsync();
+        OperateResult<string> RequestAllLocateCellToWms();
+        Task<OperateResult<string>> RequestAllLocateCellToWmsAsync();
     }
 }

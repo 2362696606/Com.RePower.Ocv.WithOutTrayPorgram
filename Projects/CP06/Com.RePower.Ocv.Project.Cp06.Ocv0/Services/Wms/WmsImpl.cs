@@ -23,25 +23,31 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms
         {
             this.settingManager = settingManager;
             HttpClientFactory = httpClientFactory;
-            HttpClient = httpClientFactory.CreateClient("WmsHttpClient");
-            HttpClient.BaseAddress = new Uri(WmsSetting.BaseAddress);
             Tray = tray;
         }
 
 
-        public WmsSetting WmsSetting { get => settingManager.CurrentWmsSetting; }
+        public WmsSetting? WmsSetting { get => settingManager.CurrentWmsSetting; }
         public IHttpClientFactory HttpClientFactory { get; private set; }
-        public HttpClient HttpClient { get; private set; }
+        public HttpClient HttpClient
+        {
+            get 
+            {
+                var temp = HttpClientFactory.CreateClient("WmsHttpClient_" + (settingManager.CurrentOcvType.ToString()));
+                temp.BaseAddress = new Uri(WmsSetting?.BaseAddress ?? "http://172.17.2.254:44311/api/services/app/ForeignInterfaceService");
+                return temp;
+            }
+        }
         public Tray Tray { get; private set; }
 
         public OperateResult<string> GetBatteriesInfo()
         {
             var requestDto = new WmsGetBatteriesInfoRequestDto
             {
-                RequestLocation = WmsSetting.RequestLocation,
-                TrayCode = Tray.TrayCode
+                RequestLocation = WmsSetting?.RequestLocation??string.Empty,
+                TrayCode = Tray.TrayCode,
             };
-            return Post(requestDto, WmsSetting.GetBatteryInfoUrl, "请求电芯条码");
+            return Post(requestDto, WmsSetting?.GetBatteryInfoUrl?? "OcvGetTrayInfo", "请求电芯条码");
         }
 
         public async Task<OperateResult<string>> GetBatteriesInfoAsync()
@@ -49,18 +55,43 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms
             return await Task.Run<OperateResult<string>>(GetBatteriesInfo);
         }
 
+        public OperateResult<string> RequestAllLocateCellToWms()
+        {
+            WmsRequestAllRequestDto dto = new WmsRequestAllRequestDto
+            {
+                whCode = WmsSetting?.WhCode ?? string.Empty,
+                Location = WmsSetting?.Location ?? string.Empty,
+                TrayBarcode = Tray.TrayCode,
+                ProjectCode = WmsSetting?.ProjectCode ?? string.Empty,
+            };
+            return Post(dto, WmsSetting?.RequestAllocateCellToWmsUrl ?? "RequestAllocateCell", "上传测试总完成至调度");
+        }
+
+        public async Task<OperateResult<string>> RequestAllLocateCellToWmsAsync()
+        {
+            return await Task.Run<OperateResult<string>>(RequestAllLocateCellToWms);
+        }
+
         public OperateResult<string> UploadTestResult()
         {
             var requestContent = new WmsUploadResultRequestDto()
             {
-                WhCode = WmsSetting.WhCode,
+                WhCode = WmsSetting?.WhCode??string.Empty,
                 TrayBarcode = Tray.TrayCode,
+                DeviceName = settingManager.CurrentOcvType.ToString(),
+                Procedure = settingManager.CurrentOcvType.ToString(),
             };
             foreach(var item in Tray.NgInfos)
             {
-                var batteryResultContent = new WmsBatteryResultContent();
+                var batteryResultContent = new WmsBatteryResultContent
+                {
+                    Barcode = item.Battery.BarCode,
+                    TestResult = item.IsNg ? "Ng" : "Ok",
+                    Index = item.Battery.Position
+                };
+                requestContent.BatteryResultContent.Add(batteryResultContent);
             }
-            return OperateResult.CreateSuccessResult<string>(string.Empty);
+            return Post(requestContent, WmsSetting?.UploadTestResultUrl ?? "UploadOCVTestResult", "上传测试结果至调度");
         }
 
         public async Task<OperateResult<string>> UploadTestResultAsync()

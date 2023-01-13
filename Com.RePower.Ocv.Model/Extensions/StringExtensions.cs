@@ -14,6 +14,32 @@ namespace Com.RePower.Ocv.Model.Extensions
 {
     public static class StringExtensions
     {
+        /// <summary>
+        /// 按格式拆分为set并添加元素后按格式返回
+        /// </summary>
+        /// <param name="sourceStr">源字符串</param>
+        /// <param name="addStr">待添加字符串</param>
+        /// <param name="spliteChar">分解字符</param>
+        /// <returns></returns>
+        public static string Deduplicate(this string sourceStr, string addStr, char? spliteChar = null)
+        {
+            var sourceList = sourceStr.Split(spliteChar ?? ' ');
+            SortedSet<string> sourceSet = new SortedSet<string>(sourceList)
+            {
+                addStr
+            };
+            return String.Join(spliteChar ?? ' ', sourceSet.ToArray());
+        }
+
+        public static string FormatRemove(this string sourceStr, string removeStr, char? spliteChar = null)
+        {
+            var sourceList = sourceStr.Split(spliteChar ?? ' ');
+            SortedSet<string> sourceSet = new SortedSet<string>(sourceList);
+            //descriptionSet.Add(addStr);
+            sourceSet.Remove(removeStr);
+            return String.Join(spliteChar ?? ' ', sourceSet.ToArray());
+        }
+
         public static decimal ToDecimalExt(this string str)
         {
             return decimal.Parse(str);

@@ -1,11 +1,17 @@
 ﻿using Com.RePower.Ocv.Model;
 using Com.RePower.Ocv.Model.Entity;
+using Com.RePower.Ocv.Model.Enums;
+using Com.RePower.Ocv.Model.Extensions;
 using HslCommunication;
 using HslCommunication.Profinet.Inovance;
 using Newtonsoft.Json;
 using Npoi.Mapper;
+using System.Collections;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO.Ports;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using Xunit.Abstractions;
@@ -95,6 +101,18 @@ namespace Com.RePower.Ocv.Test
             string resultString = JsonConvert.SerializeObject(plcCacheValues);
             OutputHelper.WriteLine(resultString);
         }
+        [Fact]
+        public void BitConvertTest()
+        {
+            NgTypeEnum e;
+            var result = Enum.TryParse<NgTypeEnum>(100.ToString(), out e);
+        }
+        //[Fact]
+        //public void NgTypeEnumTest()
+        //{
+        //    NgTypeEnum e = NgTypeEnum.VolOverMax|NgTypeEnum.K2OverMin;
+        //    int i = (int)e;
+        //}
     }
     public class TestClass
     {
@@ -156,5 +174,6 @@ namespace Com.RePower.Ocv.Test
 
             return 0;
         }
+        
     }
 }

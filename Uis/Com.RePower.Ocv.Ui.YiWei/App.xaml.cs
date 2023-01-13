@@ -84,7 +84,7 @@ namespace Com.RePower.Ocv.Ui.YiWei
             builder.RegisterModule<TestOptionModule>();
             builder.RegisterModule<BatteryNgCriteriaModule>();
             builder.RegisterModule<ProjectModule>();
-            builder.RegisterModule<WmsModule>();
+            //builder.RegisterModule<WmsModule>();
         }
     }
 }

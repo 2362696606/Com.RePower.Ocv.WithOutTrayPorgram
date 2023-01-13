@@ -3,6 +3,7 @@ using Com.RePower.Device.Plc.Impl;
 using Com.RePower.DeviceBase;
 using Com.RePower.DeviceBase.Plc;
 using Com.RePower.Ocv.Model.DataBaseContext;
+using Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -26,8 +27,9 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Modules
                     var localPlcSettingJson = localPlcSettingObj.JsonValue;
                     if (!string.IsNullOrEmpty(localPlcSettingJson))
                     {
-                        var jObj = JObject.Parse(localPlcSettingJson);
-                        bool isReal = jObj.Value<bool>("IsReal");
+                        var fObj = settingContext.SettingItems.First(x => x.SettingName == "FacticityManager");
+                        FacticityManager? facticityManager = JsonConvert.DeserializeObject<FacticityManager>(fObj.JsonValue);
+                        bool isReal = facticityManager?.IsRealPlc ?? false;
                         IPlc? obj = null;
                         if (isReal)
                         {

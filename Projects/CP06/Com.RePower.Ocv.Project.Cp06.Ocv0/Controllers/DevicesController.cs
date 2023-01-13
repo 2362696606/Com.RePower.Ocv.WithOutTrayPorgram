@@ -3,6 +3,7 @@ using Com.RePower.DeviceBase.Ohm;
 using Com.RePower.DeviceBase.Plc;
 using Com.RePower.DeviceBase.SwitchBoard;
 using Com.RePower.Ocv.Model.DataBaseContext;
+using Com.RePower.Ocv.Model.Helper;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -14,15 +15,18 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
 {
     public class DevicesController
     {
+        private IDMM? _dmm;
+        private IOhm? _ohm;
+        private ISwitchBoard? _switchBoard;
         public DevicesController(IPlc localPlc
-            , IDMM dMM
-            , IOhm ohm
-            , ISwitchBoard switchBoard)
+            , IDMM? dMM
+            , IOhm? ohm
+            , ISwitchBoard? switchBoard)
         {
             Plc = localPlc;
-            DMM = dMM;
-            Ohm = ohm;
-            SwitchBoard = switchBoard;
+            _dmm = dMM;
+            _ohm = ohm;
+            _switchBoard = switchBoard;
             this.PlcAddressCache = new Dictionary<string, string>();
             using (var settingContext = new OcvSettingDbContext())
             {
@@ -49,9 +53,44 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
         }
 
         public IPlc Plc { get; }
-        public IDMM DMM { get; }
-        public IOhm Ohm { get; }
-        public ISwitchBoard SwitchBoard { get; }
+
+        public IDMM? DMM
+        {
+            get 
+            {
+                //if (_dmm == null)
+                //{
+                //    LogHelper.UiLog.Error("万用表为null");
+                //}
+                return _dmm; 
+            }
+        }
+
+        public IOhm? Ohm
+        {
+            get 
+            {
+                //if (_ohm == null)
+                //{
+                //    LogHelper.UiLog.Error("万用表为null");
+                //}
+                return _ohm; 
+            }
+        }
+
+        public ISwitchBoard? SwitchBoard
+        {
+            get 
+            {
+                //if(_switchBoard == null)
+                //{
+                //    LogHelper.UiLog.Error("万用表为null");
+                //}
+                return _switchBoard; 
+            }
+        }
+
+
         public Dictionary<string, string> PlcAddressCache { get; set; }
     }
 }

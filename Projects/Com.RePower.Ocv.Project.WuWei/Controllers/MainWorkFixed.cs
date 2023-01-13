@@ -732,7 +732,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 SetAlarm();
                 return OperateResult.CreateFailedResult($"请求电芯条码失败，WMS返回托盘条码{resultObj.PileContent.PalletBarcode}与本地托盘条码{Tray.TrayCode}不一致");
             }
-            var tempNgInfos = new System.Collections.ObjectModel.ObservableCollection<NgInfo>();
+            var tempNgInfos = new List<NgInfo>();
             foreach (var item in resultObj.PileContent.Batterys)
             {
                 NgInfo ngInfo = new NgInfo();
@@ -889,16 +889,19 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 if (ngInfo.Battery.NVolValue > BatteryNgCriteria.MaxPVol)
                 {
                     ngInfo.NgDescription = "电压过高";
+                    ngInfo.NgType = 2;
                     ngInfo.IsNg = true;
                 }
                 else if (ngInfo.Battery.NVolValue < BatteryNgCriteria.MinPVol)
                 {
                     ngInfo.NgDescription = "电压过低";
+                    ngInfo.NgType = 1;
                     ngInfo.IsNg = true;
                 }
                 else
                 {
                     ngInfo.NgDescription = string.Empty;
+                    ngInfo.NgType = 0;
                     ngInfo.IsNg = false;
                 }
             }
@@ -910,7 +913,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// <returns></returns>
         private OperateResult InitWork()
         {
-            Tray.NgInfos = new System.Collections.ObjectModel.ObservableCollection<NgInfo>();
+            Tray.NgInfos = new List<NgInfo>();
             LogHelper.UiLog.Info("写入本地Plc[Send_1] = 0");
             var write1 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_1"], (short)0);
             if (write1.IsFailed)
@@ -958,10 +961,17 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     rnDbOcv.TrayId = Tray.TrayCode;//托盘号
                     rnDbOcv.IsTrans = 1;//是否跨线
                     rnDbOcv.ModelNo = TestOption.OcvType + "_6";//设备号+线
-                    if (Tray.NgInfos.FirstOrDefault(s => s.IsNg == true) != null)
+                    //if (Tray.NgInfos.FirstOrDefault(s => s.IsNg == true) != null)
+                    //{
+                    //    rnDbOcv.TotalNgState = "NG";
+                    //}
+                    if(Tray.NgInfos.Any(x=>x.IsNg))
                     {
-
                         rnDbOcv.TotalNgState = "NG";
+                    }
+                    else
+                    {
+                        rnDbOcv.TotalNgState = "OK";
                     }
                     rnDbOcv.CellId = item.Battery.BarCode ?? "KONG";
                     rnDbOcv.OcvVoltage = Convert.ToDecimal(item.Battery.VolValue);//电池电压
@@ -972,7 +982,19 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     rnDbOcv.InsertTime = DateTime.Now;
                     rnDbOcv.TestMode = "自动";
                     rnDbOcv.ShellVoltage = Convert.ToDecimal(item.Battery.NVolValue);
-                    rnDbOcv.PostiveSvResult = item.IsNg == true ? "NG" : "OK";
+                    rnDbOcv.SvResult = item.IsNg == true ? "NG" : "OK";
+                    switch(item.NgType)
+                    {
+                        case 0:
+                            rnDbOcv.SvNgCode = "00";
+                            break;
+                        case 1:
+                            rnDbOcv.SvNgCode = "C1";
+                            break;
+                        case 2:
+                            rnDbOcv.SvNgCode = "C2";
+                            break;
+                    }
                     listrnDbs.Add(rnDbOcv);
                 }
 

@@ -19,6 +19,6 @@ namespace Com.RePower.Ocv.Model.Entity
         /// Ng结果
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<NgInfo> _ngInfos = new ObservableCollection<NgInfo>();
+        private List<NgInfo> _ngInfos = new List<NgInfo>();
     }
 }

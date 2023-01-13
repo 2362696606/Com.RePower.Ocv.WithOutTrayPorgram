@@ -20,23 +20,6 @@ namespace Com.RePower.Ocv.Project.YiWei.Modules
         {
             using(OcvSettingDbContext settingContext = new OcvSettingDbContext())
             {
-                //var localPlcSettingObj = settingContext.SettingItems.First(x => x.SettingName == "本地Plc");
-                //if(localPlcSettingObj!=null)
-                //{
-                //    var localPlcSettingJson = localPlcSettingObj.JsonValue;
-                //    if(!string.IsNullOrEmpty(localPlcSettingJson))
-                //    {
-                //        var obj = JsonConvert.DeserializeObject<InovanceTcpNetPlcImpl>(localPlcSettingJson);
-                //        if(obj!=null)
-                //        {
-                //            builder.RegisterInstance<InovanceTcpNetPlcImpl>(obj)
-                //                .AsSelf()
-                //                .As<IPlc>()
-                //                .As<IDevice>()
-                //                .Keyed<IPlc>(PlcDeviceEnum.LocalPlc);
-                //        }
-                //    }
-                //}
                 var logisticsPlcSettingObj = settingContext.SettingItems.First(x => x.SettingName == "本地Plc");
                 if (logisticsPlcSettingObj != null)
                 {
@@ -49,8 +32,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Modules
                             builder.RegisterInstance<Siemens_S1500Impl>(obj)
                                 .AsSelf()
                                 .As<IPlc>()
-                                .As<IDevice>()
-                                .Keyed<IPlc>(PlcDeviceEnum.LocalPlc);
+                                .As<IDevice>();
                         }
                     }
                 }

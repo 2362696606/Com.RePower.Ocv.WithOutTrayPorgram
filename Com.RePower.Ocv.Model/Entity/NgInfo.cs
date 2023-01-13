@@ -20,6 +20,11 @@ namespace Com.RePower.Ocv.Model.Entity
         [ObservableProperty]
         private string? _ngDescription;
         /// <summary>
+        /// 附加Ng描述
+        /// </summary>
+        [ObservableProperty]
+        private string? _extraNgDescription;
+        /// <summary>
         /// 是否ng true为ng，false为非ng
         /// </summary>
         [ObservableProperty]
