@@ -182,7 +182,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 return writeResult;
             }
             LogHelper.UiLog.Info("正在等待PLC请求测试");
-            var waitResult = DevicesController.Plc.Wait(DevicesController.PlcAddressCache["测试请求信号"], 1, cancellation: this.FlowController.CancelToken);
+            var waitResult = DevicesController.Plc.Wait(DevicesController.PlcAddressCache["测试请求信号"], (short)1, cancellation: this.FlowController.CancelToken);
             if (waitResult.IsFailed)
             {
                 return waitResult;
@@ -283,7 +283,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
         private OperateResult TestOneGroupBatteries(int groupIndex)
         {
             LogHelper.UiLog.Info($"等待组{groupIndex + 1}就绪");
-            var waitResult = DevicesController.Plc.Wait(DevicesController.PlcAddressCache["测试状态"], (short)groupIndex + 1, cancellation: FlowController.CancelToken);
+            var waitResult = DevicesController.Plc.Wait(DevicesController.PlcAddressCache["测试状态"], (short)(groupIndex + 1), cancellation: FlowController.CancelToken);
             if (waitResult.IsFailed)
                 return waitResult;
             List<int> currentGroup = TestOrder[groupIndex];
@@ -300,15 +300,19 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                     {
                         DoPauseOrStop();
                         LogHelper.UiLog.Info($"组{groupIndex + 1}执行复测");
-                        var writeResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试标志位"], (short)groupIndex + 111);
+                        var writeResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试标志位"], (short)(groupIndex + 111));
                         if (writeResult.IsFailed)
                             return writeResult;
-                        var waitResult1 = DevicesController.Plc.Wait(DevicesController.PlcAddressCache["测试状态"], (short)groupIndex + 1, cancellation: FlowController.CancelToken);
+                        var waitResult1 = DevicesController.Plc.Wait(DevicesController.PlcAddressCache["测试状态"], (short)(groupIndex + 1), cancellation: FlowController.CancelToken);
                         if (waitResult1.IsFailed)
                             return waitResult1;
                         var doTestResult1 = DoTestOneGroup(currentGroup);
                         if (doTestResult1.IsFailed)
                             return doTestResult1;
+                        var writeResult1 = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试标志位"], (short)8);
+                        if (writeResult1.IsFailed)
+                            return writeResult1;
+                        Thread.Sleep(30);
                     }
                     else
                     {
@@ -317,7 +321,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 }
             }
             LogHelper.UiLog.Info($"组{groupIndex + 1}测试完成");
-            var writeComplateResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试标志位"], (short)groupIndex + 11);
+            var writeComplateResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试标志位"], (short)(groupIndex + 11));
             if (writeComplateResult.IsFailed)
                 return writeComplateResult;
             return OperateResult.CreateSuccessResult();
@@ -704,7 +708,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 return writeResult1;
             LogHelper.UiLog.Info("等待拆盘完成");
             //等待拆盘完成
-            var waitResult1 = DevicesController.Plc.Wait(DevicesController.PlcAddressCache["拆盘请求信号"], (short)2, cancellation: FlowController.CancelToken);
+            var waitResult1 = DevicesController.Plc.Wait(DevicesController.PlcAddressCache["托盘状态"], (short)2, cancellation: FlowController.CancelToken);
             if (waitResult1.IsFailed)
                 return waitResult1;
             LogHelper.UiLog.Info("写入收到拆盘完成确认");
