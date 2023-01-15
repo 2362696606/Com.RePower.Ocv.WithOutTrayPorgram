@@ -332,7 +332,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             };
             return Post(dto, MesSetting?.SaveDataAutoUrl ?? "thirdPartyAPI!saveData_autoOCV2ForE.action", "Mes上传测试结果");
         }
-        private OperateResult<string> Post(Object obj, string url, string optionName)
+        protected virtual OperateResult<string> Post(Object obj, string url, string optionName)
         {
             string jStr = JsonConvert.SerializeObject(obj);
             HttpContent content = new StringContent(jStr);
@@ -343,7 +343,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             if (result.IsSuccessStatusCode)
             {
                 string strResult = result.Content.ReadAsStringAsync().Result;
-                LogHelper.WmsServiceLog.Info($"{optionName}，请求内容{jStr},返回{strResult}");
+                LogHelper.MesServiceLog.Info($"{optionName}，请求内容{jStr},返回{strResult}");
                 if (string.IsNullOrEmpty(strResult))
                 {
                     return OperateResult.CreateFailedResult<string>($"{optionName}失败，返回为空或null");
@@ -355,7 +355,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             }
             else
             {
-                LogHelper.WmsServiceLog.Error($"{optionName}失败，内容{jStr},无法成功与调度通讯");
+                LogHelper.MesServiceLog.Error($"{optionName}失败，内容{jStr},无法成功与调度通讯");
                 return OperateResult.CreateFailedResult<string>($"{optionName}失败，内容{jStr}无法成功与调度通讯");
             }
         }

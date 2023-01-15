@@ -26,7 +26,21 @@ namespace Com.RePower.Ocv.Model.Helper
             get { return _wmsServiceLog; }
             set { _wmsServiceLog = value; }
         }
+        private static ILog _mesServiceLog = Log.getMessageFile("MesLog");
 
+        public static ILog MesServiceLog
+        {
+            get { return _mesServiceLog; }
+            set { _mesServiceLog = value; }
+        }
+
+        private static ILog _plcLog = Log.getMessageFile("PlcLog");
+
+        public static ILog PlcLog
+        {
+            get { return _plcLog; }
+            set { _plcLog = value; }
+        }
 
         public static void RegisterUiLogEvent(Action<object?, LoggingEvent> action)
         {

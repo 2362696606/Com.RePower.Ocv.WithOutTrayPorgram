@@ -44,7 +44,6 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             {
                 var defaultOcvType = settingContext.SettingItems.First(x => x.SettingName == "DefaultOcvType");
                 string defaultOcvTypeStr = defaultOcvType.JsonValue;
-                this.CurrentOcvType = Enum.Parse<OcvTypeEnmu>(defaultOcvTypeStr);
                 #region 初始化wms配置
                 var wmsOcv0 = settingContext.SettingItems.First(x => x.SettingName == "WmsSetting_Ocv0");
                 string jStrOcv0 = wmsOcv0.JsonValue;
@@ -101,6 +100,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 var batteryStandardForOcv3Str = batteryStandardForOcv3.JsonValue;
                 this._batteryStandardForOcv3 = JsonConvert.DeserializeObject<BatteryStandard>(batteryStandardForOcv3Str);
                 #endregion
+                this.CurrentOcvType = Enum.Parse<OcvTypeEnmu>(defaultOcvTypeStr);
             }
         }
         public WmsSetting? CurrentWmsSetting

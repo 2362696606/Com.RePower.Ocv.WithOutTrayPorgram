@@ -12,6 +12,9 @@ namespace Com.RePower.Device.Plc.Impl
         public InovanceTcpNetPlcImpl()
         {
             var device = new HslCommunication.Profinet.Inovance.InovanceTcpNet();
+
+            device.Read<InovanceTcpNet>();
+
             device.DataFormat = HslCommunication.Core.DataFormat.DCBA;
             device.IsStringReverse = true;
             netWorkDeviceBase = device;

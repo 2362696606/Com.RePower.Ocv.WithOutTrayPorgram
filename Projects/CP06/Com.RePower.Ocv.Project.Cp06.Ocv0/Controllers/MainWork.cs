@@ -241,6 +241,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 foreach(var item in resultDto.HandleResult.BatteriesInfoList)
                 {
                     var ngInfo = new NgInfo();
+                    ngInfo.Battery.TrayCode = Tray.TrayCode;
                     ngInfo.Battery = new Battery();
                     ngInfo.Battery.Position = item.Index;
                     ngInfo.Battery.BarCode = item.BarCode;
@@ -309,10 +310,6 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                         var doTestResult1 = DoTestOneGroup(currentGroup);
                         if (doTestResult1.IsFailed)
                             return doTestResult1;
-                        var writeResult1 = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试标志位"], (short)8);
-                        if (writeResult1.IsFailed)
-                            return writeResult1;
-                        Thread.Sleep(30);
                     }
                     else
                     {
@@ -363,6 +360,13 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 }
                 var validateResult = ValidateOneBatteryLocalNgStatus(ngInfo);
             }
+            var writeResult2 = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试标志位"], (short)8);
+            if (writeResult2.IsFailed)
+                return writeResult2;
+            LogHelper.UiLog.Info($"等待测试状态清零");
+            var waitResult2 = DevicesController.Plc.Wait(DevicesController.PlcAddressCache["测试状态"], (short)0, cancellation: FlowController.CancelToken);
+            if (waitResult2.IsFailed)
+                return waitResult2;
             return OperateResult.CreateSuccessResult();
         }
         /// <summary>
@@ -637,8 +641,43 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
         {
             using (var localContext = new LocalTestResultDbContext())
             {
+                //var dto = Mapper.Map<TrayDto>(Tray);
+                //localContext.Trays.Add(dto);
+                //localContext.SaveChanges();
                 var dto = Mapper.Map<TrayDto>(Tray);
-                localContext.Trays.Add(dto);
+
+                var trays = localContext.Trays.Where(x => x.TrayCode == Tray.TrayCode).ToList();
+                if (trays == null || trays.Count() <= 0)
+                {
+                    localContext.Trays.Add(dto);
+                }
+                else if (trays.Count() == 1)
+                {
+                    var temp = trays.First();
+                    foreach (var item in dto.NgInfos)
+                    {
+                        temp.NgInfos.Add(item);
+                    }
+                    localContext.Update(temp);
+                }
+                else
+                {
+                    var temp = trays.First();
+                    int count = trays.Count();
+                    for (int i = 1; i < count; i++)
+                    {
+                        foreach (var item in trays[i].NgInfos)
+                        {
+                            temp.NgInfos.Add(item);
+                        }
+                        localContext.Remove(trays[i]);
+                    }
+                    foreach (var item in dto.NgInfos)
+                    {
+                        temp.NgInfos.Add(item);
+                    }
+                    localContext.Update(temp);
+                }   
                 localContext.SaveChanges();
             }
             return OperateResult.CreateSuccessResult();
@@ -652,7 +691,39 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             using (var sceneContext = new OcvTestResultDbContext())
             {
                 var dto = Mapper.Map<TrayDto>(Tray);
-                sceneContext.Trays.Add(dto);
+
+                var trays = sceneContext.Trays.Where(x => x.TrayCode == Tray.TrayCode).ToList();
+                if(trays == null || trays.Count()<=0)
+                {
+                    sceneContext.Trays.Add(dto);
+                }
+                else if(trays.Count() == 1)
+                {
+                    var temp = trays.First();
+                    foreach(var item in dto.NgInfos)
+                    {
+                        temp.NgInfos.Add(item);
+                    }
+                    sceneContext.Update(temp);
+                }
+                else
+                {
+                    var temp = trays.First();
+                    int count = trays.Count();
+                    for(int i = 1;i<count;i++)
+                    {
+                        foreach(var item in trays[i].NgInfos)
+                        {
+                            temp.NgInfos.Add(item);
+                        }
+                        sceneContext.Remove(trays[i]);
+                    }
+                    foreach (var item in dto.NgInfos)
+                    {
+                        temp.NgInfos.Add(item);
+                    }
+                    sceneContext.Update(temp);
+                }
                 sceneContext.SaveChanges();
             }
             return OperateResult.CreateSuccessResult();
@@ -691,7 +762,10 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             foreach(var item in Tray.NgInfos)
             {
                 LogHelper.UiLog.Info($"写电池{item.Battery.Position}结果到plc");
-                var sendValue = item.IsNg ? 2 : 1;
+                var getNgValueResult = GetNgValue(item);
+                if(getNgValueResult.IsFailed)
+                    return getNgValueResult;
+                var sendValue = getNgValueResult.Content;
                 var writeResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache[$"位置{item.Battery.Position}托盘电池状态"], (short)sendValue);
                 if (writeResult.IsFailed)
                     return writeResult;
@@ -717,6 +791,39 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             if (writeResult2.IsFailed)
                 return writeResult2;
             return OperateResult.CreateSuccessResult();
+        }
+        /// <summary>
+        /// 获取ng通道
+        /// </summary>
+        /// <param name="ngInfo"></param>
+        /// <returns></returns>
+        private OperateResult<int> GetNgValue(NgInfo ngInfo)
+        {
+            int sendValue = 1;
+            if(SettingManager.CurrentOcvType == OcvTypeEnmu.OCV0 || SettingManager.CurrentOcvType == OcvTypeEnmu.OCV3)
+            {
+                sendValue = ngInfo.IsNg ? 2 : 1;
+            }
+            else
+            {
+                if (ngInfo.HasNgType(NgTypeEnum.电压过低 | NgTypeEnum.电压过高))
+                {
+                    sendValue = SettingManager.CurrentTestOption?.VolNgChannel ?? 2;
+                }
+                else if (ngInfo.HasNgType(NgTypeEnum.内阻过低 | NgTypeEnum.内阻过高))
+                {
+                    sendValue = SettingManager.CurrentTestOption?.ResNgChannel ?? 2;
+                }
+                else if (ngInfo.HasNgType(NgTypeEnum.负极壳体电压过低 | NgTypeEnum.负极壳体电压过高))
+                {
+                    sendValue = SettingManager.CurrentTestOption?.NVolNgChannel ?? 2;
+                }
+                else if (ngInfo.HasNgType(NgTypeEnum.K1过低 | NgTypeEnum.K1过高 | NgTypeEnum.K2过低 | NgTypeEnum.K2过高 | NgTypeEnum.K3过低 | NgTypeEnum.K3过高))
+                {
+                    sendValue = SettingManager.CurrentTestOption?.KValueNgChannel ?? 2;
+                }
+            }
+            return OperateResult.CreateSuccessResult(sendValue);
         }
         /// <summary>
         /// 上传结果到WMS

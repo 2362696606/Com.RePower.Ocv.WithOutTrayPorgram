@@ -79,6 +79,10 @@ namespace Com.RePower.Ocv.Model.Dto
         /// </summary>
         public double? KValue5 { get; set; }
         /// <summary>
+        /// 托盘条码
+        /// </summary>
+        public string? TrayCode { get; set; }
+        /// <summary>
         /// 测试时间
         /// </summary>
         public DateTime TestTime { get; set; }

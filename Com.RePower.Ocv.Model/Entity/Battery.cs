@@ -85,6 +85,11 @@ namespace Com.RePower.Ocv.Model.Entity
         [ObservableProperty]
         private double? _kValue4;
         /// <summary>
+        /// 托盘条码
+        /// </summary>
+        [ObservableProperty]
+        private string? _trayCode;
+        /// <summary>
         /// 是否已经测试
         /// </summary>
         [ObservableProperty]

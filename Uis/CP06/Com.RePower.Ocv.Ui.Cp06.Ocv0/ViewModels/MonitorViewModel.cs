@@ -1,7 +1,10 @@
-﻿using Com.RePower.Ocv.Model;
+﻿using Com.RePower.DeviceBase.Plc;
+using Com.RePower.Ocv.Model;
 using Com.RePower.Ocv.Model.DataBaseContext;
 using Com.RePower.Ocv.Model.Entity;
+using Com.RePower.Ocv.Ui.Cp06.Ocv0.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,12 +17,16 @@ namespace Com.RePower.Ocv.Ui.Cp06.Ocv0.ViewModels
     {
         [ObservableProperty]
         private bool _showWaitDialog = true;
-        public MonitorViewModel()
+        private bool _isMonitor = false;
+        public MonitorViewModel(IPlc plc)
         {
             this.LocalPlcCacheValues = new ObservableCollection<PlcCacheValue>();
             InitCacheValues();
+            Plc = plc;
         }
         public ObservableCollection<PlcCacheValue> LocalPlcCacheValues { get; set; }
+        public IPlc Plc { get; }
+
         private async void InitCacheValues()
         {
             List<PlcCacheValue> tempLocal = new List<PlcCacheValue>();
@@ -50,7 +57,21 @@ namespace Com.RePower.Ocv.Ui.Cp06.Ocv0.ViewModels
             {
                 LocalPlcCacheValues.Add(item);
             }
+            
             this.ShowWaitDialog = false;
+        }
+        [RelayCommand]
+        private async void StartMonitor()
+        {
+
+            await Task.Run(() =>
+            {
+                if (!Plc.IsConnected)
+                {
+                    Plc.Connect();
+                }
+                Plc.PlcValueMonitor(LocalPlcCacheValues);
+            });
         }
     }
 }

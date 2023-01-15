@@ -37,24 +37,28 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         public OperateResult Connect()
         {
             LogHelper.UiLog.Debug("连接Plc");
+            LogHelper.PlcLog.Debug("连接Plc");
             return plc.Connect();
         }
 
         public Task<OperateResult> ConnectAsync()
         {
             LogHelper.UiLog.Debug("异步连接Plc");
+            LogHelper.PlcLog.Debug("异步连接Plc");
             return plc.ConnectAsync();
         }
 
         public OperateResult DisConnect()
         {
             LogHelper.UiLog.Debug("Plc断开连接");
+            LogHelper.PlcLog.Debug("Plc断开连接");
             return plc.DisConnect();
         }
 
         public Task<OperateResult> DisConnectAsync()
         {
             LogHelper.UiLog.Debug("Plc异步断开连接");
+            LogHelper.PlcLog.Debug("Plc异步断开连接");
             return plc.DisConnectAsync();
         }
 
@@ -67,6 +71,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Read(address, length);
             LogHelper.UiLog.Debug($"读取byte[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"读取byte[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -74,6 +79,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadAsync(address, length);
             LogHelper.UiLog.Debug($"异步读取bte[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"异步读取bte[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -81,6 +87,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadBool(address, length);
             LogHelper.UiLog.Debug($"读取bool[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"读取bool[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -88,6 +95,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadBool(address);
             LogHelper.UiLog.Debug($"读取bool,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"读取bool,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -95,6 +103,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadBoolAsync(address, length);
             LogHelper.UiLog.Debug($"异步读取bool[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"异步读取bool[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -102,6 +111,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadBoolAsync(address);
             LogHelper.UiLog.Debug($"异步读取bool,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"异步读取bool,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -109,6 +119,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadDouble(address);
             LogHelper.UiLog.Debug($"读取double,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"读取double,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -116,6 +127,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadDouble(address, length);
             LogHelper.UiLog.Debug($"读取double[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"读取double[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -123,6 +135,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadDoubleAsync(address);
             LogHelper.UiLog.Debug($"异步读取double,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"异步读取double,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -130,6 +143,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadDoubleAsync(address, length);
             LogHelper.UiLog.Debug($"异步读取double[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"异步读取double[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -137,6 +151,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadFloat(address);
             LogHelper.UiLog.Debug($"读取float,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"读取float,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -144,6 +159,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadFloat(address, length);
             LogHelper.UiLog.Debug($"读取float[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"读取float[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -151,6 +167,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadFloatAsync(address);
             LogHelper.UiLog.Debug($"异步读取float,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"异步读取float,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -158,6 +175,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadFloatAsync(address, length);
             LogHelper.UiLog.Debug($"异步读取float[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"异步读取float[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -165,6 +183,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadInt16(address);
             LogHelper.UiLog.Debug($"读取int16,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"读取int16,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -172,6 +191,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadInt16(address, length);
             LogHelper.UiLog.Debug($"读取int16[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"读取int16[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -179,6 +199,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadInt16Async(address);
             LogHelper.UiLog.Debug($"异步读取int16,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"异步读取int16,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -186,6 +207,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadInt16Async(address, length);
             LogHelper.UiLog.Debug($"异步读取int16[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"异步读取int16[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -193,6 +215,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadInt32(address);
             LogHelper.UiLog.Debug($"读取int32,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"读取int32,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -200,6 +223,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadInt32(address, length);
             LogHelper.UiLog.Debug($"读取int32[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"读取int32[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -207,6 +231,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadInt32Async(address);
             LogHelper.UiLog.Debug($"异步读取int32,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"异步读取int32,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -214,6 +239,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadInt32Async(address, length);
             LogHelper.UiLog.Debug($"异步读取int32[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"异步读取int32[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -221,6 +247,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadInt64(address);
             LogHelper.UiLog.Debug($"读取int64,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"读取int64,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -228,6 +255,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadInt64(address, length);
             LogHelper.UiLog.Debug($"读取int64[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"读取int64[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -235,6 +263,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadInt64Async(address);
             LogHelper.UiLog.Debug($"异步读取int64,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"异步读取int64,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -242,6 +271,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadInt64Async(address, length);
             LogHelper.UiLog.Debug($"异步读取int64[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"异步读取int64[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -249,6 +279,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadString(address, length);
             LogHelper.UiLog.Debug($"读取string,地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"读取string,地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -256,6 +287,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadString(address, length);
             LogHelper.UiLog.Debug($"读取string,地址为{address},长度为{length},编码格式为{encoding},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"读取string,地址为{address},长度为{length},编码格式为{encoding},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -263,6 +295,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadStringAsync(address, length);
             LogHelper.UiLog.Debug($"异步读取string,地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"异步读取string,地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -270,6 +303,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadStringAsync(address, length);
             LogHelper.UiLog.Debug($"异步读取string,地址为{address},长度为{length},编码格式为{encoding},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"异步读取string,地址为{address},长度为{length},编码格式为{encoding},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -277,6 +311,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadUInt16(address);
             LogHelper.UiLog.Debug($"读取uint16,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"读取uint16,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -284,6 +319,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadUInt16(address, length);
             LogHelper.UiLog.Debug($"读取uint16[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"读取uint16[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -291,6 +327,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadUInt16Async(address);
             LogHelper.UiLog.Debug($"异步读取uint16,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"异步读取uint16,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -298,6 +335,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadUInt16Async(address, length);
             LogHelper.UiLog.Debug($"异步读取uint16[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"异步读取uint16[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -305,6 +343,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadUInt32(address);
             LogHelper.UiLog.Debug($"读取uint32,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"读取uint32,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -312,6 +351,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadUInt32(address, length);
             LogHelper.UiLog.Debug($"读取uint32[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"读取uint32[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -319,6 +359,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadUInt32Async(address);
             LogHelper.UiLog.Debug($"异步读取uint32,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"异步读取uint32,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -326,6 +367,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadUInt32Async(address, length);
             LogHelper.UiLog.Debug($"异步读取uint32[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"异步读取uint32[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -333,6 +375,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadUInt64(address);
             LogHelper.UiLog.Debug($"读取uint64,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"读取uint64,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -340,6 +383,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.ReadUInt64(address, length);
             LogHelper.UiLog.Debug($"读取uint64[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"读取uint64[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -347,6 +391,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadUInt64Async(address);
             LogHelper.UiLog.Debug($"异步读取uint64,地址为{address},结果{result.IsSuccess},内容{result.Content}");
+            LogHelper.PlcLog.Debug($"异步读取uint64,地址为{address},结果{result.IsSuccess},内容{result.Content}");
             return result;
         }
 
@@ -354,6 +399,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.ReadUInt64Async(address, length);
             LogHelper.UiLog.Debug($"异步读取uint64[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"异步读取uint64[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
 
@@ -362,6 +408,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -370,6 +417,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -378,6 +426,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -386,6 +435,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -394,6 +444,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -402,6 +453,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -410,6 +462,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -417,6 +470,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout, cancellation);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -424,6 +478,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout, cancellation);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -431,6 +486,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout, cancellation);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -438,6 +494,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout, cancellation);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -445,6 +502,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout, cancellation);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -452,6 +510,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout, cancellation);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -459,6 +518,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Wait(address, waitValue, readInterval, waitTimeout, cancellation);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -467,6 +527,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -475,6 +536,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -483,6 +545,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -491,6 +554,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -499,6 +563,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -507,6 +572,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -515,6 +581,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout);
             LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -522,6 +589,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout, cancellation);
             LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -529,6 +597,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout, cancellation);
             LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -536,6 +605,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout, cancellation);
             LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -543,6 +613,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout, cancellation);
             LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -550,6 +621,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout, cancellation);
             LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -557,6 +629,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout, cancellation);
             LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -564,6 +637,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WaitAsync(address, waitValue, readInterval, waitTimeout, cancellation);
             LogHelper.UiLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
+            LogHelper.PlcLog.Debug($"异步等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }
 
@@ -571,6 +645,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, value);
             LogHelper.UiLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value.ToArrayString()},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value.ToArrayString()},结果{result.IsSuccess}");
             return result;
         }
 
@@ -578,6 +653,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, value);
             LogHelper.UiLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value.ToArrayString()},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value.ToArrayString()},结果{result.IsSuccess}");
             return result;
         }
 
@@ -585,6 +661,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, value);
             LogHelper.UiLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -592,6 +669,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, value);
             LogHelper.UiLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -599,6 +677,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, values);
             LogHelper.UiLog.Debug($"写入地址{address},类型{values.GetType().Name},值{values.ToArrayString()},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{values.GetType().Name},值{values.ToArrayString()},结果{result.IsSuccess}");
             return result;
         }
 
@@ -606,6 +685,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, value);
             LogHelper.UiLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -613,6 +693,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, values);
             LogHelper.UiLog.Debug($"写入地址{address},类型{values.GetType().Name},值{values.ToArrayString()},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{values.GetType().Name},值{values.ToArrayString()},结果{result.IsSuccess}");
             return result;
         }
 
@@ -620,6 +701,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, value);
             LogHelper.UiLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -627,6 +709,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, values);
             LogHelper.UiLog.Debug($"写入地址{address},类型{values.GetType().Name},值{values.ToArrayString()},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{values.GetType().Name},值{values.ToArrayString()},结果{result.IsSuccess}");
             return result;
         }
 
@@ -634,6 +717,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, value);
             LogHelper.UiLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -641,6 +725,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, values);
             LogHelper.UiLog.Debug($"写入地址{address},类型{values.GetType().Name},值{values.ToArrayString()},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{values.GetType().Name},值{values.ToArrayString()},结果{result.IsSuccess}");
             return result;
         }
 
@@ -648,6 +733,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, value);
             LogHelper.UiLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -655,6 +741,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, values);
             LogHelper.UiLog.Debug($"写入地址{address},类型{values.GetType().Name},值{values.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{values.GetType().Name},值{values.ToArrayString()}");
             return result;
         }
 
@@ -662,6 +749,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, value);
             LogHelper.UiLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -669,6 +757,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, values);
             LogHelper.UiLog.Debug($"写入地址{address},类型{values.GetType().Name},值{values.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{values.GetType().Name},值{values.ToArrayString()}");
             return result;
         }
 
@@ -676,6 +765,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, value);
             LogHelper.UiLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -683,6 +773,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, values);
             LogHelper.UiLog.Debug($"写入地址{address},类型{values.GetType().Name},值{values.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{values.GetType().Name},值{values.ToArrayString()}");
             return result;
         }
 
@@ -690,6 +781,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, value);
             LogHelper.UiLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -697,6 +789,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, values);
             LogHelper.UiLog.Debug($"写入地址{address},类型{values.GetType().Name},值{values.ToArrayString()}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{values.GetType().Name},值{values.ToArrayString()}");
             return result;
         }
 
@@ -704,6 +797,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, value);
             LogHelper.UiLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -711,6 +805,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, value);
             LogHelper.UiLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},编码格式{encoding},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},编码格式{encoding},结果{result.IsSuccess}");
             return result;
         }
 
@@ -718,6 +813,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, value);
             LogHelper.UiLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},长度{length},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},长度{length},结果{result.IsSuccess}");
             return result;
         }
 
@@ -725,6 +821,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = plc.Write(address, value);
             LogHelper.UiLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},长度{length},编码格式{encoding},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"写入地址{address},类型{value.GetType().Name},值{value},长度{length},编码格式{encoding},结果{result.IsSuccess}");
             return result;
         }
 
@@ -732,6 +829,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, value);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -739,6 +837,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, value);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -746,6 +845,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, value);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -753,6 +853,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, value);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -760,6 +861,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, values);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{values.GetType().Name},值{values},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{values.GetType().Name},值{values},结果{result.IsSuccess}");
             return result;
         }
 
@@ -767,6 +869,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, value);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -774,6 +877,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, values);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{values.GetType().Name},值{values},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{values.GetType().Name},值{values},结果{result.IsSuccess}");
             return result;
         }
 
@@ -781,6 +885,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, value);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -788,6 +893,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, values);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{values.GetType().Name},值{values},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{values.GetType().Name},值{values},结果{result.IsSuccess}");
             return result;
         }
 
@@ -795,6 +901,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, value);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -802,6 +909,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, values);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{values.GetType().Name},值{values},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{values.GetType().Name},值{values},结果{result.IsSuccess}");
             return result;
         }
 
@@ -809,6 +917,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, value);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -816,6 +925,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, values);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{values.GetType().Name},值{values},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{values.GetType().Name},值{values},结果{result.IsSuccess}");
             return result;
         }
 
@@ -823,6 +933,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, value);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -830,6 +941,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, values);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{values.GetType().Name},值{values},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{values.GetType().Name},值{values},结果{result.IsSuccess}");
             return result;
         }
 
@@ -837,6 +949,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, value);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -844,6 +957,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, values);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{values.GetType().Name},值{values},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{values.GetType().Name},值{values},结果{result.IsSuccess}");
             return result;
         }
 
@@ -851,6 +965,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, value);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -858,6 +973,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, values);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{values.GetType().Name},值{values},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{values.GetType().Name},值{values},结果{result.IsSuccess}");
             return result;
         }
 
@@ -865,6 +981,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, value);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},结果{result.IsSuccess}");
             return result;
         }
 
@@ -872,6 +989,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, value);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},编码格式{encoding},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},编码格式{encoding},结果{result.IsSuccess}");
             return result;
         }
 
@@ -879,6 +997,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, value);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},长度{length},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},长度{length},结果{result.IsSuccess}");
             return result;
         }
 
@@ -886,6 +1005,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
         {
             var result = await plc.WriteAsync(address, value);
             LogHelper.UiLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},编码格式{encoding},长度{length},结果{result.IsSuccess}");
+            LogHelper.PlcLog.Debug($"异步写入地址{address},类型{value.GetType().Name},值{value},编码格式{encoding},长度{length},结果{result.IsSuccess}");
             return result;
         }
     }

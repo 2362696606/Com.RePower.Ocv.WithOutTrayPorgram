@@ -12,7 +12,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<SettingManager>();
+            builder.RegisterType<SettingManager>().SingleInstance();
         }
     }
 }

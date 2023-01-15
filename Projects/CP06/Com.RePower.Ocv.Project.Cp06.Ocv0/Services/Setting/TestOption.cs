@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -7,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Setting
 {
-    public class TestOption
+    public partial class TestOption:ObservableObject
     {
+        [ObservableProperty]
+        private string _a = "a";
         /// <summary>
         /// 是否测试电压
         /// </summary>
@@ -45,5 +48,21 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Setting
         /// OCV3负极壳体电压通道
         /// </summary>
         public int? NVolChannelForOcv3 { get; set; }
+        /// <summary>
+        /// 电压ng通道
+        /// </summary>
+        public int? VolNgChannel { get; set; }
+        /// <summary>
+        /// 内阻ng通道
+        /// </summary>
+        public int? ResNgChannel { get; set; }
+        /// <summary>
+        /// K值ng通道
+        /// </summary>
+        public int? KValueNgChannel { get; set; }
+        /// <summary>
+        /// 负极壳体电压ng通道
+        /// </summary>
+        public int? NVolNgChannel { get; set; }
     }
 }

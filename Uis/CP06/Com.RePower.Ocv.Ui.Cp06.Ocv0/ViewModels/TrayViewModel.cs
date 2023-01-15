@@ -1,4 +1,5 @@
 ﻿using Com.RePower.Ocv.Model.Entity;
+using Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,13 @@ namespace Com.RePower.Ocv.Ui.Cp06.Ocv0.ViewModels
     {
         [ObservableProperty]
         private Tray _tray;
-        public TrayViewModel(Tray tray)
+        [ObservableProperty]
+        private SettingManager _settingManager;
+
+        public TrayViewModel(Tray tray,SettingManager settingManager)
         {
             this._tray = tray;
+            this._settingManager = settingManager;
         }
 
     }

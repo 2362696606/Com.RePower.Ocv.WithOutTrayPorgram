@@ -164,7 +164,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             string batteryCode = getCode.Match(@"[0-9\.a-zA-Z_-]+").Value;
             if (string.IsNullOrEmpty(batteryCode))
             {
-                return OperateResult.CreateFailedResult("托盘条码不合规");
+                return OperateResult.CreateFailedResult("电芯条码不合规");
             }
             NgInfo ngInfo = new NgInfo();
             ngInfo.Battery = new Battery()
@@ -514,7 +514,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
         {
             var ngInfo = Tray.NgInfos[0];
             var sentValue = ngInfo.IsNg ? 4 : 3;
-            LogHelper.UiLog.Info("想Plc写入测试结果");
+            LogHelper.UiLog.Info("向Plc写入测试结果");
             var writeResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试状态"], (short)sentValue);
             if(writeResult.IsFailed)
                 return writeResult;
