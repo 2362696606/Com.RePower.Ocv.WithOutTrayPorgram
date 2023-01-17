@@ -5,17 +5,15 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="LocalTestResult.dbs" />
     <None Remove="OcvSetting.dbs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="LocalTestResult.dbs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Logo.ico" />
     <Content Include="OcvSetting.dbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

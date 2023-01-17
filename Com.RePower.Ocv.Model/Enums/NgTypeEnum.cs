@@ -124,7 +124,7 @@ namespace Com.RePower.Ocv.Model.Enums
         /// 保留Ng类型1
         /// </summary>
         [Description("保留Ng类型1")]
-        保留Ng类型1 = 4194304,
+        K值计算失败 = 4194304,
         /// <summary>
         /// 保留Ng类型2
         /// </summary>

@@ -1,5 +1,6 @@
 ﻿using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers;
+using Com.RePower.Ocv.Project.Cp06.Ocv0.Enums;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Dto;
 using Com.RePower.WpfBase;
 using Newtonsoft.Json;
@@ -30,11 +31,27 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms
                 Result = 1,
                 Message = "请求成功"
             };
-            dto.HandleResult.Procedure = settingManager.CurrentOcvType.ToString();
+            switch(settingManager.CurrentOcvType)
+            {
+                case OcvTypeEnmu.OCV0:
+                case OcvTypeEnmu.OCV3:
+                    dto.HandleResult.Procedure = settingManager.CurrentOcvType.ToString();
+                    break;
+                case OcvTypeEnmu.OCV1:
+                case OcvTypeEnmu.OCV2:
+                    dto.HandleResult.Procedure = new Random().Next(2) == 1? OcvTypeEnmu.OCV1.ToString():OcvTypeEnmu.OCV2.ToString();
+                    break;
+            }
+
+            //dto.HandleResult.Procedure = settingManager.CurrentOcvType.ToString();
             //dto.HandleResult.Skip = new Random().Next(2) == 1 ? true : false;
             //string randomNumStr = string.Format("{0:D5}", new Random().Next(10000));
             dto.HandleResult.TrayCode = Tray.TrayCode;
-            int batteryConut = 36;
+            int batteryConut = 0;
+            foreach(var item in settingManager.CurrentTestOrder)
+            {
+                batteryConut += item.Count();
+            }
             for(int i=0;i<batteryConut;i++)
             {
                 var battery = new WmsBatteryInfo { Index = i + 1 };

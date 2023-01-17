@@ -44,12 +44,12 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             MesService = mesService;
             SettingManager = settingManager;
             Mapper = mapper;
-            using (var settingContext = new OcvSettingDbContext())
-            {
-                var item = settingContext.SettingItems.First(x => x.SettingName == "TestOrder");
-                string jStr = item.JsonValue;
-                this.TestOrder = JsonConvert.DeserializeObject<List<List<int>>>(jStr)??new List<List<int>>();
-            }
+            //using (var settingContext = new OcvSettingDbContext())
+            //{
+            //    var item = settingContext.SettingItems.First(x => x.SettingName == "TestOrder");
+            //    string jStr = item.JsonValue;
+            //    this.TestOrder = JsonConvert.DeserializeObject<List<List<int>>>(jStr)??new List<List<int>>();
+            //}
         }
 
         public DevicesController DevicesController { get; }
@@ -58,7 +58,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
         public IMesService MesService { get; }
         public SettingManager SettingManager { get; }
         public IMapper Mapper { get; }
-        public List<List<int>> TestOrder { get; set; }
+        public List<List<int>> TestOrder { get => SettingManager.CurrentTestOrder; }
 
         protected override OperateResult DoWork()
         {
@@ -88,17 +88,13 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 if(saveToLocationResult.IsFailed)
                     return saveToLocationResult;
                 DoPauseOrStop();
-                //var saveToSceneDbResult = SaveToSceneDb();
-                //if (saveToSceneDbResult.IsFailed)
-                //    return saveToSceneDbResult;
-                //DoPauseOrStop();
+                var saveToSceneDbResult = SaveToSceneDb();
+                if (saveToSceneDbResult.IsFailed)
+                    return saveToSceneDbResult;
+                DoPauseOrStop();
                 var uploadToMesResult = UploadTestResultToMes();
                 if(uploadToMesResult.IsFailed)
                     return uploadToMesResult;
-                DoPauseOrStop();
-                var unBindingResult = UnBindingTray();
-                if(unBindingResult.IsFailed)
-                    return unBindingResult;
                 DoPauseOrStop();
                 var uploadToWmsResult = UploadTestResultToWms();
                 if (uploadToWmsResult.IsFailed)
@@ -107,6 +103,10 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 var requestAllLocateCellResult = RequestAllLocateCellToWms();
                 if(requestAllLocateCellResult.IsFailed)
                     return requestAllLocateCellResult;
+                DoPauseOrStop();
+                var unBindingResult = UnBindingTray();
+                if (unBindingResult.IsFailed)
+                    return unBindingResult;
                 DoPauseOrStop();
                 var writeResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试标志位"], (short)2);
                 if(writeResult.IsFailed)
@@ -176,7 +176,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 }
             }
             LogHelper.UiLog.Info("测试标志位写入0");
-            var writeResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试标志位"], 0);
+            var writeResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试标志位"], (short)0);
             if (writeResult.IsFailed)
             {
                 return writeResult;
@@ -434,18 +434,18 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             }
             return OperateResult.CreateSuccessResult();
         }
-        /// <summary>
-        /// 判断本地ng情况
-        /// </summary>
-        /// <returns></returns>
-        private OperateResult ValidateBatteriesLocalNgStatus()
-        {
-            foreach (var item in Tray.NgInfos)
-            {
-                ValidateOneBatteryLocalNgStatus(item);
-            }
-            return OperateResult.CreateSuccessResult();
-        }
+        ///// <summary>
+        ///// 判断本地ng情况
+        ///// </summary>
+        ///// <returns></returns>
+        //private OperateResult ValidateBatteriesLocalNgStatus()
+        //{
+        //    foreach (var item in Tray.NgInfos)
+        //    {
+        //        ValidateOneBatteryLocalNgStatus(item);
+        //    }
+        //    return OperateResult.CreateSuccessResult();
+        //}
         /// <summary>
         /// 验证单个电池ng情况
         /// </summary>
@@ -462,75 +462,40 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 double maxNVol = SettingManager.CurrentBatteryStandard?.MaxNVol ?? 0;
                 double minNVol = SettingManager.CurrentBatteryStandard?.MinNVol ?? 0;
 
-                //bool volNg = false;
-                //bool resNg = false;
-                //bool nVolNg = false;
+                ngInfo.NgType = 0;
+
                 if (SettingManager.CurrentTestOption?.IsTestVol ?? false)
                 {
 
                     if (ngInfo.Battery.VolValue > maxVol)
                     {
-                        //volNg = true;
-                        //ngInfo.IsNg = true;
                         ngInfo.AddNgType(NgTypeEnum.电压过高);
-                        ngInfo.RemoveNgType(NgTypeEnum.电压过低);
                     }
                     else if (ngInfo.Battery.VolValue < minVol)
                     {
-                        //volNg = true;
-                        //ngInfo.IsNg = true;
                         ngInfo.AddNgType(NgTypeEnum.电压过低);
-                        ngInfo.RemoveNgType(NgTypeEnum.电压过高);
-                    }
-                    else
-                    {
-                        //volNg = false;
-                        ngInfo.RemoveNgType(NgTypeEnum.电压过高);
-                        ngInfo.RemoveNgType(NgTypeEnum.电压过低);
                     }
                 }
                 if (SettingManager.CurrentTestOption?.IsTestRes ?? false)
                 {
                     if (ngInfo.Battery.Res > maxRes)
                     {
-                        //resNg = true;
-                        //ngInfo.IsNg = true;
                         ngInfo.AddNgType(NgTypeEnum.内阻过高);
-                        ngInfo.RemoveNgType(NgTypeEnum.内阻过低);
                     }
                     else if (ngInfo.Battery.Res < minRes)
                     {
-                        //resNg = true;
-                        //ngInfo.IsNg = true;
                         ngInfo.AddNgType(NgTypeEnum.内阻过低);
-                        ngInfo.RemoveNgType(NgTypeEnum.内阻过高);
-                    }
-                    else
-                    {
-                        //resNg = false;
-                        ngInfo.RemoveNgType(NgTypeEnum.内阻过高);
-                        ngInfo.RemoveNgType(NgTypeEnum.内阻过低);
                     }
                 }
                 if (SettingManager.CurrentTestOption?.IsTestNVol ?? false)
                 {
                     if (ngInfo.Battery.NVolValue > maxNVol)
                     {
-                        //nVolNg = true;
                         ngInfo.AddNgType(NgTypeEnum.负极壳体电压过高);
-                        ngInfo.RemoveNgType(NgTypeEnum.负极壳体电压过低);
                     }
                     else if (ngInfo.Battery.NVolValue < minNVol)
                     {
-                        //nVolNg = true;
                         ngInfo.AddNgType(NgTypeEnum.负极壳体电压过低);
-                        ngInfo.RemoveNgType(NgTypeEnum.负极壳体电压过高);
-                    }
-                    else
-                    {
-                        //nVolNg = false;
-                        ngInfo.RemoveNgType(NgTypeEnum.负极壳体电压过低);
-                        ngInfo.RemoveNgType(NgTypeEnum.负极壳体电压过高);
                     }
                 }
                 ngInfo.SetIsNg();
@@ -549,33 +514,40 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 List<BatteryDto> batteryList = new List<BatteryDto>();
                 using (var resultContext = new OcvTestResultDbContext())
                 {
+                    List<string> codeList = Tray.NgInfos.Select(x => x.Battery.BarCode).ToList();
                     switch (SettingManager.CurrentOcvType)
                     {
                         case OcvTypeEnmu.OCV1:
-                            batteryList = resultContext.Batterys.Where(x => (Tray.NgInfos.Any(y => y.Battery.BarCode == x.BarCode)) && x.OcvType == "OCV0").ToList();
+                            batteryList = resultContext.Batterys
+                                .Where(x => codeList.Contains(x.BarCode) && x.OcvType == "OCV0")
+                                .AsNoTracking()
+                                .ToList();
                             break;
                         case OcvTypeEnmu.OCV2:
-                            batteryList = resultContext.Batterys.Where(x => (Tray.NgInfos.Any(y => y.Battery.BarCode == x.BarCode)) && x.OcvType == "OCV1").ToList();
+                            batteryList = resultContext.Batterys
+                                .Where(x => codeList.Contains(x.BarCode) && x.OcvType == "OCV1")
+                                .AsNoTracking()
+                                .ToList();
                             break;
                     }
                 }
-                if(batteryList.Count<=0)
-                {
-                    return OperateResult.CreateFailedResult("无法找到当前托盘上一OCV工站的数据");
-                }
-                if(batteryList.Count<Tray.NgInfos.Count)
-                {
-                    var codeList1 = batteryList.Select(x => x.BarCode).ToList();
-                    var codeList2 = Tray.NgInfos.Select(x => x.Battery.BarCode).ToList();
-                    var codeList3 = codeList2.Where(x => !codeList1.Contains(x)).ToList();
-                    var result = String.Join(';', codeList3);
-                    return OperateResult.CreateFailedResult($"无法找到电芯{result}在上一OCV工站的数据");
-                }
+                //if(batteryList.Count<=0)
+                //{
+                //    return OperateResult.CreateFailedResult("无法找到当前托盘上一OCV工站的数据");
+                //}
+                //else if(batteryList.Count<Tray.NgInfos.Count)
+                //{
+                //    var codeList1 = batteryList.Select(x => x.BarCode).ToList();
+                //    var codeList2 = Tray.NgInfos.Select(x => x.Battery.BarCode).ToList();
+                //    var codeList3 = codeList2.Where(x => !codeList1.Contains(x)).ToList();
+                //    var result = String.Join(';', codeList3);
+                //    return OperateResult.CreateFailedResult($"无法找到电芯{result}在上一OCV工站的数据");
+                //}
                 foreach(var item in Tray.NgInfos)
                 {
                     var battery = item.Battery;
-                    var batteryDto = batteryList.OrderByDescending(o => o.TestTime).FirstOrDefault(x => x.BarCode == item.Battery.BarCode);
-                    if (batteryDto != null)
+                    var batteryDto = batteryList.OrderByDescending(o => o.TestTime).LastOrDefault(x => x.BarCode == item.Battery.BarCode);
+                    if (batteryDto is { })
                     {
                         TimeSpan hoursSpan = item.Battery.TestTime - batteryDto.TestTime;
                         double hours = hoursSpan.TotalHours;
@@ -583,6 +555,8 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                         var kValue = Math.Round((v ?? 0) / hours, 3);
                         double maxK = SettingManager.CurrentBatteryStandard?.MaxKValue??0;
                         double minK = SettingManager.CurrentBatteryStandard?.MinKValue??0;
+                        item.RemoveNgType(NgTypeEnum.K2过高);
+                        item.RemoveNgType(NgTypeEnum.K2过低);
                         switch (SettingManager.CurrentOcvType)
                         {
                             case OcvTypeEnmu.OCV1:
@@ -591,17 +565,10 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                                     if (kValue > maxK)
                                     {
                                         item.AddNgType(NgTypeEnum.K1过高);
-                                        item.RemoveNgType(NgTypeEnum.K1过低);
                                     }
                                     else if (kValue < minK)
                                     {
                                         item.AddNgType(NgTypeEnum.K1过低);
-                                        item.RemoveNgType(NgTypeEnum.K1过高);
-                                    }
-                                    else
-                                    {
-                                        item.RemoveNgType(NgTypeEnum.K1过高);
-                                        item.RemoveNgType(NgTypeEnum.K1过低);
                                     }
                                     break;
                                 }
@@ -611,24 +578,23 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                                     if (kValue > maxK)
                                     {
                                         item.AddNgType(NgTypeEnum.K2过高);
-                                        item.RemoveNgType(NgTypeEnum.K2过低);
                                     }
                                     else if (kValue < minK)
                                     {
                                         item.AddNgType(NgTypeEnum.K2过低);
-                                        item.RemoveNgType(NgTypeEnum.K2过高);
-                                    }
-                                    else
-                                    {
-                                        item.RemoveNgType(NgTypeEnum.K2过高);
-                                        item.RemoveNgType(NgTypeEnum.K2过低);
                                     }
                                     break;
                                 }
                         }
-                        item.SetIsNg();
-                        item.SetNgDescritpion();
                     }
+                    else
+                    {
+                        item.RemoveNgType(NgTypeEnum.K2过高);
+                        item.RemoveNgType(NgTypeEnum.K2过低);
+                        item.AddNgType(NgTypeEnum.K值计算失败);
+                    }
+                    item.SetIsNg();
+                    item.SetNgDescritpion();
                 }
             }
             return OperateResult.CreateSuccessResult();

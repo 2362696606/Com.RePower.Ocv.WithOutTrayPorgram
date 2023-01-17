@@ -24,7 +24,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.DbContext
             }
             string connectString = connectStr;
             optionsBuilder.UseSqlServer(connectString);
-            optionsBuilder.UseLazyLoadingProxies();
+            //optionsBuilder.UseLazyLoadingProxies();
             base.OnConfiguring(optionsBuilder);
         }
     }

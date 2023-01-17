@@ -28,5 +28,6 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Dto
         /// 工序OCV0 OCV1 OCV2 OCV3
         /// </summary>
         public string Procedure { get; set; } = "OCV0";
+        public string ProjectCode { get; set; } = "CP06";
     }
 }

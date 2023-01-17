@@ -17,7 +17,7 @@ namespace Com.RePower.Ocv.Model.DataBaseContext
         {
             string connectString = @"data source=.\LocalTestResult.dbs";
             optionsBuilder.UseSqlite(connectString);
-            optionsBuilder.UseLazyLoadingProxies();
+            //optionsBuilder.UseLazyLoadingProxies();
             base.OnConfiguring(optionsBuilder);
         }
     }

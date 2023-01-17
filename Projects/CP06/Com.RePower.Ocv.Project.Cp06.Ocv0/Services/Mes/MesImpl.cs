@@ -32,7 +32,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             get
             {
                 var temp = HttpClientFactory.CreateClient("MesHttpClient_" + (SettingManager.CurrentOcvType.ToString()));
-                temp.BaseAddress = new Uri(MesSetting?.BaseAddress ?? "http://10.10.1.240:8578/mes/third");
+                temp.BaseAddress = new Uri(MesSetting?.BaseAddress ?? "http://10.10.1.240:8578/mes/third/");
                 return temp;
             }
         }

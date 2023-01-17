@@ -34,7 +34,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms
             get 
             {
                 var temp = HttpClientFactory.CreateClient("WmsHttpClient_" + (settingManager.CurrentOcvType.ToString()));
-                temp.BaseAddress = new Uri(WmsSetting?.BaseAddress ?? "http://172.17.2.254:44311/api/services/app/ForeignInterfaceService");
+                temp.BaseAddress = new Uri(WmsSetting?.BaseAddress ?? "http://172.17.2.200:44311/api/services/app/ForeignInterfaceService/");
                 return temp;
             }
         }
@@ -80,6 +80,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms
                 TrayBarcode = Tray.TrayCode,
                 DeviceName = settingManager.CurrentOcvType.ToString(),
                 Procedure = settingManager.CurrentOcvType.ToString(),
+                ProjectCode = settingManager.CurrentWmsSetting?.ProjectCode ?? "CP06",
             };
             foreach(var item in Tray.NgInfos)
             {
