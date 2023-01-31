@@ -79,7 +79,8 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 DoPauseOrStop();
                 var testBatteriesResult = TestBatteries();
                 if(testBatteriesResult.IsFailed)
-                    return testBatteriesResult;
+                    return testBatteriesResult; 
+                DoPauseOrStop();
                 var verfyKValueResult = VerifyKValue();
                 if(verfyKValueResult.IsFailed)
                     return verfyKValueResult;
@@ -511,6 +512,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
         {
             if (SettingManager.CurrentTestOption?.VerifyKValue ?? false)
             {
+                LogHelper.UiLog.Info("验证K值");
                 List<BatteryDto> batteryList = new List<BatteryDto>();
                 using (var resultContext = new OcvTestResultDbContext())
                 {
@@ -605,14 +607,12 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
         /// <returns></returns>
         private OperateResult SaveToLocation()
         {
+            LogHelper.UiLog.Info("保存到本地数据库");
             using (var localContext = new LocalTestResultDbContext())
             {
-                //var dto = Mapper.Map<TrayDto>(Tray);
-                //localContext.Trays.Add(dto);
-                //localContext.SaveChanges();
                 var dto = Mapper.Map<TrayDto>(Tray);
 
-                var trays = localContext.Trays.Where(x => x.TrayCode == Tray.TrayCode).ToList();
+                var trays = localContext.Trays.Where(x => x.TrayCode == Tray.TrayCode).Include(x=>x.NgInfos).ThenInclude(x=>x.Battery).ToList();
                 if (trays == null || trays.Count() <= 0)
                 {
                     localContext.Trays.Add(dto);
@@ -654,11 +654,12 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
         /// <returns></returns>
         private OperateResult SaveToSceneDb()
         {
+            LogHelper.UiLog.Info("保存到现场服务器数据库");
             using (var sceneContext = new OcvTestResultDbContext())
             {
                 var dto = Mapper.Map<TrayDto>(Tray);
 
-                var trays = sceneContext.Trays.Where(x => x.TrayCode == Tray.TrayCode).ToList();
+                var trays = sceneContext.Trays.Where(x => x.TrayCode == Tray.TrayCode).Include(x=>x.NgInfos).ThenInclude(x=>x.Battery).ToList();
                 if(trays == null || trays.Count()<=0)
                 {
                     sceneContext.Trays.Add(dto);
@@ -709,11 +710,11 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             var contentObj = JsonConvert.DeserializeObject<MesBatteryResultReturnDto>(returnContentStr) ?? new MesBatteryResultReturnDto();
             if(!contentObj.Status)
             {
-                return OperateResult.CreateFailedResult($"上传mes失败:{contentObj.Message}");
+                return OperateResult.CreateFailedResult($"上传mes失败:{contentObj.Message ?? "未知异常"}");
             }
             if(contentObj.ErrorCode == "warn")
             {
-                LogHelper.UiLog.Warn(contentObj.Message);
+                LogHelper.UiLog.Warn(contentObj.Message ?? "未知异常");
             }
             return OperateResult.CreateSuccessResult();
         }
@@ -804,7 +805,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             string recovertContentStr = uploadResult.Content ?? string.Empty;
             var obj = JsonConvert.DeserializeObject<WmsNormalReturnDto>(recovertContentStr)??new WmsNormalReturnDto();
             if (obj.Result != 1)
-                return OperateResult.CreateFailedResult($"上传调度失败:{obj.Message}");
+                return OperateResult.CreateFailedResult($"上传调度失败:{obj.Message ?? "未知异常"}");
             return OperateResult.CreateSuccessResult();
         }
         /// <summary>
@@ -822,7 +823,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 string str = result.Content ?? string.Empty;
                 var obj = JsonConvert.DeserializeObject<WmsNormalReturnDto>(str) ?? new WmsNormalReturnDto();
                 if (obj.Result != 1)
-                    return OperateResult.CreateFailedResult($"OCV0出库接口调用失败:{obj.Message}");
+                    return OperateResult.CreateFailedResult($"OCV0出库接口调用失败:{obj.Message ?? "未知异常"}");
             }
             return OperateResult.CreateSuccessResult();
         }

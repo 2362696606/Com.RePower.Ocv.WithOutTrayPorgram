@@ -89,6 +89,8 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
                     return UploadResultForOcv1();
                 case Enums.OcvTypeEnmu.OCV2:
                     return UploadResultForOcv2();
+                case Enums.OcvTypeEnmu.OCV3:
+                    return UploadResultForOcv3();
                 default:
                     return OperateResult.CreateFailedResult<string>("未实现当前ocv工站mes上传业务");
             }
