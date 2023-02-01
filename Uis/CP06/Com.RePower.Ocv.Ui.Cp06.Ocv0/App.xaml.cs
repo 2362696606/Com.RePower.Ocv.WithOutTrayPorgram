@@ -4,16 +4,6 @@ using Com.RePower.Ocv.Model.Mapper;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Modules;
 using Com.RePower.Ocv.Ui.UiBase;
 using Microsoft.Extensions.DependencyInjection;
-using Prism.Ioc;
-using Prism.Unity;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace Com.RePower.Ocv.Ui.Cp06.Ocv0
 {

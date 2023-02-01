@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Com.RePower.Ocv.Model.Dto;
+using Com.RePower.Ocv.Model.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +30,13 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Dto
         /// 工序OCV0 OCV1 OCV2 OCV3
         /// </summary>
         public string Procedure { get; set; } = "OCV0";
+        /// <summary>
+        /// 项目代码
+        /// </summary>
         public string ProjectCode { get; set; } = "CP06";
+        /// <summary>
+        /// 详细结果
+        /// </summary>
+        public List<NgInfoDto> ResultDetails { get; set; } = new List<NgInfoDto>();
     }
 }

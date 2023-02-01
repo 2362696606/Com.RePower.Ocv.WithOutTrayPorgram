@@ -40,6 +40,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             SettingManager = settingManager;
             Tray = tray;
             Mapper = mapper;
+            Task.Run(KeepHeartbeat);
         }
 
         public DevicesController DevicesController { get; }
@@ -87,9 +88,6 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 var unBindingBatteryResult = UnBindingBattery();
                 if(unBindingBatteryResult.IsFailed)
                     return unBindingBatteryResult;
-                //var uploadToWmsResult = UploadTestResultToWms();
-                //if (uploadToWmsResult.IsFailed)
-                //    return uploadToWmsResult;
             }
         }
         /// <summary>
@@ -350,7 +348,8 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 foreach (var item in Tray.NgInfos)
                 {
                     var battery = item.Battery;
-                    var batteryDto = batteryList.OrderByDescending(o => o.TestTime).LastOrDefault(x => x.BarCode == item.Battery.BarCode);
+                    batteryList.Sort((x, y) => DateTime.Compare(x.TestTime, y.TestTime));
+                    var batteryDto = batteryList.LastOrDefault(x => x.BarCode == item.Battery.BarCode);
                     if (batteryDto is { })
                     {
                         TimeSpan hoursSpan = item.Battery.TestTime - batteryDto.TestTime;
@@ -515,6 +514,24 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             if (obj.Result != 1)
                 return OperateResult.CreateFailedResult($"上传调度失败:{obj.Message}");
             return OperateResult.CreateSuccessResult();
+        }
+        private OperateResult KeepHeartbeat()
+        {
+            if(!this.DevicesController.Plc.IsConnected)
+            {
+                var connectResult = this.DevicesController.Plc.Connect();
+                if(connectResult.IsFailed)
+                    return connectResult;
+            }
+            bool currentBeat = false;
+            while(true)
+            {
+                currentBeat = !currentBeat;
+                var writeResult = this.DevicesController.Plc.Write(this.DevicesController.PlcAddressCache["上位机心跳"], currentBeat ? (short)1 : (short)0);
+                if (writeResult.IsFailed)
+                    return writeResult;
+                Thread.Sleep(500);
+            }
         }
     }
 }

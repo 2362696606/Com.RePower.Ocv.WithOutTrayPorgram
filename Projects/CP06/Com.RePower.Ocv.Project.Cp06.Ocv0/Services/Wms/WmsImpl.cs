@@ -1,4 +1,6 @@
-﻿using Com.RePower.Ocv.Model.Entity;
+﻿using AutoMapper;
+using Com.RePower.Ocv.Model.Dto;
+using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Dto;
@@ -19,9 +21,10 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms
     {
         private readonly SettingManager settingManager;
 
-        public WmsImpl(IHttpClientFactory httpClientFactory, Tray tray, SettingManager settingManager)
+        public WmsImpl(IHttpClientFactory httpClientFactory, Tray tray, SettingManager settingManager,IMapper mapper)
         {
             this.settingManager = settingManager;
+            Mapper = mapper;
             HttpClientFactory = httpClientFactory;
             Tray = tray;
         }
@@ -39,6 +42,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms
             }
         }
         public Tray Tray { get; private set; }
+        public IMapper Mapper { get; }
 
         public OperateResult<string> GetBatteriesInfo()
         {
@@ -91,6 +95,8 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms
                     Index = item.Battery.Position
                 };
                 requestContent.BatteryResultContent.Add(batteryResultContent);
+                NgInfoDto dto = Mapper.Map<NgInfoDto>(item);
+                requestContent.ResultDetails.Add(dto);
             }
             return Post(requestContent, WmsSetting?.UploadTestResultUrl ?? "UploadOCVTestResult", "上传测试结果至调度");
         }

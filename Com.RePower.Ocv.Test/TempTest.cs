@@ -152,7 +152,28 @@ namespace Com.RePower.Ocv.Test
                                       t.Status != TaskStatus.Canceled ? t.Result.ToString("N0") : "n/a");
             }
         }
+        [Fact]
+        private void OrderByDateTimeTest()
+        {
+            List<DateTimeTestClass> tasks = new List<DateTimeTestClass>();
+            for (int i = 0; i < 20; i++) 
+            {
+                int random = new Random().Next(100);
+                DateTimeTestClass dateTimeTestClass = new DateTimeTestClass { Id = i,Time = DateTime.Now.AddDays(random) };
+                tasks.Add(dateTimeTestClass);
+            }
+            //tasks.OrderBy(x => x.Time);
+            tasks.Sort((x, y) => DateTime.Compare(x.Time, y.Time));
+        }
     }
+
+
+    public class DateTimeTestClass
+    {
+        public int Id { get; set; }
+        public DateTime Time { get; set; }
+    }
+
     public class TestClass
     {
         public string StringValue { get; set; } = string.Empty;

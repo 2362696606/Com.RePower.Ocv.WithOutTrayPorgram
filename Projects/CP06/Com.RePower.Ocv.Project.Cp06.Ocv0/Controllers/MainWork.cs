@@ -548,7 +548,8 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 foreach(var item in Tray.NgInfos)
                 {
                     var battery = item.Battery;
-                    var batteryDto = batteryList.OrderByDescending(o => o.TestTime).LastOrDefault(x => x.BarCode == item.Battery.BarCode);
+                    batteryList.Sort((x, y) => DateTime.Compare(x.TestTime, y.TestTime));
+                    var batteryDto = batteryList.LastOrDefault(x => x.BarCode == item.Battery.BarCode);
                     if (batteryDto is { })
                     {
                         TimeSpan hoursSpan = item.Battery.TestTime - batteryDto.TestTime;
