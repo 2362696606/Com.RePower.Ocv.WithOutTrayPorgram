@@ -1,0 +1,10 @@
+﻿<uiBase:UiBaseApplication x:Class="Com.RePower.Ocv.Ui.Byd.CB15.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:uiBase="clr-namespace:Com.RePower.Ocv.Ui.UiBase;assembly=Com.RePower.Ocv.Ui.UiBase"
+             xmlns:local="clr-namespace:Com.RePower.Ocv.Ui.Byd.CB15"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</uiBase:UiBaseApplication>
