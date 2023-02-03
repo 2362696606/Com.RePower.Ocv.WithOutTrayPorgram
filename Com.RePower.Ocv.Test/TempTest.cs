@@ -165,6 +165,35 @@ namespace Com.RePower.Ocv.Test
             //tasks.OrderBy(x => x.Time);
             tasks.Sort((x, y) => DateTime.Compare(x.Time, y.Time));
         }
+        [Fact]
+        private void TranslationTest()
+        {
+            //byte[] testByte = new byte[] { 0x2D, 0x20, 0x20, 0x20, 0x30, 0x2E, 0x30, 0x31, 0x45, 0x2B, 0x30, 0x2C, 0x2D, 0x33, 0x2E, 0x32, 0x36, 0x39, 0x31, 0x39, 0x45, 0x2B, 0x30, 0x0D, 0x0A };
+
+            //var value = Encoding.ASCII.GetString(testByte);
+            //string[] values = value.Split(',');
+            //var parseDoubleVal = double.Parse(values[0]);
+            string testValue = @"-0.01E+0";
+            var parseDoubleVal = double.Parse(testValue);
+        }
+
+        //protected virtual double TranslateToDouble(string valueSource)
+        //{
+        //    //var value = (double)Decimal.Parse(Encoding.ASCII.GetString(bytes), System.Globalization.NumberStyles.Float);
+        //    var value = double.Parse(valueSource);
+        //    switch (ResultUnit)
+        //    {
+        //        default:
+        //        case ResultUnit.mΩ:
+        //            value = value * 1000;
+        //            value = Math.Round(value, Digits);
+        //            break;
+        //        case ResultUnit.Ω:
+        //            value = Math.Round(value, Digits);
+        //            break;
+        //    }
+        //    return value;
+        //}
     }
 
 

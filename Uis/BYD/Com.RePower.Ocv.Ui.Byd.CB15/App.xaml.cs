@@ -36,6 +36,7 @@ namespace Com.RePower.Ocv.Ui.Byd.CB15
             builder.RegisterModule<WorkModule>();
             builder.RegisterModule<TrayModule>();
             builder.RegisterModule<SettingManagerModule>();
+            builder.RegisterModule<WmsModule>();
         }
     }
 }

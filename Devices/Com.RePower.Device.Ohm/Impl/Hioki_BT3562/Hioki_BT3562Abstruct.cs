@@ -46,7 +46,7 @@ namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
                     //double parseDoubleVal = (double)decimal.Parse(values[0],
                     //    System.Globalization.NumberStyles.Float) * 1000;
                     //var parseDoubleVal = double.Parse(values[0]) * 1000;
-                    var parseDoubleVal = TranslateToDouble(values[0]);
+                    var parseDoubleVal = TranslateToDouble(values[0].Replace(" ", ""));
                     return OperateResult.CreateSuccessResult(parseDoubleVal);
                 }
             }
