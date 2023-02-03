@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Project.Cp06.Ocv0.DbContext
 {
-    public class OcvTestResultDbContext : Microsoft.EntityFrameworkCore.DbContext
+    public class OcvTestResultDbContext : LocalTestResultDbContext
     {
-        public DbSet<BatteryDto> Batterys { get; set; }
-        public DbSet<NgInfoDto> NgInfos { get; set; }
-        public DbSet<TrayDto> Trays { get; set; }
+        //public DbSet<BatteryDto> Batterys { get; set; }
+        //public DbSet<NgInfoDto> NgInfos { get; set; }
+        //public DbSet<TrayDto> Trays { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string connectStr;
@@ -24,8 +24,6 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.DbContext
             }
             string connectString = connectStr;
             optionsBuilder.UseSqlServer(connectString);
-            //optionsBuilder.UseLazyLoadingProxies();
-            base.OnConfiguring(optionsBuilder);
         }
     }
 }

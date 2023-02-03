@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Decorators
+namespace Com.RePower.Ocv.Project.Byd.CB15.Decorators
 {
     public class PlcDecorator : IPlc
     {

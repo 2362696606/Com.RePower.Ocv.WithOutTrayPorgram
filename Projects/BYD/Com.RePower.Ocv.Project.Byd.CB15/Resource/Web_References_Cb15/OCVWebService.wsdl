@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://tempuri.org/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="ConnectTest">
+        <s:complexType />
+      </s:element>
+      <s:element name="ConnectTestResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ConnectTestResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateOCVStatus">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="EquipNum" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="WorkMode" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Status" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="ErrorMsg" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateOCVStatusResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateOCVStatusResult" type="tns:Status" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Status">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Code" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="getTechnologyInfoByBarCode">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="EquipNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BarCode" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getTechnologyInfoByBarCodeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getTechnologyInfoByBarCodeResult" type="tns:TrayInfoOCV" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="TrayInfoOCV">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="EquipNum" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="trayCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="oprationType" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="oprationVersion" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="temperature" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TrayInfoLstResult" type="tns:ArrayOfTrayInfoResult" />
+          <s:element minOccurs="0" maxOccurs="1" name="Status" type="tns:Status" />
+          <s:element minOccurs="0" maxOccurs="1" name="Operation" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfTrayInfoResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="TrayInfoResult" nillable="true" type="tns:TrayInfoResult" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TrayInfoResult">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Position" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="BatteryCode" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="getTrayTpye">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="EquipNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BarCode" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getTrayTpyeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getTrayTpyeResult" type="tns:TrayTypeOCV" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="TrayTypeOCV">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TrayType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Status" type="tns:Status" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="getOCVTestResultByBarCode">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="EquipNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BarCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="lstBattery" type="tns:ArrayOfBatteryInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfBatteryInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="BatteryInfo" nillable="true" type="tns:BatteryInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="BatteryInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Position" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="BatteryCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Result" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="getOCVTestResultByBarCodeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getOCVTestResultByBarCodeResult" type="tns:Result" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Result">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Code" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Msg" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="RequestOutFeed">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="EquipNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BarCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Status" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RequestOutFeedResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RequestOutFeedResult" type="tns:Result" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="ConnectTestSoapIn">
+    <wsdl:part name="parameters" element="tns:ConnectTest" />
+  </wsdl:message>
+  <wsdl:message name="ConnectTestSoapOut">
+    <wsdl:part name="parameters" element="tns:ConnectTestResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateOCVStatusSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateOCVStatus" />
+  </wsdl:message>
+  <wsdl:message name="UpdateOCVStatusSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateOCVStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="getTechnologyInfoByBarCodeSoapIn">
+    <wsdl:part name="parameters" element="tns:getTechnologyInfoByBarCode" />
+  </wsdl:message>
+  <wsdl:message name="getTechnologyInfoByBarCodeSoapOut">
+    <wsdl:part name="parameters" element="tns:getTechnologyInfoByBarCodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="getTrayTpyeSoapIn">
+    <wsdl:part name="parameters" element="tns:getTrayTpye" />
+  </wsdl:message>
+  <wsdl:message name="getTrayTpyeSoapOut">
+    <wsdl:part name="parameters" element="tns:getTrayTpyeResponse" />
+  </wsdl:message>
+  <wsdl:message name="getOCVTestResultByBarCodeSoapIn">
+    <wsdl:part name="parameters" element="tns:getOCVTestResultByBarCode" />
+  </wsdl:message>
+  <wsdl:message name="getOCVTestResultByBarCodeSoapOut">
+    <wsdl:part name="parameters" element="tns:getOCVTestResultByBarCodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="RequestOutFeedSoapIn">
+    <wsdl:part name="parameters" element="tns:RequestOutFeed" />
+  </wsdl:message>
+  <wsdl:message name="RequestOutFeedSoapOut">
+    <wsdl:part name="parameters" element="tns:RequestOutFeedResponse" />
+  </wsdl:message>
+  <wsdl:portType name="OCVWebServiceSoap">
+    <wsdl:operation name="ConnectTest">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">连接测试</wsdl:documentation>
+      <wsdl:input message="tns:ConnectTestSoapIn" />
+      <wsdl:output message="tns:ConnectTestSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateOCVStatus">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">设置OCV状态</wsdl:documentation>
+      <wsdl:input message="tns:UpdateOCVStatusSoapIn" />
+      <wsdl:output message="tns:UpdateOCVStatusSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getTechnologyInfoByBarCode">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">根据托盘下发电芯信息</wsdl:documentation>
+      <wsdl:input message="tns:getTechnologyInfoByBarCodeSoapIn" />
+      <wsdl:output message="tns:getTechnologyInfoByBarCodeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getTrayTpye">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取托盘类型(1空盘2实盘0未知)</wsdl:documentation>
+      <wsdl:input message="tns:getTrayTpyeSoapIn" />
+      <wsdl:output message="tns:getTrayTpyeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getOCVTestResultByBarCode">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">上传OCV测试结果</wsdl:documentation>
+      <wsdl:input message="tns:getOCVTestResultByBarCodeSoapIn" />
+      <wsdl:output message="tns:getOCVTestResultByBarCodeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RequestOutFeed">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">OCV请求出盘(Status 0正常出盘 1 异常出盘)</wsdl:documentation>
+      <wsdl:input message="tns:RequestOutFeedSoapIn" />
+      <wsdl:output message="tns:RequestOutFeedSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="OCVWebServiceSoap" type="tns:OCVWebServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ConnectTest">
+      <soap:operation soapAction="http://tempuri.org/ConnectTest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateOCVStatus">
+      <soap:operation soapAction="http://tempuri.org/UpdateOCVStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTechnologyInfoByBarCode">
+      <soap:operation soapAction="http://tempuri.org/getTechnologyInfoByBarCode" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTrayTpye">
+      <soap:operation soapAction="http://tempuri.org/getTrayTpye" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getOCVTestResultByBarCode">
+      <soap:operation soapAction="http://tempuri.org/getOCVTestResultByBarCode" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RequestOutFeed">
+      <soap:operation soapAction="http://tempuri.org/RequestOutFeed" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="OCVWebServiceSoap12" type="tns:OCVWebServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ConnectTest">
+      <soap12:operation soapAction="http://tempuri.org/ConnectTest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateOCVStatus">
+      <soap12:operation soapAction="http://tempuri.org/UpdateOCVStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTechnologyInfoByBarCode">
+      <soap12:operation soapAction="http://tempuri.org/getTechnologyInfoByBarCode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTrayTpye">
+      <soap12:operation soapAction="http://tempuri.org/getTrayTpye" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getOCVTestResultByBarCode">
+      <soap12:operation soapAction="http://tempuri.org/getOCVTestResultByBarCode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RequestOutFeed">
+      <soap12:operation soapAction="http://tempuri.org/RequestOutFeed" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="OCVWebService">
+    <wsdl:port name="OCVWebServiceSoap" binding="tns:OCVWebServiceSoap">
+      <soap:address location="http://172.22.20.10:9006/OCVWebService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="OCVWebServiceSoap12" binding="tns:OCVWebServiceSoap12">
+      <soap12:address location="http://172.22.20.10:9006/OCVWebService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

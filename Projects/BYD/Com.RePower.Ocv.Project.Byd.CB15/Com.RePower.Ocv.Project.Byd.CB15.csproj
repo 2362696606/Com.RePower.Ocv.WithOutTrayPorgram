@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,7 +7,33 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Resource\Web_References_Cb15\Reference.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.DMM\Com.RePower.Device.DMM.csproj" />
+    <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.Ohm\Com.RePower.Device.Ohm.csproj" />
+    <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.Plc\Com.RePower.Device.Plc.csproj" />
+    <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.SwitchBoard\Com.RePower.Device.SwitchBoard.csproj" />
+    <ProjectReference Include="..\..\..\Devices\Com.RePower.DeviceBase\Com.RePower.DeviceBase.csproj" />
     <ProjectReference Include="..\..\Com.RePower.Ocv.Project.ProjectBase\Com.RePower.Ocv.Project.ProjectBase.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DbContext\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+    <PackageReference Include="System.ServiceModel.Duplex" Version="4.10.*" />
+    <PackageReference Include="System.ServiceModel.Federation" Version="4.10.*" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.10.*" />
+    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.10.*" />
+    <PackageReference Include="System.ServiceModel.Security" Version="4.10.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resource\Web_References_Cb15\Reference.cs" />
   </ItemGroup>
 
 </Project>

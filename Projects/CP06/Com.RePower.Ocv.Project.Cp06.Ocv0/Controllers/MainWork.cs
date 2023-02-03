@@ -44,12 +44,6 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             MesService = mesService;
             SettingManager = settingManager;
             Mapper = mapper;
-            //using (var settingContext = new OcvSettingDbContext())
-            //{
-            //    var item = settingContext.SettingItems.First(x => x.SettingName == "TestOrder");
-            //    string jStr = item.JsonValue;
-            //    this.TestOrder = JsonConvert.DeserializeObject<List<List<int>>>(jStr)??new List<List<int>>();
-            //}
         }
 
         public DevicesController DevicesController { get; }

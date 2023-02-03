@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Com.RePower.Ocv.Ui.Byd.CB15.ViewModels;
+using Com.RePower.WpfBase;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,16 +15,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Com.RePower.Ocv.Ui.Byd.CB15
+namespace Com.RePower.Ocv.Ui.Byd.CB15.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// CraftView.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class CraftView : UserControl
     {
-        public MainWindow()
+        public CraftView()
         {
             InitializeComponent();
+            this.DataContext = IocHelper.Default.GetService<CraftViewModel>();
         }
     }
 }

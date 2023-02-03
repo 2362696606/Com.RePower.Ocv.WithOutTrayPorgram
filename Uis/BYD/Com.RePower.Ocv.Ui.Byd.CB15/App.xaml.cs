@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Com.RePower.Ocv.Model.DataBaseContext;
 using Com.RePower.Ocv.Model.Mapper;
+using Com.RePower.Ocv.Project.Byd.CB15.Modules;
 using Com.RePower.Ocv.Ui.UiBase;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -27,7 +28,14 @@ namespace Com.RePower.Ocv.Ui.Byd.CB15
 
         protected override void IocRegister(ContainerBuilder builder)
         {
-            
+            builder.RegisterModule<DevicesContorllerModules>();
+            builder.RegisterModule<DmmModule>();
+            builder.RegisterModule<OhmModule>();
+            builder.RegisterModule<PlcModule>();
+            builder.RegisterModule<SwitchBoardModule>();
+            builder.RegisterModule<WorkModule>();
+            builder.RegisterModule<TrayModule>();
+            builder.RegisterModule<SettingManagerModule>();
         }
     }
 }

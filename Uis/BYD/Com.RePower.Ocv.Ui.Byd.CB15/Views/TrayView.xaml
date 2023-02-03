@@ -1,0 +1,67 @@
+﻿<UserControl
+    x:Class="Com.RePower.Ocv.Ui.Byd.CB15.Views.TrayView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Com.RePower.Ocv.Ui.Byd.CB15.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uiHelper="clr-namespace:Com.RePower.Ocv.Ui.Byd.CB15.UiHelper"
+    xmlns:valueConvert="clr-namespace:Com.RePower.Ocv.Ui.Byd.CB15.ValueConverter"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <valueConvert:BoolToVisibility x:Key="BoolToVisibility" />
+        <uiHelper:BindingProxy x:Key="proxy" Data="{Binding}" />
+    </UserControl.Resources>
+    <materialDesign:Card Margin="16" Padding="30">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBox
+                materialDesign:HintAssist.Hint="托盘条码"
+                IsReadOnly="True"
+                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                Text="{Binding Tray.TrayCode}" />
+            <DataGrid
+                Grid.Row="1"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                IsReadOnly="True"
+                ItemsSource="{Binding Tray.NgInfos}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Battery.Position}" Header="位置" />
+                    <DataGridTextColumn Binding="{Binding Battery.BarCode}" Header="条码" />
+                    <DataGridTextColumn
+                        Binding="{Binding Battery.VolValue}"
+                        Header="电压"
+                        Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                    <DataGridTextColumn
+                        Binding="{Binding Battery.Res}"
+                        Header="内阻"
+                        Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestRes, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                    <DataGridTextColumn
+                        Binding="{Binding Battery.NVolValue}"
+                        Header="负极壳体电压"
+                        Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestNVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                    <DataGridTextColumn
+                        Binding="{Binding Battery.KValue1}"
+                        Header="K01"
+                        Visibility="{Binding Data.SettingManager.CurrentTestOption.VerifyKValue, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                    <DataGridTextColumn
+                        Binding="{Binding Battery.KValue2}"
+                        Header="K12"
+                        Visibility="{Binding Data.SettingManager.CurrentTestOption.VerifyKValue, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                    <DataGridTextColumn
+                        Binding="{Binding Battery.KValue3}"
+                        Header="K23"
+                        Visibility="{Binding Data.SettingManager.CurrentTestOption.VerifyKValue, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                    <DataGridTextColumn Binding="{Binding NgDescription}" Header="Ng描述" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </materialDesign:Card>
+</UserControl>
