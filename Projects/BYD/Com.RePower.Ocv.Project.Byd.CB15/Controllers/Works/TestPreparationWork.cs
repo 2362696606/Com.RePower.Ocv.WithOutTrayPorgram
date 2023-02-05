@@ -16,6 +16,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
         /// <returns></returns>
         private OperateResult TestPreparation()
         {
+            _retestCount = 0;
+            _msaCount = 1;
+            IsMsaTest = false;
+
             if (!DevicesController.Plc.IsConnected)
             {
                 LogHelper.UiLog.Info("连接plc");

@@ -692,7 +692,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
         }
 
         /// <summary>
-        /// 保存到本地数据库
+        /// 上传结果到mes
         /// </summary>
         /// <returns></returns>
         private OperateResult UploadTestResultToMes()
@@ -780,7 +780,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 {
                     sendValue = SettingManager.CurrentTestOption?.NVolNgChannel ?? 2;
                 }
-                else if (ngInfo.HasNgType(NgTypeEnum.K1过低 | NgTypeEnum.K1过高 | NgTypeEnum.K2过低 | NgTypeEnum.K2过高 | NgTypeEnum.K3过低 | NgTypeEnum.K3过高))
+                else if (ngInfo.HasNgType(NgTypeEnum.K1过低 | NgTypeEnum.K1过高 | NgTypeEnum.K2过低 | NgTypeEnum.K2过高 | NgTypeEnum.K3过低 | NgTypeEnum.K3过高 | NgTypeEnum.K值计算失败))
                 {
                     sendValue = SettingManager.CurrentTestOption?.KValueNgChannel ?? 2;
                 }

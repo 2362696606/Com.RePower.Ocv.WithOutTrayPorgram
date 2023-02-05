@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DbContext\**" />
+    <EmbeddedResource Remove="DbContext\**" />
+    <None Remove="DbContext\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Resource\Web_References_Cb15\Reference.cs" />
   </ItemGroup>
 
@@ -17,10 +23,6 @@
     <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.SwitchBoard\Com.RePower.Device.SwitchBoard.csproj" />
     <ProjectReference Include="..\..\..\Devices\Com.RePower.DeviceBase\Com.RePower.DeviceBase.csproj" />
     <ProjectReference Include="..\..\Com.RePower.Ocv.Project.ProjectBase\Com.RePower.Ocv.Project.ProjectBase.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DbContext\" />
   </ItemGroup>
 
   <ItemGroup>

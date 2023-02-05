@@ -37,6 +37,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
         }
         private OperateResult TestOneBattery(NgInfo ngInfo)
         {
+            if(ngInfo.Battery.IsTested && !ngInfo.IsNg)
+            {
+                return OperateResult.CreateSuccessResult();
+            }
             LogHelper.UiLog.Info($"开始测试电池{ngInfo.Battery.Position}");
             int boardIndex = ngInfo.Battery.Position > 20 ? 2 : 1;
             int channelIndex = ngInfo.Battery.Position > 20 ? ngInfo.Battery.Position - 20 : ngInfo.Battery.Position;
@@ -67,6 +71,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                     return nvolResult ?? OperateResult.CreateFailedResult($"读取电池{ngInfo.Battery.Position}负极壳体电压失败,因为万用表实例为null");
                 ngInfo.Battery.NVolValue = nvolResult.Content;
             }
+            ngInfo.Battery.IsTested = true;
             return OperateResult.CreateSuccessResult();
         }
         private OperateResult SwitchChannel(int boardIndex, int channelIndex, bool isTestNvol = false)

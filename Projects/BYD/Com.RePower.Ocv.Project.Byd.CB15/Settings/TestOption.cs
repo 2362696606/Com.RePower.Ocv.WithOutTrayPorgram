@@ -37,6 +37,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Setting
         /// </summary>
         public int RetestTimes { get; set; }
         /// <summary>
+        /// Msa测试次数
+        /// </summary>
+        public int MsaTimes { get; set; }
+        /// <summary>
         /// 托盘电池数量
         /// </summary>
         public int BatteryCount { get; set; }

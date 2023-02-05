@@ -9,8 +9,14 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
 {
     public partial class MainWork
     {
-        private OperateResult Retest()
+        private OperateResult SendPlcNgInfo()
         {
+            if (Tray.NgInfos.Any(x => x.IsNg)) 
+            {
+                var sendResult = DevicesController.Plc.Write(SettingManager.CurrentPlcAddressCache["测试结果"], (short)3);
+                if (sendResult.IsFailed)
+                    return sendResult; 
+            }
             return OperateResult.CreateSuccessResult();
         }
     }
