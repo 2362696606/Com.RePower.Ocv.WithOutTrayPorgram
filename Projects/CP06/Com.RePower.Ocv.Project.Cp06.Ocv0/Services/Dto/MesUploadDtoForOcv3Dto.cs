@@ -25,6 +25,10 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Dto
         /// </summary>
         public string NG_REASON { get; set; } = string.Empty;
         /// <summary>
+        /// 
+        /// </summary>
+        public string OCV3_DATE { get; set; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        /// <summary>
         /// OCV3    
         /// </summary>
         public string OCV3 { get; set; } = string.Empty;

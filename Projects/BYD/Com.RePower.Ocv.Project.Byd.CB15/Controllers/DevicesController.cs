@@ -1,7 +1,9 @@
-﻿using Com.RePower.DeviceBase.DMM;
+﻿using Autofac.Features.AttributeFilters;
+using Com.RePower.DeviceBase.DMM;
 using Com.RePower.DeviceBase.Ohm;
 using Com.RePower.DeviceBase.Plc;
 using Com.RePower.DeviceBase.SwitchBoard;
+using Com.RePower.DeviceBase.TemperatureSensor;
 using Com.RePower.Ocv.Model.DataBaseContext;
 using Newtonsoft.Json.Linq;
 using System;
@@ -17,38 +19,21 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
         private IDMM? _dmm;
         private IOhm? _ohm;
         private ISwitchBoard? _switchBoard;
+        private ITemperatureSensor? _ptemperatureSensor;
+        private ITemperatureSensor? _ntemperatureSensor;
         public DevicesController(IPlc localPlc
-            , IDMM? dMM
-            , IOhm? ohm
-            , ISwitchBoard? switchBoard)
+            , IDMM? dMM = null
+            , IOhm? ohm = null
+            , ISwitchBoard? switchBoard = null
+            , [KeyFilter("PTempSensor")]ITemperatureSensor? ptemperatureSensor = null
+            , [KeyFilter("NTempSensor")]ITemperatureSensor? ntemperatureSensor = null)
         {
             Plc = localPlc;
             _dmm = dMM;
             _ohm = ohm;
             _switchBoard = switchBoard;
-            //this.PlcAddressCache = new Dictionary<string, string>();
-            //using (var settingContext = new OcvSettingDbContext())
-            //{
-            //    var localPlcAddressCacheSettingObj = settingContext.SettingItems.First(x => x.SettingName == "Plc缓存");
-            //    if (localPlcAddressCacheSettingObj != null)
-            //    {
-            //        var localPlcAddressCacheSettingJson = localPlcAddressCacheSettingObj.JsonValue;
-            //        if (!string.IsNullOrEmpty(localPlcAddressCacheSettingJson))
-            //        {
-            //            JArray localPlcAddressCacheSettingArray = JArray.Parse(localPlcAddressCacheSettingJson);
-            //            foreach (var item in localPlcAddressCacheSettingArray)
-            //            {
-            //                var name = item.Value<string>("Name");
-            //                var address = item.Value<string>("Address");
-            //                if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(address))
-            //                {
-            //                    PlcAddressCache.Add(name, address);
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            //this.LogisticsPlcAddressCache = new Dictionary<string, string>();
+            _ptemperatureSensor = ptemperatureSensor;
+            _ntemperatureSensor = ntemperatureSensor;
         }
 
         public IPlc Plc { get; }
@@ -89,6 +74,14 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
             }
         }
 
+        public ITemperatureSensor? PTemperatureSensor
+        {
+            get { return _ptemperatureSensor; }
+        }
+        public ITemperatureSensor? NTemperatureSensor
+        {
+            get { return _ntemperatureSensor; }
+        }
 
     }
 }

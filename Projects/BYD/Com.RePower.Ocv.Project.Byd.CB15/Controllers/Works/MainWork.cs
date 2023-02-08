@@ -27,6 +27,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
         /// </summary>
         private int _msaCount = 1;
         /// <summary>
+        /// 上一次测试为msa测试
+        /// </summary>
+        private bool _lastTimesIsMsa;
+        /// <summary>
         /// 复测计数
         /// </summary>
         private int _retestCount = 0;
@@ -82,6 +86,11 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 if (waitPlcRequestTestResult.IsFailed)
                     return waitPlcRequestTestResult;
                 DoPauseOrStop();
+                //测试温度
+                var testTempResult = TestTemp();
+                if (testTempResult.IsFailed)
+                    return testTempResult;
+                DoPauseOrStop();
                 //测试电池
                 var testBatteriesResult = TestBatteries();
                 if (testBatteriesResult.IsFailed)
@@ -92,9 +101,47 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 if(validateNgInfoResult.IsFailed)
                     return validateNgInfoResult;
                 DoPauseOrStop();
+                if(IsMsaTest)
+                {
+                    _lastTimesIsMsa = true;
+                    var saveMsaDataResult = SaveMsaData(1);
+                    if(saveMsaDataResult.IsFailed)
+                        return saveMsaDataResult;
+                    DoPauseOrStop();
+                    while (_msaCount<(SettingManager.CurrentTestOption?.MsaTimes??int.MinValue))
+                    {
+                        //等待plc复测信号
+                        var waitPlcRequestRetestResult = WaitPlcRequestRetest();
+                        if (waitPlcRequestRetestResult.IsFailed)
+                            return waitPlcRequestRetestResult;
+                        DoPauseOrStop();
+                        //测试温度
+                        var testTempResult1 = TestTemp();
+                        if (testTempResult1.IsFailed)
+                            return testTempResult1;
+                        DoPauseOrStop();
+                        //测试电池
+                        var testBatteriesResult1 = TestBatteries();
+                        if (testBatteriesResult1.IsFailed)
+                            return testBatteriesResult1;
+                        DoPauseOrStop();
+                        //验证Ng情况
+                        var validateNgInfoResult1 = ValidateNgInfo();
+                        if (validateNgInfoResult1.IsFailed)
+                            return validateNgInfoResult1;
+                        DoPauseOrStop();
+                        var saveMsaDataResult1 = SaveMsaData(_msaCount + 1);
+                        if (saveMsaDataResult.IsFailed)
+                            return saveMsaDataResult;
+                        DoPauseOrStop();
+                        _msaCount++;
+                    }
+                    PauseWorkAsync();
+                }
                 //判断是否需要复测
                 while(JudgeRetest())
                 {
+                    DoPauseOrStop();
                     //等待plc复测信号
                     var waitPlcRequestRetestResult = WaitPlcRequestRetest();
                     if (waitPlcRequestRetestResult.IsFailed)

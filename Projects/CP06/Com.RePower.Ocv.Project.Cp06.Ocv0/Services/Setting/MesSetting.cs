@@ -14,6 +14,10 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Setting
         public string SfcTrayOnceUnbindUrl { get; set; } = string.Empty;
         public string SfcValidateDLcapacityAfterUrl { get; set; } = string.Empty;
         public string SaveDataAutoUrl { get; set; } = string.Empty;
+        /// <summary>
+        /// 上传设备状态
+        /// </summary>
+        public string UploadMachineStatusUrl { get; set; } = "http://10.10.1.240:8578/mes/third/thirdPartyAPI!doUploadMachineStatus_Change.action";
 
         /// <summary>
         /// 站点

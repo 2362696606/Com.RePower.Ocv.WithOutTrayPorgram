@@ -21,7 +21,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
         public string DeviceName { get; set; } = "UnnamedDevice";
 
         public int ReadDelay { get; set ; }
-        public Func<byte[]>? RecoveryMethod { get ; set; }
+        public Func<byte[], byte[]>? RecoveryMethod { get ; set; }
 
         public OperateResult Connect(string ipAddress, int port)
         {
@@ -63,7 +63,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
             Thread.Sleep(ReadDelay);
             if (isNeedRecovery)
             {
-                var returnResult = RecoveryMethod?.Invoke() ?? cmd;
+                var returnResult = RecoveryMethod?.Invoke(cmd) ?? cmd;
                 return OperateResult.CreateSuccessResult(returnResult);
             }
             else

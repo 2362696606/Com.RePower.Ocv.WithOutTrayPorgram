@@ -1,4 +1,6 @@
 ﻿using Com.RePower.DeviceBase;
+using Com.RePower.DeviceBase.BaseDevice;
+using Com.RePower.DeviceBase.DMM;
 using Com.RePower.WpfBase;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
 {
-    public abstract class Keysight_34461AAbstract : DMMBase
+    public abstract class Keysight_34461AAbstract : DMMBase,IDMMNet
     {
         /// <summary>
         /// 当前测试模式
@@ -54,6 +56,8 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
         /// 保留小数位
         /// </summary>
         public int Digits { get; set; } = 3;
+        public abstract string IpAddress { get; set; }
+        public abstract int Port { get; set; }
 
         protected virtual OperateResult<double> ReadValue(byte[] cmd)
         {
@@ -180,14 +184,7 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
             return ReadValue(command);
         }
 
-        public OperateResult Connect(string ipAddress, int port)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<OperateResult> ConnectAsync(string ipAddress, int port)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract OperateResult Connect(string ipAddress, int port);
+        public abstract Task<OperateResult> ConnectAsync(string ipAddress, int port);
     }
 }

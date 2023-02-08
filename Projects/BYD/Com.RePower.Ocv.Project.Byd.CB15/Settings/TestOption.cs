@@ -25,6 +25,14 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Setting
         /// </summary>
         public bool IsTestNVol { get; set; }
         /// <summary>
+        /// 是否测试正极温度
+        /// </summary>
+        public bool IsTestPTemp { get; set; }
+        /// <summary>
+        /// 是否测试负极温度
+        /// </summary>
+        public bool IsTestNTemp { get; set; }
+        /// <summary>
         /// 验证k值
         /// </summary>
         public bool VerifyKValue { get; set; }

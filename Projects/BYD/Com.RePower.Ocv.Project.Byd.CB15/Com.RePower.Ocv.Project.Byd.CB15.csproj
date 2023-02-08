@@ -21,11 +21,14 @@
     <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.Ohm\Com.RePower.Device.Ohm.csproj" />
     <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.Plc\Com.RePower.Device.Plc.csproj" />
     <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.SwitchBoard\Com.RePower.Device.SwitchBoard.csproj" />
+    <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.TemperatureSensor\Com.RePower.Device.TemperatureSensor.csproj" />
     <ProjectReference Include="..\..\..\Devices\Com.RePower.DeviceBase\Com.RePower.DeviceBase.csproj" />
     <ProjectReference Include="..\..\Com.RePower.Ocv.Project.ProjectBase\Com.RePower.Ocv.Project.ProjectBase.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="30.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.2" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
     <PackageReference Include="System.ServiceModel.Duplex" Version="4.10.*" />
     <PackageReference Include="System.ServiceModel.Federation" Version="4.10.*" />

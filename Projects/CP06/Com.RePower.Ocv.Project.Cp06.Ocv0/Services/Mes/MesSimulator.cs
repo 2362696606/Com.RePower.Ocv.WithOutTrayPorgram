@@ -32,9 +32,14 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             throw new NotImplementedException();
         }
 
-        public OperateResult<string> UploadingDeviceStatus()
+        public OperateResult<string> UploadingDeviceStatus(int status, bool isShutdown, string message = "")
         {
-            throw new NotImplementedException();
+            MesBatteryResultReturnDto mesBatteryResultReturnDto = new MesBatteryResultReturnDto
+            {
+                Status = true,
+            };
+            string str = JsonConvert.SerializeObject(mesBatteryResultReturnDto);
+            return OperateResult.CreateSuccessResult<string>(str);
         }
 
         public OperateResult<string> UploadResult()

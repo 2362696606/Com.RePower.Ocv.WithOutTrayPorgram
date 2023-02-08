@@ -16,7 +16,7 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
             dev!.RecoveryMethod = RecoveryMethod;
         }
 
-        private byte[] RecoveryMethod()
+        private byte[] RecoveryMethod(byte[] cmd)
         {
             var random = new Random();
             var randNum = random.NextDouble() * (4.0 - 2.0) + 2.0;

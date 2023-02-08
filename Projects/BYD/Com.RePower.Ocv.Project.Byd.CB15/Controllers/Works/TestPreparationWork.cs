@@ -17,9 +17,12 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
         private OperateResult TestPreparation()
         {
             _retestCount = 0;
-            _msaCount = 1;
-            IsMsaTest = false;
-
+            if (_lastTimesIsMsa)
+            {
+                _msaCount = 1;
+                IsMsaTest = false;
+            }
+            _lastTimesIsMsa = false;
             if (!DevicesController.Plc.IsConnected)
             {
                 LogHelper.UiLog.Info("连接plc");
@@ -66,6 +69,32 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 if (result.IsSuccess)
                 {
                     LogHelper.UiLog.Info("成功连接切换板");
+                }
+                else
+                {
+                    return result;
+                }
+            }
+            if(!(DevicesController.PTemperatureSensor?.IsConnected??true))
+            {
+                LogHelper.UiLog.Info("连接MTVS1");
+                var result = DevicesController.PTemperatureSensor.Connect();
+                if(result.IsSuccess)
+                {
+                    LogHelper.UiLog.Info("成功连接MTVS1");
+                }
+                else
+                {
+                    return result;
+                }
+            }
+            if (!(DevicesController.NTemperatureSensor?.IsConnected ?? true))
+            {
+                LogHelper.UiLog.Info("连接MTVS2");
+                var result = DevicesController.NTemperatureSensor.Connect();
+                if (result.IsSuccess)
+                {
+                    LogHelper.UiLog.Info("成功连接MTVS2");
                 }
                 else
                 {

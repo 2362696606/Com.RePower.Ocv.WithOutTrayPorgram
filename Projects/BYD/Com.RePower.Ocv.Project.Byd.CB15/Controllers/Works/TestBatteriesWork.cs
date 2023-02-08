@@ -37,7 +37,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
         }
         private OperateResult TestOneBattery(NgInfo ngInfo)
         {
-            if(ngInfo.Battery.IsTested && !ngInfo.IsNg)
+            if (ngInfo.Battery.IsTested && !ngInfo.IsNg && !_isMsaTest && !_lastTimesIsMsa) 
             {
                 return OperateResult.CreateSuccessResult();
             }

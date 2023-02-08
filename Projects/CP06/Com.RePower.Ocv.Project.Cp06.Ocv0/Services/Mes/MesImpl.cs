@@ -74,9 +74,18 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             throw new NotImplementedException();
         }
 
-        public OperateResult<string> UploadingDeviceStatus()
+        public OperateResult<string> UploadingDeviceStatus(int status,bool isShutdown,string message = "")
         {
-            throw new NotImplementedException();
+            MesDeviceStatusDto dto = new MesDeviceStatusDto()
+            {
+                Site = SettingManager.CurrentMesSetting?.SITE ?? "25",
+                MachineNo = SettingManager.CurrentMesSetting?.RESOURCE_NO ?? string.Empty,
+                Status = status.ToString().PadLeft(2, '0'),
+                IsShutdown = isShutdown ? "Y" : "N",
+                Message = message,
+                Operator = SettingManager.CurrentMesSetting?.DC_USER ?? "MACHINE_JCD",
+            };
+            return Post(dto, SettingManager.CurrentMesSetting?.UploadMachineStatusUrl ?? "http://10.10.1.240:8578/mes/third/thirdPartyAPI!doUploadMachineStatus_Change.action", "上传设备状态至mes");
         }
 
         public OperateResult<string> UploadResult()
@@ -303,7 +312,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
                 OPERATION_NO = string.Empty,
                 TRAY_NO = Tray.TrayCode,
                 RESOURCE_NO = MesSetting?.RESOURCE_NO ?? string.Empty,
-                SHIFTS = DateTime.Now.Hour >= 8 && DateTime.Now.Hour < 20 ? "白班" : "夜班",
+                SHIFTS = ngInfo.Battery.TestTime.Hour >= 8 && ngInfo.Battery.TestTime.Hour < 20 ? "白班" : "夜班",
                 IS_FIRST_INSPECTION = "Y",
                 DC_DATE = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                 DC_USER = MesSetting?.DC_USER ?? string.Empty,
@@ -313,6 +322,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
                 SFC_NO = ngInfo.Battery.BarCode,
                 DC_RESULT = ngInfo.IsNg ? "NG" : "OK",
                 NG_REASON = ngInfo.NgDescription ?? string.Empty,
+                OCV3_DATE = ngInfo.Battery.TestTime.ToString("yyyy-MM-dd HH:mm:ss"),
 
                 OCV3 = ngInfo.Battery.VolValue?.ToString() ?? string.Empty,
                 OCV3_MIN_VALUE = SettingManager.CurrentBatteryStandard?.MinVol.ToString() ?? string.Empty,

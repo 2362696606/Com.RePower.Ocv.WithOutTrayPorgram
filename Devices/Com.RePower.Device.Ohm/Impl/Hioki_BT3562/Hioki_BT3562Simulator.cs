@@ -16,7 +16,7 @@ namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
             dev!.RecoveryMethod = RecoveryMethod;
         }
 
-        private byte[] RecoveryMethod()
+        private byte[] RecoveryMethod(byte[] cmd)
         {
 
             var random = new Random();

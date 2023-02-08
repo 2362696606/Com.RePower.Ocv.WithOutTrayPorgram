@@ -42,6 +42,9 @@ namespace Com.RePower.Ocv.Ui.UiBase
                 var localDb = IocHelper.Default.GetService<LocalTestResultDbContext>();
                 localDb?.Database.EnsureCreated();
                 #endregion
+                #region 初始化完成后调用
+                OnInitComplate(); 
+                #endregion
                 #region 初始化UiLog
                 LogHelper.RegisterUiLogEvent(new System.Action<object?, log4net.Core.LoggingEvent>((sender, e) =>
                 {
@@ -68,6 +71,8 @@ namespace Com.RePower.Ocv.Ui.UiBase
 
         protected abstract void AddService(ServiceCollection serviceCollection);
         protected abstract void IocRegister(ContainerBuilder builder);
+        protected virtual void OnInitComplate()
+        { }
 
         private void BaseRegister(ContainerBuilder builder)
         {

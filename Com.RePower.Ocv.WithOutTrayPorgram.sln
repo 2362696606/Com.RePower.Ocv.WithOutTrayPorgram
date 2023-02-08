@@ -51,11 +51,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.RePower.Ocv.Ui.Cp06.Ocv
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BYD", "BYD", "{E032F847-DBA3-4620-8676-6D8D8D3B518F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.RePower.Ocv.Project.Byd.CB15", "Projects\BYD\Com.RePower.Ocv.Project.Byd.CB15\Com.RePower.Ocv.Project.Byd.CB15.csproj", "{21A9040C-9692-408F-B742-38A2475FA95A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.RePower.Ocv.Project.Byd.CB15", "Projects\BYD\Com.RePower.Ocv.Project.Byd.CB15\Com.RePower.Ocv.Project.Byd.CB15.csproj", "{21A9040C-9692-408F-B742-38A2475FA95A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BYD", "BYD", "{087092A8-5FB7-454C-B68E-E135D29446CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.RePower.Ocv.Ui.Byd.CB15", "Uis\BYD\Com.RePower.Ocv.Ui.Byd.CB15\Com.RePower.Ocv.Ui.Byd.CB15.csproj", "{CEE65337-A74B-4A20-8915-1D4E0F0FF14F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.RePower.Ocv.Ui.Byd.CB15", "Uis\BYD\Com.RePower.Ocv.Ui.Byd.CB15\Com.RePower.Ocv.Ui.Byd.CB15.csproj", "{CEE65337-A74B-4A20-8915-1D4E0F0FF14F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.RePower.Device.TemperatureSensor", "Devices\Com.RePower.Device.TemperatureSensor\Com.RePower.Device.TemperatureSensor.csproj", "{757274AA-9B5A-4752-BBBB-C4340F00C34B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -143,6 +145,10 @@ Global
 		{CEE65337-A74B-4A20-8915-1D4E0F0FF14F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEE65337-A74B-4A20-8915-1D4E0F0FF14F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEE65337-A74B-4A20-8915-1D4E0F0FF14F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{757274AA-9B5A-4752-BBBB-C4340F00C34B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{757274AA-9B5A-4752-BBBB-C4340F00C34B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{757274AA-9B5A-4752-BBBB-C4340F00C34B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{757274AA-9B5A-4752-BBBB-C4340F00C34B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -169,6 +175,7 @@ Global
 		{21A9040C-9692-408F-B742-38A2475FA95A} = {E032F847-DBA3-4620-8676-6D8D8D3B518F}
 		{087092A8-5FB7-454C-B68E-E135D29446CD} = {1E60EEA3-AF3D-4B3C-9D10-74CF33BFB79D}
 		{CEE65337-A74B-4A20-8915-1D4E0F0FF14F} = {087092A8-5FB7-454C-B68E-E135D29446CD}
+		{757274AA-9B5A-4752-BBBB-C4340F00C34B} = {D2344D39-50A9-4723-9B04-6B7E052FCA9B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {88805ACA-2D00-4E18-A293-E570B08FCE76}

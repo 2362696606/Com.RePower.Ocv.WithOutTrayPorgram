@@ -24,19 +24,19 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Modules
                 switch (ocvType)
                 {
                     case OcvTypeEnmu.OCV1:
-                        ohmSettingObj = settingContext.SettingItems.First(x => x.SettingName == "OhmSetting_Ocv1");
+                        ohmSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "OhmSetting_Ocv1");
                         break;
                     case OcvTypeEnmu.OCV2:
-                        ohmSettingObj = settingContext.SettingItems.First(x => x.SettingName == "OhmSetting_Ocv2");
+                        ohmSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "OhmSetting_Ocv2");
                         break;
                     case OcvTypeEnmu.OCV3:
-                        ohmSettingObj = settingContext.SettingItems.First(x => x.SettingName == "OhmSetting_Ocv3");
+                        ohmSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "OhmSetting_Ocv3");
                         break;
                     case OcvTypeEnmu.OCV4:
-                        ohmSettingObj = settingContext.SettingItems.First(x => x.SettingName == "OhmSetting_Ocv4");
+                        ohmSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "OhmSetting_Ocv4");
                         break;
                 }
-                if (ohmSettingObj != null)
+                if (ohmSettingObj is { })
                 {
                     var ohmSettingJson = ohmSettingObj.JsonValue;
                     if (!string.IsNullOrEmpty(ohmSettingJson))

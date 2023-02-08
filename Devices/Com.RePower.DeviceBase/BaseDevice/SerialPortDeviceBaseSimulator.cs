@@ -11,7 +11,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
     {
         private bool disposedValue;
 
-        public Func<byte[]>? RecoveryMethod { get; set; }
+        public Func<byte[], byte[]>? RecoveryMethod { get; set; }
 
         public string PortName { get; set; } = "COM1";
 
@@ -63,7 +63,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
             Thread.Sleep(ReadDelay);
             if (isNeedRecovery)
             {
-                var returnResult = RecoveryMethod?.Invoke() ?? cmd;
+                var returnResult = RecoveryMethod?.Invoke(cmd) ?? cmd;
                 return OperateResult.CreateSuccessResult(returnResult);
             }
             else

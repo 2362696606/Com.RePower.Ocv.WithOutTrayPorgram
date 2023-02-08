@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
 {
-    public class Keysight_34461AImpl : Keysight_34461AAbstract,IDMMNet
+    public class Keysight_34461AImpl : Keysight_34461AAbstract
     {
         protected INetDeviceBase netDeviceBase;
         public Keysight_34461AImpl()
@@ -33,12 +33,12 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
             set { netDeviceBase.ReadDelay = value;}
         }
 
-        public string IpAddress
+        public override string IpAddress
         {
             get { return netDeviceBase.IpAddress;}
             set { netDeviceBase.IpAddress = value;}
         }
-        public int Port
+        public override int Port
         {
             get { return netDeviceBase.Port;}
             set { netDeviceBase.Port = value;}
@@ -47,6 +47,16 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
         public override OperateResult Connect()
         {
             return netDeviceBase.Connect();
+        }
+
+        public override OperateResult Connect(string ipAddress, int port)
+        {
+            return netDeviceBase.Connect(ipAddress, port);
+        }
+
+        public override async Task<OperateResult> ConnectAsync(string ipAddress, int port)
+        {
+            return await netDeviceBase.ConnectAsync(ipAddress, port);
         }
 
         public override OperateResult DisConnect()

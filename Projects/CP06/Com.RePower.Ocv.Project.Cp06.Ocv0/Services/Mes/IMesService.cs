@@ -45,7 +45,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
         /// 设备状态上传
         /// </summary>
         /// <returns></returns>
-        public OperateResult<string> UploadingDeviceStatus();
+        public OperateResult<string> UploadingDeviceStatus(int status, bool isShutdown, string message = "");
         /// <summary>
         /// 用户上岗认证
         /// </summary>
