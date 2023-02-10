@@ -1,0 +1,16 @@
+﻿<Window
+    x:Class="Com.RePower.Ocv.Ui.Byd.CB15.Views.MainSettingView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Com.RePower.Ocv.Ui.Byd.CB15.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uiBaseViews="clr-namespace:Com.RePower.Ocv.Ui.UiBase.Views;assembly=Com.RePower.Ocv.Ui.UiBase"
+    Title="MainSettingView"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+    <Grid>
+        <uiBaseViews:SettingView SettingObj="{Binding SettingManager.CurrentTestOption}" />
+    </Grid>
+</Window>

@@ -24,12 +24,14 @@ namespace Com.RePower.Ocv.Ui.Byd.CB15
     /// </summary>
     public partial class App : UiBaseApplication
     {
+        public SettingManager SettingManager { get; set; } = new SettingManager();
         protected override void AddService(ServiceCollection serviceCollection)
         {
             serviceCollection.AddAutoMapper(typeof(OrganizationProfile),typeof(MesDtoProfile));
             //serviceCollection.AddHttpClient();
             serviceCollection.AddDbContext<LocalTestResultDbContext>();
-            serviceCollection.AddDbContext<MesDbContext>(option=>option.UseSqlServer(connectionString: @"Data Source=192.168.1.1;Initial Catalog=CB15_OCV;User Id=sa;Password=0528;TrustServerCertificate=true;"));
+            serviceCollection.AddDbContext<MesDbContext>(option => option.UseSqlServer(connectionString: SettingManager.CurrentMesSetting?.DbConnectString 
+                ?? "Data Source=172.22.65.199;Initial Catalog=CB15_OCV;User Id=repower;Password=Admin@123;TrustServerCertificate=true;"));
         }
 
         protected override void IocRegister(ContainerBuilder builder)

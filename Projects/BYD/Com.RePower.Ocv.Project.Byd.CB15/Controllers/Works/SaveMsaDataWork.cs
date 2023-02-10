@@ -22,24 +22,24 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
         /// <returns></returns>
         private OperateResult SaveMsaData(int msaTimes)
         {
-            string dir = @$"./正常数据文件夹_msa/{Tray.TrayCode}";
+            string dir = @$"./数据文件夹_msa/{Tray.TrayCode}";
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
             }
-            string path = @$"./正常数据文件夹_msa/{Tray.TrayCode}/{Tray.TrayCode}_{msaTimes}.csv";
+            string path = @$"./数据文件夹_msa/{Tray.TrayCode}/{Tray.TrayCode}_{msaTimes}.csv";
             switch (SettingManager.CurrentOcvType)
             {
                 case Enums.OcvTypeEnmu.OCV1:
-                    return SaveMsaDateToCsv<Ocv1InfoDto>(path);
+                    return SaveTestDateToCsv<Ocv1InfoDto>(path);
                 case Enums.OcvTypeEnmu.OCV2:
-                    return SaveMsaDateToCsv<Ocv2InfoDto>(path);
+                    return SaveTestDateToCsv<Ocv2InfoDto>(path);
                 case Enums.OcvTypeEnmu.OCV3:
-                    return SaveMsaDateToCsv<Ocv3InfoDto>(path);
+                    return SaveTestDateToCsv<Ocv3InfoDto>(path);
                 case Enums.OcvTypeEnmu.OCV4:
-                    return SaveMsaDateToCsv<Ocv4InfoDto>(path);
+                    return SaveTestDateToCsv<Ocv4InfoDto>(path);
                 default:
-                    return SaveMsaDateToCsv<Ocv1InfoDto>(path);
+                    return SaveTestDateToCsv<Ocv1InfoDto>(path);
             }
         }
 
@@ -68,7 +68,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
             }
         }
 
-        private OperateResult SaveMsaDateToCsv<T>(string path)
+        private OperateResult SaveTestDateToCsv<T>(string path)
         {
             List<T> dtos = Mapper.Map<List<T>>(Tray.NgInfos);
             try

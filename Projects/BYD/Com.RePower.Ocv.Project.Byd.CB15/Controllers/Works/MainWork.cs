@@ -168,15 +168,22 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 if (sendAxisCoordinatesResult.IsFailed)
                     return sendPlcTestComplateResult;
                 DoPauseOrStop();
+                //保存到本地cvs文件
+                var saveToCvsResult = SaveTestResultToCsv();
+                if (saveToCvsResult.IsFailed)
+                    return saveToCvsResult;
+                DoPauseOrStop();
                 //保存到本地数据库
                 var saveToLocationResult = SaveToLocation();
                 if(saveToLocationResult.IsFailed)
                     return saveToLocationResult;
                 DoPauseOrStop();
+                //上传到mes
                 var uploadTestResultToMesResult = UploadTestResultToMes();
                 if(uploadTestResultToMesResult.IsFailed)
                     return uploadTestResultToMesResult;
                 DoPauseOrStop();
+                //向plc下发出库
                 var sendPlcOutboundResult = SendPlcOutbound();
                 if(sendPlcOutboundResult.IsFailed)
                     return sendPlcOutboundResult;

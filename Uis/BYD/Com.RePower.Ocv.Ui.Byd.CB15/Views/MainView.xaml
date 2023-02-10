@@ -20,7 +20,14 @@
             SnackbarMessageQueue="{Binding ElementName=MainSnackbar, Path=MessageQueue}">
             <materialDesign:ColorZone Width="2560" Height="1440">
                 <Grid>
-                    <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Menu IsMainMenu="True">
+                        <MenuItem Command="{Binding OpenSettingViewCommand}" Header="打开配置" />
+                    </Menu>
+                    <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.7*" />
                             <ColumnDefinition Width="0.3*" />

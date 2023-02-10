@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Documents\**" />
+    <EmbeddedResource Remove="Documents\**" />
+    <None Remove="Documents\**" />
+    <Page Remove="Documents\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="6.4.0" />
     <PackageReference Include="Azure.Identity" Version="1.6.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.1" />
@@ -20,10 +27,6 @@
     <ProjectReference Include="..\..\Devices\Com.RePower.Device.Plc\Com.RePower.Device.Plc.csproj" />
     <ProjectReference Include="..\..\Devices\Com.RePower.Device.SwitchBoard\Com.RePower.Device.SwitchBoard.csproj" />
     <ProjectReference Include="..\Com.RePower.Ocv.Project\Com.RePower.Ocv.Project.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Documents\" />
   </ItemGroup>
 
 </Project>

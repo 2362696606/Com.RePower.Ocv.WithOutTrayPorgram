@@ -19,6 +19,9 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
         [NotifyPropertyChangedFor(nameof(CurrentOtherSetting))]
         [NotifyPropertyChangedFor(nameof(CurrentTestOption))]
         [NotifyPropertyChangedFor(nameof(CurrentBatteryStandard))]
+        [NotifyPropertyChangedFor(nameof(CurrentWmeSetting))]
+        [NotifyPropertyChangedFor(nameof(CurrentMesSetting))]
+        [NotifyPropertyChangedFor(nameof(CurrentPlcAddressCache))]
         [ObservableProperty]
         private OcvTypeEnmu _currentOcvType;
 
@@ -42,6 +45,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
         private WmsSetting? _wmsSettingForOcv2;
         private WmsSetting? _wmsSettingForOcv3;
         private WmsSetting? _wmsSettingForOcv4;
+        private MesSetting? _mesSettingForOcv1;
+        private MesSetting? _mesSettingForOcv2;
+        private MesSetting? _mesSettingForOcv3;
+        private MesSetting? _mesSettingForOcv4;
 
         public SettingManager()
         {
@@ -163,8 +170,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
                     }
                 }
                 #endregion
-
-                #region 初始化TestOption
+                #region 初始化WmsSetting
                 var wmsSettingForOcv1 = context.SettingItems.FirstOrDefault(x => x.SettingName == "WmsSetting_Ocv1");
                 var wmsSettingForOcv1Str = wmsSettingForOcv1?.JsonValue ?? string.Empty;
                 this._wmsSettingForOcv1 = JsonConvert.DeserializeObject<WmsSetting>(wmsSettingForOcv1Str);
@@ -178,7 +184,20 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
                 var wmsSettingForOcv4Str = wmsSettingForOcv4?.JsonValue ?? string.Empty;
                 this._wmsSettingForOcv4 = JsonConvert.DeserializeObject<WmsSetting>(wmsSettingForOcv4Str);
                 #endregion
-
+                #region 初始化MesSetting
+                var mesSettingForOcv1 = context.SettingItems.FirstOrDefault(x => x.SettingName == "MesSetting_Ocv1");
+                var mesSettingForOcv1Str = mesSettingForOcv1?.JsonValue ?? string.Empty;
+                this._mesSettingForOcv1 = JsonConvert.DeserializeObject<MesSetting>(mesSettingForOcv1Str);
+                var mesSettingForOcv2 = context.SettingItems.FirstOrDefault(x => x.SettingName == "MesSetting_Ocv2");
+                var mesSettingForOcv2Str = mesSettingForOcv2?.JsonValue ?? string.Empty;
+                this._mesSettingForOcv2 = JsonConvert.DeserializeObject<MesSetting>(mesSettingForOcv2Str);
+                var mesSettingForOcv3 = context.SettingItems.FirstOrDefault(x => x.SettingName == "MesSetting_Ocv3");
+                var mesSettingForOcv3Str = mesSettingForOcv3?.JsonValue ?? string.Empty;
+                this._mesSettingForOcv3 = JsonConvert.DeserializeObject<MesSetting>(mesSettingForOcv3Str);
+                var mesSettingForOcv4 = context.SettingItems.FirstOrDefault(x => x.SettingName == "MesSetting_Ocv4");
+                var mesSettingForOcv4Str = mesSettingForOcv4?.JsonValue ?? string.Empty;
+                this._mesSettingForOcv4 = JsonConvert.DeserializeObject<MesSetting>(mesSettingForOcv4Str);
+                #endregion
                 #region 初始化默认工站
                 var defaultOcvType = context.SettingItems.FirstOrDefault(x => x.SettingName == "DefaultOcvType");
                 string defaultOcvTypeStr = defaultOcvType?.JsonValue ?? string.Empty;
@@ -278,6 +297,25 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
                         return _wmsSettingForOcv3;
                     case OcvTypeEnmu.OCV4:
                         return _wmsSettingForOcv4;
+                    default: return null;
+                }
+            }
+        }
+
+        public MesSetting? CurrentMesSetting
+        {
+            get
+            {
+                switch (CurrentOcvType)
+                {
+                    case OcvTypeEnmu.OCV1:
+                        return _mesSettingForOcv1;
+                    case OcvTypeEnmu.OCV2:
+                        return _mesSettingForOcv2;
+                    case OcvTypeEnmu.OCV3:
+                        return _mesSettingForOcv3;
+                    case OcvTypeEnmu.OCV4:
+                        return _mesSettingForOcv4;
                     default: return null;
                 }
             }

@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.DMM\Com.RePower.Device.DMM.csproj" />
+    <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.Ohm\Com.RePower.Device.Ohm.csproj" />
+    <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.Plc\Com.RePower.Device.Plc.csproj" />
+    <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.SwitchBoard\Com.RePower.Device.SwitchBoard.csproj" />
+    <ProjectReference Include="..\..\..\Devices\Com.RePower.DeviceBase\Com.RePower.DeviceBase.csproj" />
+    <ProjectReference Include="..\..\Com.RePower.Ocv.Project.ProjectBase\Com.RePower.Ocv.Project.ProjectBase.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,4 +1,7 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Com.RePower.Ocv.Ui.Byd.CB15.Views;
+using Com.RePower.WpfBase;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Com.RePower.Ocv.Ui.Byd.CB15.ViewModels
 {
@@ -6,6 +9,13 @@ namespace Com.RePower.Ocv.Ui.Byd.CB15.ViewModels
     {
         public MainViewModel()
         {
+        }
+        [RelayCommand]
+        private void OpenSettingView()
+        {
+            var settingView = new MainSettingView();
+            settingView.DataContext = IocHelper.Default.GetService<MainSettingViewModel>();
+            settingView.ShowDialog();
         }
     }
 }
