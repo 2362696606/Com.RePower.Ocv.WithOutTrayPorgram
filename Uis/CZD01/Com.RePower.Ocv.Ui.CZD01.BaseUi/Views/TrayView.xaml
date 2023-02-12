@@ -55,7 +55,7 @@
                         Binding="{Binding Battery.NTemp}"
                         Header="负极温度"
                         Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestNTemp, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
-                    <DataGridTextColumn
+                    <!--<DataGridTextColumn
                         Binding="{Binding Battery.KValue1}"
                         Header="K01"
                         Visibility="{Binding Data.SettingManager.CurrentTestOption.VerifyKValue, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
@@ -66,7 +66,7 @@
                     <DataGridTextColumn
                         Binding="{Binding Battery.KValue3}"
                         Header="K23"
-                        Visibility="{Binding Data.SettingManager.CurrentTestOption.VerifyKValue, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                        Visibility="{Binding Data.SettingManager.CurrentTestOption.VerifyKValue, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />-->
                     <DataGridTextColumn Binding="{Binding NgDescription}" Header="Ng描述" />
                 </DataGrid.Columns>
             </DataGrid>

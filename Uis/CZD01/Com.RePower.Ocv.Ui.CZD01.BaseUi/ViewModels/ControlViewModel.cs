@@ -1,4 +1,7 @@
 ﻿using Com.RePower.Ocv.Project;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +10,39 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Ui.CZD01.BaseUi.ViewModels
 {
-    public class ControlViewModel
+    public partial class ControlViewModel : ObservableObject
     {
-        public ControlViewModel(IProjectMainWork mainWork)
+        public ControlViewModel(IProjectMainWork? mainWork = null)
         {
-            MainWork = mainWork;
+            _work = mainWork;
         }
 
-        public IProjectMainWork MainWork { get; }
+
+        private IProjectMainWork? _work;
+
+        public IProjectMainWork? Work
+        {
+            get
+            {
+                if (this._work == null)
+                {
+                    WeakReferenceMessenger.Default.Send("未能成功获取流程实现", "MainSnackbar");
+                }
+                return _work;
+            }
+        }
+        [RelayCommand]
+        private void DoStart()
+        {
+            if (Work?.WorkStatus == 0 || Work?.WorkStatus == 2)
+                Work.StartWorkAsync();
+            else
+                Work?.PauseWorkAsync();
+        }
+        [RelayCommand]
+        private void DoStop()
+        {
+            Work?.StopWorkAsync();
+        }
     }
 }
