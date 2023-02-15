@@ -27,9 +27,10 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Modules
                     var localPlcSettingJson = localPlcSettingObj.JsonValue;
                     if (!string.IsNullOrEmpty(localPlcSettingJson))
                     {
-                        var fObj = settingContext.SettingItems.First(x => x.SettingName == "FacticityManager");
-                        FacticityManager? facticityManager = JsonConvert.DeserializeObject<FacticityManager>(fObj.JsonValue);
-                        bool isReal = facticityManager?.IsRealPlc ?? false;
+                        //var fObj = settingContext.SettingItems.First(x => x.SettingName == "FacticityManager");
+                        //FacticityManager? facticityManager = JsonConvert.DeserializeObject<FacticityManager>(fObj.JsonValue);
+                        //bool isReal = facticityManager?.IsRealPlc ?? false;
+                        bool isReal = SettingManager.Instance.FacticitySetting?.IsRealPlc ?? false;
                         IPlc? obj = null;
                         if (isReal)
                         {

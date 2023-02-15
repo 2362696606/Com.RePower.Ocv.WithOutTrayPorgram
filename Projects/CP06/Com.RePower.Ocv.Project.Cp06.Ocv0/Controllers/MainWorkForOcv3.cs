@@ -171,7 +171,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 return readBatteryCodeResult;
             }
             string getCode = readBatteryCodeResult?.Content ?? string.Empty;
-            string batteryCode = getCode.Match(@"[0-9\.a-zA-Z_-]+").Value;
+            string batteryCode = getCode.Match(@"[0-9\.a-zA-Z_-]+")?.Value ?? string.Empty;
             if (string.IsNullOrEmpty(batteryCode))
             {
                 return OperateResult.CreateFailedResult("电芯条码不合规");
@@ -311,7 +311,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
         /// <returns></returns>
         private OperateResult VerifyKValue()
         {
-            if (SettingManager.CurrentTestOption?.VerifyKValue ?? false)
+            if (SettingManager.CurrentTestOption?.IsVerifyKValue ?? false)
             {
                 List<BatteryDto> batteryList = new List<BatteryDto>();
                 using (var resultContext = new OcvTestResultDbContext())

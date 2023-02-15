@@ -16,6 +16,10 @@ namespace Com.RePower.Ocv.Model.Dto
         /// </summary>
         public string TrayCode { get; set; } = string.Empty;
         /// <summary>
+        /// 任务号
+        /// </summary>
+        public long? TaskCode { get; set; }
+        /// <summary>
         /// Ng结果
         /// </summary>
         public virtual List<NgInfoDto> NgInfos { get; set; } = new List<NgInfoDto>();

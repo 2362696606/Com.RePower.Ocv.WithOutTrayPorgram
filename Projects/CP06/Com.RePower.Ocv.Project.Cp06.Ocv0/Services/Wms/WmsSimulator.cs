@@ -14,11 +14,10 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms
 {
     public class WmsSimulator : IWmsService
     {
-        private readonly SettingManager settingManager;
+        private SettingManager settingManager => SettingManager.Instance;
 
-        public WmsSimulator(SettingManager settingManager,Tray tray)
+        public WmsSimulator(Tray tray)
         {
-            this.settingManager = settingManager;
             Tray = tray;
         }
 

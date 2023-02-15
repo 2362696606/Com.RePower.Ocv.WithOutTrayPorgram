@@ -30,6 +30,8 @@ namespace Com.RePower.Ocv.Ui.UiBase
             {
                 #region 初始化IOC容器
                 var serviceCollection = new ServiceCollection();
+                //添加本地存储数据库
+                serviceCollection.AddDbContext<LocalTestResultDbContext>();
                 AddService(serviceCollection);
                 var autofacServiceProviderFactory = new AutofacServiceProviderFactory();
                 var builder = autofacServiceProviderFactory.CreateBuilder(serviceCollection);

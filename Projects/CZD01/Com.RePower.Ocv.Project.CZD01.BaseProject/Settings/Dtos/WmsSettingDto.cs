@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Setting
+namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Settings.Dtos
 {
-    public class WmsSetting
+    public class WmsSettingDto
     {
         /// <summary>
         /// 获取托盘条码接口

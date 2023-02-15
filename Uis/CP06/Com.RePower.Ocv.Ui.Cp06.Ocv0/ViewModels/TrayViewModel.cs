@@ -13,13 +13,11 @@ namespace Com.RePower.Ocv.Ui.Cp06.Ocv0.ViewModels
     {
         [ObservableProperty]
         private Tray _tray;
-        [ObservableProperty]
-        private SettingManager _settingManager;
+        public SettingManager SettingManager => SettingManager.Instance;
 
-        public TrayViewModel(Tray tray,SettingManager settingManager)
+        public TrayViewModel(Tray tray)
         {
             this._tray = tray;
-            this._settingManager = settingManager;
         }
 
     }

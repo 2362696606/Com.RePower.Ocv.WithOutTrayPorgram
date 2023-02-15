@@ -33,8 +33,6 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Wms
             try
             {
                 var result = WebServiceClient.getTechnologyInfoByBarCodeAsync(SettingManager.CurrentWmeSetting?.EquipNum ?? string.Empty, Tray.TrayCode).Result;
-                
-                
                 return OperateResult.CreateSuccessResult(result.Body.getTechnologyInfoByBarCodeResult);
             }
             catch (Exception e)

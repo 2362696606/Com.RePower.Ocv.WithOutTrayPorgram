@@ -123,43 +123,43 @@ namespace Com.RePower.Ocv.Model.Enums
         /// <summary>
         /// 保留Ng类型1
         /// </summary>
-        [Description("保留Ng类型1")]
+        [Description("K值计算失败")]
         K值计算失败 = 4194304,
         /// <summary>
         /// 保留Ng类型2
         /// </summary>
-        [Description("保留Ng类型2")]
-        保留Ng类型2 = 8388608,
+        [Description("压差过高")]
+        压差过高 = 8388608,
         /// <summary>
         /// 保留Ng类型3
         /// </summary>
-        [Description("保留Ng类型3")]
-        保留Ng类型3 = 16777216,
+        [Description("压差过低")]
+        压差过低 = 16777216,
         /// <summary>
         /// 保留Ng类型4
         /// </summary>
-        [Description("保留Ng类型4")]
-        保留Ng类型4 = 33554432,
+        [Description("压差计算失败")]
+        压差计算失败 = 33554432,
         /// <summary>
         /// 保留Ng类型5
         /// </summary>
-        [Description("保留Ng类型5")]
-        保留Ng类型5 = 67108864,
+        [Description("单托盘K值过高")]
+        单托盘K值过高 = 67108864,
         /// <summary>
         /// 保留Ng类型6
         /// </summary>
-        [Description("保留Ng类型6")]
-        保留Ng类型6 = 67108864,
+        [Description("单托盘K值过低")]
+        单托盘K值过低 = 67108864,
         /// <summary>
         /// 保留Ng类型7
         /// </summary>
-        [Description("保留Ng类型7")]
-        保留Ng类型7 = 134217728,
+        [Description("整体K值过高")]
+        整体K值过高 = 134217728,
         /// <summary>
         /// 保留Ng类型8
         /// </summary>
-        [Description("保留Ng类型8")]
-        保留Ng类型8 = 268435456,
+        [Description("整体K值过低")]
+        整体K值过低 = 268435456,
         /// <summary>
         /// 保留Ng类型9
         /// </summary>

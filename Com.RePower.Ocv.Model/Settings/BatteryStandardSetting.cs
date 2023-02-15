@@ -19,6 +19,8 @@ namespace Com.RePower.Ocv.Model.Settings
         private double _minNvol;
         private double _maxPVol;
         private double _minPVol;
+        private double _maxTemp;
+        private double _minTemp;
         private double _maxNTemp;
         private double _minNTemp;
         private double _maxPTemp;
@@ -103,6 +105,26 @@ namespace Com.RePower.Ocv.Model.Settings
         {
             get { return _minPVol; }
             set { SetProperty(ref _minPVol, value); }
+        }
+
+        /// <summary>
+        /// 最大温度
+        /// </summary>
+        [SettingName("最小温度")]
+        public double MaxTemp
+        {
+            get { return _maxTemp; }
+            set { SetProperty(ref _maxTemp, value); }
+        }
+
+        /// <summary>
+        /// 最小温度
+        /// </summary>
+        [SettingName("最大温度")]
+        public double MinTemp
+        {
+            get { return _minTemp; }
+            set { SetProperty(ref _minTemp, value); }
         }
 
         /// <summary>

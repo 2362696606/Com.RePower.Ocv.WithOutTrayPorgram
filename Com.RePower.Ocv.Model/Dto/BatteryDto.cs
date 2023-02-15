@@ -87,6 +87,10 @@ namespace Com.RePower.Ocv.Model.Dto
         /// </summary>
         public DateTime TestTime { get; set; }
         /// <summary>
+        /// 任务号
+        /// </summary>
+        public long? TaskCode { get; set; }
+        /// <summary>
         /// 保留int类型1
         /// </summary>
         public int? ReserveInt1 { get; set; }

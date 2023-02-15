@@ -25,7 +25,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 return readTrayCodeResult;
             }
             string getCode = readTrayCodeResult?.Content ?? string.Empty;
-            string trayCode = getCode.Match(@"[0-9\.a-zA-Z_-]+").Value;
+            string trayCode = getCode.Match(@"[0-9\.a-zA-Z_-]+")?.Value ?? string.Empty;
             if (string.IsNullOrEmpty(trayCode))
             {
                 return OperateResult.CreateFailedResult("托盘条码不合规");

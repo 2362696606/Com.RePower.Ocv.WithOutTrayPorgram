@@ -28,7 +28,7 @@ namespace Com.RePower.Ocv.Ui.Cp06.Ocv0
             builder.RegisterModule<SwitchBoardModule>();
             builder.RegisterModule<WorkModule>();
             builder.RegisterModule<TrayModule>();
-            builder.RegisterModule<SettingManagerModule>();
+            //builder.RegisterModule<SettingManagerModule>();
             builder.RegisterModule<WmsModule>();
             builder.RegisterModule<MesModule>();
         }

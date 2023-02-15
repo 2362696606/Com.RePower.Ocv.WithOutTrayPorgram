@@ -3,7 +3,7 @@ using Com.RePower.Ocv.Model.DataBaseContext;
 using Com.RePower.Ocv.Model.Dto;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Enums;
-using Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Setting;
+using Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Settings;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

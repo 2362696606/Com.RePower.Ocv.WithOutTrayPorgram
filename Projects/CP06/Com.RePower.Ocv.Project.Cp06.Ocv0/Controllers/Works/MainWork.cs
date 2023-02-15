@@ -35,14 +35,12 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
             , Tray tray
             , IWmsService wmsService
             , IMesService mesService
-            , SettingManager settingManager
             , IMapper mapper)
         {
             DevicesController = devicesController;
             Tray = tray;
             WmsService = wmsService;
             MesService = mesService;
-            SettingManager = settingManager;
             Mapper = mapper;
             Task.Run(() => UploadDevicesStatusToMes());
         }
@@ -75,7 +73,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
         public Tray Tray { get; }
         public IWmsService WmsService { get; }
         public IMesService MesService { get; }
-        public SettingManager SettingManager { get; }
+        public SettingManager SettingManager { get => SettingManager.Instance; }
         public IMapper Mapper { get; }
         public List<List<int>> TestOrder { get => SettingManager.CurrentTestOrder; }
 
@@ -223,7 +221,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                 return readTrayCodeResult;
             }
             string getCode = readTrayCodeResult?.Content ?? string.Empty;
-            string trayCode = getCode.Match(@"[0-9\.a-zA-Z_-]+").Value;
+            string trayCode = getCode.Match(@"[0-9\.a-zA-Z_-]+")?.Value ?? string.Empty;
             if (string.IsNullOrEmpty(trayCode))
             {
                 return OperateResult.CreateFailedResult("托盘条码不合规");
@@ -366,7 +364,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     return closeResult;
                 if (SettingManager.CurrentTestOption?.IsTestNVol ?? false)
                 {
-                    int startChannel = SettingManager.CurrentTestOption.NVolStartChannel;
+                    int startChannel = SettingManager.CurrentTestOption.NVolStartChannel ?? 1;
                     LogHelper.UiLog.Info($"开始测试电池{currentGroup[i]}负极壳体电压");
                     var openNVolChannelResult = DevicesController.SwitchBoard?.OpenChannel(1, i + startChannel) ?? OperateResult.CreateFailedResult("未找到切换板");
                     if (openNVolChannelResult.IsFailed)
@@ -529,7 +527,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
         /// <returns></returns>
         private OperateResult VerifyKValue()
         {
-            if (SettingManager.CurrentTestOption?.VerifyKValue ?? false)
+            if (SettingManager.CurrentTestOption?.IsVerifyKValue ?? false)
             {
                 LogHelper.UiLog.Info("验证K值");
                 List<BatteryDto> batteryList = new List<BatteryDto>();

@@ -37,7 +37,7 @@ namespace Com.RePower.Ocv.Model.Helper
                 }
             }
 
-            ISheet sheet = null;
+            ISheet? sheet = null;
             ICellStyle dateStyle = workbook.CreateCellStyle();
             IDataFormat format = workbook.CreateDataFormat();
             dateStyle.DataFormat = format.GetFormat("yyyy-mm-dd");
@@ -50,7 +50,7 @@ namespace Com.RePower.Ocv.Model.Helper
             {
                 for (int j = 0; j < dtSource.Columns.Count; j++)
                 {
-                    int intTemp = Encoding.GetEncoding(936).GetBytes(dtSource.Rows[i][j].ToString()).Length;
+                    int intTemp = Encoding.GetEncoding(936).GetBytes(dtSource.Rows[i][j]?.ToString()??string.Empty).Length;
                     if (intTemp > arrColWidth[j])
                     {
                         arrColWidth[j] = intTemp;
@@ -79,7 +79,8 @@ namespace Com.RePower.Ocv.Model.Helper
                         headStyle.Alignment = HorizontalAlignment.Center;
                         IFont font = workbook.CreateFont();
                         font.FontHeightInPoints = 20;
-                        font.Boldweight = 700;
+                        //font.Boldweight = 700;
+                        //font.setBoldweight(700);
                         headStyle.SetFont(font);
                         headerRow.GetCell(0).CellStyle = headStyle;
 
@@ -96,7 +97,7 @@ namespace Com.RePower.Ocv.Model.Helper
                         headStyle.Alignment = HorizontalAlignment.Center;
                         IFont font = workbook.CreateFont();
                         font.FontHeightInPoints = 10;
-                        font.Boldweight = 700;
+                        //font.Boldweight = 700;
                         headStyle.SetFont(font);
                         //写入列标题
                         foreach (DataColumn column in dtSource.Columns)
@@ -113,63 +114,65 @@ namespace Com.RePower.Ocv.Model.Helper
                 #endregion
 
                 #region 填充内容
-
-                IRow dataRow = sheet.CreateRow(rowIndex);
-                foreach (DataColumn column in dtSource.Columns)
+                if (sheet is { })
                 {
-                    ICell newCell = dataRow.CreateCell(column.Ordinal);
-                    string drValue = row[column].ToString();
-                    switch (column.DataType.ToString())
+                    IRow dataRow = sheet.CreateRow(rowIndex);
+                    foreach (DataColumn column in dtSource.Columns)
                     {
-                        case "System.String": //字符串类型
-                            double result;
-                            if (isNumeric(drValue, out result))
-                            {
-                                //数字字符串
-                                double.TryParse(drValue, out result);
-                                newCell.SetCellValue(result);
+                        ICell newCell = dataRow.CreateCell(column.Ordinal);
+                        string drValue = row[column].ToString() ?? string.Empty;
+                        switch (column.DataType.ToString())
+                        {
+                            case "System.String": //字符串类型
+                                double result;
+                                if (isNumeric(drValue, out result))
+                                {
+                                    //数字字符串
+                                    double.TryParse(drValue, out result);
+                                    newCell.SetCellValue(result);
+                                    break;
+                                }
+                                else
+                                {
+                                    newCell.SetCellValue(drValue);
+                                    break;
+                                }
+
+                            case "System.DateTime": //日期类型
+                                DateTime dateV;
+                                DateTime.TryParse(drValue, out dateV);
+                                newCell.SetCellValue(dateV);
+
+                                newCell.CellStyle = dateStyle; //格式化显示
                                 break;
-                            }
-                            else
-                            {
-                                newCell.SetCellValue(drValue);
+                            case "System.Boolean": //布尔型
+                                bool boolV = false;
+                                bool.TryParse(drValue, out boolV);
+                                newCell.SetCellValue(boolV);
                                 break;
-                            }
+                            case "System.Int16": //整型
+                            case "System.Int32":
+                            case "System.Int64":
+                            case "System.Byte":
+                                int intV = 0;
+                                int.TryParse(drValue, out intV);
+                                newCell.SetCellValue(intV);
+                                break;
+                            case "System.Decimal": //浮点型
+                            case "System.Double":
+                                double doubV = 0;
+                                double.TryParse(drValue, out doubV);
+                                newCell.SetCellValue(doubV);
+                                break;
+                            case "System.DBNull": //空值处理
+                                newCell.SetCellValue("");
+                                break;
+                            default:
+                                newCell.SetCellValue(drValue.ToString());
+                                break;
+                        }
 
-                        case "System.DateTime": //日期类型
-                            DateTime dateV;
-                            DateTime.TryParse(drValue, out dateV);
-                            newCell.SetCellValue(dateV);
-
-                            newCell.CellStyle = dateStyle; //格式化显示
-                            break;
-                        case "System.Boolean": //布尔型
-                            bool boolV = false;
-                            bool.TryParse(drValue, out boolV);
-                            newCell.SetCellValue(boolV);
-                            break;
-                        case "System.Int16": //整型
-                        case "System.Int32":
-                        case "System.Int64":
-                        case "System.Byte":
-                            int intV = 0;
-                            int.TryParse(drValue, out intV);
-                            newCell.SetCellValue(intV);
-                            break;
-                        case "System.Decimal": //浮点型
-                        case "System.Double":
-                            double doubV = 0;
-                            double.TryParse(drValue, out doubV);
-                            newCell.SetCellValue(doubV);
-                            break;
-                        case "System.DBNull": //空值处理
-                            newCell.SetCellValue("");
-                            break;
-                        default:
-                            newCell.SetCellValue(drValue.ToString());
-                            break;
-                    }
-
+                    } 
                 }
                 #endregion
                 rowIndex++;
@@ -203,7 +206,7 @@ namespace Com.RePower.Ocv.Model.Helper
             {
                 workbook = WorkbookFactory.Create(readfs);
             }
-            ISheet sheet = null;
+            ISheet? sheet = null;
             ICellStyle dateStyle = workbook.CreateCellStyle();
             IDataFormat format = workbook.CreateDataFormat();
             dateStyle.DataFormat = format.GetFormat("yyyy-mm-dd");
@@ -218,7 +221,7 @@ namespace Com.RePower.Ocv.Model.Helper
             {
                 for (int j = 0; j < dtSource.Columns.Count; j++)
                 {
-                    int intTemp = Encoding.GetEncoding(936).GetBytes(dtSource.Rows[i][j].ToString()).Length;
+                    int intTemp = Encoding.GetEncoding(936).GetBytes(dtSource.Rows[i][j].ToString()??string.Empty).Length;
                     if (intTemp > arrColWidth[j])
                     {
                         arrColWidth[j] = intTemp;
@@ -250,7 +253,7 @@ namespace Com.RePower.Ocv.Model.Helper
                         headStyle.Alignment = HorizontalAlignment.Center;
                         IFont font = workbook.CreateFont();
                         font.FontHeightInPoints = 20;
-                        font.Boldweight = 700;
+                        //font.Boldweight = 700;
                         headStyle.SetFont(font);
                         headerRow.GetCell(0).CellStyle = headStyle;
                     }
@@ -263,7 +266,7 @@ namespace Com.RePower.Ocv.Model.Helper
                         headStyle.Alignment = HorizontalAlignment.Center;
                         IFont font = workbook.CreateFont();
                         font.FontHeightInPoints = 10;
-                        font.Boldweight = 700;
+                        //font.Boldweight = 700;
                         headStyle.SetFont(font);
 
 
@@ -283,60 +286,63 @@ namespace Com.RePower.Ocv.Model.Helper
                 #endregion
 
                 #region 填充内容
-                IRow dataRow = sheet.CreateRow(rowIndex);
-                foreach (DataColumn column in dtSource.Columns)
+                if (sheet is { })
                 {
-                    ICell newCell = dataRow.CreateCell(column.Ordinal);
-                    string drValue = row[column].ToString();
-                    switch (column.DataType.ToString())
+                    IRow dataRow = sheet.CreateRow(rowIndex);
+                    foreach (DataColumn column in dtSource.Columns)
                     {
-                        case "System.String": //字符串类型
-                            double result;
-                            if (isNumeric(drValue, out result))
-                            {
+                        ICell newCell = dataRow.CreateCell(column.Ordinal);
+                        string drValue = row[column].ToString() ?? string.Empty;
+                        switch (column.DataType.ToString())
+                        {
+                            case "System.String": //字符串类型
+                                double result;
+                                if (isNumeric(drValue, out result))
+                                {
 
-                                double.TryParse(drValue, out result);
-                                newCell.SetCellValue(result);
-                                break;
-                            }
-                            else
-                            {
-                                newCell.SetCellValue(drValue);
-                                break;
-                            }
-                        case "System.DateTime": //日期类型
-                            DateTime dateV;
-                            DateTime.TryParse(drValue, out dateV);
-                            newCell.SetCellValue(dateV);
+                                    double.TryParse(drValue, out result);
+                                    newCell.SetCellValue(result);
+                                    break;
+                                }
+                                else
+                                {
+                                    newCell.SetCellValue(drValue);
+                                    break;
+                                }
+                            case "System.DateTime": //日期类型
+                                DateTime dateV;
+                                DateTime.TryParse(drValue, out dateV);
+                                newCell.SetCellValue(dateV);
 
-                            newCell.CellStyle = dateStyle; //格式化显示
-                            break;
-                        case "System.Boolean": //布尔型
-                            bool boolV = false;
-                            bool.TryParse(drValue, out boolV);
-                            newCell.SetCellValue(boolV);
-                            break;
-                        case "System.Int16": //整型
-                        case "System.Int32":
-                        case "System.Int64":
-                        case "System.Byte":
-                            int intV = 0;
-                            int.TryParse(drValue, out intV);
-                            newCell.SetCellValue(intV);
-                            break;
-                        case "System.Decimal": //浮点型
-                        case "System.Double":
-                            double doubV = 0;
-                            double.TryParse(drValue, out doubV);
-                            newCell.SetCellValue(doubV);
-                            break;
-                        case "System.DBNull": //空值处理
-                            newCell.SetCellValue("");
-                            break;
-                        default:
-                            newCell.SetCellValue(drValue.ToString());
-                            break;
-                    }
+                                newCell.CellStyle = dateStyle; //格式化显示
+                                break;
+                            case "System.Boolean": //布尔型
+                                bool boolV = false;
+                                bool.TryParse(drValue, out boolV);
+                                newCell.SetCellValue(boolV);
+                                break;
+                            case "System.Int16": //整型
+                            case "System.Int32":
+                            case "System.Int64":
+                            case "System.Byte":
+                                int intV = 0;
+                                int.TryParse(drValue, out intV);
+                                newCell.SetCellValue(intV);
+                                break;
+                            case "System.Decimal": //浮点型
+                            case "System.Double":
+                                double doubV = 0;
+                                double.TryParse(drValue, out doubV);
+                                newCell.SetCellValue(doubV);
+                                break;
+                            case "System.DBNull": //空值处理
+                                newCell.SetCellValue("");
+                                break;
+                            default:
+                                newCell.SetCellValue(drValue.ToString());
+                                break;
+                        }
+                    } 
                 }
                 #endregion
                 rowIndex++;
@@ -574,20 +580,20 @@ namespace Com.RePower.Ocv.Model.Helper
                                     }
                                 }
                             }
-                            catch (Exception exception)
+                            catch (Exception)
                             {
                                 throw;
                             }
                         }
                         table.Rows.Add(dataRow);
                     }
-                    catch (Exception exception)
+                    catch (Exception)
                     {
                         throw;
                     }
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 throw;
             }
@@ -610,7 +616,7 @@ namespace Com.RePower.Ocv.Model.Helper
                 if (file.Length > 0)
                 {
                     IWorkbook wb = WorkbookFactory.Create(file);
-                    ISheet isheet = wb.GetSheet(SheetName);
+                    ISheet? isheet = wb.GetSheet(SheetName);
                     table = ImportDt(isheet, HeaderRowIndex, dir);
                     isheet = null;
                 }
@@ -634,7 +640,7 @@ namespace Com.RePower.Ocv.Model.Helper
                 if (file.Length > 0)
                 {
                     IWorkbook wb = WorkbookFactory.Create(file);
-                    ISheet isheet = wb.GetSheetAt(SheetIndex);
+                    ISheet? isheet = wb.GetSheetAt(SheetIndex);
                     table = ImportDt(isheet, HeaderRowIndex, dir);
                     isheet = null;
                 }

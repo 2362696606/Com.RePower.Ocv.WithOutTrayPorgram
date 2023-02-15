@@ -18,26 +18,29 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            var ohmSettingJStr = SettingManager.Instance.OhmSettingJson;
-            if (!string.IsNullOrEmpty(ohmSettingJStr))
+            if (SettingManager.Instance.CurrentTestOption?.IsTestRes ?? false) 
             {
-                bool isReal = SettingManager.Instance.CurrentFacticity?.IsRealOhm ?? false;
-                IOhm? obj;
-                if (isReal)
+                var ohmSettingJStr = SettingManager.Instance.OhmSettingJson;
+                if (!string.IsNullOrEmpty(ohmSettingJStr))
                 {
-                    obj = JsonConvert.DeserializeObject<Hioki_BT3562Impl>(ohmSettingJStr);
-                }
-                else
-                {
-                    obj = JsonConvert.DeserializeObject<Hioki_BT3562Simulator>(ohmSettingJStr);
-                }
-                if (obj is { })
-                {
-                    builder.RegisterInstance(obj)
-                        .AsSelf()
-                        .As<IOhm>()
-                        .As<IDevice>();
-                }
+                    bool isReal = SettingManager.Instance.CurrentFacticity?.IsRealOhm ?? false;
+                    IOhm? obj;
+                    if (isReal)
+                    {
+                        obj = JsonConvert.DeserializeObject<Hioki_BT3562Impl>(ohmSettingJStr);
+                    }
+                    else
+                    {
+                        obj = JsonConvert.DeserializeObject<Hioki_BT3562Simulator>(ohmSettingJStr);
+                    }
+                    if (obj is { })
+                    {
+                        builder.RegisterInstance(obj)
+                            .AsSelf()
+                            .As<IOhm>()
+                            .As<IDevice>();
+                    }
+                } 
             }
         }
     }

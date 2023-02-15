@@ -16,6 +16,11 @@ namespace Com.RePower.Ocv.Model.Entity
         [ObservableProperty]
         private string _trayCode = string.Empty;
         /// <summary>
+        /// 任务号
+        /// </summary>
+        [ObservableProperty]
+        private long? _taskCode;
+        /// <summary>
         /// Ng结果
         /// </summary>
         [ObservableProperty]

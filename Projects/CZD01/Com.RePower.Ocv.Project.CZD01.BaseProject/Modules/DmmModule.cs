@@ -18,26 +18,31 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            var dmmSettingJStr = SettingManager.Instance.DmmSettingJson;
-            if (!string.IsNullOrEmpty(dmmSettingJStr))
+            if ((SettingManager.Instance.CurrentTestOption?.IsTestVol ?? false)
+                || (SettingManager.Instance.CurrentTestOption?.IsTestNVol ?? false)
+                || (SettingManager.Instance.CurrentTestOption?.IsTestPVol ?? false)) 
             {
-                bool isReal = SettingManager.Instance.CurrentFacticity?.IsRealDmm ?? false;
-                IDMM? obj;
-                if (isReal)
+                var dmmSettingJStr = SettingManager.Instance.DmmSettingJson;
+                if (!string.IsNullOrEmpty(dmmSettingJStr))
                 {
-                    obj = JsonConvert.DeserializeObject<Keysight_34461AImpl>(dmmSettingJStr);
-                }
-                else
-                {
-                    obj = JsonConvert.DeserializeObject<Keysight_34461ASimulator>(dmmSettingJStr);
-                }
-                if (obj is { })
-                {
-                    builder.RegisterInstance(obj)
-                        .AsSelf()
-                        .As<IDMM>()
-                        .As<IDevice>();
-                }
+                    bool isReal = SettingManager.Instance.CurrentFacticity?.IsRealDmm ?? false;
+                    IDMM? obj;
+                    if (isReal)
+                    {
+                        obj = JsonConvert.DeserializeObject<Keysight_34461AImpl>(dmmSettingJStr);
+                    }
+                    else
+                    {
+                        obj = JsonConvert.DeserializeObject<Keysight_34461ASimulator>(dmmSettingJStr);
+                    }
+                    if (obj is { })
+                    {
+                        builder.RegisterInstance(obj)
+                            .AsSelf()
+                            .As<IDMM>()
+                            .As<IDevice>();
+                    }
+                } 
             }
         }
     }

@@ -41,6 +41,14 @@ namespace Com.RePower.Ocv.Model.Settings.Dtos
         /// </summary>
         public double MinPVol { get; set; }
         /// <summary>
+        /// 最大温度
+        /// </summary>
+        public double MaxTemp { get; set; }
+        /// <summary>
+        /// 最小温度
+        /// </summary>
+        public double MinTemp { get; set; }
+        /// <summary>
         /// 最大负极温度
         /// </summary>
         public double MaxNTemp { get; set; }

@@ -85,6 +85,11 @@ namespace Com.RePower.Ocv.Model.Entity
         [ObservableProperty]
         private double? _kValue4;
         /// <summary>
+        /// K值5
+        /// </summary>
+        [ObservableProperty]
+        private double? _kValue5;
+        /// <summary>
         /// 托盘条码
         /// </summary>
         [ObservableProperty]
@@ -110,6 +115,11 @@ namespace Com.RePower.Ocv.Model.Entity
         [ObservableProperty]
         private DateTime _testTime = DateTime.Now;
         /// <summary>
+        /// 任务号
+        /// </summary>
+        [ObservableProperty]
+        private long? _taskCode;
+        /// <summary>
         /// 保留int类型1
         /// </summary>
         [ObservableProperty]
@@ -134,11 +144,6 @@ namespace Com.RePower.Ocv.Model.Entity
         /// </summary>
         [ObservableProperty]
         private int? _reserveInt5 ;
-        /// <summary>
-        /// K值5
-        /// </summary>
-        [ObservableProperty]
-        private double? _kValue5;
         /// <summary>
         /// 保留double类型1
         /// </summary>

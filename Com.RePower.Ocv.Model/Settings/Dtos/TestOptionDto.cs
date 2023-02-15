@@ -40,5 +40,9 @@ namespace Com.RePower.Ocv.Model.Settings.Dtos
         /// 复测次数
         /// </summary>
         public int RetestTimes { get; set; }
+        /// <summary>
+        /// 是否验证k值
+        /// </summary>
+        public bool IsVerifyKValue { get; set; }
     }
 }

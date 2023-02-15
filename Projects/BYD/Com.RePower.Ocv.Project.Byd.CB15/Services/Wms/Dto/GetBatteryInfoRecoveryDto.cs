@@ -31,6 +31,6 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Wms.Dto
         /// <summary>
         /// 结果
         /// </summary>
-        public WmsRecoveryStatusDto Status { get; set; }
+        public WmsRecoveryStatusDto Status { get; set; } = new WmsRecoveryStatusDto();
     }
 }

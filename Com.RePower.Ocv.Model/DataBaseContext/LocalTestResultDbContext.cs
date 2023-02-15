@@ -10,6 +10,12 @@ namespace Com.RePower.Ocv.Model.DataBaseContext
 {
     public class LocalTestResultDbContext:DbContext
     {
+        //public LocalTestResultDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions) { }
+        //public LocalTestResultDbContext(DbContextOptions<LocalTestResultDbContext> dbContextOptions):base(dbContextOptions) { }
+        //public LocalTestResultDbContext():base()
+        //{
+
+        //}
         public DbSet<BatteryDto> Batterys { get; set; }
         public DbSet<NgInfoDto> NgInfos { get; set; }
         public DbSet<TrayDto> Trays { get; set; }
@@ -17,8 +23,6 @@ namespace Com.RePower.Ocv.Model.DataBaseContext
         {
             string connectString = @"data source=.\LocalTestResult.dbs";
             optionsBuilder.UseSqlite(connectString);
-            //optionsBuilder.UseLazyLoadingProxies();
-            //base.OnConfiguring(optionsBuilder);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Com.RePower.Ocv.Model.DataBaseContext;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Enums;
-using Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Setting;
+using Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Settings;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Newtonsoft.Json;
 using System;
@@ -14,6 +14,13 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
 {
     public partial class SettingManager:ObservableObject
     {
+        private static readonly Lazy<SettingManager> _instance =
+           new Lazy<SettingManager>(() => new SettingManager());
+        /// <summary>
+        /// 单例静态实例
+        /// </summary>
+        public static SettingManager Instance { get { return _instance.Value; } }
+
         private WmsSetting? _wmsSettingForOcv0;
         private WmsSetting? _wmsSettingForOcv1;
         private WmsSetting? _wmsSettingForOcv2;
@@ -37,9 +44,10 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
         private TestOption? _testOptionForOcv1;
         private TestOption? _testOptionForOcv2;
         private TestOption? _testOptionForOcv3;
+        private FacticitySetting? _facticitySetting;
         private List<List<int>> _testOrder;
 
-        public SettingManager()
+        private SettingManager()
         {
             using (var settingContext = new OcvSettingDbContext())
             {
@@ -104,7 +112,14 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 #region 初始化TestOrder
                 var item = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "TestOrder");
                 string jStr = item?.JsonValue ?? string.Empty;
-                this._testOrder = JsonConvert.DeserializeObject<List<List<int>>>(jStr) ?? new List<List<int>>(); 
+                this._testOrder = JsonConvert.DeserializeObject<List<List<int>>>(jStr) ?? new List<List<int>>();
+                #endregion
+                #region 初始化FacticitySetting
+                var facticitySettingStr = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "FacticityManager")?.JsonValue;
+                if (!string.IsNullOrEmpty(facticitySettingStr))
+                {
+                    this._facticitySetting = JsonConvert.DeserializeObject<FacticitySetting>(facticitySettingStr);
+                } 
                 #endregion
 
                 this.CurrentOcvType = Enum.Parse<OcvTypeEnmu>(defaultOcvTypeStr);
@@ -185,6 +200,11 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                         return null;
                 }
             }
+        }
+
+        public FacticitySetting? FacticitySetting
+        {
+            get { return _facticitySetting; }
         }
 
 

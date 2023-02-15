@@ -38,8 +38,5 @@ namespace Com.RePower.Ocv.Ui.UiBase.Views
         public static readonly DependencyProperty DbContextProperty =
             DependencyProperty.Register("DbContext", typeof(LocalTestResultDbContext), typeof(DataSearchView), new PropertyMetadata(new LocalTestResultDbContext()));
 
-        
-
-
     }
 }

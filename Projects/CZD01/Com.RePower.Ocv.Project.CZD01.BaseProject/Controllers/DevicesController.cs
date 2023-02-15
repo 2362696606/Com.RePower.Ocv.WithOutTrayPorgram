@@ -2,6 +2,7 @@
 using Com.RePower.DeviceBase.Ohm;
 using Com.RePower.DeviceBase.Plc;
 using Com.RePower.DeviceBase.SwitchBoard;
+using Com.RePower.DeviceBase.TemperatureSensor;
 using log4net.Plugin;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,13 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers
 {
     public class DevicesController
     {
-        public DevicesController(IPlc? plc = null,ISwitchBoard? switchBoard = null,IOhm? ohm = null,IDMM? dmm = null)
+        public DevicesController(IPlc? plc = null,ISwitchBoard? switchBoard = null,IOhm? ohm = null,IDMM? dmm = null,ITemperatureSensor? temperatureSensor = null)
         {
             _plc = plc;
             _switchBoard = switchBoard;
             _ohm = ohm;
             _dmm = dmm;
+            _temperatureSensor = temperatureSensor;
         }
 
         private IPlc? _plc;
@@ -44,6 +46,12 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers
         public IDMM? Dmm
         {
             get { return _dmm; }
+        }
+        private ITemperatureSensor? _temperatureSensor;
+
+        public ITemperatureSensor? TemperatureSensor
+        {
+            get { return _temperatureSensor; }
         }
 
     }

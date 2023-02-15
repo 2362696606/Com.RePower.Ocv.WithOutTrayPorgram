@@ -36,5 +36,9 @@ namespace Com.RePower.Ocv.Model.Settings.Dtos
         /// 是否是真实Mes
         /// </summary>
         public bool IsRealMes { get; set; }
+        /// <summary>
+        /// 是否是真实温度传感器
+        /// </summary>
+        public bool IsRealTemperatureSensor { get; set; }
     }
 }

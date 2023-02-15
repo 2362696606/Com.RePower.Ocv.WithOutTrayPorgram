@@ -17,6 +17,17 @@ namespace Com.RePower.Ocv.Model.Extensions
     public static class ObjectExtensions
     {
         /// <summary>
+        /// 计算标准差
+        /// </summary>
+        /// <param name="sequence">样本</param>
+        /// <returns></returns>
+        public static double StandardDeviation(this IEnumerable<double> sequence)
+        {
+            double average = sequence.Average();
+            double sum = sequence.Sum(d => Math.Pow(d - average, 2));
+            return Math.Sqrt((sum) / sequence.Count());
+        }
+        /// <summary>
         /// 返回对象格式化后的Json字符串
         /// </summary>
         /// <param name="obj1"></param>
@@ -27,7 +38,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             JsonSerializer serializer = new JsonSerializer();
             TextReader tr = new StringReader(json);
             JsonTextReader jtr = new JsonTextReader(tr);
-            object obj = serializer.Deserialize(jtr);
+            object? obj = serializer.Deserialize(jtr);
             string formatString;
             if (obj != null)
             {
@@ -52,9 +63,9 @@ namespace Com.RePower.Ocv.Model.Extensions
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static DateTime ToObjDateTime(this object str)
+        public static DateTime ToObjDateTime(this object? str)
         {
-            string s = str.ToString();
+            string s = str?.ToString() ?? string.Empty;
             return DateTime.Parse(s);
         }
 
@@ -64,7 +75,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         }
         public static bool IsDefault<T>(this T obj)
         {
-            T theDefault = default;
+            T? theDefault = default;
             if (obj == null && theDefault == null)
             {
                 return true;
@@ -76,7 +87,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             else
             {
-                return obj.Equals(theDefault);
+                return obj?.Equals(theDefault) ?? false;
             }
         }
         /// <summary>
@@ -88,19 +99,19 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return obj != null;
         }
-        public static T DoFunc<T>(this object obj, Func<T, T> action) where T : class
+        public static T? DoFunc<T>(this object obj, Func<T, T> action) where T : class
         {
-            if (obj != null)
+            if (obj is T temp)
             {
-                return action(obj as T);
+                return action(temp);
             }
             return null;
         }
         public static void DoAction<T>(this object obj, Action<T> action) where T : class
         {
-            if (obj != null)
+            if (obj is T temp)
             {
-                action(obj as T);
+                action(temp);
             }
         }
 
@@ -134,7 +145,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             else
             {
-                Type memberInfo = obj.GetType().BaseType;
+                Type? memberInfo = obj.GetType().BaseType;
                 return memberInfo != null && memberInfo.FullName == "System.Enum";
             }
         }
@@ -172,13 +183,18 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             if (typeof(T) == typeof(Guid) || typeof(T) == typeof(TimeSpan))
             {
-                return (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFromInvariantString(obj.ToString());
+                var typeConverter = TypeDescriptor.GetConverter(typeof(T));
+                var tempObj = typeConverter.ConvertFromInvariantString(obj.ToString()??string.Empty);
+                if(tempObj is T tempT)
+                {
+                    return tempT;
+                }
             }
             if (typeof(T).IsEnum)
             {
                 if (Enum.IsDefined(typeof(T), obj))
                 {
-                    return (T)Enum.Parse(typeof(T), obj.ToString());
+                    return (T)Enum.Parse(typeof(T), obj.ToString() ?? string.Empty);
                 }
                 else
                 {

@@ -16,6 +16,7 @@ namespace Com.RePower.Ocv.Model.Settings
         private bool _isRealSwitchBoard;
         private bool _isRealMes;
         private bool _isRealWms;
+        private bool _isRealTemperatureSensor;
         /// <summary>
         /// 是否是真实Plc
         /// </summary>
@@ -73,5 +74,14 @@ namespace Com.RePower.Ocv.Model.Settings
             get { return _isRealMes; }
             set { SetProperty(ref _isRealMes, value); }
         }
+        /// <summary>
+        /// 是否是真实温度传感器
+        /// </summary>
+        public bool IsRealTemperatureSensor
+        {
+            get { return _isRealTemperatureSensor; }
+            set { SetProperty(ref _isRealTemperatureSensor, value); }
+        }
+
     }
 }

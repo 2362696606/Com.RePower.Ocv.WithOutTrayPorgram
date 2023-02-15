@@ -98,7 +98,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return false;
         }
-        public static string TrimEx(this string str, string defaultVal = null)
+        public static string? TrimEx(this string str, string? defaultVal = null)
         {
             if (str == null) return defaultVal;
             return str.Trim();
@@ -111,7 +111,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return str;
         }
-        public static string TrimIfEmpty(this string str, string defaultVal = null)
+        public static string? TrimIfEmpty(this string? str, string? defaultVal = null)
         {
             if (str == null) return defaultVal;
             str = str.Trim();
@@ -245,7 +245,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return defaultVal;
         }
-        public static T Deserialize<T>(this string str)
+        public static T? Deserialize<T>(this string str)
         {
             if (!string.IsNullOrWhiteSpace(str))
             {
@@ -262,18 +262,18 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             if (str.IsNotNullAndWhiteSpace())
             {
-                object deserialize = str.Deserialize<object>();
-                return deserialize.ToJsonFormatted();
+                object? deserialize = str.Deserialize<object>();
+                return deserialize?.ToJsonFormatted() ?? string.Empty;
             }
 
             return str;
         }
-        public static string ToMd5(this string str)
+        public static string? ToMd5(this string str)
         {
 
             if (str != null)
             {
-                MD5 md5 = new MD5CryptoServiceProvider();
+                MD5 md5 = MD5.Create();
                 byte[] result = md5.ComputeHash(Encoding.ASCII.GetBytes(str));
                 return Encoding.ASCII.GetString(result);
             }
@@ -413,13 +413,13 @@ namespace Com.RePower.Ocv.Model.Extensions
                 }
                 else if (Regex.IsMatch(path, @"^[a-zA-Z]:"))
                 {
-                    return Path.GetDirectoryName(path).GetDirectoryName(go - 1);
+                    return Path.GetDirectoryName(path)?.GetDirectoryName(go - 1) ?? string.Empty;
                 }
                 return string.Empty;
             }
             else
             {
-                return Path.GetDirectoryName(path);
+                return Path.GetDirectoryName(path) ?? string.Empty;
             }
         }
         /// <summary>
@@ -501,7 +501,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         /// <param name="pattern"></param>
         /// <param name="option"></param>
         /// <returns></returns>
-        public static Match Match(this string str, string pattern, RegexOptions option = RegexOptions.None)
+        public static Match? Match(this string str, string pattern, RegexOptions option = RegexOptions.None)
         {
             if (str.IsNull())
             {
@@ -510,7 +510,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             return Regex.Match(str, pattern, option);
         }
 
-        public static MatchCollection Matches(this string str, string pattern, RegexOptions option = RegexOptions.IgnoreCase)
+        public static MatchCollection? Matches(this string str, string pattern, RegexOptions option = RegexOptions.IgnoreCase)
         {
             if (str.IsNullOrWhitespace())
             {
@@ -648,12 +648,14 @@ namespace Com.RePower.Ocv.Model.Extensions
         /// <param name="useSpe">是否包含特殊字符，1=包含，默认为不包含</param>
         /// <param name="custom">要包含的自定义字符，直接输入要包含的字符列表</param>
         /// <returns>指定长度的随机字符串</returns>
-        public static string GetRandomString(this string randomString, int length, bool useNum, bool useLow, bool useUpp, bool useSpe, string custom)
+        public static string? GetRandomString(this string randomString, int length, bool useNum, bool useLow, bool useUpp, bool useSpe, string custom)
         {
             byte[] b = new byte[4];
-            new RNGCryptoServiceProvider().GetBytes(b);
+            //new RNGCryptoServiceProvider().GetBytes(b);
+            var randomNumberGenerator = RandomNumberGenerator.Create();
+            randomNumberGenerator.GetBytes(b);
             Random r = new Random(BitConverter.ToInt32(b, 0));
-            string s = null, str = custom;
+            string? s = null, str = custom;
             if (useNum == true) { str += "0123456789"; }
             if (useLow == true) { str += "abcdefghijklmnopqrstuvwxyz"; }
             if (useUpp == true) { str += "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; }
@@ -706,13 +708,13 @@ namespace Com.RePower.Ocv.Model.Extensions
         /// <typeparam name="T"></typeparam>
         /// <param name="str"></param>
         /// <returns></returns> 
-        public static string GetMethodNameByDescription<T>(this string str) where T : class
+        public static string? GetMethodNameByDescription<T>(this string str) where T : class
         {
             Type type = typeof(T);
             List<MethodInfo> list = type.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).ToList();
-            MethodInfo method = list.FirstOrDefault(p =>
+            MethodInfo? method = list.FirstOrDefault(p =>
             {
-                DescriptionAttribute item = (DescriptionAttribute)p.GetCustomAttributes(typeof(DescriptionAttribute)).FirstOrDefault();
+                DescriptionAttribute? item = (DescriptionAttribute?)p.GetCustomAttributes(typeof(DescriptionAttribute)).FirstOrDefault();
                 if (item != null && item.Description == str)
                 {
                     return true;
@@ -773,7 +775,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         /// <param name="str"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public static string TakeLength(this string str, int length)
+        public static string? TakeLength(this string str, int length)
         {
             if (str != null)
             {

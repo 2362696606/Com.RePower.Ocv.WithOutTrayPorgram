@@ -19,6 +19,7 @@ namespace Com.RePower.Ocv.Model.Settings
         private bool _isTestNTemp;
         private bool _isDoRetest;
         private int _retestTimes;
+        private bool _isTestTemp;
 
         /// <summary>
         /// 是否测试电压
@@ -59,6 +60,16 @@ namespace Com.RePower.Ocv.Model.Settings
             get { return _isTestNVol; }
             set { SetProperty(ref _isTestNVol, value); }
         }
+        /// <summary>
+        /// 是否测试温度
+        /// </summary>
+        [SettingName("是否测试温度")]
+        public bool IsTestTemp
+        {
+            get { return _isTestTemp; }
+            set { SetProperty(ref _isTestTemp, value); }
+        }
+
 
         /// <summary>
         /// 是否测试正极温度
@@ -99,5 +110,16 @@ namespace Com.RePower.Ocv.Model.Settings
             get { return _retestTimes; }
             set { SetProperty(ref _retestTimes, value); }
         }
+        private bool _isVerifyKValue;
+        /// <summary>
+        /// 是否验证k值
+        /// </summary>
+        [SettingName("是否验证k值")]
+        public bool IsVerifyKValue
+        {
+            get { return _isVerifyKValue; }
+            set { SetProperty(ref _isVerifyKValue, value); }
+        }
+
     }
 }

@@ -17,7 +17,8 @@ namespace Com.RePower.Ocv.Ui.Cp06.Ocv0.ViewModels
     {
         [ObservableProperty]
         private bool _showWaitDialog = true;
-        private bool _isMonitor = false;
+
+        //private bool _isMonitor = false;
         public MonitorViewModel(IPlc plc)
         {
             this.LocalPlcCacheValues = new ObservableCollection<PlcCacheValue>();

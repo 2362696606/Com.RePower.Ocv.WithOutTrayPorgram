@@ -4,7 +4,7 @@ using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Dto;
-using Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Setting;
+using Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Settings;
 using Com.RePower.WpfBase;
 using Newtonsoft.Json;
 using NPOI.OpenXmlFormats.Dml.Diagram;
