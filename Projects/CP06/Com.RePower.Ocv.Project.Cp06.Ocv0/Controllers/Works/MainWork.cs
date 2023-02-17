@@ -68,6 +68,10 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                 Thread.Sleep(1000 * 60 * 3);
             }
         }
+        /// <summary>
+        /// 已预约校准
+        /// </summary>
+        public bool IsScheduledCalibration { get; private set; }
 
         public DevicesController DevicesController { get; }
         public Tray Tray { get; }
@@ -516,8 +520,8 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                         ngInfo.AddNgType(NgTypeEnum.负极壳体电压过低);
                     }
                 }
-                ngInfo.SetIsNg();
-                ngInfo.SetNgDescritpion();
+                //ngInfo.SetIsNg();
+                //ngInfo.SetNgDescritpion();
             }
             return OperateResult.CreateSuccessResult();
         }
@@ -613,8 +617,8 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                         item.RemoveNgType(NgTypeEnum.K2过低);
                         item.AddNgType(NgTypeEnum.K值计算失败);
                     }
-                    item.SetIsNg();
-                    item.SetNgDescritpion();
+                    //item.SetIsNg();
+                    //item.SetNgDescritpion();
                 }
             }
             return OperateResult.CreateSuccessResult();

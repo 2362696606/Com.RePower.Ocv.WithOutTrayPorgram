@@ -20,42 +20,56 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <materialDesign:Card Margin="16" Padding="16">
-        <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Properties}">
-            <ItemsControl.Template>
-                <ControlTemplate TargetType="ItemsControl">
-                    <ScrollViewer
-                        x:Name="ScrollViewer"
-                        Padding="{TemplateBinding Padding}"
-                        Template="{StaticResource MaterialDesignScrollViewerTemplate}"
-                        VerticalScrollBarVisibility="Auto">
-                        <ItemsPresenter />
-                    </ScrollViewer>
-                </ControlTemplate>
-            </ItemsControl.Template>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="2" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="local:SettingViewItem">
-                    <materialDesign:Card Margin="5" Padding="5">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0.4*" />
-                                <ColumnDefinition Width="0.6*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock
-                                Margin="5,0"
-                                VerticalAlignment="Center"
-                                FontWeight="Black"
-                                Text="{Binding SettingName}" />
-                            <ContentControl Grid.Column="1" Content="{Binding Content}" />
-                        </Grid>
-                    </materialDesign:Card>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </materialDesign:Card>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <materialDesign:Card Margin="16" Padding="16">
+            <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Properties}">
+                <ItemsControl.Template>
+                    <ControlTemplate TargetType="ItemsControl">
+                        <ScrollViewer
+                            x:Name="ScrollViewer"
+                            Padding="{TemplateBinding Padding}"
+                            Template="{StaticResource MaterialDesignScrollViewerTemplate}"
+                            VerticalScrollBarVisibility="Auto">
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="2" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="local:SettingViewItem">
+                        <materialDesign:Card Margin="5" Padding="5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.4*" />
+                                    <ColumnDefinition Width="0.6*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Margin="5,0"
+                                    VerticalAlignment="Center"
+                                    FontWeight="Black"
+                                    Text="{Binding SettingName}" />
+                                <ContentControl Grid.Column="1" Content="{Binding Content}" />
+                            </Grid>
+                        </materialDesign:Card>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </materialDesign:Card>
+        <Button
+            Grid.Row="1"
+            Margin="0,0,16,16"
+            HorizontalAlignment="Right"
+            Click="DoSaveChanged"
+            Content="保存"
+            Visibility="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=SaveButtonVisibility}" />
+        <materialDesign:Snackbar Name="SettingViewSnackbar" Grid.RowSpan="2" />
+    </Grid>
 </UserControl>

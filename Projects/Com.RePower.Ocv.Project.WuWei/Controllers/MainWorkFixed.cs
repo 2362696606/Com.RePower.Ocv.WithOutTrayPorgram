@@ -888,21 +888,24 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             {
                 if (ngInfo.Battery.NVolValue > BatteryNgCriteria.MaxPVol)
                 {
-                    ngInfo.NgDescription = "电压过高";
-                    ngInfo.NgType = 2;
-                    ngInfo.IsNg = true;
+                    //ngInfo.NgDescription = "电压过高";
+                    //ngInfo.NgType = 2;
+                    //ngInfo.IsNg = true;
+                    ngInfo.AddNgType(Ocv.Model.Enums.NgTypeEnum.电压过高);
                 }
                 else if (ngInfo.Battery.NVolValue < BatteryNgCriteria.MinPVol)
                 {
-                    ngInfo.NgDescription = "电压过低";
-                    ngInfo.NgType = 1;
-                    ngInfo.IsNg = true;
+                    //ngInfo.NgDescription = "电压过低";
+                    //ngInfo.NgType = 1;
+                    //ngInfo.IsNg = true;
+                    ngInfo.AddNgType(Ocv.Model.Enums.NgTypeEnum.电压过低);
                 }
                 else
                 {
-                    ngInfo.NgDescription = string.Empty;
+                    //ngInfo.NgDescription = string.Empty;
+                    //ngInfo.NgType = 0;
+                    //ngInfo.IsNg = false;
                     ngInfo.NgType = 0;
-                    ngInfo.IsNg = false;
                 }
             }
         }

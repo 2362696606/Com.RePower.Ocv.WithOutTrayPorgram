@@ -176,37 +176,61 @@ namespace Com.RePower.Ocv.Model.Extensions
             currentNgType = currentNgType | ngType;
             ngInfo.NgType = (int)currentNgType;
         }
-        /// <summary>
-        /// 设置Ng描述
-        /// </summary>
-        /// <param name="ngInfo"></param>
-        public static void SetNgDescritpion(this NgInfo ngInfo)
-        {
-            NgTypeEnum currentNgType = (NgTypeEnum)(ngInfo.NgType ?? 0);
-            if(ngInfo.NgType == null || ngInfo.NgType == 0 || ngInfo.HasNgType(NgTypeEnum.正常))
-            {
-                ngInfo.NgDescription = string.Empty;
-            }
-            else
-            {
-                ngInfo.NgDescription = currentNgType.ToString();
-            }
-        }
-        /// <summary>
-        /// 设置是否ng
-        /// </summary>
-        /// <param name="ngInfo"></param>
-        public static void SetIsNg(this NgInfo ngInfo)
-        {
-            NgTypeEnum currentNgType = (NgTypeEnum)(ngInfo.NgType ?? 0);
-            if (ngInfo.NgType == null || ngInfo.NgType == 0 || ngInfo.HasNgType(NgTypeEnum.正常))
-            {
-                ngInfo.IsNg = false;
-            }
-            else
-            {
-                ngInfo.IsNg = true;
-            }
-        }
+        ///// <summary>
+        ///// 设置Ng描述
+        ///// </summary>
+        ///// <param name="ngInfo"></param>
+        //public static void SetNgDescritpion(this NgInfo ngInfo)
+        //{
+        //    NgTypeEnum currentNgType = (NgTypeEnum)(ngInfo.NgType ?? 0);
+        //    if (ngInfo.NgType == null || ngInfo.NgType == 0 || ngInfo.HasNgType(NgTypeEnum.正常))
+        //    {
+        //        ngInfo.NgDescription = string.Empty;
+        //    }
+        //    else
+        //    {
+        //        ngInfo.NgDescription = currentNgType.ToString();
+        //    }
+        //}
+        //public static string? GetNgDescription(this NgInfo ngInfo)
+        //{
+        //    NgTypeEnum currentNgType = (NgTypeEnum)(ngInfo.NgType ?? 0);
+        //    if (ngInfo.NgType == null || ngInfo.NgType == 0 || ngInfo.HasNgType(NgTypeEnum.正常))
+        //    {
+        //        return string.Empty;
+        //    }
+        //    else
+        //    {
+        //        return currentNgType.ToString();
+        //    }
+        //}
+        ///// <summary>
+        ///// 设置是否ng
+        ///// </summary>
+        ///// <param name="ngInfo"></param>
+        //public static void SetIsNg(this NgInfo ngInfo)
+        //{
+        //    NgTypeEnum currentNgType = (NgTypeEnum)(ngInfo.NgType ?? 0);
+        //    if (ngInfo.NgType == null || ngInfo.NgType == 0 || ngInfo.HasNgType(NgTypeEnum.正常))
+        //    {
+        //        ngInfo.IsNg = false;
+        //    }
+        //    else
+        //    {
+        //        ngInfo.IsNg = true;
+        //    }
+        //}
+        //public static bool GetIsNg(this NgInfo ngInfo)
+        //{
+        //    NgTypeEnum currentNgType = (NgTypeEnum)(ngInfo.NgType ?? 0);
+        //    if (ngInfo.NgType == null || ngInfo.NgType == 0 || ngInfo.HasNgType(NgTypeEnum.正常))
+        //    {
+        //        return false;
+        //    }
+        //    else
+        //    {
+        //        return true;
+        //    }
+        //}
     }
 }

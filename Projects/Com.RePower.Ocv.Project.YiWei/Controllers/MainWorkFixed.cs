@@ -475,27 +475,32 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
         {
             foreach (var ngInfo in Tray.NgInfos)
             {
-                ngInfo.NgDescription = string.Empty;
-                ngInfo.IsNg = false;
+                //ngInfo.NgDescription = string.Empty;
+                //ngInfo.IsNg = false;
+                ngInfo.NgType = 0;
                 if (ngInfo.Battery.VolValue > BatteryNgCriteria.MaxVol)
                 {
-                    ngInfo.NgDescription = "电压过高";
-                    ngInfo.IsNg = true;
+                    //ngInfo.NgDescription = "电压过高";
+                    //ngInfo.IsNg = true;
+                    ngInfo.AddNgType(Ocv.Model.Enums.NgTypeEnum.电压过高);
                 }
                 else if (ngInfo.Battery.VolValue < BatteryNgCriteria.MinVol)
                 {
-                    ngInfo.NgDescription = "电压过低";
-                    ngInfo.IsNg = true;
+                    //ngInfo.NgDescription = "电压过低";
+                    //ngInfo.IsNg = true;
+                    ngInfo.AddNgType(Ocv.Model.Enums.NgTypeEnum.电压过低);
                 }
                 if(ngInfo.Battery.Res>BatteryNgCriteria.MaxRes)
                 {
-                    ngInfo.NgDescription = String.IsNullOrEmpty(ngInfo.NgDescription) ? "内阻过高" : "|内阻过高";
-                    ngInfo.IsNg = true;
+                    //ngInfo.NgDescription = String.IsNullOrEmpty(ngInfo.NgDescription) ? "内阻过高" : "|内阻过高";
+                    //ngInfo.IsNg = true;
+                    ngInfo.AddNgType(Ocv.Model.Enums.NgTypeEnum.内阻过高);
                 }
                 else if (ngInfo.Battery.Res > BatteryNgCriteria.MaxRes)
                 {
-                    ngInfo.NgDescription = String.IsNullOrEmpty(ngInfo.NgDescription) ? "内阻过低" : "|内阻过低";
-                    ngInfo.IsNg = true;
+                    //ngInfo.NgDescription = String.IsNullOrEmpty(ngInfo.NgDescription) ? "内阻过低" : "|内阻过低";
+                    //ngInfo.IsNg = true;
+                    ngInfo.AddNgType(Ocv.Model.Enums.NgTypeEnum.内阻过低);
                 }
             }
         }

@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:Com.RePower.Ocv.Ui.Cp06.Ocv0"
     xmlns:uiBase="clr-namespace:Com.RePower.Ocv.Ui.UiBase;assembly=Com.RePower.Ocv.Ui.UiBase"
+    ShutdownMode="OnMainWindowClose"
     StartupUri="Views/MainView.xaml">
     <Application.Resources />
 </uiBase:UiBaseApplication>

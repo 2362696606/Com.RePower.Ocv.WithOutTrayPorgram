@@ -49,8 +49,8 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                 if (ngInfo.Battery.Temp < SettingManager.CurrentBatteryStandard?.MinTemp)
                     ngInfo.AddNgType(Model.Enums.NgTypeEnum.温度过低);
             }
-            ngInfo.SetIsNg();
-            ngInfo.SetNgDescritpion();
+            //ngInfo.SetIsNg();
+            //ngInfo.SetNgDescritpion();
             return OperateResult.CreateSuccessResult();
         }
     }

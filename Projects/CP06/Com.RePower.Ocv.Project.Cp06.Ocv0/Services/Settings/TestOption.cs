@@ -2,6 +2,7 @@
 using Com.RePower.Ocv.Model.Settings;
 using Com.RePower.WpfBase;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -85,16 +86,20 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Settings
             set { SetProperty(ref _nVolNgChannel, value); }
         }
 
-
-
+        /// <summary>
+        /// 实现保存
+        /// </summary>
+        [JsonIgnore]
+        [IgnorSetting]
+        public Func<string, OperateResult>? DoSaveChanged { get; set; }
         public OperateResult SaveChanged()
         {
-            throw new NotImplementedException();
+            return DoSaveChanged?.Invoke("TestOption") ?? OperateResult.CreateFailedResult("\"TestOption\"未绑定保存实现");
         }
 
         public async Task<OperateResult> SaveChangedAsync()
         {
-            return await Task.Run(() => SaveChanged());
+            return await Task.Run(SaveChanged);
         }
     }
 }

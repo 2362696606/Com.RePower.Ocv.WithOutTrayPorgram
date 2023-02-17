@@ -69,8 +69,8 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                         if (SettingManager.CurrentTestOption?.IsVerifyVolDifference ?? false)
                             ngInfo.AddNgType(Model.Enums.NgTypeEnum.压差计算失败);
                     }
-                    ngInfo.SetIsNg();
-                    ngInfo.SetNgDescritpion();
+                    //ngInfo.SetIsNg();
+                    //ngInfo.SetNgDescritpion();
                 }
                 if (SettingManager.CurrentTestOption?.IsVerifyCurrentKValue ?? false)
                 {
@@ -92,8 +92,8 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                             ngInfo.AddNgType(Model.Enums.NgTypeEnum.单托盘K值过高);
                         if (ngInfo.Battery.KValue1 < min)
                             ngInfo.AddNgType(Model.Enums.NgTypeEnum.单托盘K值过低);
-                        ngInfo.SetIsNg();
-                        ngInfo.SetNgDescritpion();
+                        //ngInfo.SetIsNg();
+                        //ngInfo.SetNgDescritpion();
                     }
                 }
             }

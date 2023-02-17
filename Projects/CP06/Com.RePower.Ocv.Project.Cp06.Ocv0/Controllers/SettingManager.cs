@@ -1,19 +1,25 @@
 ﻿using Com.RePower.Ocv.Model.DataBaseContext;
+using Com.RePower.Ocv.Model.Settings;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Enums;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Settings;
+using Com.RePower.WpfBase;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using BatteryStandard = Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Settings.BatteryStandard;
 
 namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
 {
     public partial class SettingManager:ObservableObject
     {
+        private readonly string calibrationSettingName = "CalibrationSetting";
+
         private static readonly Lazy<SettingManager> _instance =
            new Lazy<SettingManager>(() => new SettingManager());
         /// <summary>
@@ -36,15 +42,15 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
         [NotifyPropertyChangedFor(nameof(CurrentBatteryStandard))]
         private OcvTypeEnmu _currentOcvType;
         //private TestOption _testOption;
-        private BatteryStandard? _batteryStandardForOcv0;
-        private BatteryStandard? _batteryStandardForOcv1;
-        private BatteryStandard? _batteryStandardForOcv2;
-        private BatteryStandard? _batteryStandardForOcv3;
-        private TestOption? _testOptionForOcv0;
-        private TestOption? _testOptionForOcv1;
-        private TestOption? _testOptionForOcv2;
-        private TestOption? _testOptionForOcv3;
-        private FacticitySetting? _facticitySetting;
+        private Services.Settings.BatteryStandard? _batteryStandardForOcv0;
+        private Services.Settings.BatteryStandard? _batteryStandardForOcv1;
+        private Services.Settings.BatteryStandard? _batteryStandardForOcv2;
+        private Services.Settings.BatteryStandard? _batteryStandardForOcv3;
+        private Services.Settings.TestOption? _testOptionForOcv0;
+        private Services.Settings.TestOption? _testOptionForOcv1;
+        private Services.Settings.TestOption? _testOptionForOcv2;
+        private Services.Settings.TestOption? _testOptionForOcv3;
+        private Services.Settings.FacticitySetting? _facticitySetting;
         private List<List<int>> _testOrder;
 
         private SettingManager()
@@ -84,30 +90,46 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 #region 初始化TestOption
                 var testOptionForOcv0 = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "TestOptionForOcv0");
                 var testOptionForOcv0Str = testOptionForOcv0?.JsonValue ?? string.Empty;
-                this._testOptionForOcv0 = JsonConvert.DeserializeObject<TestOption>(testOptionForOcv0Str);
+                this._testOptionForOcv0 = JsonConvert.DeserializeObject<Services.Settings.TestOption>(testOptionForOcv0Str);
+                if (_testOptionForOcv0 is ISettingSaveChanged)
+                    _testOptionForOcv0.DoSaveChanged = DoSaveChanged;
                 var testOptionForOcv1 = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "TestOptionForOcv1");
                 var testOptionForOcv1Str = testOptionForOcv1?.JsonValue ?? string.Empty;
-                this._testOptionForOcv1 = JsonConvert.DeserializeObject<TestOption>(testOptionForOcv1Str);
+                this._testOptionForOcv1 = JsonConvert.DeserializeObject<Services.Settings.TestOption>(testOptionForOcv1Str);
+                if (_testOptionForOcv1 is ISettingSaveChanged)
+                    _testOptionForOcv1.DoSaveChanged = DoSaveChanged;
                 var testOptionForOcv2 = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "TestOptionForOcv2");
                 var testOptionForOcv2Str = testOptionForOcv2?.JsonValue ?? string.Empty;
-                this._testOptionForOcv2 = JsonConvert.DeserializeObject<TestOption>(testOptionForOcv2Str);
+                this._testOptionForOcv2 = JsonConvert.DeserializeObject<Services.Settings.TestOption>(testOptionForOcv2Str);
+                if (_testOptionForOcv2 is ISettingSaveChanged)
+                    _testOptionForOcv2.DoSaveChanged = DoSaveChanged;
                 var testOptionForOcv3 = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "TestOptionForOcv3");
                 var testOptionForOcv3Str = testOptionForOcv3?.JsonValue ?? string.Empty;
-                this._testOptionForOcv3 = JsonConvert.DeserializeObject<TestOption>(testOptionForOcv3Str);
+                this._testOptionForOcv3 = JsonConvert.DeserializeObject<Services.Settings.TestOption>(testOptionForOcv3Str);
+                if (_testOptionForOcv3 is ISettingSaveChanged)
+                    _testOptionForOcv3.DoSaveChanged = DoSaveChanged;
                 #endregion
                 #region 初始化BatteryStatdard
                 var batteryStandardForOcv0 = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "BatteryStandardForOcv0");
                 var batteryStandardForOcv0Str = batteryStandardForOcv0?.JsonValue ?? string.Empty;
                 this._batteryStandardForOcv0 = JsonConvert.DeserializeObject<BatteryStandard>(batteryStandardForOcv0Str);
+                if (_batteryStandardForOcv0 is ISettingSaveChanged)
+                    _batteryStandardForOcv0.DoSaveChanged = DoSaveChanged;
                 var batteryStandardForOcv1 = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "BatteryStandardForOcv1");
                 var batteryStandardForOcv1Str = batteryStandardForOcv1?.JsonValue ?? string.Empty;
                 this._batteryStandardForOcv1 = JsonConvert.DeserializeObject<BatteryStandard>(batteryStandardForOcv1Str);
+                if (_batteryStandardForOcv1 is ISettingSaveChanged)
+                    _batteryStandardForOcv1.DoSaveChanged = DoSaveChanged;
                 var batteryStandardForOcv2 = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "BatteryStandardForOcv2");
                 var batteryStandardForOcv2Str = batteryStandardForOcv2?.JsonValue ?? string.Empty;
                 this._batteryStandardForOcv2 = JsonConvert.DeserializeObject<BatteryStandard>(batteryStandardForOcv2Str);
+                if (_batteryStandardForOcv2 is ISettingSaveChanged)
+                    _batteryStandardForOcv2.DoSaveChanged = DoSaveChanged;
                 var batteryStandardForOcv3 = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "BatteryStandardForOcv3");
                 var batteryStandardForOcv3Str = batteryStandardForOcv3?.JsonValue ?? string.Empty;
                 this._batteryStandardForOcv3 = JsonConvert.DeserializeObject<BatteryStandard>(batteryStandardForOcv3Str);
+                if (_batteryStandardForOcv3 is ISettingSaveChanged)
+                    _batteryStandardForOcv3.DoSaveChanged = DoSaveChanged;
                 #endregion
                 #region 初始化TestOrder
                 var item = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "TestOrder");
@@ -118,8 +140,15 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 var facticitySettingStr = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "FacticityManager")?.JsonValue;
                 if (!string.IsNullOrEmpty(facticitySettingStr))
                 {
-                    this._facticitySetting = JsonConvert.DeserializeObject<FacticitySetting>(facticitySettingStr);
-                } 
+                    this._facticitySetting = JsonConvert.DeserializeObject<Services.Settings.FacticitySetting>(facticitySettingStr);
+                }
+                #endregion
+                #region 初始化CalibrationSetting
+                var calibrationSettingStr = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == calibrationSettingName)?.JsonValue;
+                if (!string.IsNullOrEmpty(calibrationSettingStr))
+                    this._calibrationSetting = JsonConvert.DeserializeObject<Services.Settings.CalibrationSetting>(calibrationSettingStr);
+                if (_calibrationSetting is ISettingSaveChanged)
+                    _calibrationSetting.DoSaveChanged = DoSaveChanged;
                 #endregion
 
                 this.CurrentOcvType = Enum.Parse<OcvTypeEnmu>(defaultOcvTypeStr);
@@ -163,7 +192,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 }
             }
         }
-        public TestOption? CurrentTestOption 
+        public Services.Settings.TestOption? CurrentTestOption 
         {
             get
             {
@@ -182,7 +211,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 }
             }
         }
-        public BatteryStandard? CurrentBatteryStandard 
+        public Services.Settings.BatteryStandard? CurrentBatteryStandard 
         {
             get
             {
@@ -201,17 +230,73 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 }
             }
         }
+        private Services.Settings.CalibrationSetting? _calibrationSetting;
 
-        public FacticitySetting? FacticitySetting
+        public Services.Settings.CalibrationSetting? CurrentCalibrationSetting
+        {
+            get { return _calibrationSetting; }
+        }
+
+
+        /// <summary>
+        /// 设备真实性配置
+        /// </summary>
+        public Services.Settings.FacticitySetting? FacticitySetting
         {
             get { return _facticitySetting; }
         }
 
-
+        /// <summary>
+        /// 测试顺序
+        /// </summary>
         public List<List<int>> CurrentTestOrder
         {
             get { return _testOrder; }
         }
 
+        private OperateResult DoSaveChanged(string name)
+        {
+            string settingName = string.Empty;
+            string? jStr = null;
+            switch(name)
+            {
+                case "TestOption":
+                    {
+                        jStr = JsonConvert.SerializeObject(CurrentTestOption);
+                        if(!string.IsNullOrEmpty(jStr))
+                            settingName = "TestOptionFor" + CurrentOcvType.ToString();
+                        break;
+                    }
+                case "BatteryStandard":
+                    {
+                        jStr = JsonConvert.SerializeObject(CurrentBatteryStandard);
+                        if(!string.IsNullOrEmpty(jStr))
+                            settingName = "BatteryStandardFor"+CurrentOcvType.ToString();
+                        break;
+                    }
+                case "Calibration":
+                    {
+                        jStr = JsonConvert.SerializeObject(CurrentCalibrationSetting);
+                        if (!string.IsNullOrEmpty(jStr))
+                            settingName = calibrationSettingName;
+                        break;
+                    }
+                default:
+                    return OperateResult.CreateFailedResult($"未实现{name}的保存修改");
+            }
+            using (var settingContext = new OcvSettingDbContext())
+            {
+                var item = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == settingName);
+                if (item is { })
+                {
+                    item.JsonValue = jStr;
+                    settingContext.Update(item);
+                    settingContext.SaveChanges();
+                }
+                else
+                    return OperateResult.CreateFailedResult($"无法在配置数据库中找到\"{settingName}\"对应的配置项");
+            }
+            return OperateResult.CreateSuccessResult();
+        }
     }
 }

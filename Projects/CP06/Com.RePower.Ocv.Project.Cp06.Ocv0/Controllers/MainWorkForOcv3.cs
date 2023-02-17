@@ -299,8 +299,8 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                         ngInfo.AddNgType(NgTypeEnum.负极壳体电压过低);
                     }
                 }
-                ngInfo.SetIsNg();
-                ngInfo.SetNgDescritpion();
+                //ngInfo.SetIsNg();
+                //ngInfo.SetNgDescritpion();
             }
             return OperateResult.CreateSuccessResult();
         }
@@ -396,8 +396,8 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                         item.RemoveNgType(NgTypeEnum.K2过低);
                         item.AddNgType(NgTypeEnum.K值计算失败);
                     }
-                    item.SetIsNg();
-                    item.SetNgDescritpion();
+                    //item.SetIsNg();
+                    //item.SetNgDescritpion();
                 }
             }
             return OperateResult.CreateSuccessResult();

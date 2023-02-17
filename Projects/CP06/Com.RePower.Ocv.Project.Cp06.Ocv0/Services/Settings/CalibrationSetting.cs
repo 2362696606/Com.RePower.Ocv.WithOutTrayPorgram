@@ -10,17 +10,17 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Settings
 {
-    public class BatteryStandard:Model.Settings.BatteryStandard,ISettingSaveChanged
+    public class CalibrationSetting : Model.Settings.CalibrationSetting, ISettingSaveChanged
     {
         /// <summary>
         /// 实现保存
         /// </summary>
         [JsonIgnore]
         [IgnorSetting]
-        public Func<string, OperateResult>? DoSaveChanged { get; set; }
+        public Func<string,OperateResult>? DoSaveChanged { get; set; }
         public OperateResult SaveChanged()
         {
-            return DoSaveChanged?.Invoke("BatteryStandard") ?? OperateResult.CreateFailedResult("\"BatteryStandard\"未绑定保存实现");
+            return DoSaveChanged?.Invoke("Calibration") ?? OperateResult.CreateFailedResult("\"Calibration\"未绑定保存实现");
         }
 
         public async Task<OperateResult> SaveChangedAsync()

@@ -194,7 +194,6 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
         /// 判断是否需要复测
         /// </summary>
         /// <returns>true:需要复测;false:不需要复测</returns>
-
         public bool JudgeRetest()
         {
             if ((SettingManager.CurrentTestOption?.IsDoRetest ?? false)

@@ -1,0 +1,136 @@
+﻿<UserControl
+    x:Class="Com.RePower.Ocv.Ui.UiBase.Views.CalibrationView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:entity="clr-namespace:Com.RePower.Ocv.Model.Entity;assembly=Com.RePower.Ocv.Model"
+    xmlns:local="clr-namespace:Com.RePower.Ocv.Ui.UiBase.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="./Dictionarys/BaseDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <materialDesign:Card Margin="20" Padding="16">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.2*" />
+                <RowDefinition Height="0.8*" />
+            </Grid.RowDefinitions>
+            <UniformGrid Rows="1">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,20,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="25"
+                        FontWeight="Bold"
+                        Text="是否启用校准值" />
+                    <ToggleButton IsChecked="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Setting.IsUseCalibration}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,20,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="25"
+                        FontWeight="Bold"
+                        Text="是否使用自动校准值" />
+                    <ToggleButton IsChecked="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Setting.IsUseAutoValue}" />
+                </StackPanel>
+            </UniformGrid>
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Setting.CalibrationValues}">
+                <ItemsControl.Template>
+                    <ControlTemplate TargetType="ItemsControl">
+                        <ScrollViewer
+                            Padding="{TemplateBinding Padding}"
+                            Template="{StaticResource MaterialDesignScrollViewerTemplate}"
+                            VerticalScrollBarVisibility="Auto">
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="3" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="entity:CalibrationValue">
+                        <materialDesign:Card Margin="5" Padding="5">
+                            <UniformGrid Columns="1">
+                                <UniformGrid.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="FontSize" Value="16" />
+                                        <!--<Setter Property="FontWeight" Value="Black" />-->
+                                        <Setter Property="Margin" Value="0,0,10,0" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                    <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="TextBox">
+                                        <Setter Property="FontSize" Value="16" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                                        <!--<Setter Property="FontWeight" Value="Black" />-->
+                                    </Style>
+                                    <Style TargetType="StackPanel">
+                                        <Setter Property="Margin" Value="0,5" />
+                                    </Style>
+                                </UniformGrid.Resources>
+                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                    <TextBlock
+                                        FontSize="20"
+                                        FontWeight="Black"
+                                        Text="通道:" />
+                                    <TextBlock
+                                        FontSize="20"
+                                        FontWeight="Black"
+                                        Text="{Binding Channel}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="仪表值:" />
+                                    <TextBlock Text="{Binding GaugeValue}" />
+                                </StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="标准值:" />
+                                    <TextBox
+                                        Grid.Column="1"
+                                        materialDesign:HintAssist.Hint="标准值"
+                                        Text="{Binding StandardValue}" />
+                                </Grid>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="偏差值:" />
+                                    <TextBlock Text="{Binding DeviationValue}" />
+                                </StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="手动校准值:" />
+                                    <TextBox
+                                        Grid.Column="1"
+                                        materialDesign:HintAssist.Hint="手动校准值"
+                                        Text="{Binding ManuallyValue}" />
+                                </Grid>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="自动校准值:" />
+                                    <TextBlock Text="{Binding AutoValue}" />
+                                </StackPanel>
+                            </UniformGrid>
+                        </materialDesign:Card>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </materialDesign:Card>
+</UserControl>

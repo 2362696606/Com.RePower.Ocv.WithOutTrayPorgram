@@ -1,4 +1,5 @@
 ﻿using Com.RePower.Ocv.Model.Attributes;
+using Com.RePower.Ocv.Model.Settings;
 using Com.RePower.Ocv.Ui.UiBase.CustomControls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
@@ -58,13 +59,16 @@ namespace Com.RePower.Ocv.Ui.UiBase.Views
             List<SettingViewItem> itemList = new List<SettingViewItem>();
             foreach(var item in properties)
             {
-
-                SettingViewItem temp = new SettingViewItem
+                var attr = item.GetCustomAttribute<IgnorSettingAttribute>();
+                if (attr == null)
                 {
-                    DependObj = SettingObj,
-                    PropertyInfo = item,
-                };
-                itemList.Add(temp);
+                    SettingViewItem temp = new SettingViewItem
+                    {
+                        DependObj = SettingObj,
+                        PropertyInfo = item,
+                    };
+                    itemList.Add(temp); 
+                }
             }
             this.OnPropertiesChanged(itemList);
         }
@@ -93,6 +97,33 @@ namespace Com.RePower.Ocv.Ui.UiBase.Views
         private void OnPropertiesChanged(IEnumerable<SettingViewItem> newValue, IEnumerable<SettingViewItem>? oldValue = null)
         {
             this.Properties = newValue;
+        }
+
+        public Visibility SaveButtonVisibility
+        {
+            get
+            {
+                if(CanSaved && (SettingObj is ISettingSaveChanged))
+                {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
+
+        public bool CanSaved { get; set; } = true;
+
+        private async void DoSaveChanged(object sender, RoutedEventArgs e)
+        {
+            if(SettingObj is ISettingSaveChanged tempSetting)
+            {
+                var result = await tempSetting.SaveChangedAsync();
+                if (result.IsFailed)
+                    this.SettingViewSnackbar.MessageQueue?.Enqueue($"保存失败:{result.Message}");
+                this.SettingViewSnackbar.MessageQueue?.Enqueue($"保存成功");
+            }
+            else
+                this.SettingViewSnackbar.MessageQueue?.Enqueue($"当前对象非继承自\"ISettingSaveChanged\"接口");
         }
     }
     public partial class SettingViewItem:ObservableObject
