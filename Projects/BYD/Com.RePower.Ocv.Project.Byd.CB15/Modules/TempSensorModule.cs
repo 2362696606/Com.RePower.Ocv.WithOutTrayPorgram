@@ -82,7 +82,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Modules
                     {
                         var fObj = settingContext.SettingItems.First(x => x.SettingName == "FacticityManager");
                         FacticityManager? facticityManager = JsonConvert.DeserializeObject<FacticityManager>(fObj.JsonValue);
-                        bool isReal = facticityManager?.IsRealPTemp ?? false;
+                        bool isReal = facticityManager?.IsRealNTemp ?? false;
                         ITemperatureSensor? obj = null;
                         if (isReal)
                         {

@@ -21,7 +21,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
         /// 是否是msa测试
         /// </summary>
         [ObservableProperty]
-        private bool _isMsaTest;
+        private bool _isMsaTest = false;
         /// <summary>
         /// msa计数
         /// </summary>
@@ -40,6 +40,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
         public IWmsService WmsService { get; }
         public IMesService? MesService { get; }
         public IMapper Mapper { get; }
+        /// <summary>
+        /// Plc连接状态
+        /// </summary>
+        public bool PlcConnectStatus { get; set; }
 
         public MainWork(DevicesController devicesController
             , SettingManager settingManager
@@ -54,6 +58,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
             WmsService = wmsService;
             MesService = mesService;
             Mapper = mapper;
+            Task.Run(KeepHeartbeat);
         }
 
         protected override OperateResult DoWork()

@@ -20,7 +20,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
             {
                 Directory.CreateDirectory(dir);
             }
-            string path = @$"./测试记录/{dayStr}/{Tray.TrayCode}_{SettingManager.CurrentOcvType.ToString()}_{timeStr}.csv";
+            string path = @$"{dir}/{Tray.TrayCode}_{SettingManager.CurrentOcvType.ToString()}_{timeStr}.csv";
             switch (SettingManager.CurrentOcvType)
             {
                 case Enums.OcvTypeEnmu.OCV1:

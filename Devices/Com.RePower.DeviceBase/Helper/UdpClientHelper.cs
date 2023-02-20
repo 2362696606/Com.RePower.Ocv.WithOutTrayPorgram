@@ -31,7 +31,7 @@ namespace Com.RePower.DeviceBase.Helper
                 if (ipEndPoint is { })
                 {
                     byte[] buffer = udpClient.Receive(ref ipEndPoint);
-                    Log.getMessageFile("tcp通讯日志").Info($"IP:{ip},端口:{port},收到回复:{buffer.ToHexString(',')}");
+                    Log.getMessageFile("udp通讯日志").Info($"IP:{ip},端口:{port},收到回复:{buffer.ToHexString(',')}");
                     return OperateResult.CreateSuccessResult(buffer);
                 }
                 else
