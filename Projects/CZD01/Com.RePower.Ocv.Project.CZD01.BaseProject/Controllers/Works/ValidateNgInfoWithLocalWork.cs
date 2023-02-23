@@ -1,5 +1,6 @@
 ﻿using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Model.Extensions;
+using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.WpfBase;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
             ngInfo.NgType = 0;
             if(SettingManager.CurrentTestOption?.IsTestVol??false)
             {
+                LogHelper.UiLog.Info("验证电压ng状况");
                 if(ngInfo.Battery.VolValue>SettingManager.CurrentBatteryStandard?.MaxVol)
                     ngInfo.AddNgType(Model.Enums.NgTypeEnum.电压过高);
                 if (ngInfo.Battery.VolValue < SettingManager.CurrentBatteryStandard?.MinVol)
@@ -23,6 +25,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
             }
             if(SettingManager.CurrentTestOption?.IsTestNVol??false)
             {
+                LogHelper.UiLog.Info("验证负极壳体电压ng状况");
                 if (ngInfo.Battery.NVolValue > SettingManager.CurrentBatteryStandard?.MaxNVol)
                     ngInfo.AddNgType(Model.Enums.NgTypeEnum.负极壳体电压过高);
                 if (ngInfo.Battery.NVolValue < SettingManager.CurrentBatteryStandard?.MinNVol)
@@ -30,6 +33,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
             }
             if(SettingManager.CurrentTestOption?.IsTestPVol??false)
             {
+                LogHelper.UiLog.Info("验证正极壳体电压ng状况");
                 if (ngInfo.Battery.PVolValue > SettingManager.CurrentBatteryStandard?.MaxPVol)
                     ngInfo.AddNgType(Model.Enums.NgTypeEnum.正极壳体电压过高);
                 if (ngInfo.Battery.PVolValue < SettingManager.CurrentBatteryStandard?.MinKValue)
@@ -37,6 +41,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
             }
             if(SettingManager.CurrentTestOption?.IsTestRes??false)
             {
+                LogHelper.UiLog.Info("验证内阻ng状况");
                 if (ngInfo.Battery.Res > SettingManager.CurrentBatteryStandard?.MaxRes)
                     ngInfo.AddNgType(Model.Enums.NgTypeEnum.内阻过高);
                 if (ngInfo.Battery.Res < SettingManager.CurrentBatteryStandard?.MinRes)
@@ -44,6 +49,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
             }
             if(SettingManager.CurrentTestOption?.IsTestTemp??false)
             {
+                LogHelper.UiLog.Info("验证温度ng状况");
                 if (ngInfo.Battery.Temp > SettingManager.CurrentBatteryStandard?.MaxTemp)
                     ngInfo.AddNgType(Model.Enums.NgTypeEnum.温度过高);
                 if (ngInfo.Battery.Temp < SettingManager.CurrentBatteryStandard?.MinTemp)

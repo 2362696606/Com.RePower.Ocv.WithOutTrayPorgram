@@ -1,0 +1,21 @@
+﻿<Window
+    x:Class="Com.RePower.Ocv.Ui.WuWei.Views.SettingView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Com.RePower.Ocv.Ui.WuWei.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uiBaseView="clr-namespace:Com.RePower.Ocv.Ui.UiBase.Views;assembly=Com.RePower.Ocv.Ui.UiBase"
+    Title="SettingView"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+    <TabControl>
+        <TabItem Header="电压范围">
+            <uiBaseView:SettingView SettingObj="{Binding BatteryNgCriteria}" />
+        </TabItem>
+        <TabItem Header="测试选项">
+            <uiBaseView:SettingView SettingObj="{Binding TestOption}" />
+        </TabItem>
+    </TabControl>
+</Window>

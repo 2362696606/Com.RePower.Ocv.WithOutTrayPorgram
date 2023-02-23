@@ -1,4 +1,5 @@
-﻿using Com.RePower.Ocv.Project.Byd.CB15.Services.Mes.Dtos;
+﻿using Com.RePower.Ocv.Model.Helper;
+using Com.RePower.Ocv.Project.Byd.CB15.Services.Mes.Dtos;
 using Com.RePower.WpfBase;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
     {
         private OperateResult SaveTestResultToCsv()
         {
+            LogHelper.UiLog.Info("保存测试结果到本地cvs");
             var time = DateTime.Now;
             string dayStr = time.ToString("yyyy_MM_dd");
             string timeStr = time.ToString("HH_mm");
@@ -20,7 +22,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
             {
                 Directory.CreateDirectory(dir);
             }
-            string path = @$"./测试记录/{dayStr}/{Tray.TrayCode}_{SettingManager.CurrentOcvType.ToString()}_{timeStr}.csv";
+            string path = @$"{dir}/{Tray.TrayCode}_{SettingManager.CurrentOcvType.ToString()}_{timeStr}.csv";
             switch (SettingManager.CurrentOcvType)
             {
                 case Enums.OcvTypeEnmu.OCV1:

@@ -2,6 +2,7 @@
 using Com.RePower.Ocv.Project.Byd.CB15.Enums;
 using Com.RePower.Ocv.Project.Byd.CB15.Services.Setting;
 using Com.RePower.Ocv.Project.Byd.CB15.Settings;
+using Com.RePower.WpfBase;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -50,7 +51,14 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
         private MesSetting? _mesSettingForOcv3;
         private MesSetting? _mesSettingForOcv4;
 
-        public SettingManager()
+        private static readonly Lazy<SettingManager> _instance =
+           new Lazy<SettingManager>(() => new SettingManager());
+        /// <summary>
+        /// 单例静态实例
+        /// </summary>
+        public static SettingManager Instance { get { return _instance.Value; } }
+
+        private SettingManager()
         {
             using (OcvSettingDbContext context = new OcvSettingDbContext())
             {
@@ -69,32 +77,57 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
                 this._otherSettingForOcv4 = JsonConvert.DeserializeObject<OtherSetting>(otherSettingForOcv4Str);
                 #endregion
                 #region 初始化TestOption
-                var testOptionForOcv1 = context.SettingItems.FirstOrDefault(x => x.SettingName == "TestOption_Ocv1");
-                var testOptionForOcv1Str = testOptionForOcv1?.JsonValue ?? string.Empty;
-                this._testOptionForOcv1 = JsonConvert.DeserializeObject<TestOption>(testOptionForOcv1Str);
-                var testOptionForOcv2 = context.SettingItems.FirstOrDefault(x => x.SettingName == "TestOption_Ocv2");
-                var testOptionForOcv2Str = testOptionForOcv2?.JsonValue ?? string.Empty;
-                this._testOptionForOcv2 = JsonConvert.DeserializeObject<TestOption>(testOptionForOcv2Str);
-                var testOptionForOcv3 = context.SettingItems.FirstOrDefault(x => x.SettingName == "TestOption_Ocv3");
-                var testOptionForOcv3Str = testOptionForOcv3?.JsonValue ?? string.Empty;
-                this._testOptionForOcv3 = JsonConvert.DeserializeObject<TestOption>(testOptionForOcv3Str);
-                var testOptionForOcv4 = context.SettingItems.FirstOrDefault(x => x.SettingName == "TestOption_Ocv4");
-                var testOptionForOcv4Str = testOptionForOcv4?.JsonValue ?? string.Empty;
-                this._testOptionForOcv4 = JsonConvert.DeserializeObject<TestOption>(testOptionForOcv4Str);
+                var testOptionForOcv1Str = context.SettingItems.FirstOrDefault(x => x.SettingName == "TestOption_Ocv1")?.JsonValue;
+                if (!string.IsNullOrEmpty(testOptionForOcv1Str))
+                {
+                    this._testOptionForOcv1 = JsonConvert.DeserializeObject<TestOption>(testOptionForOcv1Str);
+                    if (_testOptionForOcv1 is { }) _testOptionForOcv1.SaveEvent = SaveChanged;
+                }
+                var testOptionForOcv2Str = context.SettingItems.FirstOrDefault(x => x.SettingName == "TestOption_Ocv2")?.JsonValue;
+                if(!string.IsNullOrEmpty(testOptionForOcv2Str))
+                {
+                    this._testOptionForOcv2 = JsonConvert.DeserializeObject<TestOption>(testOptionForOcv2Str);
+                    if (_testOptionForOcv2 is { }) _testOptionForOcv2.SaveEvent = SaveChanged;
+                }
+
+                var testOptionForOcv3Str = context.SettingItems.FirstOrDefault(x => x.SettingName == "TestOption_Ocv3")?.JsonValue;
+                if (!string.IsNullOrEmpty(testOptionForOcv3Str))
+                {
+                    this._testOptionForOcv3 = JsonConvert.DeserializeObject<TestOption>(testOptionForOcv3Str);
+                    if (_testOptionForOcv3 is { }) _testOptionForOcv3.SaveEvent = SaveChanged;
+                }
+                var testOptionForOcv4Str = context.SettingItems.FirstOrDefault(x => x.SettingName == "TestOption_Ocv4")?.JsonValue;
+                if (!string.IsNullOrEmpty(testOptionForOcv4Str))
+                {
+                    this._testOptionForOcv4 = JsonConvert.DeserializeObject<TestOption>(testOptionForOcv4Str);
+                    if (_testOptionForOcv4 is { }) _testOptionForOcv4.SaveEvent = SaveChanged;
+                }
                 #endregion
                 #region 初始化BatteryStandard
-                var BatteryStandardForOcv1 = context.SettingItems.FirstOrDefault(x => x.SettingName == "BatteryStandard_Ocv1");
-                var BatteryStandardForOcv1Str = BatteryStandardForOcv1?.JsonValue ?? string.Empty;
-                this._batteryStandardForOcv1 = JsonConvert.DeserializeObject<BatteryStandard>(BatteryStandardForOcv1Str);
-                var BatteryStandardForOcv2 = context.SettingItems.FirstOrDefault(x => x.SettingName == "BatteryStandard_Ocv2");
-                var BatteryStandardForOcv2Str = BatteryStandardForOcv2?.JsonValue ?? string.Empty;
-                this._batteryStandardForOcv2 = JsonConvert.DeserializeObject<BatteryStandard>(BatteryStandardForOcv2Str);
-                var BatteryStandardForOcv3 = context.SettingItems.FirstOrDefault(x => x.SettingName == "BatteryStandard_Ocv3");
-                var BatteryStandardForOcv3Str = BatteryStandardForOcv3?.JsonValue ?? string.Empty;
-                this._batteryStandardForOcv3 = JsonConvert.DeserializeObject<BatteryStandard>(BatteryStandardForOcv3Str);
-                var BatteryStandardForOcv4 = context.SettingItems.FirstOrDefault(x => x.SettingName == "BatteryStandard_Ocv4");
-                var BatteryStandardForOcv4Str = BatteryStandardForOcv4?.JsonValue ?? string.Empty;
-                this._batteryStandardForOcv4 = JsonConvert.DeserializeObject<BatteryStandard>(BatteryStandardForOcv4Str);
+                var BatteryStandardForOcv1Str = context.SettingItems.FirstOrDefault(x => x.SettingName == "BatteryStandard_Ocv1")?.JsonValue;
+                if(!string.IsNullOrEmpty(BatteryStandardForOcv1Str))
+                {
+                    this._batteryStandardForOcv1 = JsonConvert.DeserializeObject<BatteryStandard>(BatteryStandardForOcv1Str);
+                    if(_batteryStandardForOcv1 is { }) _batteryStandardForOcv1.SaveEvent = SaveChanged;
+                }
+                var BatteryStandardForOcv2Str = context.SettingItems.FirstOrDefault(x => x.SettingName == "BatteryStandard_Ocv2")?.JsonValue;
+                if (!string.IsNullOrEmpty(BatteryStandardForOcv2Str))
+                {
+                    this._batteryStandardForOcv2 = JsonConvert.DeserializeObject<BatteryStandard>(BatteryStandardForOcv2Str);
+                    if (_batteryStandardForOcv2 is { }) _batteryStandardForOcv2.SaveEvent = SaveChanged;
+                }
+                var BatteryStandardForOcv3Str = context.SettingItems.FirstOrDefault(x => x.SettingName == "BatteryStandard_Ocv3")?.JsonValue;
+                if (!string.IsNullOrEmpty(BatteryStandardForOcv3Str))
+                {
+                    this._batteryStandardForOcv3 = JsonConvert.DeserializeObject<BatteryStandard>(BatteryStandardForOcv3Str);
+                    if (_batteryStandardForOcv3 is { }) _batteryStandardForOcv3.SaveEvent = SaveChanged;
+                }
+                var BatteryStandardForOcv4Str = context.SettingItems.FirstOrDefault(x => x.SettingName == "BatteryStandard_Ocv4")?.JsonValue;
+                if (!string.IsNullOrEmpty(BatteryStandardForOcv4Str))
+                {
+                    this._batteryStandardForOcv4 = JsonConvert.DeserializeObject<BatteryStandard>(BatteryStandardForOcv4Str);
+                    if (_batteryStandardForOcv4 is { }) _batteryStandardForOcv4.SaveEvent = SaveChanged;
+                }
                 #endregion
                 #region 初始化PlcAddressCache
                 var plcAddressCacheForOcv1 = context.SettingItems.First(x => x.SettingName == "PlcAddressCache_Ocv1");
@@ -318,6 +351,83 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
                         return _mesSettingForOcv4;
                     default: return null;
                 }
+            }
+        }
+
+        private OperateResult SaveChanged(string name)
+        {
+            string? settingName = null;
+            string? settingValue = null;
+            switch (name)
+            {
+                case "TestOption":
+                    {
+                        switch(CurrentOcvType)
+                        {
+                            case OcvTypeEnmu.OCV1:
+                                settingName = "TestOption_Ocv1";
+                                break;
+                            case OcvTypeEnmu.OCV2:
+                                settingName = "TestOption_Ocv2";
+                                break;
+                            case OcvTypeEnmu.OCV3:
+                                settingName = "TestOption_Ocv3";
+                                break;
+                            case OcvTypeEnmu.OCV4:
+                                settingName = "TestOption_Ocv4";
+                                break;
+                        }
+                        settingValue = JsonConvert.SerializeObject(CurrentTestOption);
+                        break;
+                    }
+                case "BatteryStandard":
+                    {
+                        switch (CurrentOcvType)
+                        {
+                            case OcvTypeEnmu.OCV1:
+                                settingName = "BatteryStandard_Ocv1";
+                                break;
+                            case OcvTypeEnmu.OCV2:
+                                settingName = "BatteryStandard_Ocv2";
+                                break;
+                            case OcvTypeEnmu.OCV3:
+                                settingName = "BatteryStandard_Ocv3";
+                                break;
+                            case OcvTypeEnmu.OCV4:
+                                settingName = "BatteryStandard_Ocv4";
+                                break;
+                        }
+                        settingValue = JsonConvert.SerializeObject(CurrentBatteryStandard);
+                        break;
+                    }
+            }
+            if(!string.IsNullOrEmpty(settingName))
+            {
+                try
+                {
+                    using (var context = new OcvSettingDbContext())
+                    {
+                        var item = context.SettingItems.FirstOrDefault(x => x.SettingName == settingName);
+                        if (item is { })
+                        {
+                            item.JsonValue = settingValue ?? string.Empty;
+                            context.SettingItems.Update(item);
+                            context.SaveChanges();
+                        }
+                        else
+                            return OperateResult.CreateFailedResult($"未找到{settingName}对应的配置项");
+                    }
+                    return OperateResult.CreateSuccessResult();
+                }
+                catch (Exception e)
+                {
+                    return OperateResult.CreateFailedResult(e.Message);
+                    throw;
+                }
+            }
+            else
+            {
+                return OperateResult.CreateFailedResult($"未找到{name}对应配置项");
             }
         }
     }

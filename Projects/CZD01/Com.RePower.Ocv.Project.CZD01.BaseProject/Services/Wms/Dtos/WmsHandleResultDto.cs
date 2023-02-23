@@ -12,7 +12,6 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Services.Wms.Dtos
         /// OCV请求时的站台位置
         /// </summary>
         public string RequestLocation { get; set; } = string.Empty;
-        //public bool Skip { get; set; }
         /// <summary>
         /// 请求的托盘条码
         /// </summary>

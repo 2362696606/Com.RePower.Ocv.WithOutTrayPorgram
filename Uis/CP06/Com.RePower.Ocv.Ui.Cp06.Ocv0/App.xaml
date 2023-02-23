@@ -6,5 +6,11 @@
     xmlns:uiBase="clr-namespace:Com.RePower.Ocv.Ui.UiBase;assembly=Com.RePower.Ocv.Ui.UiBase"
     ShutdownMode="OnMainWindowClose"
     StartupUri="Views/MainView.xaml">
-    <Application.Resources />
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Com.RePower.Ocv.Ui.UiBase;component/Views/Dictionarys/BaseDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 </uiBase:UiBaseApplication>

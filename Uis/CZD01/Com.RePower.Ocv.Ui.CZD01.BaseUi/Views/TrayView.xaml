@@ -12,8 +12,11 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <valueConverter:BoolToVisibility x:Key="BoolToVisibility" />
-        <uiHelper:BindingProxy x:Key="proxy" Data="{Binding}" />
+        <ResourceDictionary>
+            <valueConverter:BoolToVisibility x:Key="BoolToVisibility" />
+            <valueConverter:NgInfoToColorMultiValueConverter x:Key="NgInfoToColor" />
+            <uiHelper:BindingProxy x:Key="proxy" Data="{Binding}" />
+        </ResourceDictionary>
     </UserControl.Resources>
     <materialDesign:Card Margin="16" Padding="30">
         <Grid>
@@ -32,6 +35,18 @@
                 CanUserAddRows="False"
                 IsReadOnly="True"
                 ItemsSource="{Binding Tray.NgInfos}">
+                <DataGrid.RowStyle>
+                    <Style BasedOn="{StaticResource MaterialDesignDataGridRow}" TargetType="DataGridRow">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource NgInfoToColor}">
+                                    <Binding Path="IsNg" />
+                                    <Binding Path="Battery.IsTested" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Battery.Position}" Header="位置" />
                     <DataGridTextColumn Binding="{Binding Battery.BarCode}" Header="条码" />

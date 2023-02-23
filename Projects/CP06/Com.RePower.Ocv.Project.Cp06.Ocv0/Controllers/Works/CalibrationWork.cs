@@ -1,4 +1,6 @@
-﻿using Com.RePower.WpfBase;
+﻿using Com.RePower.Ocv.Model.Extensions;
+using Com.RePower.Ocv.Model.Helper;
+using Com.RePower.WpfBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +15,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
         /// 预约校准
         /// </summary>
         /// <returns></returns>
-        private OperateResult ScheduledCalibration()
+        public OperateResult ScheduledCalibration()
         {
             if (DevicesController.PlcAddressCache.TryGetValue("清空/计量选择", out string? address))
             {
@@ -35,28 +37,69 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
             var getAddressResult = DevicesController.PlcAddressCache.TryGetValue("校表请求信号", out string? address);
             if (!getAddressResult)
                 return OperateResult.CreateFailedResult("未找到\"校表请求信号\"对应地址");
-            var waitResult = DevicesController.Plc.Wait(address!, (short)1);
+            var waitResult = DevicesController.Plc.Wait(address??string.Empty, (short)1);
             if(waitResult.IsFailed) return waitResult;
             return OperateResult.CreateSuccessResult();
         }
-        //private OperateResult DoCalibration()
-        //{
-            
-        //    var CalibrationValues = SettingManager.CurrentCalibrationSetting?.CalibrationValues;
-        //    if (CalibrationValues is { })
-        //    {
-        //        var closeAllResult = DevicesController.SwitchBoard?.CloseAllChannels(1) ?? OperateResult.CreateFailedResult("切换板实例为null");
-        //        if(closeAllResult.IsFailed) return closeAllResult;
-        //        foreach (var item in CalibrationValues)
-        //        {
-        //            var openResult = DevicesController.SwitchBoard?.OpenChannel(1, item.Channel) ?? OperateResult.CreateFailedResult("切换板实例为null");
-        //            if (openResult.IsFailed) return openResult;
-        //            var resResult = DevicesController.Ohm?.ReadRes() ?? OperateResult.CreateFailedResult<double>("内阻仪实例为null");
-        //            if(resResult.IsFailed) return resResult;
-        //            var res = resResult.Content;
-        //        }
-        //    }
-        //    else return OperateResult.CreateFailedResult("无法获取校表配置");
-        //}
+        /// <summary>
+        /// 下发开始校准
+        /// </summary>
+        /// <returns></returns>
+        private OperateResult SendStartCalibration()
+        {
+            var getAddressResult = DevicesController.PlcAddressCache.TryGetValue("校表标志位", out string? address);
+            if (!getAddressResult) return OperateResult.CreateFailedResult("未找到\"校表标志位\"对应地址");
+            var writeResult = DevicesController.Plc.Write(address??string.Empty, (short)1);
+            if(writeResult.IsFailed) return writeResult;
+            return OperateResult.CreateSuccessResult();
+        }
+        /// <summary>
+        /// 等待请求计量
+        /// </summary>
+        /// <returns></returns>
+        private OperateResult WaitRequestMeasure()
+        {
+            var getAddressResult = DevicesController.PlcAddressCache.TryGetValue("请求信号", out string? address);
+            if (!getAddressResult)
+                return OperateResult.CreateFailedResult("未找到\"请求信号\"对应地址");
+            var waitResult = DevicesController.Plc.Wait(address ?? string.Empty, (short)2);
+            if (waitResult.IsFailed) return waitResult;
+            return OperateResult.CreateSuccessResult();
+        }
+        /// <summary>
+        /// 执行校准
+        /// </summary>
+        /// <returns></returns>
+        private OperateResult DoCalibration()
+        {
+            var closeAllResult = DevicesController.SwitchBoard?.CloseAllChannels(1) ?? OperateResult.CreateFailedResult("切换板实例为null");
+            if (closeAllResult.IsFailed) return closeAllResult;
+            foreach (var item in (SettingManager.CurrentCalibrationSetting?.CalibrationValues ?? new List<Model.Entity.CalibrationValue>())) 
+            {
+                var openResult = DevicesController.SwitchBoard?.OpenChannel(1, item.Channel) ?? OperateResult.CreateFailedResult("切换板实例为null");
+                if (openResult.IsFailed)
+                    return openResult;
+                var readResult = DevicesController.Ohm?.ReadRes() ?? OperateResult.CreateFailedResult<double>("内阻仪实例为null");
+                if (readResult.IsFailed) return readResult;
+                item.GaugeValue = readResult.Content;
+                item.AutoValue = item.DeviationValue;
+                var closeResult = DevicesController.SwitchBoard?.CloseChannel(1, item.Channel) ?? OperateResult.CreateFailedResult("切换板实例为null");
+                if (closeResult.IsFailed) return closeResult;
+            }
+            return OperateResult.CreateSuccessResult();
+        }
+        /// <summary>
+        /// 下发计量完成
+        /// </summary>
+        /// <returns></returns>
+        private OperateResult SendMeasureComplate()
+        {
+            var getAddressResult = DevicesController.PlcAddressCache.TryGetValue("校表标志位", out string? address);
+            if (!getAddressResult) return OperateResult.CreateFailedResult("未找到\"校表标志位\"对应地址");
+            var writeResult = DevicesController.Plc.Write(address ?? string.Empty, (short)3);
+            if (writeResult.IsFailed) return writeResult;
+            IsScheduledCalibration = false;
+            return OperateResult.CreateSuccessResult();
+        }
     }
 }

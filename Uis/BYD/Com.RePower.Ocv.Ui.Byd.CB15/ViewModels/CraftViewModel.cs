@@ -5,12 +5,10 @@ namespace Com.RePower.Ocv.Ui.Byd.CB15.ViewModels
 {
     public partial class CraftViewModel:ObservableObject
     {
-        [ObservableProperty]
-        private SettingManager _settingManager;
+        public SettingManager SettingManager => SettingManager.Instance;
 
-        public CraftViewModel(SettingManager settingManager)
+        public CraftViewModel()
         {
-            this._settingManager = settingManager;
         }
     }
 }

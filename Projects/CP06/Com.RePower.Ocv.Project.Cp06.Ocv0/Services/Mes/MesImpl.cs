@@ -17,10 +17,9 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
 {
     public class MesImpl : IMesService
     {
-        public MesImpl(IHttpClientFactory httpClientFactory,SettingManager settingManager,Tray tray)
+        public MesImpl(IHttpClientFactory httpClientFactory,Tray tray)
         {
             HttpClientFactory = httpClientFactory;
-            SettingManager = settingManager;
             Tray = tray;
         }
         public MesSetting? MesSetting
@@ -38,7 +37,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
         }
 
         public IHttpClientFactory HttpClientFactory { get; }
-        public SettingManager SettingManager { get; }
+        public SettingManager SettingManager => SettingManager.Instance;
         public Tray Tray { get; }
 
         public OperateResult<string> BatteryDismantlingDiskDataUploadToMes()

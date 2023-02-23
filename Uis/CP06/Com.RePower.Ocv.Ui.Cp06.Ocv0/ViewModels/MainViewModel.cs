@@ -19,13 +19,20 @@ namespace Com.RePower.Ocv.Ui.Cp06.Ocv0.ViewModels
         [RelayCommand]
         private void DoCalibration()
         {
-
             var calibrationView = new CalibrationView();
             calibrationView.Show();
-            //Task.Run(() =>
-            //{
-            //});
-
+        }
+        [RelayCommand]
+        private void OpenSetting()
+        {
+            var settingView = new SettingView();
+            settingView.Show();
+        }
+        [RelayCommand]
+        private void OpenDataSearch()
+        {
+            var dataSearchView = new DataSearchView();
+            dataSearchView.Show();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Com.RePower.Ocv.Ui.WuWei.ViewModels;
+using Com.RePower.WpfBase;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,16 +14,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Com.RePower.Ocv.Ui.Byd.CB15.Views
+namespace Com.RePower.Ocv.Ui.WuWei.Views
 {
     /// <summary>
-    /// MainSettingView.xaml 的交互逻辑
+    /// SettingView.xaml 的交互逻辑
     /// </summary>
-    public partial class MainSettingView : Window
+    public partial class SettingView : Window
     {
-        public MainSettingView()
+        public SettingView()
         {
             InitializeComponent();
+            this.DataContext = IocHelper.Default.GetService<SettingViewModel>();
         }
     }
 }

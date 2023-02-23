@@ -86,7 +86,7 @@ namespace Com.RePower.Ocv.Ui.WuWei
             builder.RegisterModule<TrayModule>();
             builder.RegisterModule<SwitchBoardModul>();
             builder.RegisterModule<TestOptionModule>();
-            builder.RegisterModule<BatteryNgCriteriaModule>();
+            //builder.RegisterModule<BatteryNgCriteriaModule>();
             builder.RegisterModule<ProjectModule>();
             builder.RegisterModule<WmsModule>();
         }

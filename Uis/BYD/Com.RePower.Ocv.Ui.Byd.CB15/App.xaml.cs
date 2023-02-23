@@ -7,6 +7,8 @@ using Com.RePower.Ocv.Project.Byd.CB15.Services.Mes;
 using Com.RePower.Ocv.Ui.UiBase;
 using Com.RePower.WpfBase;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
@@ -24,13 +26,12 @@ namespace Com.RePower.Ocv.Ui.Byd.CB15
     /// </summary>
     public partial class App : UiBaseApplication
     {
-        public SettingManager SettingManager { get; set; } = new SettingManager();
         protected override void AddService(ServiceCollection serviceCollection)
         {
             serviceCollection.AddAutoMapper(typeof(OrganizationProfile),typeof(MesDtoProfile));
             //serviceCollection.AddHttpClient();
             serviceCollection.AddDbContext<LocalTestResultDbContext>();
-            serviceCollection.AddDbContext<MesDbContext>(option => option.UseSqlServer(connectionString: SettingManager.CurrentMesSetting?.DbConnectString 
+            serviceCollection.AddDbContext<MesDbContext>(option => option.UseSqlServer(connectionString: SettingManager.Instance.CurrentMesSetting?.DbConnectString 
                 ?? "Data Source=172.22.65.199;Initial Catalog=CB15_OCV;User Id=repower;Password=Admin@123;TrustServerCertificate=true;"));
         }
 
@@ -44,7 +45,7 @@ namespace Com.RePower.Ocv.Ui.Byd.CB15
             builder.RegisterModule<TempSensorModule>();
             builder.RegisterModule<WorkModule>();
             builder.RegisterModule<TrayModule>();
-            builder.RegisterModule<SettingManagerModule>();
+            //builder.RegisterModule<SettingManagerModule>();
             builder.RegisterModule<WmsModule>();
             builder.RegisterModule<MesModule>();
         }
@@ -59,6 +60,9 @@ namespace Com.RePower.Ocv.Ui.Byd.CB15
                 {
                     var context = IocHelper.Default.GetService<MesDbContext>();
                     context?.Database.EnsureCreated();
+
+                    //var creator = context?.GetService<IRelationalDatabaseCreator>();
+                    //creator?.CreateTables();
                 }
             }
         }

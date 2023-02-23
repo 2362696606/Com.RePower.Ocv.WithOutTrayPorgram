@@ -20,7 +20,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
             {
                 var uploadResult = this.MesService?.UploadResultToMes();
                 if (uploadResult?.IsFailed ?? true)
-                    return uploadResult ?? OperateResult.CreateFailedResult("Mes服务为Null"); 
+                    return uploadResult ?? OperateResult.CreateFailedResult("Mes服务为Null");
             }
             return OperateResult.CreateSuccessResult();
         }

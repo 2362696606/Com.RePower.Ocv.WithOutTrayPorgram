@@ -7,6 +7,7 @@ using Com.RePower.Ocv.Model.Settings.Dtos;
 using Com.RePower.Ocv.Project.CZD01.BaseProject.Profiles;
 using Com.RePower.Ocv.Project.CZD01.BaseProject.Settings;
 using Com.RePower.Ocv.Project.CZD01.BaseProject.Settings.Dtos;
+using Com.RePower.WpfBase;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -75,6 +76,8 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers
                 {
                     var dto = JsonConvert.DeserializeObject<Settings.Dtos.TestOptionDto>(testOptionJStr);
                     this._testOption = mapper.Map<Settings.TestOption>(dto);
+                    _testOption.SaveEvent = SaveChange;
+                    
                 }
                 #endregion
                 #region 初始化BatteryStandard
@@ -83,6 +86,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers
                 {
                     var dto = JsonConvert.DeserializeObject<Settings.Dtos.BatteryStandardSettingDto>(batteryStandardJStr);
                     this._batteryStandard = mapper.Map<Settings.BatteryStandard>(dto);
+                    _batteryStandard.SaveEvent = SaveChange;
                 }
                 #endregion
                 #region 初始化WmsSetting
@@ -229,5 +233,38 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers
         /// 现场数据库连接字符串
         /// </summary>
         public string? SceneConnectString { get; set; }
+
+        private OperateResult SaveChange(string name)
+        {
+            string? settingName = null;
+            string? settingValue = null;
+            switch (name)
+            {
+                case "BatteryStandard":
+                    settingName = batteryStandardSettingName;
+                    settingValue = JsonConvert.SerializeObject(CurrentBatteryStandard);
+                    break;
+                case "TestOption":
+                    settingName = testOptionSettingName;
+                    settingValue = JsonConvert.SerializeObject(CurrentTestOption);
+                    break;
+            }
+            if (!string.IsNullOrEmpty(settingName))
+            {
+                using (var context = new OcvSettingDbContext())
+                {
+                    var item = context.SettingItems.FirstOrDefault(x => x.SettingName == settingName);
+                    if (item is { })
+                    {
+                        item.JsonValue = settingValue??string.Empty;
+                        context.SettingItems.Update(item);
+                        context.SaveChanges();
+                        return OperateResult.CreateSuccessResult();
+                    }
+                    else return OperateResult.CreateFailedResult($"未找到{settingName}对应的配置项");
+                }
+            }
+            else return OperateResult.CreateFailedResult($"未找到{name}对应的配置项");
+        }
     }
 }

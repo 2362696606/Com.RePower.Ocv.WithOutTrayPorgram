@@ -13,9 +13,8 @@ namespace Com.RePower.Ocv.Ui.Byd.CB15.ViewModels
         [RelayCommand]
         private void OpenSettingView()
         {
-            var settingView = new MainSettingView();
-            settingView.DataContext = IocHelper.Default.GetService<MainSettingViewModel>();
-            settingView.ShowDialog();
+            var settingView = new SettingView();
+            settingView.Show();
         }
     }
 }

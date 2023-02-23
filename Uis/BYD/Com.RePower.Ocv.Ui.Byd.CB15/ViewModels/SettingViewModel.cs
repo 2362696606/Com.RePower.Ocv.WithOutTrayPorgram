@@ -8,13 +8,8 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Ui.Byd.CB15.ViewModels
 {
-    public partial class MainSettingViewModel:ObservableObject
+    public class SettingViewModel:ObservableObject
     {
-        [ObservableProperty]
-        private SettingManager _settingManager;
-        public MainSettingViewModel(SettingManager settingManager)
-        {
-            this._settingManager = settingManager;
-        }
+        public SettingManager SettingManager => SettingManager.Instance;
     }
 }

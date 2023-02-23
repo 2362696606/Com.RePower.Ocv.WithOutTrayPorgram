@@ -19,28 +19,27 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms
 {
     public class WmsImpl : IWmsService
     {
-        private readonly SettingManager settingManager;
 
-        public WmsImpl(IHttpClientFactory httpClientFactory, Tray tray, SettingManager settingManager,IMapper mapper)
+        public WmsImpl(IHttpClientFactory httpClientFactory, Tray tray,IMapper mapper)
         {
-            this.settingManager = settingManager;
             Mapper = mapper;
             HttpClientFactory = httpClientFactory;
             Tray = tray;
         }
 
 
-        public WmsSetting? WmsSetting { get => settingManager.CurrentWmsSetting; }
+        public WmsSetting? WmsSetting { get => SettingManager.CurrentWmsSetting; }
         public IHttpClientFactory HttpClientFactory { get; private set; }
         public HttpClient HttpClient
         {
             get 
             {
-                var temp = HttpClientFactory.CreateClient("WmsHttpClient_" + (settingManager.CurrentOcvType.ToString()));
+                var temp = HttpClientFactory.CreateClient("WmsHttpClient_" + (SettingManager.CurrentOcvType.ToString()));
                 temp.BaseAddress = new Uri(WmsSetting?.BaseAddress ?? "http://172.17.2.200:44311/api/services/app/ForeignInterfaceService/");
                 return temp;
             }
         }
+        public SettingManager SettingManager => SettingManager.Instance;
         public Tray Tray { get; private set; }
         public IMapper Mapper { get; }
 
@@ -82,9 +81,9 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms
             {
                 WhCode = WmsSetting?.WhCode??string.Empty,
                 TrayBarcode = Tray.TrayCode,
-                DeviceName = settingManager.CurrentOcvType.ToString(),
-                Procedure = settingManager.CurrentOcvType.ToString(),
-                ProjectCode = settingManager.CurrentWmsSetting?.ProjectCode ?? "CP06",
+                DeviceName = SettingManager.CurrentOcvType.ToString(),
+                Procedure = SettingManager.CurrentOcvType.ToString(),
+                ProjectCode = SettingManager.CurrentWmsSetting?.ProjectCode ?? "CP06",
             };
             foreach(var item in Tray.NgInfos)
             {

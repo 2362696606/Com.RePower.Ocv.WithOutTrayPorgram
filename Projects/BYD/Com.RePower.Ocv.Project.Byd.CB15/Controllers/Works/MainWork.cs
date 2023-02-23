@@ -21,7 +21,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
         /// 是否是msa测试
         /// </summary>
         [ObservableProperty]
-        private bool _isMsaTest;
+        private bool _isMsaTest = false;
         /// <summary>
         /// msa计数
         /// </summary>
@@ -35,25 +35,30 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
         /// </summary>
         private int _retestCount = 0;
         public DevicesController DevicesController { get; }
-        public SettingManager SettingManager { get; }
+        public SettingManager SettingManager => SettingManager.Instance;
         public Tray Tray { get; }
         public IWmsService WmsService { get; }
         public IMesService? MesService { get; }
         public IMapper Mapper { get; }
+        /// <summary>
+        /// Plc连接状态
+        /// </summary>
+        public bool PlcConnectStatus { get; set; }
 
         public MainWork(DevicesController devicesController
-            , SettingManager settingManager
+            //, SettingManager settingManager
             , Tray tray
             , IMapper mapper
             , IWmsService wmsService
             , IMesService? mesService = null)
         {
             DevicesController = devicesController;
-            SettingManager = settingManager;
+            //SettingManager = settingManager;
             Tray = tray;
             WmsService = wmsService;
             MesService = mesService;
             Mapper = mapper;
+            Task.Run(KeepHeartbeat);
         }
 
         protected override OperateResult DoWork()
@@ -182,6 +187,8 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 var uploadTestResultToMesResult = UploadTestResultToMes();
                 if(uploadTestResultToMesResult.IsFailed)
                     return uploadTestResultToMesResult;
+                var uploadTestResultToWmsResult = UploadTestResultToWms();
+                if(uploadTestResultToWmsResult.IsFailed) return uploadTestResultToWmsResult;
                 DoPauseOrStop();
                 //向plc下发出库
                 var sendPlcOutboundResult = SendPlcOutbound();

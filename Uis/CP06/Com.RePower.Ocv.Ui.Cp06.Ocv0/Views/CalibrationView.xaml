@@ -22,10 +22,22 @@
             Margin="0,0,16,16"
             HorizontalAlignment="Right"
             Rows="1">
-            <Button
-                Margin="0,0,10,0"
-                Command="{Binding DoCalibrationCommand}"
-                Content="预约校准" />
+            <Button Margin="0,0,10,0" Command="{Binding DoCalibrationCommand}">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource MaterialDesignFlatMidBgButton}" TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Work.IsScheduledCalibration}" Value="true">
+                                <Setter Property="Content" Value="已预约校准" />
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Work.IsScheduledCalibration}" Value="false">
+                                <Setter Property="Content" Value="预约校准 " />
+                                <Setter Property="IsEnabled" Value="True" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
             <Button Command="{Binding DoSaveChangedCommand}" Content="保存" />
         </UniformGrid>
         <materialDesign:Snackbar Grid.RowSpan="2" MessageQueue="{Binding MessageQueue}" />

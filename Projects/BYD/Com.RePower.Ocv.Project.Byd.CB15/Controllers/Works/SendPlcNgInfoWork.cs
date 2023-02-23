@@ -1,4 +1,5 @@
-﻿using Com.RePower.WpfBase;
+﻿using Com.RePower.Ocv.Model.Helper;
+using Com.RePower.WpfBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
     {
         private OperateResult SendPlcNgInfo()
         {
+            LogHelper.UiLog.Info("向Plc下发测试结果");
             if (Tray.NgInfos.Any(x => x.IsNg)) 
             {
                 var sendResult = DevicesController.Plc.Write(SettingManager.CurrentPlcAddressCache["测试结果"], (short)3);

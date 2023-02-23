@@ -2,6 +2,7 @@
 using Com.RePower.Ocv.Project;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works;
+using Com.RePower.WpfBase;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
@@ -22,12 +23,18 @@ namespace Com.RePower.Ocv.Ui.Cp06.Ocv0.ViewModels
 
         public SettingManager SettingManager => SettingManager.Instance;
         [RelayCommand]
-        private void DoCalibration()
+        private async void DoCalibration()
         {
-            if(Work is MainWork tempWork)
+            var result = await Task.Run(() =>
             {
-
-            }
+                if (Work is MainWork tempWork)
+                {
+                    return tempWork.ScheduledCalibration();
+                }
+                else return OperateResult.CreateFailedResult("当前流程未实现校准");
+            });
+            if (result.IsFailed) MessageQueue.Enqueue($"预约校准失败:{result.Message}");
+            MessageQueue.Enqueue("已预约校准");
         }
         [RelayCommand]
         private async void DoSaveChanged()

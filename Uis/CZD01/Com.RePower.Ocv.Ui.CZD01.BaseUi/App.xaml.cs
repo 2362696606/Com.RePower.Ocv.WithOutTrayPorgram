@@ -28,6 +28,7 @@ namespace Com.RePower.Ocv.Ui.CZD01.BaseUi
         protected override void AddService(ServiceCollection serviceCollection)
         {
             serviceCollection.AddDbContext<LocalTestResultDbContext>();
+            serviceCollection.AddHttpClient();
             string sceneConnectStr = SettingManager.Instance.SceneConnectString ?? string.Empty;
             if(!string.IsNullOrEmpty(sceneConnectStr))
             {

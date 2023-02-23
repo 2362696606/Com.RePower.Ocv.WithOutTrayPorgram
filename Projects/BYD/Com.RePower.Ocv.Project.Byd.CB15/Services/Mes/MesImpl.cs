@@ -13,16 +13,15 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
 {
     public class MesImpl : IMesService
     {
-        public MesImpl(MesDbContext context,SettingManager settingManager,Tray tray,IMapper mapper)
+        public MesImpl(MesDbContext context,Tray tray,IMapper mapper)
         {
             Context = context;
-            SettingManager = settingManager;
             Tray = tray;
             Mapper = mapper;
         }
 
         public MesDbContext Context { get; }
-        public SettingManager SettingManager { get; }
+        public SettingManager SettingManager => SettingManager.Instance;
         public Tray Tray { get; }
         public IMapper Mapper { get; }
 
@@ -63,7 +62,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
                 dto.UploadTime = DateTime.Now;
                 dtos.Add(dto);
             }
-            Context.Add(dtos);
+            Context.AddRange(dtos);
             Context.SaveChanges();
             return OperateResult.CreateSuccessResult();
         }
@@ -80,7 +79,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
                 dto.UploadTime = DateTime.Now;
                 dtos.Add(dto);
             }
-            Context.Add(dtos);
+            Context.AddRange(dtos);
             Context.SaveChanges();
             return OperateResult.CreateSuccessResult();
         }
@@ -97,7 +96,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
                 dto.UploadTime = DateTime.Now;
                 dtos.Add(dto);
             }
-            Context.Add(dtos);
+            Context.AddRange(dtos);
             Context.SaveChanges();
             return OperateResult.CreateSuccessResult();
         }
@@ -114,7 +113,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
                 dto.UploadTime = DateTime.Now;
                 dtos.Add(dto);
             }
-            Context.Add(dtos);
+            Context.AddRange(dtos);
             Context.SaveChanges();
             return OperateResult.CreateSuccessResult();
         }

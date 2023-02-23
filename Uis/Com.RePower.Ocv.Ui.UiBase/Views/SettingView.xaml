@@ -64,6 +64,7 @@
             </ItemsControl>
         </materialDesign:Card>
         <Button
+            Name="SaveButton"
             Grid.Row="1"
             Margin="0,0,16,16"
             HorizontalAlignment="Right"

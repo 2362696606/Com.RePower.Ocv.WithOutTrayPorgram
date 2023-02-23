@@ -68,9 +68,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                 {
                     return writeResult;
                 }
-                return OperateResult.CreateSuccessResult();
             }
-
             return OperateResult.CreateSuccessResult();
         }
     }

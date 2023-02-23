@@ -51,15 +51,14 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         public MainWorkFixed(DevicesController devicesController
             , FlowController flowController
             , Tray tray
-            , BatteryNgCriteria batteryNgCriteria
-            , TestOption testOption
+            //, BatteryNgCriteria batteryNgCriteria
+            //, TestOption testOption
             , IWmsService wmsService)
         {
             DevicesController = devicesController;
             FlowController = flowController;
             Tray = tray;
-            BatteryNgCriteria = batteryNgCriteria;
-            TestOption = testOption;
+            //TestOption = testOption;
             WmsService = wmsService;
         }
 
@@ -75,8 +74,8 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         public DevicesController DevicesController { get; }
         public FlowController FlowController { get; }
         public Tray Tray { get; }
-        public BatteryNgCriteria BatteryNgCriteria { get; }
-        public TestOption TestOption { get; }
+        public BatteryNgCriteria? BatteryNgCriteria => SettingManager.Instance.BatteryNgCriteria;
+        public TestOption? TestOption => SettingManager.Instance.TestOption;
         public IWmsService WmsService { get; }
 
         
@@ -87,7 +86,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// </summary>
         public bool IsDoUploadToMes
         {
-            get { return TestOption.IsDoUploadToMes; }
+            get { return TestOption?.IsDoUploadToMes??false; }
         }
 
         /// <summary>
@@ -95,7 +94,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// </summary>
         public bool IsDoRetest
         {
-            get { return TestOption.IsDoRetest; }
+            get { return TestOption?.IsDoRetest??false; }
         }
 
         /// <summary>
@@ -103,7 +102,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// </summary>
         public int RetestTimes
         {
-            get { return TestOption.RetestTimes; }
+            get { return TestOption?.RetestTimes??0; }
         }
 
         /// <summary>
@@ -429,7 +428,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// <returns></returns>
         private OperateResult DoMsaTest()
         {
-            for(int msatestTimes = 0;msatestTimes<TestOption.MsaTimes; msatestTimes++)
+            for(int msatestTimes = 0;msatestTimes<(TestOption?.MsaTimes??25); msatestTimes++)
             {
 
                 #region 暂停或停止
@@ -454,7 +453,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 {
                     return saveResult;
                 }
-                if (msatestTimes<TestOption.MsaTimes-1)
+                if (msatestTimes<(TestOption?.MsaTimes??25-1))
                 {
                     #region 下发复测信号
                     LogHelper.UiLog.Info("写入Plc[Send_2] = 2");
@@ -826,7 +825,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 return openResult;
             }
             LogHelper.UiLog.Info("读取电压");
-            Thread.Sleep(TestOption.DMMReadDelayWhenSwitch);
+            Thread.Sleep(TestOption?.DMMReadDelayWhenSwitch??100);
             var read1 = DevicesController.DMM.ReadDc();
             if (read1.IsFailed)
             {
@@ -841,7 +840,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             {
                 return closeResult;
             }
-            Thread.Sleep(TestOption.SwitchDelay);
+            Thread.Sleep(TestOption?.SwitchDelay??100);
             return OperateResult.CreateSuccessResult();
         }
 
@@ -886,14 +885,14 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         {
             foreach (var ngInfo in Tray.NgInfos)
             {
-                if (ngInfo.Battery.NVolValue > BatteryNgCriteria.MaxPVol)
+                if (ngInfo.Battery.NVolValue > BatteryNgCriteria?.MaxPVol)
                 {
                     //ngInfo.NgDescription = "电压过高";
                     //ngInfo.NgType = 2;
                     //ngInfo.IsNg = true;
                     ngInfo.AddNgType(Ocv.Model.Enums.NgTypeEnum.电压过高);
                 }
-                else if (ngInfo.Battery.NVolValue < BatteryNgCriteria.MinPVol)
+                else if (ngInfo.Battery.NVolValue < BatteryNgCriteria?.MinPVol)
                 {
                     //ngInfo.NgDescription = "电压过低";
                     //ngInfo.NgType = 1;
@@ -952,9 +951,9 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 foreach (var item in Tray.NgInfos)
                 {
                     RnDbOcv rnDbOcv = new RnDbOcv();
-                    rnDbOcv.EqpId = "rn_" + TestOption.OcvType + "_6"; //设备编码   //EquipmentCode;
-                    rnDbOcv.PcId = TestOption.OcvType + "_6";//设备号+线
-                    rnDbOcv.Operation = TestOption.OcvType;//设备号
+                    rnDbOcv.EqpId = "rn_" + TestOption?.OcvType??"Ocv0" + "_6"; //设备编码   //EquipmentCode;
+                    rnDbOcv.PcId = TestOption?.OcvType ?? "Ocv0" + "_6";//设备号+线
+                    rnDbOcv.Operation = TestOption?.OcvType ?? "Ocv0";//设备号
                     if (string.IsNullOrWhiteSpace(Tray.TrayCode))
                     {
                         LogHelper.UiLog.Error("托盘条码为空！");
@@ -963,7 +962,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     }
                     rnDbOcv.TrayId = Tray.TrayCode;//托盘号
                     rnDbOcv.IsTrans = 1;//是否跨线
-                    rnDbOcv.ModelNo = TestOption.OcvType + "_6";//设备号+线
+                    rnDbOcv.ModelNo = TestOption?.OcvType ?? "Ocv0" + "_6";//设备号+线
                     //if (Tray.NgInfos.FirstOrDefault(s => s.IsNg == true) != null)
                     //{
                     //    rnDbOcv.TotalNgState = "NG";

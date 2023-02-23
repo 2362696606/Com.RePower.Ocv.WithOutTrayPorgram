@@ -15,16 +15,15 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Wms
 {
     public class WmsImpl : IWmsService
     {
-        public WmsImpl(Tray tray, SettingManager settingManager, IMapper mapper)
+        public WmsImpl(Tray tray, IMapper mapper)
         {
             Tray = tray;
-            SettingManager = settingManager;
             Mapper = mapper;
             WebServiceClient = new OCVWebServiceSoapClient(new OCVWebServiceSoapClient.EndpointConfiguration());
         }
 
         public Tray Tray { get; }
-        public SettingManager SettingManager { get; }
+        public SettingManager SettingManager => SettingManager.Instance;
         public IMapper Mapper { get; }
         public OCVWebServiceSoapClient WebServiceClient { get; set; }
 

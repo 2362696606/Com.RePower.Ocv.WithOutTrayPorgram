@@ -16,6 +16,7 @@ using Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms;
 using Com.RePower.Ocv.Project.ProjectBase.Controllers;
 using Com.RePower.WpfBase;
+using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.VisualBasic;
@@ -68,10 +69,16 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                 Thread.Sleep(1000 * 60 * 3);
             }
         }
+
+        private bool _isScheduledCalibration;
         /// <summary>
         /// 已预约校准
         /// </summary>
-        public bool IsScheduledCalibration { get; private set; }
+        public bool IsScheduledCalibration
+        {
+            get { return _isScheduledCalibration; }
+            private set { SetProperty(ref _isScheduledCalibration, value); }
+        }
 
         public DevicesController DevicesController { get; }
         public Tray Tray { get; }
@@ -85,65 +92,80 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
         {
             while (true)
             {
-                DoPauseOrStop();
-                var testPreParationResult = TestPreparation();
-                if (testPreParationResult.IsFailed)
-                    return testPreParationResult;
-                DoPauseOrStop();
-                var getTrayCodeResult = GetTrayCode();
-                if (getTrayCodeResult.IsFailed)
-                    return getTrayCodeResult;
-                DoPauseOrStop();
-                var getBatteriesInfoResult = GetBatteriesInfo();
-                if (getBatteriesInfoResult.IsFailed)
-                    return getBatteriesInfoResult;
-                DoPauseOrStop();
-                var testBatteriesResult = TestBatteries();
-                if (testBatteriesResult.IsFailed)
-                    return testBatteriesResult;
-                DoPauseOrStop();
-                var verfyKValueResult = VerifyKValue();
-                if (verfyKValueResult.IsFailed)
-                    return verfyKValueResult;
-                DoPauseOrStop();
-                var saveToLocationResult = SaveToLocation();
-                if (saveToLocationResult.IsFailed)
-                    return saveToLocationResult;
-                DoPauseOrStop();
-                var saveToSceneDbResult = SaveToSceneDb();
-                if (saveToSceneDbResult.IsFailed)
-                    return saveToSceneDbResult;
-                DoPauseOrStop();
-                var uploadToMesResult = UploadTestResultToMes();
-                if (uploadToMesResult.IsFailed)
-                    return uploadToMesResult;
-                DoPauseOrStop();
-                var uploadToWmsResult = UploadTestResultToWms();
-                if (uploadToWmsResult.IsFailed)
-                    return uploadToWmsResult;
-                DoPauseOrStop();
-                var requestAllLocateCellResult = RequestAllLocateCellToWms();
-                if (requestAllLocateCellResult.IsFailed)
-                    return requestAllLocateCellResult;
-                DoPauseOrStop();
-                var unBindingResult = UnBindingTray();
-                if (unBindingResult.IsFailed)
-                    return unBindingResult;
-                DoPauseOrStop();
-                var writeResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试标志位"], (short)2);
-                if (writeResult.IsFailed)
-                    return writeResult;
-                //return OperateResult.CreateSuccessResult();
-
+                var connectResult = ConnectDevices();
+                if (connectResult.IsFailed) return connectResult;
+                if (!IsScheduledCalibration)
+                {
+                    DoPauseOrStop();
+                    var testPreParationResult = TestPreparation();
+                    if (testPreParationResult.IsFailed)
+                        return testPreParationResult;
+                    DoPauseOrStop();
+                    var getTrayCodeResult = GetTrayCode();
+                    if (getTrayCodeResult.IsFailed)
+                        return getTrayCodeResult;
+                    DoPauseOrStop();
+                    var getBatteriesInfoResult = GetBatteriesInfo();
+                    if (getBatteriesInfoResult.IsFailed)
+                        return getBatteriesInfoResult;
+                    DoPauseOrStop();
+                    var testBatteriesResult = TestBatteries();
+                    if (testBatteriesResult.IsFailed)
+                        return testBatteriesResult;
+                    DoPauseOrStop();
+                    var verfyKValueResult = VerifyKValue();
+                    if (verfyKValueResult.IsFailed)
+                        return verfyKValueResult;
+                    DoPauseOrStop();
+                    var saveToLocationResult = SaveToLocation();
+                    if (saveToLocationResult.IsFailed)
+                        return saveToLocationResult;
+                    DoPauseOrStop();
+                    var saveToSceneDbResult = SaveToSceneDb();
+                    if (saveToSceneDbResult.IsFailed)
+                        return saveToSceneDbResult;
+                    DoPauseOrStop();
+                    var uploadToMesResult = UploadTestResultToMes();
+                    if (uploadToMesResult.IsFailed)
+                        return uploadToMesResult;
+                    DoPauseOrStop();
+                    var uploadToWmsResult = UploadTestResultToWms();
+                    if (uploadToWmsResult.IsFailed)
+                        return uploadToWmsResult;
+                    DoPauseOrStop();
+                    var requestAllLocateCellResult = RequestAllLocateCellToWms();
+                    if (requestAllLocateCellResult.IsFailed)
+                        return requestAllLocateCellResult;
+                    DoPauseOrStop();
+                    var unBindingResult = UnBindingTray();
+                    if (unBindingResult.IsFailed)
+                        return unBindingResult;
+                    DoPauseOrStop();
+                    var writeResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试标志位"], (short)2);
+                    if (writeResult.IsFailed)
+                        return writeResult; 
+                }
+                else
+                {
+                    //校表
+                    var waitResult = WaitRequestCalibration();
+                    if (waitResult.IsFailed) return waitResult;
+                    var writeResult = SendStartCalibration();
+                    if(writeResult.IsFailed) return writeResult;
+                    waitResult = WaitRequestMeasure();
+                    if(waitResult.IsFailed) return waitResult;
+                    var doResult = DoCalibration();
+                    if(doResult.IsFailed) return doResult;
+                    writeResult = SendMeasureComplate();
+                    if (writeResult.IsFailed) return writeResult;
+                }
             }
         }
-
-
         /// <summary>
-        /// 测试准备
+        /// 连接设备
         /// </summary>
-        /// <returns>操作结果</returns>
-        private OperateResult TestPreparation()
+        /// <returns></returns>
+        private OperateResult ConnectDevices()
         {
             if (!DevicesController.Plc.IsConnected)
             {
@@ -158,7 +180,10 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     return result;
                 }
             }
-            if (!(DevicesController.DMM?.IsConnected ?? true))
+            if ((!(DevicesController.DMM?.IsConnected ?? true)) 
+                && ((SettingManager.CurrentTestOption?.IsTestVol??false)
+                ||(SettingManager.CurrentTestOption?.IsTestNVol??false)
+                ||(SettingManager.CurrentTestOption?.IsTestPVol??false)))
             {
                 LogHelper.UiLog.Info("连接万用表");
                 var result = DevicesController.DMM.Connect();
@@ -171,7 +196,8 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     return result;
                 }
             }
-            if (!(DevicesController.Ohm?.IsConnected ?? true))
+            if ((!(DevicesController.Ohm?.IsConnected ?? true))
+                &&(SettingManager.CurrentTestOption?.IsTestRes??false))
             {
                 LogHelper.UiLog.Info("连接内阻仪");
                 var result = DevicesController.Ohm.Connect();
@@ -197,6 +223,15 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     return result;
                 }
             }
+            return OperateResult.CreateSuccessResult();
+        }
+
+        /// <summary>
+        /// 测试准备
+        /// </summary>
+        /// <returns>操作结果</returns>
+        private OperateResult TestPreparation()
+        {
             LogHelper.UiLog.Info("测试标志位写入0");
             var writeResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试标志位"], (short)0);
             if (writeResult.IsFailed)
@@ -363,6 +398,17 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                 var testResult = TestOneBattery(ngInfo);
                 if (testResult.IsFailed)
                     return testResult;
+                if((SettingManager.CurrentTestOption?.IsTestRes??false )
+                    && (SettingManager.CurrentCalibrationSetting?.IsUseCalibration??false))
+                {
+                    var calibrationValue = SettingManager.CurrentCalibrationSetting?.CalibrationValues?.FirstOrDefault(x => x.Channel == (i + 1));
+                    if (calibrationValue is { })
+                    {
+                        if (SettingManager.CurrentCalibrationSetting?.IsUseAutoValue ?? false)
+                            ngInfo.Battery.Res += calibrationValue.AutoValue;
+                        else ngInfo.Battery.Res += calibrationValue.ManuallyValue;
+                    } 
+                }
                 var closeResult = DevicesController.SwitchBoard?.CloseChannel(1, i + 1) ?? OperateResult.CreateFailedResult("未找到切换板");
                 if (closeResult.IsFailed)
                     return closeResult;

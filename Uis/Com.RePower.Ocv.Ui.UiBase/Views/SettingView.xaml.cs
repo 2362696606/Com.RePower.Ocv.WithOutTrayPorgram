@@ -70,6 +70,7 @@ namespace Com.RePower.Ocv.Ui.UiBase.Views
                     itemList.Add(temp); 
                 }
             }
+            this.SaveButton.Visibility = SaveButtonVisibility;
             this.OnPropertiesChanged(itemList);
         }
 
@@ -115,12 +116,17 @@ namespace Com.RePower.Ocv.Ui.UiBase.Views
 
         private async void DoSaveChanged(object sender, RoutedEventArgs e)
         {
+            if(SettingViewSnackbar.MessageQueue == null)
+            {
+                SettingViewSnackbar.MessageQueue = new MaterialDesignThemes.Wpf.SnackbarMessageQueue();
+            }
             if(SettingObj is ISettingSaveChanged tempSetting)
             {
                 var result = await tempSetting.SaveChangedAsync();
                 if (result.IsFailed)
                     this.SettingViewSnackbar.MessageQueue?.Enqueue($"保存失败:{result.Message}");
-                this.SettingViewSnackbar.MessageQueue?.Enqueue($"保存成功");
+                else
+                    this.SettingViewSnackbar.MessageQueue?.Enqueue($"保存成功");
             }
             else
                 this.SettingViewSnackbar.MessageQueue?.Enqueue($"当前对象非继承自\"ISettingSaveChanged\"接口");

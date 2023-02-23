@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Com.RePower.Ocv.Project.Byd.CB15.Controllers;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes.Dtos
@@ -64,7 +65,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes.Dtos
         /// </summary>
         [Column(TypeName = "varchar(4)")]
         [CsvHelper.Configuration.Attributes.Ignore]
-        public string? PCID { get; set; }
+        public string? PCID { get; set; } = SettingManager.Instance.CurrentMesSetting?.PcId ?? string.Empty;
         /// <summary>
         /// 例：6楼1单元OCV1
         /// </summary>

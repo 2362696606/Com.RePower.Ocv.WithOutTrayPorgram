@@ -256,22 +256,48 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
 
         private OperateResult DoSaveChanged(string name)
         {
-            string settingName = string.Empty;
+            string? settingName = null;
             string? jStr = null;
             switch(name)
             {
                 case "TestOption":
                     {
+                        switch (CurrentOcvType)
+                        {
+                            case OcvTypeEnmu.OCV0:
+                                settingName = "TestOptionForOcv0";
+                                break;
+                            case OcvTypeEnmu.OCV1:
+                                settingName = "TestOptionForOcv1";
+                                break;
+                            case OcvTypeEnmu.OCV2:
+                                settingName = "TestOptionForOcv2";
+                                break;
+                            case OcvTypeEnmu.OCV3:
+                                settingName = "TestOptionForOcv3";
+                                break;
+                        }
                         jStr = JsonConvert.SerializeObject(CurrentTestOption);
-                        if(!string.IsNullOrEmpty(jStr))
-                            settingName = "TestOptionFor" + CurrentOcvType.ToString();
                         break;
                     }
                 case "BatteryStandard":
                     {
+                        switch (CurrentOcvType)
+                        {
+                            case OcvTypeEnmu.OCV0:
+                                settingName = "BatteryStandardForOcv0";
+                                break;
+                            case OcvTypeEnmu.OCV1:
+                                settingName = "BatteryStandardForOcv1";
+                                break;
+                            case OcvTypeEnmu.OCV2:
+                                settingName = "BatteryStandardForOcv2";
+                                break;
+                            case OcvTypeEnmu.OCV3:
+                                settingName = "BatteryStandardForOcv3";
+                                break;
+                        }
                         jStr = JsonConvert.SerializeObject(CurrentBatteryStandard);
-                        if(!string.IsNullOrEmpty(jStr))
-                            settingName = "BatteryStandardFor"+CurrentOcvType.ToString();
                         break;
                     }
                 case "Calibration":
@@ -284,19 +310,26 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 default:
                     return OperateResult.CreateFailedResult($"未实现{name}的保存修改");
             }
-            using (var settingContext = new OcvSettingDbContext())
+            if(string.IsNullOrEmpty(settingName))
             {
-                var item = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == settingName);
-                if (item is { })
-                {
-                    item.JsonValue = jStr;
-                    settingContext.Update(item);
-                    settingContext.SaveChanges();
-                }
-                else
-                    return OperateResult.CreateFailedResult($"无法在配置数据库中找到\"{settingName}\"对应的配置项");
+                return OperateResult.CreateFailedResult($"未实现\"{name}\"的保存修改");
             }
-            return OperateResult.CreateSuccessResult();
+            else
+            {
+                using (var settingContext = new OcvSettingDbContext())
+                {
+                    var item = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == settingName);
+                    if (item is { })
+                    {
+                        item.JsonValue = jStr;
+                        settingContext.Update(item);
+                        settingContext.SaveChanges();
+                    }
+                    else
+                        return OperateResult.CreateFailedResult($"无法在配置数据库中找到\"{settingName}\"对应的配置项");
+                }
+                return OperateResult.CreateSuccessResult(); 
+            }
         }
     }
 }

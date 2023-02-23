@@ -27,7 +27,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
             {
                 Directory.CreateDirectory(dir);
             }
-            string path = @$"./数据文件夹_msa/{Tray.TrayCode}/{Tray.TrayCode}_{msaTimes}.csv";
+            string path = @$"{dir}/{Tray.TrayCode}_{msaTimes}.csv";
             switch (SettingManager.CurrentOcvType)
             {
                 case Enums.OcvTypeEnmu.OCV1:
@@ -73,7 +73,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
             List<T> dtos = Mapper.Map<List<T>>(Tray.NgInfos);
             try
             {
-                using (var writer = new StreamWriter(path))
+                using (var writer = new StreamWriter(path,false))
                 {
                     var csvConfig = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture);
                     using (var csv = new CsvWriter(writer, csvConfig))
@@ -85,7 +85,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
             }
             catch (Exception e)
             {
-                return OperateResult.CreateFailedResult($"MSA保存到CSV出错：{e.Message}");
+                return OperateResult.CreateFailedResult($"保存到CSV出错：{e.Message}");
             }
         }
 

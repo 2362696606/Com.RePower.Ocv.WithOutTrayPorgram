@@ -14,15 +14,14 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Wms
 {
     public class WmsSimulator : IWmsService
     {
-        public WmsSimulator(Tray tray, SettingManager settingManager, IMapper mapper)
+        public WmsSimulator(Tray tray, IMapper mapper)
         {
             Tray = tray;
-            SettingManager = settingManager;
             Mapper = mapper;
         }
 
         public Tray Tray { get; }
-        public SettingManager SettingManager { get; }
+        public SettingManager SettingManager => SettingManager.Instance;
         public IMapper Mapper { get; }
 
         public OperateResult<TrayInfoOCV> GetTechnologyInfoByBarCode()

@@ -4,6 +4,7 @@ using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.CZD01.BaseProject.Services.Wms.Dtos;
 using Com.RePower.WpfBase;
 using Newtonsoft.Json;
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,6 +48,15 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                     ngInfo.Battery.BarCode = item.BarCode;
                     ngInfo.Battery.OcvType = resultDto.HandleResult.Procedure;
                     ngInfo.Battery.TaskCode = resultDto.HandleResult.TaskCode;
+                    if(item.AttachedNgInfo is { })
+                    {
+                        if(item.AttachedNgInfo.IsOk !=null && item.AttachedNgInfo.IsOk == false)
+                        {
+                            ngInfo.AttachedIsNg= true;
+                            if(!string.IsNullOrEmpty(item.AttachedNgInfo.Message))
+                                ngInfo.AttachedNgDescription = item.AttachedNgInfo.Message;
+                        }
+                    }
                     ngInfos.Add(ngInfo);
                 }
                 ngInfos.OrderBy(x => x.Battery.Position);

@@ -19,6 +19,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
         /// <exception cref="NotImplementedException"></exception>
         private OperateResult TestBatteries()
         {
+            LogHelper.UiLog.Info("关闭切换板所有通道");
             var closeResult1 = DevicesController.SwitchBoard?.CloseAllChannels(1);
             if(closeResult1?.IsFailed??true)
                 return closeResult1 ?? OperateResult.CreateFailedResult("关闭箱号1的切换板所有通道失败，因为切换板实例为null");
@@ -61,7 +62,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                     return resResult ?? OperateResult.CreateFailedResult($"读取电池{ngInfo.Battery.Position}内阻失败,因为内阻仪实例为null");
                 ngInfo.Battery.Res = resResult.Content;
             }
-            if(SettingManager.CurrentTestOption?.IsTestNVol??false)
+            var closeResult = SwitchChannel(boardIndex, channelIndex, false, false);
+            if (closeResult.IsFailed)
+                return closeResult;
+            if (SettingManager.CurrentTestOption?.IsTestNVol??false)
             {
                 var openNvolChannelResult = SwitchChannel(boardIndex, channelIndex, true);
                 if(openNvolChannelResult.IsFailed)
@@ -70,29 +74,50 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 if(nvolResult?.IsFailed??true)
                     return nvolResult ?? OperateResult.CreateFailedResult($"读取电池{ngInfo.Battery.Position}负极壳体电压失败,因为万用表实例为null");
                 ngInfo.Battery.NVolValue = nvolResult.Content;
+                var closeNvolChannelResult = SwitchChannel(boardIndex, channelIndex, true, false);
+                if (closeNvolChannelResult.IsFailed)
+                    return closeNvolChannelResult;
             }
             ngInfo.Battery.IsTested = true;
             return OperateResult.CreateSuccessResult();
         }
-        private OperateResult SwitchChannel(int boardIndex, int channelIndex, bool isTestNvol = false)
+        private OperateResult SwitchChannel(int boardIndex, int channelIndex, bool isTestNvol = false,bool isOpen = true)
         {
             if(SettingManager.CurrentTestOption?.IsTestNVol??false)
             {
                 int[] channels = new int[3];
                 if (isTestNvol)
-                    channels = new int[] { channelIndex, 21, 23 };
-                else
                     channels = new int[] { channelIndex, 22, 24 };
-                var openResult = DevicesController.SwitchBoard?.OpenChannels(boardIndex, channels);
-                if (openResult?.IsFailed ?? true)
-                    return openResult ?? OperateResult.CreateFailedResult($"切换箱号{boardIndex}的切换板通道{channelIndex}失败，因为切换板实例为null");
+                else
+                    channels = new int[] { channelIndex, 21, 23 };
+                if (isOpen)
+                {
+                    var openResult = DevicesController.SwitchBoard?.OpenChannels(boardIndex, channels) ?? OperateResult.CreateFailedResult($"切换箱号{boardIndex}的切换板通道{channelIndex}失败，因为切换板实例为null");
+                    if (openResult.IsFailed)
+                        return openResult; 
+                }
+                else
+                {
+                    var closeResult = DevicesController.SwitchBoard?.CloseChannels(boardIndex, channels) ?? OperateResult.CreateFailedResult($"关闭箱号{boardIndex}的切换板通道{channelIndex}失败，因为切换板实例为null");
+                    if (closeResult.IsFailed)
+                        return closeResult;
+                }
                 return OperateResult.CreateSuccessResult();
             }
             else
             {
-                var openResult = DevicesController.SwitchBoard?.OpenChannel(boardIndex, channelIndex);
-                if (openResult?.IsFailed ?? true)
-                    return openResult ?? OperateResult.CreateFailedResult($"切换箱号{boardIndex}的切换板通道{channelIndex}失败，因为切换板实例为null");
+                if (isOpen)
+                {
+                    var openResult = DevicesController.SwitchBoard?.OpenChannel(boardIndex, channelIndex) ?? OperateResult.CreateFailedResult($"切换箱号{boardIndex}的切换板通道{channelIndex}失败，因为切换板实例为null");
+                    if (openResult.IsFailed)
+                        return openResult; 
+                }
+                else
+                {
+                    var closeResult = DevicesController.SwitchBoard?.CloseChannel(boardIndex, channelIndex) ?? OperateResult.CreateFailedResult($"关闭箱号{boardIndex}的切换板通道{channelIndex}失败，因为切换板实例为null");
+                    if (closeResult.IsFailed)
+                        return closeResult;
+                }
                 return OperateResult.CreateSuccessResult();
             }
         }

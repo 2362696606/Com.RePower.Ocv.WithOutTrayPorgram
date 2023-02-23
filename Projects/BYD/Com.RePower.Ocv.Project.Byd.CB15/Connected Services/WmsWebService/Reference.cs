@@ -1042,11 +1042,11 @@ namespace WmsWebService
         {
             if ((endpointConfiguration == EndpointConfiguration.OCVWebServiceSoap))
             {
-                return new System.ServiceModel.EndpointAddress("http://172.22.20.10:9006/OCVWebService.asmx");
+                return new System.ServiceModel.EndpointAddress("http://172.22.20.16:9006/OCVWebService.asmx");
             }
             if ((endpointConfiguration == EndpointConfiguration.OCVWebServiceSoap12))
             {
-                return new System.ServiceModel.EndpointAddress("http://172.22.20.10:9006/OCVWebService.asmx");
+                return new System.ServiceModel.EndpointAddress("http://172.22.20.16:9006/OCVWebService.asmx");
             }
             throw new System.InvalidOperationException(string.Format("找不到名称为“{0}”的终结点。", endpointConfiguration));
         }

@@ -76,6 +76,8 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                     var testOneBatteryResult = TestOneBattery(ngInfo);
                     if (testOneBatteryResult.IsFailed)
                         return testOneBatteryResult;
+                    var closeResult = DevicesController.SwitchBoard?.CloseChannel(1, i + 1) ?? OperateResult.CreateFailedResult("切换板实例为null");
+                    if (closeResult.IsFailed) return closeResult;
                     if (SettingManager.CurrentTestOption?.IsTestNVol ?? false)
                     {
                         DoPauseOrStop();
@@ -84,6 +86,9 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                         if (openResult1.IsFailed)
                             return openResult;
                         var testNVolResult = TestNVol(ngInfo);
+                        if (testNVolResult.IsFailed) return testNVolResult;
+                        var closeResult1 = DevicesController.SwitchBoard?.CloseChannel(1, i + startChannel) ?? OperateResult.CreateFailedResult("切换板实例为null");
+                        if (closeResult1.IsFailed) return closeResult1;
                     }
                     if (SettingManager.CurrentTestOption?.IsTestPVol ?? false)
                     {
@@ -92,7 +97,10 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                         var openResult1 = DevicesController.SwitchBoard?.OpenChannel(1, i + startChannel) ?? OperateResult.CreateFailedResult("切换板实例为null");
                         if (openResult1.IsFailed)
                             return openResult;
-                        var testNVolResult = TestPVol(ngInfo);
+                        var testPVolResult = TestPVol(ngInfo);
+                        if (testPVolResult.IsFailed) return testPVolResult;
+                        var closeResult1 = DevicesController.SwitchBoard?.CloseChannel(1, i + startChannel) ?? OperateResult.CreateFailedResult("切换板实例为null");
+                        if (closeResult1.IsFailed) return closeResult1;
                     }
                     if (SettingManager.CurrentTestOption?.IsTestTemp ?? false)
                     {
@@ -111,6 +119,9 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                     }
                     ngInfo.Battery.IsTested = true;
                     ngInfo.Battery.TestTime = DateTime.Now;
+                    var cleanResult = WaitStatusClean();
+                    if (cleanResult.IsFailed)
+                        return cleanResult;
                     var localNgInfoResult = ValidateNgInfoWithLocal(ngInfo);
                 }
             }
