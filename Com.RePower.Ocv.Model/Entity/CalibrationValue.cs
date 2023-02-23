@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Com.RePower.Ocv.Model.Extensions;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -54,7 +55,7 @@ namespace Com.RePower.Ocv.Model.Entity
 		[JsonIgnore]
         public double? DeviationValue
         {
-            get { return _gaugeValue - _standardValue; }
+            get { return _gaugeValue.sub(_standardValue); }
         }
         private double? _manuallyValue;
 		/// <summary>

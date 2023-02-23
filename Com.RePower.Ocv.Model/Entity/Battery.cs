@@ -4,121 +4,215 @@ namespace Com.RePower.Ocv.Model.Entity
 {
     public partial class Battery:ObservableObject
     {
+
+        private string _barCode = string.Empty;
         /// <summary>
         /// 电芯条码
         /// </summary>
-        [ObservableProperty]
-        private string _barCode = string.Empty;
+        public string BarCode
+        {
+            get { return _barCode; }
+            set { SetProperty(ref _barCode, value); }
+        }
+        private int _position;
         /// <summary>
         /// 电池位置
         /// </summary>
-        [ObservableProperty]
-        private int _position;
+        public int Position
+        {
+            get { return _position; }
+            set { SetProperty(ref _position, value); }
+        }
+        private int? _batteryType;
         /// <summary>
         /// 电池类型
         /// </summary>
-        [ObservableProperty]
-        private int? _batteryType;
+        public int? BatteryType
+        {
+            get { return _batteryType; }
+            set { SetProperty(ref _batteryType, value); }
+        }
+        private string? _ocvType;
         /// <summary>
         /// Ocv类型
         /// </summary>
-        [ObservableProperty]
-        private string? _ocvType;
+        public string? OcvType
+        {
+            get { return _ocvType; }
+            set { SetProperty(ref _ocvType, value); }
+        }
+        private string? _ocvStationName;
         /// <summary>
         /// Ocv工站名
         /// </summary>
-        [ObservableProperty]
-        private string? _ocvStationName;
+        public string? OcvStationName
+        {
+            get { return _ocvStationName; }
+            set { SetProperty(ref _ocvStationName, value); }
+        }
+        private double? _volValue;
         /// <summary>
         /// 电压
         /// </summary>
-        [ObservableProperty]
-        private double? _volValue;
+        public double? VolValue
+        {
+            get { return _volValue; }
+            set { SetProperty(ref _volValue, value); }
+        }
+        private double? _pVolValue;
         /// <summary>
         /// 正极壳电压
         /// </summary>
-        [ObservableProperty]
-        private double? _pVolValue;
+        public double? PVolValue
+        {
+            get { return _pVolValue; }
+            set { SetProperty(ref _pVolValue, value); }
+        }
+        private double? _nVolValue;
         /// <summary>
         /// 负极壳体电压
         /// </summary>
-        [ObservableProperty]
-        private double? _nVolValue;
+        public double? NVolValue
+        {
+            get { return _nVolValue; }
+            set { SetProperty(ref _nVolValue, value); }
+        }
+        private double? _res;
         /// <summary>
         /// 内阻
         /// </summary>
-        [ObservableProperty]
-        private double? _res;
+        public virtual double? Res
+        {
+            get { return _res; }
+            set { SetProperty(ref _res, value); }
+        }
+        private double? _temp;
         /// <summary>
         /// 温度
         /// </summary>
-        [ObservableProperty]
-        private double? _temp;
+        public double? Temp
+        {
+            get { return _temp; }
+            set { SetProperty(ref _temp, value); }
+        }
+        private double? _pTemp;
         /// <summary>
         /// 正极温度
         /// </summary>
-        [ObservableProperty]
-        private double? _pTemp;
+        public double? PTemp
+        {
+            get { return _pTemp; }
+            set { SetProperty(ref _pTemp, value); }
+        }
+        private double? _nTemp;
         /// <summary>
         /// 负极温度
         /// </summary>
-        [ObservableProperty]
-        private double? _nTemp;
+        public double? NTemp
+        {
+            get { return _nTemp; }
+            set { SetProperty(ref _nTemp, value); }
+        }
+        private double? _kValue1;
         /// <summary>
         /// K值1
         /// </summary>
-        [ObservableProperty]
-        private double? _kValue1;
+        public double? KValue1
+        {
+            get { return _kValue1; }
+            set { SetProperty(ref _kValue1, value); }
+        }
+        private double? _kValue2;
         /// <summary>
         /// K值2
         /// </summary>
-        [ObservableProperty]
-        private double? _kValue2;
+        public double? KValue2
+        {
+            get { return _kValue2; }
+            set { SetProperty(ref _kValue2, value); }
+        }
+        private double? _kValue3;
         /// <summary>
         /// K值3
         /// </summary>
-        [ObservableProperty]
-        private double? _kValue3;
+        public double? KValue3
+        {
+            get { return _kValue3; }
+            set { SetProperty(ref _kValue3, value); }
+        }
+        private double? _kValue4;
         /// <summary>
         /// K值4
         /// </summary>
-        [ObservableProperty]
-        private double? _kValue4;
+        public double? KValue4
+        {
+            get { return _kValue4; }
+            set { SetProperty(ref _kValue4, value); }
+        }
+        private double? _kValue5;
         /// <summary>
         /// K值5
         /// </summary>
-        [ObservableProperty]
-        private double? _kValue5;
+        public double? KValue5
+        {
+            get { return _kValue5; }
+            set { SetProperty(ref _kValue5, value); }
+        }
+        private string? _trayCode;
         /// <summary>
         /// 托盘条码
         /// </summary>
-        [ObservableProperty]
-        private string? _trayCode;
+        public string? TrayCode
+        {
+            get { return _trayCode; }
+            set { SetProperty(ref _trayCode, value); }
+        }
+        private bool _isTested;
         /// <summary>
         /// 是否已经测试
         /// </summary>
-        [ObservableProperty]
-        private bool _isTested = false;
+        public bool IsTested
+        {
+            get { return _isTested; }
+            set { SetProperty(ref _isTested, value); }
+        }
+        private bool _isExsit = true;
         /// <summary>
         /// 电芯是否存在
         /// </summary>
-        [ObservableProperty]
-        private bool _isExsit = true;
+        public bool IsExsit
+        {
+            get { return _isExsit; }
+            set { SetProperty(ref _isExsit, value); }
+        }
+        private bool _isReal = true;
         /// <summary>
         /// 电芯是否为真
         /// </summary>
-        [ObservableProperty]
-        private bool _isReal = true;
+        public bool IsReal
+        {
+            get { return _isReal; }
+            set { SetProperty(ref _isReal, value); }
+        }
+        private DateTime _testTime = DateTime.Now;
         /// <summary>
         /// 测试时间
         /// </summary>
-        [ObservableProperty]
-        private DateTime _testTime = DateTime.Now;
+        public DateTime TestTime
+        {
+            get { return _testTime; }
+            set { SetProperty(ref _testTime, value); }
+        }
+        private long? _taskCode;
         /// <summary>
         /// 任务号
         /// </summary>
-        [ObservableProperty]
-        private long? _taskCode;
+        public long? TaskCode
+        {
+            get { return _taskCode; }
+            set { SetProperty(ref _taskCode, value); }
+        }
+
         /// <summary>
         /// 保留int类型1
         /// </summary>

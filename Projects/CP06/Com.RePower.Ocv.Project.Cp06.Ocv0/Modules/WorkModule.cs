@@ -25,12 +25,14 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Modules
                     case OcvTypeEnmu.OCV3:
                         builder.RegisterType<MainWorkForOcv3>()
                             .AsSelf()
-                            .As<IProjectMainWork>();
+                            .As<IProjectMainWork>()
+                            .SingleInstance();
                         break;
                     default:
                         builder.RegisterType<MainWork>()
                             .AsSelf()
-                            .As<IProjectMainWork>();
+                            .As<IProjectMainWork>()
+                            .SingleInstance();
                         break;
                 }
             }

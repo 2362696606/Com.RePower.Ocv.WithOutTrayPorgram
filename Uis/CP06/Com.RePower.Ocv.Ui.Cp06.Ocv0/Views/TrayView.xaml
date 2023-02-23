@@ -48,6 +48,10 @@
                         Header="负极壳体电压"
                         Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestNVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
                     <DataGridTextColumn
+                        Binding="{Binding Battery.PVolValue}"
+                        Header="正极壳体电压"
+                        Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestPVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                    <DataGridTextColumn
                         Binding="{Binding Battery.KValue1}"
                         Header="K01"
                         Visibility="{Binding Data.SettingManager.CurrentTestOption.IsVerifyKValue, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />

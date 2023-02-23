@@ -25,6 +25,17 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Settings
             get { return _nVolStartChannel; }
             set { SetProperty(ref _nVolStartChannel, value); }
         }
+        private int? _pVolStartChannel;
+        /// <summary>
+        /// 正极壳体电压起始通道
+        /// </summary>
+        [SettingName("正极壳体电压起始通道")]
+        public int? PVolStartChannel
+        {
+            get { return _pVolStartChannel; }
+            set { SetProperty(ref _pVolStartChannel, value); }
+        }
+
         private int? _volChannelForOcv3;
         /// <summary>
         /// OCV3电压通道
@@ -85,6 +96,17 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Settings
             get { return _nVolNgChannel; }
             set { SetProperty(ref _nVolNgChannel, value); }
         }
+        private int? _pVolNgChannel;
+        /// <summary>
+        /// 正极壳体电压ng通道
+        /// </summary>
+        [SettingName("正极壳体电压ng通道")]
+        public int? PVolNgChannel
+        {
+            get { return _pVolNgChannel; }
+            set { SetProperty(ref _pVolNgChannel, value); }
+        }
+
 
         /// <summary>
         /// 实现保存

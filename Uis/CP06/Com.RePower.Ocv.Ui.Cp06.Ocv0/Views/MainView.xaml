@@ -27,7 +27,7 @@
                     <Menu>
                         <MenuItem Command="{Binding DoCalibrationCommand}" Header="校准工具" />
                         <MenuItem Command="{Binding OpenSettingCommand}" Header="参数配置" />
-                        <MenuItem Command="{Binding OpenDataSearchCommand}" Header="数据查询" />
+                        <!--<MenuItem Command="{Binding OpenDataSearchCommand}" Header="数据查询" />-->
                     </Menu>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>

@@ -298,8 +298,9 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                 foreach (var item in resultDto.HandleResult.BatteriesInfoList)
                 {
                     var ngInfo = new NgInfo();
+                    ngInfo.Battery = new Models_Cp06.Battery();
                     ngInfo.Battery.TrayCode = Tray.TrayCode;
-                    ngInfo.Battery = new Battery();
+                    //ngInfo.Battery = new Battery();
                     ngInfo.Battery.Position = item.Index;
                     ngInfo.Battery.BarCode = item.BarCode;
                     ngInfo.Battery.OcvType = resultDto.HandleResult.Procedure;
@@ -405,8 +406,19 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     if (calibrationValue is { })
                     {
                         if (SettingManager.CurrentCalibrationSetting?.IsUseAutoValue ?? false)
-                            ngInfo.Battery.Res += calibrationValue.AutoValue;
-                        else ngInfo.Battery.Res += calibrationValue.ManuallyValue;
+                        {
+                            if(ngInfo.Battery is Models_Cp06.Battery battery)
+                                battery.ResCalibrationValue = calibrationValue.AutoValue;
+                            else
+                                ngInfo.Battery.Res += calibrationValue.AutoValue;
+                        }
+                        else
+                        {
+                            if (ngInfo.Battery is Models_Cp06.Battery battery)
+                                battery.ResCalibrationValue = calibrationValue.ManuallyValue;
+                            else
+                                ngInfo.Battery.Res += calibrationValue.ManuallyValue;
+                        }
                     } 
                 }
                 var closeResult = DevicesController.SwitchBoard?.CloseChannel(1, i + 1) ?? OperateResult.CreateFailedResult("未找到切换板");
@@ -418,13 +430,27 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     LogHelper.UiLog.Info($"开始测试电池{currentGroup[i]}负极壳体电压");
                     var openNVolChannelResult = DevicesController.SwitchBoard?.OpenChannel(1, i + startChannel) ?? OperateResult.CreateFailedResult("未找到切换板");
                     if (openNVolChannelResult.IsFailed)
-                        return openResult;
+                        return openNVolChannelResult;
                     var testNVolResult = TestBatteryNVol(ngInfo);
                     if (testNVolResult.IsFailed)
                         return testNVolResult;
                     var closeNVolChannelResult = DevicesController.SwitchBoard?.CloseChannel(1, i + startChannel) ?? OperateResult.CreateFailedResult("未找到切换板");
                     if (closeNVolChannelResult.IsFailed)
-                        return openResult;
+                        return closeNVolChannelResult;
+                }
+                if(SettingManager.CurrentTestOption?.IsTestPVol??false)
+                {
+                    int startChannel = SettingManager.CurrentTestOption.PVolStartChannel ?? 1;
+                    LogHelper.UiLog.Info($"开始测试电池{currentGroup[i]}正极壳体电压");
+                    var openPVolChannelResult = DevicesController.SwitchBoard?.OpenChannel(1, i + startChannel) ?? OperateResult.CreateFailedResult("未找到切换板");
+                    if (openPVolChannelResult.IsFailed)
+                        return openPVolChannelResult;
+                    var testPVolResult = TestBatteryPVol(ngInfo);
+                    if (testPVolResult.IsFailed)
+                        return testPVolResult;
+                    var closeNVolChannelResult = DevicesController.SwitchBoard?.CloseChannel(1, i + startChannel) ?? OperateResult.CreateFailedResult("未找到切换板");
+                    if (closeNVolChannelResult.IsFailed)
+                        return closeNVolChannelResult;
                 }
                 var validateResult = ValidateOneBatteryLocalNgStatus(ngInfo);
             }
@@ -445,8 +471,8 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
         private OperateResult TestOneBattery(NgInfo ngInfo)
         {
             ngInfo.Battery.TestTime = DateTime.Now;
-            //未测试已ng
-            if (!ngInfo.Battery.IsTested && ngInfo.IsNg)
+            //外部ng
+            if (ngInfo.AttachedIsNg ?? false)
             {
                 LogHelper.UiLog.Info($"电芯{ngInfo.Battery.Position}外部ng，不进行测试");
                 return OperateResult.CreateSuccessResult();
@@ -474,7 +500,11 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                 if (ohmReadValue.IsFailed)
                     return ohmReadValue;
                 ngInfo.Battery.IsTested = true;
-                ngInfo.Battery.Res = ohmReadValue.Content;
+                if (ngInfo.Battery is Models_Cp06.Battery battery)
+                    battery.ResReadValue = ohmReadValue.Content;
+                else
+                    ngInfo.Battery.Res = ohmReadValue.Content;
+                //ngInfo.Battery.Res = ohmReadValue.Content;
             }
             return OperateResult.CreateSuccessResult();
         }
@@ -485,12 +515,17 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
         /// <returns></returns>
         private OperateResult TestBatteryNVol(NgInfo ngInfo)
         {
-            if (ngInfo.Battery.IsTested && ngInfo.IsNg)
+            //if (ngInfo.Battery.IsTested && ngInfo.IsNg)
+            //{
+            //    LogHelper.UiLog.Info($"电芯{ngInfo.Battery.Position}外部ng，不进行测试");
+            //    return OperateResult.CreateSuccessResult();
+            //}
+            if(ngInfo.AttachedIsNg??false)
             {
                 LogHelper.UiLog.Info($"电芯{ngInfo.Battery.Position}外部ng，不进行测试");
                 return OperateResult.CreateSuccessResult();
             }
-            if (SettingManager.CurrentTestOption?.IsTestVol ?? false)
+            if (SettingManager.CurrentTestOption?.IsTestNVol ?? false)
             {
                 DoPauseOrStop();
                 LogHelper.UiLog.Info($"开始测试电芯{ngInfo.Battery.Position}负极壳体电压");
@@ -499,6 +534,29 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     return dmmReadValue;
                 ngInfo.Battery.IsTested = true;
                 ngInfo.Battery.NVolValue = dmmReadValue.Content;
+            }
+            return OperateResult.CreateSuccessResult();
+        }/// <summary>
+         /// 测试单个电池正极壳体电压
+         /// </summary>
+         /// <param name="ngInfo"></param>
+         /// <returns></returns>
+        private OperateResult TestBatteryPVol(NgInfo ngInfo)
+        {
+            if (ngInfo.AttachedIsNg ?? false)
+            {
+                LogHelper.UiLog.Info($"电芯{ngInfo.Battery.Position}外部ng，不进行测试");
+                return OperateResult.CreateSuccessResult();
+            }
+            if (SettingManager.CurrentTestOption?.IsTestPVol ?? false)
+            {
+                DoPauseOrStop();
+                LogHelper.UiLog.Info($"开始测试电芯{ngInfo.Battery.Position}正极壳体电压");
+                var dmmReadValue = DevicesController.DMM?.ReadDc() ?? OperateResult.CreateFailedResult<double>("未找到万用表");
+                if (dmmReadValue.IsFailed)
+                    return dmmReadValue;
+                ngInfo.Battery.IsTested = true;
+                ngInfo.Battery.PVolValue = dmmReadValue.Content;
             }
             return OperateResult.CreateSuccessResult();
         }
@@ -529,6 +587,8 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                 double minRes = SettingManager.CurrentBatteryStandard?.MinRes ?? 0;
                 double maxNVol = SettingManager.CurrentBatteryStandard?.MaxNVol ?? 0;
                 double minNVol = SettingManager.CurrentBatteryStandard?.MinNVol ?? 0;
+                double maxPVol = SettingManager.CurrentBatteryStandard?.MaxPVol?? 0;
+                double minPVol = SettingManager.CurrentBatteryStandard?.MinPVol?? 0;
 
                 ngInfo.NgType = 0;
 
@@ -565,6 +625,11 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     {
                         ngInfo.AddNgType(NgTypeEnum.负极壳体电压过低);
                     }
+                }
+                if(SettingManager.CurrentTestOption?.IsTestPVol??false)
+                {
+                    if (ngInfo.Battery.PVolValue > maxPVol) ngInfo.AddNgType(NgTypeEnum.正极壳体电压过高);
+                    else if (ngInfo.Battery.PVolValue < minPVol) ngInfo.AddNgType(NgTypeEnum.正极壳体电压过低);
                 }
                 //ngInfo.SetIsNg();
                 //ngInfo.SetNgDescritpion();
