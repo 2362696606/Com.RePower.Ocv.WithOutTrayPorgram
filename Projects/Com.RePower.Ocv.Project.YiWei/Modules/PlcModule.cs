@@ -1,8 +1,11 @@
 ﻿using Autofac;
 using Com.RePower.Device.Plc.Impl;
+using Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard;
 using Com.RePower.DeviceBase;
 using Com.RePower.DeviceBase.Plc;
+using Com.RePower.DeviceBase.SwitchBoard;
 using Com.RePower.Ocv.Model.DataBaseContext;
+using Com.RePower.Ocv.Project.ProjectBase.Controllers;
 using Com.RePower.Ocv.Project.YiWei.Decorators;
 using Com.RePower.Ocv.Project.YiWei.Enum;
 using Newtonsoft.Json;
@@ -18,26 +21,27 @@ namespace Com.RePower.Ocv.Project.YiWei.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            using(OcvSettingDbContext settingContext = new OcvSettingDbContext())
+            var plcSettingJStr = SettingManager<Controllers.SettingManager>.Instance.PlcSettingJson;
+            if (!string.IsNullOrEmpty(plcSettingJStr))
             {
-                var logisticsPlcSettingObj = settingContext.SettingItems.First(x => x.SettingName == "本地Plc");
-                if (logisticsPlcSettingObj != null)
+                bool isReal = SettingManager<Controllers.SettingManager>.Instance.CurrentFacticitySetting?.IsRealPlc ?? false;
+                IPlc? obj;
+                if (isReal)
                 {
-                    var logisticsPlcSettingJson = logisticsPlcSettingObj.JsonValue;
-                    if (!string.IsNullOrEmpty(logisticsPlcSettingJson))
-                    {
-                        var obj = JsonConvert.DeserializeObject<Siemens_S1500Impl>(logisticsPlcSettingJson);
-                        if (obj != null)
-                        {
-                            builder.RegisterInstance<Siemens_S1500Impl>(obj)
-                                .AsSelf()
-                                .As<IPlc>()
-                                .As<IDevice>();
-                        }
-                    }
+                    obj = JsonConvert.DeserializeObject<Siemens_S1500Impl>(plcSettingJStr);
+                }
+                else
+                {
+                    obj = JsonConvert.DeserializeObject<PlcNetSimulator>(plcSettingJStr);
+                }
+                if (obj is { })
+                {
+                    builder.RegisterInstance(obj)
+                        .AsSelf()
+                        .As<IPlc>()
+                        .As<IDevice>();
                 }
             }
-            builder.RegisterDecorator<PlcDecorator, IPlc>();
         }
     }
 }

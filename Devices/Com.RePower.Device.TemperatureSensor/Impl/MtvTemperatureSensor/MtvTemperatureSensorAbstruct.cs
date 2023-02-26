@@ -48,7 +48,7 @@ namespace Com.RePower.Device.TemperatureSensor.Impl.MtvTemperatureSensor
                         foreach (var item in tempData)
                         {
                             short tempShortVal = BitConverter.ToInt16(item);
-                            double tempDoubleVal = Math.Abs(Math.Round(tempShortVal * 0.01, 2));
+                            double tempDoubleVal = Math.Abs(Math.Round(tempShortVal * 0.1, 2));
                             tempDoubleDatas.Add(tempDoubleVal);
                         }
                         return OperateResult.CreateSuccessResult(tempDoubleDatas.ToArray());

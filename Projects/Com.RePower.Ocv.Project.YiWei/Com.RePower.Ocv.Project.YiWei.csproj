@@ -21,13 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Com.RePower.Ocv.Model\Com.RePower.Ocv.Model.csproj" />
     <ProjectReference Include="..\..\Devices\Com.RePower.Device.DMM\Com.RePower.Device.DMM.csproj" />
     <ProjectReference Include="..\..\Devices\Com.RePower.Device.Ohm\Com.RePower.Device.Ohm.csproj" />
     <ProjectReference Include="..\..\Devices\Com.RePower.Device.Plc\Com.RePower.Device.Plc.csproj" />
     <ProjectReference Include="..\..\Devices\Com.RePower.Device.SwitchBoard\Com.RePower.Device.SwitchBoard.csproj" />
     <ProjectReference Include="..\Com.RePower.Ocv.Project.ProjectBase\Com.RePower.Ocv.Project.ProjectBase.csproj" />
-    <ProjectReference Include="..\Com.RePower.Ocv.Project\Com.RePower.Ocv.Project.csproj" />
   </ItemGroup>
 
 </Project>

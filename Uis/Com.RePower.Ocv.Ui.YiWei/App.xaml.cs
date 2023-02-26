@@ -81,8 +81,8 @@ namespace Com.RePower.Ocv.Ui.YiWei
             builder.RegisterModule<TrayModule>();
             builder.RegisterModule<OhmModule>();
             builder.RegisterModule<SwitchBoardModule>();//切换板
-            builder.RegisterModule<TestOptionModule>();
-            builder.RegisterModule<BatteryNgCriteriaModule>();
+            //builder.RegisterModule<TestOptionModule>();
+            //builder.RegisterModule<BatteryNgCriteriaModule>();
             builder.RegisterModule<ProjectModule>();
             //builder.RegisterModule<WmsModule>();
         }

@@ -8,6 +8,9 @@
         /// 电芯是否存在true为存在电芯，false不存在电芯
         /// </summary>
         public bool IsExist { get; set; }
+        /// <summary>
+        /// 前一工站Ng信息
+        /// </summary>
         public WmsAttachedNgInfo? AttachedNgInfo { get; set; }
     }
     public class WmsAttachedNgInfo

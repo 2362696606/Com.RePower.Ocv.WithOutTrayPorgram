@@ -79,6 +79,33 @@ namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
         {
             deviceBase.Dispose();
         }
+        /// <summary>
+        /// 配置连续测量开关
+        /// </summary>
+        /// <param name="isOpen"></param>
+        /// <returns></returns>
+        public OperateResult SetInitiateContinuous(bool isOpen = false)
+        {
+            string cmdStr = ":INITIATE:CONTINUOUS " + (isOpen?"ON":"OFF")+ "\r\n";
+            byte[] cmd = Encoding.ASCII.GetBytes(cmdStr);
+            var result = SendCmd(cmd.ToArray(), isNeedRecovery: false);
+            if (result.IsFailed)
+            {
+                return OperateResult.CreateFailedResult<double>($"读取内阻失败:{result.Message ?? "未知原因"}");
+            }
+            return OperateResult.CreateSuccessResult();
+        }
+        public OperateResult SetRang(string range = "3.0000E-3")
+        {
+            string cmdStr = ":RES:RANG " + range + "\r\n";
+            byte[] cmd = Encoding.ASCII.GetBytes(cmdStr);
+            var result = SendCmd(cmd.ToArray(), isNeedRecovery: false);
+            if (result.IsFailed)
+            {
+                return OperateResult.CreateFailedResult<double>($"读取内阻失败:{result.Message ?? "未知原因"}");
+            }
+            return OperateResult.CreateSuccessResult();
+        }
 
         public override OperateResult<byte[]> SendCmd(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
         {

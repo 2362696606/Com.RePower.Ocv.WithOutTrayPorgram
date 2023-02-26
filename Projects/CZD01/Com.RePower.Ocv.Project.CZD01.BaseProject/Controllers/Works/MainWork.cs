@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Com.RePower.Ocv.Model.DataBaseContext;
 using Com.RePower.Ocv.Model.Entity;
+using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.CZD01.BaseProject.DbContext;
 using Com.RePower.Ocv.Project.CZD01.BaseProject.Services;
 using Com.RePower.Ocv.Project.ProjectBase.Controllers;
@@ -123,6 +124,19 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                 var sendAllTestComplateResult = SendAllTestComplate();
                 if (sendAllTestComplateResult.IsFailed)
                     return sendAllTestComplateResult;
+
+                LogHelper.UiLog.Info("等待拆盘标志位归零");
+                string address = SettingManager.PlcValueCacheSetting?["拆盘标志位"]?.Address ?? string.Empty;
+                if (string.IsNullOrEmpty(address))
+                    return OperateResult.CreateFailedResult("无法获取\"拆盘标志位\"地址");
+                var writeResult = DevicesController.Plc?.Wait(address, (short)0) ?? OperateResult.CreateFailedResult("Plc实例为null");
+                if (writeResult.IsFailed)
+                {
+                    return writeResult;
+                }
+                LogHelper.UiLog.Info("成功等待拆盘标志位归零，开始下一轮");
+                //return OperateResult.CreateSuccessResult();
+
                 //var writeResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试标志位"], (short)2);
                 //if (writeResult.IsFailed)
                 //    return writeResult;

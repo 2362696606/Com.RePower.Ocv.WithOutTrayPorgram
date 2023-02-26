@@ -10,5 +10,5 @@
     Width="800"
     Height="450"
     mc:Ignorable="d">
-    <uiBaseViews:DataSearchView />
+    <uiBaseViews:DataSearchView DataContext="{Binding DataContext}" />
 </Window>

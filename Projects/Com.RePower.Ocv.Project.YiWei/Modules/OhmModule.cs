@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 using System.Linq;
 using Com.RePower.DeviceBase.Ohm;
 using Com.RePower.Device.Ohm.Impl.Hioki_BT3562;
+using Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard;
+using Com.RePower.DeviceBase.SwitchBoard;
+using Com.RePower.Ocv.Project.ProjectBase.Controllers;
 
 namespace Com.RePower.Ocv.Project.YiWei.Modules
 {
@@ -12,24 +15,25 @@ namespace Com.RePower.Ocv.Project.YiWei.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            using (OcvSettingDbContext settingContext = new OcvSettingDbContext())
+            var ohmSettingJStr = SettingManager<Controllers.SettingManager>.Instance.OhmSettingJson;
+            if (!string.IsNullOrEmpty(ohmSettingJStr))
             {
-                var ohmSettingObj = settingContext.SettingItems.First(x => x.SettingName == "内阻仪");
-                if (ohmSettingObj != null)
+                bool isReal = SettingManager<Controllers.SettingManager>.Instance.CurrentFacticitySetting?.IsRealOhm ?? false;
+                IOhm? obj;
+                if (isReal)
                 {
-                    var ohmSettingJson = ohmSettingObj.JsonValue;
-                    if (!string.IsNullOrEmpty(ohmSettingJson))
-                    {
-                        var obj = JsonConvert.DeserializeObject<Hioki_BT3562Impl>(ohmSettingJson);
-                        //var obj = JsonConvert.DeserializeObject<Hioki_BT3562Simulator>(ohmSettingJson);
-                        if (obj != null)
-                        {
-                            builder.RegisterInstance(obj)
-                                .AsSelf()
-                                .As<IOhm>()
-                                .As<IDevice>();
-                        }
-                    }
+                    obj = JsonConvert.DeserializeObject<Hioki_BT3562Impl>(ohmSettingJStr);
+                }
+                else
+                {
+                    obj = JsonConvert.DeserializeObject<Hioki_BT3562Simulator>(ohmSettingJStr);
+                }
+                if (obj is { })
+                {
+                    builder.RegisterInstance(obj)
+                        .AsSelf()
+                        .As<IOhm>()
+                        .As<IDevice>();
                 }
             }
         }

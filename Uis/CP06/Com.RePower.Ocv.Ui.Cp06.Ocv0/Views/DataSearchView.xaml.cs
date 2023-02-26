@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Com.RePower.Ocv.Ui.Cp06.Ocv0.ViewModels;
+using Com.RePower.WpfBase;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +24,7 @@ namespace Com.RePower.Ocv.Ui.Cp06.Ocv0.Views
         public DataSearchView()
         {
             InitializeComponent();
+            this.DataContext = IocHelper.Default.GetService<DataSearchViewModel>();
         }
     }
 }

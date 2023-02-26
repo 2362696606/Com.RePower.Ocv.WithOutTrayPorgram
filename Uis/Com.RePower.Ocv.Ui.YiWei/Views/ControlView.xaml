@@ -10,19 +10,66 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <materialDesign:Card Margin="16" Padding="30">
-        <UniformGrid Rows="1">
-            <UniformGrid.Resources>
-                <Style BasedOn="{StaticResource MaterialDesignOutlinedButton}" TargetType="Button">
-                    <Setter Property="Margin" Value="5,0" />
-                    <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource AncestorType=UniformGrid, AncestorLevel=1}, Path=Height}" />
-                    <Setter Property="VerticalContentAlignment" Value="Center" />
-                    <Setter Property="FontSize" Value="80"/>
-                    <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp3"/>
-                </Style>
-            </UniformGrid.Resources>
-            <Button Command="{Binding DoStartCommand}" Content="开始" />
-            <Button Command="{Binding DoPauseCommand}" Content="暂停" />
-            <Button Command="{Binding DoStopCommand}" Content="停止" />
-        </UniformGrid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <UniformGrid Rows="1">
+                <UniformGrid.Resources>
+                    <Style
+                        x:Key="ButtonStyle"
+                        BasedOn="{StaticResource MaterialDesignOutlinedButton}"
+                        TargetType="Button">
+                        <Setter Property="Margin" Value="5" />
+                        <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource AncestorType=UniformGrid, AncestorLevel=1}, Path=Height}" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="FontSize" Value="80" />
+                        <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp3" />
+                    </Style>
+                    <Style BasedOn="{StaticResource MaterialDesignOutlinedButton}" TargetType="ToggleButton">
+                        <Style.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <!--<Setter Property="Background" Value="{DynamicResource SecondaryAccentBrush}" />-->
+                                <Setter Property="Background" Value="{StaticResource AttentionToActionBrush}" />
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="Margin" Value="5" />
+                        <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource AncestorType=UniformGrid, AncestorLevel=1}, Path=Height}" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="FontSize" Value="80" />
+                        <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp3" />
+                    </Style>
+                </UniformGrid.Resources>
+                <Button Command="{Binding DoStartCommand}">
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Work.WorkStatus}" Value="1">
+                                    <Setter Property="Content" Value="暂停" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Work.WorkStatus}" Value="2">
+                                    <Setter Property="Content" Value="开始" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Work.WorkStatus}" Value="0">
+                                    <Setter Property="Content" Value="开始" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <!--<Button Command="{Binding DoPauseCommand}" Content="暂停" />-->
+                <Button
+                    Command="{Binding DoStopCommand}"
+                    Content="停止"
+                    Style="{StaticResource ButtonStyle}" />
+                <!--<ToggleButton Content="MSA" IsChecked="{Binding Work.MsaFlag}" />
+                <Button
+                    Command="{Binding ReSetPlcCommand}"
+                    Content="复位"
+                    Style="{StaticResource ButtonStyle}" />-->
+                <!--<ToggleButton Content="正常测试" IsChecked="{Binding Work.MsaFlag}" />-->
+            </UniformGrid>
+        </Grid>
     </materialDesign:Card>
 </UserControl>

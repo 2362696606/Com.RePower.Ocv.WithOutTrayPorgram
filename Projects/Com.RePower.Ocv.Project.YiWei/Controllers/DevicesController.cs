@@ -15,9 +15,9 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
     public class DevicesController
     {
         public DevicesController(IPlc localPlc
-            , IDMM dMM
-            , ISwitchBoard switchBoard
-            , IOhm ohm)
+            , IDMM? dMM = null
+            , ISwitchBoard? switchBoard = null
+            , IOhm? ohm = null)
         {
             LocalPlc = localPlc;
             DMM = dMM;
@@ -33,9 +33,9 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
         /// <summary>
         /// 万用表
         /// </summary>
-        public IDMM DMM { get; }
-        public ISwitchBoard SwitchBoard { get; }
-        public IOhm Ohm { get; }
+        public IDMM? DMM { get; }
+        public ISwitchBoard? SwitchBoard { get; }
+        public IOhm? Ohm { get; }
 
         /// <summary>
         /// Plc地址映射字典

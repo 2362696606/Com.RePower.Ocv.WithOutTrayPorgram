@@ -11,25 +11,25 @@ namespace Com.RePower.Ocv.Ui.YiWei.ViewModels
 {
     public partial class ControlViewModel:ObservableObject
     {
-        private IProjectMainWork work;
+        public IProjectMainWork Work { get; }
         public ControlViewModel(IProjectMainWork projectMainWork)
         {
-            this.work = projectMainWork;
+            this.Work = projectMainWork;
         }
         [RelayCommand]
         private void DoStart()
         {
-            work.StartWorkAsync();
+            Work.StartWorkAsync();
         }
         [RelayCommand]
         private void DoStop()
         {
-            work.StopWorkAsync();
+            Work.StopWorkAsync();
         }
         [RelayCommand]
         private void DoPause() 
         {
-            work.PauseWorkAsync();
+            Work.PauseWorkAsync();
         }
     }
 }

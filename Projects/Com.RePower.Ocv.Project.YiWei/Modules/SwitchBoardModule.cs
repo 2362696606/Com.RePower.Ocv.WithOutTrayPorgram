@@ -5,6 +5,7 @@ using Com.RePower.DeviceBase;
 using Com.RePower.DeviceBase.DMM;
 using Com.RePower.DeviceBase.SwitchBoard;
 using Com.RePower.Ocv.Model.DataBaseContext;
+using Com.RePower.Ocv.Project.ProjectBase.Controllers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,24 +19,25 @@ namespace Com.RePower.Ocv.Project.YiWei.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            using (OcvSettingDbContext settingContext = new OcvSettingDbContext())
+            var switchBoardSettingJStr = SettingManager<Controllers.SettingManager>.Instance.SwitchBoardSettingJson;
+            if (!string.IsNullOrEmpty(switchBoardSettingJStr))
             {
-                var switchBoardSettingObj = settingContext.SettingItems.First(x => x.SettingName == "切换板");
-                if (switchBoardSettingObj != null)
+                bool isReal = SettingManager<Controllers.SettingManager>.Instance.CurrentFacticitySetting?.IsRealSwitchBoard ?? false;
+                ISwitchBoard? obj;
+                if (isReal)
                 {
-                    var switchBoardSettingJson = switchBoardSettingObj.JsonValue;
-                    if (!string.IsNullOrEmpty(switchBoardSettingJson))
-                    {
-                        var obj = JsonConvert.DeserializeObject<FourLinesSwitchBoardImpl>(switchBoardSettingJson);
-                        //var obj = JsonConvert.DeserializeObject<GeneralSwitchBoardSimulator>(switchBoardSettingJson);
-                        if (obj != null)
-                        {
-                            builder.RegisterInstance(obj)
-                                .AsSelf()
-                                .As<ISwitchBoard>()
-                                .As<IDevice>();
-                        }
-                    }
+                    obj = JsonConvert.DeserializeObject<FourLinesSwitchBoardImpl>(switchBoardSettingJStr);
+                }
+                else
+                {
+                    obj = JsonConvert.DeserializeObject<FourLinesSwitchBoardSimulator>(switchBoardSettingJStr);
+                }
+                if (obj is { })
+                {
+                    builder.RegisterInstance(obj)
+                        .AsSelf()
+                        .As<ISwitchBoard>()
+                        .As<IDevice>();
                 }
             }
         }

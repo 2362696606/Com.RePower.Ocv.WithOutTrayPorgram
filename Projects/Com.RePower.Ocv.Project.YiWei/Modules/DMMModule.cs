@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 using Com.RePower.DeviceBase.DMM;
 using Com.RePower.Device.DMM.Impl;
 using Com.RePower.Device.DMM.Impl.Keysight_34461A;
+using Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard;
+using Com.RePower.DeviceBase.SwitchBoard;
+using Com.RePower.Ocv.Project.ProjectBase.Controllers;
 
 namespace Com.RePower.Ocv.Project.YiWei.Modules
 {
@@ -20,23 +23,25 @@ namespace Com.RePower.Ocv.Project.YiWei.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            using (OcvSettingDbContext settingContext = new OcvSettingDbContext())
+            var dmmSettingJStr = SettingManager<Controllers.SettingManager>.Instance.DmmSettingJson;
+            if (!string.IsNullOrEmpty(dmmSettingJStr))
             {
-                var dmmSettingObj = settingContext.SettingItems.First(x => x.SettingName == "万用表");
-                if (dmmSettingObj != null)
+                bool isReal = SettingManager<Controllers.SettingManager>.Instance.CurrentFacticitySetting?.IsRealDmm ?? false;
+                IDMM? obj;
+                if (isReal)
                 {
-                    var dmmSettingJson = dmmSettingObj.JsonValue;
-                    if (!string.IsNullOrEmpty(dmmSettingJson))
-                    {
-                        var obj = JsonConvert.DeserializeObject<Keysight_34461AImpl>(dmmSettingJson);
-                        if (obj != null)
-                        {
-                            builder.RegisterInstance(obj)
-                                .AsSelf()
-                                .As<IDMM>()
-                                .As<IDevice>();
-                        }
-                    }
+                    obj = JsonConvert.DeserializeObject<Keysight_34461AImpl>(dmmSettingJStr);
+                }
+                else
+                {
+                    obj = JsonConvert.DeserializeObject<Keysight_34461ASimulator>(dmmSettingJStr);
+                }
+                if (obj is { })
+                {
+                    builder.RegisterInstance(obj)
+                        .AsSelf()
+                        .As<IDMM>()
+                        .As<IDevice>();
                 }
             }
         }

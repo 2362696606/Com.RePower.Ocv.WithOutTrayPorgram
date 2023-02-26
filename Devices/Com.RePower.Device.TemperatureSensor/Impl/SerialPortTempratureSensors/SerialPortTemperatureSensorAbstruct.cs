@@ -57,7 +57,7 @@ namespace Com.RePower.Device.TemperatureSensor.Impl.SerialPortTempratureSensors
                         for (int t = 2; t < 9; t += 2)
                         {
                             var realValue = BitConverter.ToInt16(recoveryBytes, t);
-                            resultList.Add((double)realValue * 0.01);
+                            resultList.Add((double)realValue * 0.1);
                         }
                         return OperateResult.CreateSuccessResult(resultList.ToArray());
                     }
