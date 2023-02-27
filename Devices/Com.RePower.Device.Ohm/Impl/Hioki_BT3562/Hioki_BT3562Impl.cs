@@ -91,18 +91,18 @@ namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
             var result = SendCmd(cmd.ToArray(), isNeedRecovery: false);
             if (result.IsFailed)
             {
-                return OperateResult.CreateFailedResult<double>($"读取内阻失败:{result.Message ?? "未知原因"}");
+                return OperateResult.CreateFailedResult<double>(isOpen ? "开启" : "关闭" + $"连续测量失败:{result.Message ?? "未知原因"}");
             }
             return OperateResult.CreateSuccessResult();
         }
-        public OperateResult SetRang(string range = "3.0000E-3")
+        public OperateResult SetRang(string range = "30.000E-3")
         {
             string cmdStr = ":RES:RANG " + range + "\r\n";
             byte[] cmd = Encoding.ASCII.GetBytes(cmdStr);
             var result = SendCmd(cmd.ToArray(), isNeedRecovery: false);
             if (result.IsFailed)
             {
-                return OperateResult.CreateFailedResult<double>($"读取内阻失败:{result.Message ?? "未知原因"}");
+                return OperateResult.CreateFailedResult<double>($"设置量程失败:{result.Message ?? "未知原因"}");
             }
             return OperateResult.CreateSuccessResult();
         }

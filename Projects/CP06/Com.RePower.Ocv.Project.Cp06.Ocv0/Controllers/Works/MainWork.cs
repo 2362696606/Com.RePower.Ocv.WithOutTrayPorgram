@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Com.RePower.Device.Ohm.Impl.Hioki_BT3562;
 using Com.RePower.DeviceBase.DMM;
 using Com.RePower.DeviceBase.Ohm;
 using Com.RePower.DeviceBase.Plc;
@@ -204,6 +205,19 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                 if (result.IsSuccess)
                 {
                     LogHelper.UiLog.Info("成功连接内阻仪");
+
+                    if (DevicesController.Ohm is Hioki_BT3562Impl tempOhm)
+                    {
+                        LogHelper.UiLog.Info("当前是Hioki_BT3562Impl正在进行初始化");
+                        var setResult = tempOhm.SetInitiateContinuous();
+                        if (setResult.IsFailed) return setResult;
+                        setResult = tempOhm.SetRang();
+                        if (setResult.IsFailed) return setResult;
+                    }
+                    else
+                    {
+                        LogHelper.UiLog.Info("当前不是Hioki_BT3562Impl");
+                    }
                 }
                 else
                 {
