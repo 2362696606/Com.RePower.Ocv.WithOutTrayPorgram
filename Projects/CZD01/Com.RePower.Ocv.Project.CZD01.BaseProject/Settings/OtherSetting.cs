@@ -1,5 +1,8 @@
 ﻿using Com.RePower.Ocv.Model.Attributes;
+using Com.RePower.Ocv.Model.Settings;
+using Com.RePower.WpfBase;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +11,13 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Settings
 {
-    public class OtherSetting:ObservableObject
+    public class OtherSetting:ObservableObject,ISettingSaveChanged
     {
 		private int _pVolStartChannel;
 		/// <summary>
 		/// 正极壳体电压开始通道
 		/// </summary>
+		[SettingName("正极壳体电压开始通道")]
 		public int PVolStartChannel
 		{
 			get { return _pVolStartChannel; }
@@ -93,5 +97,20 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Settings
 			set { SetProperty(ref _volDifferenceNgChannel, value); }
 		}
 
-	}
+        /// <summary>
+        /// 用于保存
+        /// </summary>
+        [IgnorSetting]
+        [JsonIgnore]
+        public Func<string, OperateResult>? SaveEvent { get; set; }
+        public OperateResult SaveChanged()
+        {
+            return SaveEvent?.Invoke("OtherSetting") ?? OperateResult.CreateFailedResult("保存委托未绑定实现");
+        }
+
+        public async Task<OperateResult> SaveChangedAsync()
+        {
+            return await Task.Run(SaveChanged);
+        }
+    }
 }

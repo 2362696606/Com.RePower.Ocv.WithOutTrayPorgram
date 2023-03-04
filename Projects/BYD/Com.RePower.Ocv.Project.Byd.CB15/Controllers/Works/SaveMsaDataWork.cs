@@ -31,15 +31,15 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
             switch (SettingManager.CurrentOcvType)
             {
                 case Enums.OcvTypeEnmu.OCV1:
-                    return SaveTestDateToCsv<Ocv1InfoDto>(path);
+                    return SaveTestDateToCsv<Ocv1InfoForCvsDto>(path);
                 case Enums.OcvTypeEnmu.OCV2:
-                    return SaveTestDateToCsv<Ocv2InfoDto>(path);
+                    return SaveTestDateToCsv<Ocv2InfoForCvsDto>(path);
                 case Enums.OcvTypeEnmu.OCV3:
-                    return SaveTestDateToCsv<Ocv3InfoDto>(path);
+                    return SaveTestDateToCsv<Ocv3InfoForCvsDto>(path);
                 case Enums.OcvTypeEnmu.OCV4:
-                    return SaveTestDateToCsv<Ocv4InfoDto>(path);
+                    return SaveTestDateToCsv<Ocv4InfoForCvsDto>(path);
                 default:
-                    return SaveTestDateToCsv<Ocv1InfoDto>(path);
+                    return SaveTestDateToCsv<Ocv1InfoForCvsDto>(path);
             }
         }
 
@@ -73,7 +73,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
             List<T> dtos = Mapper.Map<List<T>>(Tray.NgInfos);
             try
             {
-                using (var writer = new StreamWriter(path,false))
+                using (var writer = new StreamWriter(path,false,Encoding.UTF8))
                 {
                     var csvConfig = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture);
                     using (var csv = new CsvWriter(writer, csvConfig))

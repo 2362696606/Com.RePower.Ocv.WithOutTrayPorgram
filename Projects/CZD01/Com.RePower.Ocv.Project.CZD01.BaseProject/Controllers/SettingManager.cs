@@ -36,6 +36,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers
         private readonly string plcAddressCacheSettingName = "PlcAddressCache";
         private readonly string otherSettingName = "OtherSetting";
         private readonly string sceneConnectStringSettingName = "OcvConnectString";
+        private readonly string calibrationSettingName = "CalibrationSetting";
 
         private IMapper mapper;
         
@@ -110,6 +111,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers
                 {
                     var dto = JsonConvert.DeserializeObject<OtherSettingDto>(otherSettingJStr);
                     this._otherSetting = mapper.Map<OtherSetting>(dto);
+                    _otherSetting.SaveEvent = SaveChange;
                 }
                 #endregion
 
@@ -123,6 +125,14 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers
                         ?? new List<Model.Entity.PlcCacheValue>();
                 }
                 #endregion
+
+                var calibrationSettingJStr = context.SettingItems.FirstOrDefault(x => x.SettingName == calibrationSettingName)?.JsonValue;
+                if(!string.IsNullOrEmpty(calibrationSettingJStr))
+                {
+                    _calibrationSetting = JsonConvert.DeserializeObject<Settings.CalibrationSetting>(calibrationSettingJStr);
+                    if (_calibrationSetting is { })
+                        _calibrationSetting.SaveEvent = SaveChange;
+                }
 
                 #region 初始化硬件配置字符串
                 PlcSettingJson = context.SettingItems.FirstOrDefault(x => x.SettingName == plcSettingName)?.JsonValue;
@@ -206,6 +216,13 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers
         {
             get { return _otherSetting; }
         }
+        private Settings.CalibrationSetting? _calibrationSetting;
+
+        public Settings.CalibrationSetting? CurrentCalibrationSetting
+        {
+            get { return _calibrationSetting; }
+        }
+
 
 
 
@@ -247,6 +264,14 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers
                 case "TestOption":
                     settingName = testOptionSettingName;
                     settingValue = JsonConvert.SerializeObject(CurrentTestOption);
+                    break;
+                case "OtherSetting":
+                    settingName = otherSettingName;
+                    settingValue = JsonConvert.SerializeObject(CurrentOtherSetting);
+                    break;
+                case "CalibrationSetting":
+                    settingName = calibrationSettingName;
+                    settingValue = JsonConvert.SerializeObject(CurrentCalibrationSetting);
                     break;
             }
             if (!string.IsNullOrEmpty(settingName))

@@ -99,10 +99,27 @@
                 </materialDesign:DialogHost.DialogContent>
                 <DataGrid
                     x:Name="DataGrid"
+                    AutoGenerateColumns="False"
                     CanUserAddRows="False"
                     CanUserDeleteRows="False"
                     IsReadOnly="True"
-                    ItemsSource="{Binding ItemsSource}" />
+                    ItemsSource="{Binding ItemsSource}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Battery.BarCode}" Header="电芯条码" />
+                        <DataGridTextColumn Binding="{Binding Battery.TrayCode}" Header="托盘条码" />
+                        <DataGridTextColumn Binding="{Binding Battery.OcvType}" Header="Ocv类型" />
+                        <DataGridTextColumn Binding="{Binding Battery.Position}" Header="位置" />
+                        <DataGridTextColumn Binding="{Binding Battery.VolValue}" Header="电压" />
+                        <DataGridTextColumn Binding="{Binding Battery.PVolValue}" Header="正极壳体电压" />
+                        <DataGridTextColumn Binding="{Binding Battery.NVolValue}" Header="负极壳体电压" />
+                        <DataGridTextColumn Binding="{Binding Battery.Res}" Header="内阻" />
+                        <DataGridTextColumn Binding="{Binding Battery.Temp}" Header="温度" />
+                        <DataGridTextColumn Binding="{Binding Battery.PTemp}" Header="正极温度" />
+                        <DataGridTextColumn Binding="{Binding Battery.NTemp}" Header="正极温度" />
+                        <DataGridTextColumn Binding="{Binding IsNg}" Header="是否Ng" />
+                        <DataGridTextColumn Binding="{Binding NgDescription}" Header="Ng描述" />
+                    </DataGrid.Columns>
+                </DataGrid>
             </materialDesign:DialogHost>
             <hc:Pagination
                 x:Name="Pagination"

@@ -31,14 +31,12 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
         public MainWorkForOcv3(DevicesController devicesController
             ,IWmsService wmsService
             ,IMesService mesService
-            ,SettingManager settingManager
             ,Tray tray
             ,IMapper mapper)
         {
             DevicesController = devicesController;
             WmsService = wmsService;
             MesService = mesService;
-            SettingManager = settingManager;
             Tray = tray;
             Mapper = mapper;
             Task.Run(KeepHeartbeat);
@@ -47,7 +45,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
         public DevicesController DevicesController { get; }
         public IWmsService WmsService { get; }
         public IMesService MesService { get; }
-        public SettingManager SettingManager { get; }
+        public SettingManager SettingManager => SettingManager.Instance;
         public Tray Tray { get; }
         public IMapper Mapper { get; }
 

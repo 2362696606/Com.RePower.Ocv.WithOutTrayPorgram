@@ -17,7 +17,12 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
             foreach(var item in Tray.NgInfos)
             {
                 int sendValue = 1;
-                if (SettingManager.CurrentOcvType ==  Model.Enums.OcvTypeEnum.OCV3)
+
+                if(item.AttachedIsNg??false)
+                {
+                    sendValue = 1;
+                }
+                else if (SettingManager.CurrentOcvType ==  Model.Enums.OcvTypeEnum.OCV3)
                 {
                     if (item.IsNg)
                     {

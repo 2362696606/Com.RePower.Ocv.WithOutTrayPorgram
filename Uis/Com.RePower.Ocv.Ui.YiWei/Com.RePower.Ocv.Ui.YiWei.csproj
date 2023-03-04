@@ -54,9 +54,6 @@
     <Compile Update="Views\TrayView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\UiLogView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -76,10 +73,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\TrayView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\UiLogView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

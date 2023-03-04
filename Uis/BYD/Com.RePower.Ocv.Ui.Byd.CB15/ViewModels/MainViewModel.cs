@@ -16,5 +16,18 @@ namespace Com.RePower.Ocv.Ui.Byd.CB15.ViewModels
             var settingView = new SettingView();
             settingView.Show();
         }
+        [RelayCommand]
+        private void OpenChannelNgInfoView()
+        {
+            var view = new ChannelNgInfosView();
+            view.Show();
+        }
+
+        [RelayCommand]
+        private void OpenDataSearch()
+        {
+            var dataSearchView = new DataSearchView();
+            dataSearchView.Show();
+        }
     }
 }

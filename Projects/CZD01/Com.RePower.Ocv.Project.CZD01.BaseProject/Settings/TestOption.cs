@@ -10,13 +10,14 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Settings
 {
-    public class TestOption:Com.RePower.Ocv.Model.Settings.TestOption,ISettingSaveChanged
+    public class TestOption : Com.RePower.Ocv.Model.Settings.TestOption, ISettingSaveChanged
     {
 
         private bool _isVerifyVolDifference;
         /// <summary>
         /// 是否验证压差
         /// </summary>
+        [SettingName("是否验证压差")]
         public bool IsVerifyVolDifference
         {
             get { return _isVerifyVolDifference; }
@@ -26,6 +27,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Settings
         /// <summary>
         /// 是否验证单托盘Ng
         /// </summary>
+        [SettingName("是否验证单托盘NG")]
         public bool IsVerifyCurrentKValue
         {
             get { return _isVerifyCurrentKValue; }

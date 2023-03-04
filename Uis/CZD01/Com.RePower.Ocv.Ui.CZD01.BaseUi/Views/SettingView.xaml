@@ -17,5 +17,8 @@
         <TabItem Header="测试选项">
             <uiBaseViews:SettingView SettingObj="{Binding SettingManager.CurrentTestOption}" />
         </TabItem>
+        <TabItem Header="其他">
+            <uiBaseViews:SettingView SettingObj="{Binding SettingManager.CurrentOtherSetting}" />
+        </TabItem>
     </TabControl>
 </Window>

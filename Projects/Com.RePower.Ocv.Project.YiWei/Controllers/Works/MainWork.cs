@@ -1,5 +1,7 @@
-﻿using Azure;
+﻿using AutoMapper;
+using Azure;
 using Com.RePower.Ocv.Model;
+using Com.RePower.Ocv.Model.DataBaseContext;
 using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Model.Extensions;
 using Com.RePower.Ocv.Model.Helper;
@@ -28,7 +30,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
 
-namespace Com.RePower.Ocv.Project.YiWei.Controllers
+namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
 {
     public partial class MainWork : MainWorkAbstract
     {
@@ -44,14 +46,21 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
         //    //WmsService = wmsService;
         //}
 
-        public MainWork(Tray tray,DevicesController devicesController):base()
+        public MainWork(Tray tray
+            , DevicesController devicesController
+            ,LocalTestResultDbContext dbContext
+            ,IMapper mapper) : base()
         {
             Tray = tray;
             DevicesController = devicesController;
+            LocalDbContext = dbContext;
+            Mapper = mapper;
         }
 
 
         public DevicesController DevicesController { get; }
+        public LocalTestResultDbContext LocalDbContext { get; }
+        public IMapper Mapper { get; }
         public Tray Tray { get; }
         public BatteryNgCriteria? BatteryNgCriteria => SettingManager<SettingManager>.Instance.CurrentBatteryNgCriteria;
         public TestOption? TestOption => SettingManager<SettingManager>.Instance.CurrentTestOption;
@@ -101,7 +110,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                         return result;
                     }
                 }
-                if (!(DevicesController.SwitchBoard?.IsConnected??true))
+                if (!(DevicesController.SwitchBoard?.IsConnected ?? true))
                 {
                     var result = DevicesController.SwitchBoard.Connect();//切换板
                     if (result.IsFailed)
@@ -109,7 +118,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                         return result;
                     }
                 }
-                if (!(DevicesController.DMM?.IsConnected ?? true)) 
+                if (!(DevicesController.DMM?.IsConnected ?? true))
                 {
                     var result = DevicesController.DMM.Connect();//万用表
                     if (result.IsFailed)
@@ -134,7 +143,6 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                 {
                     return OperateResult.CreateFailedResult(wait0.Message ?? "等待本地Plc[上位机交互] = 5失败", wait0.ErrorCode);
                 }
-
                 DoPauseOrStop();
                 LogHelper.UiLog.Info("等待Plc[上位机交互] = 5");
                 var wait1 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["上位机交互"], 5);
@@ -157,7 +165,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                 }
                 batteryCode = read1.Content ?? string.Empty;
                 batteryCode = Regex.Match(read1.Content ?? string.Empty, @"[0-9\.a-zA-Z_-]+").Value;
-                if(string.IsNullOrEmpty(batteryCode))
+                if (string.IsNullOrEmpty(batteryCode))
                 {
                     return OperateResult.CreateFailedResult("电池条码1为空");
                 }
@@ -179,7 +187,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                 }
                 batteryCode = read2.Content ?? string.Empty;
                 batteryCode = Regex.Match(batteryCode ?? string.Empty, @"[0-9\.a-zA-Z_-]+").Value;
-                if(string.IsNullOrEmpty(batteryCode))
+                if (string.IsNullOrEmpty(batteryCode))
                 {
                     return OperateResult.CreateFailedResult("电池条码2为空");
                 }
@@ -207,10 +215,14 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                     //验证ng结果
                     ValidateNgResult();
                     break;
-                    
-                } while (IsDoRetest && reTestTimes < RetestTimes);
 
+                } while (IsDoRetest && reTestTimes < RetestTimes);
                 DoPauseOrStop();
+
+                var saveToLocalResult = SaveToLocalDb();
+                if (saveToLocalResult.IsFailed) return saveToLocalResult;
+                DoPauseOrStop();
+
                 LogHelper.UiLog.Info("写入Plc[上位机交互] = 10");
                 var write6 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["上位机交互"], 10);
                 if (write6.IsFailed)
@@ -241,7 +253,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                     return result;
                 }
             }
-            if(!(DevicesController.Ohm?.IsConnected ?? true))
+            if (!(DevicesController.Ohm?.IsConnected ?? true))
             {
                 var result = DevicesController.Ohm.Connect();//万用表
                 if (result.IsFailed)
@@ -307,7 +319,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
             }
             battery.VolValue = read1.Content;
             var read2 = DevicesController.Ohm?.ReadRes() ?? OperateResult.CreateFailedResult<double>("内阻仪实例为null");
-            if(read2.IsFailed)
+            if (read2.IsFailed)
             {
                 return OperateResult.CreateFailedResult($"读取内阻失败{read2.Message ?? "未知原因"}", read2.ErrorCode);
             }
@@ -315,7 +327,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
             battery.IsTested = true;
             battery.TestTime = DateTime.Now;
             //打开对应通道
-            var closeResult = SwitchChannel(battery.Position,false);
+            var closeResult = SwitchChannel(battery.Position, false);
             if (closeResult.IsFailed)
             {
                 return closeResult;
@@ -356,13 +368,13 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                 //ngInfo.NgDescription = string.Empty;
                 //ngInfo.IsNg = false;
                 ngInfo.NgType = 0;
-                if (ngInfo.Battery.VolValue > (BatteryNgCriteria?.MaxVol ?? 0)) 
+                if (ngInfo.Battery.VolValue > (BatteryNgCriteria?.MaxVol ?? 0))
                 {
                     //ngInfo.NgDescription = "电压过高";
                     //ngInfo.IsNg = true;
                     ngInfo.AddNgType(Ocv.Model.Enums.NgTypeEnum.电压过高);
                 }
-                else if (ngInfo.Battery.VolValue < ((BatteryNgCriteria?.MinVol ?? 0)))
+                else if (ngInfo.Battery.VolValue < (BatteryNgCriteria?.MinVol ?? 0))
                 {
                     //ngInfo.NgDescription = "电压过低";
                     //ngInfo.IsNg = true;
@@ -374,7 +386,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                     //ngInfo.IsNg = true;
                     ngInfo.AddNgType(Ocv.Model.Enums.NgTypeEnum.内阻过高);
                 }
-                else if (ngInfo.Battery.Res > (BatteryNgCriteria?.MaxRes ?? 0)) 
+                else if (ngInfo.Battery.Res > (BatteryNgCriteria?.MaxRes ?? 0))
                 {
                     //ngInfo.NgDescription = String.IsNullOrEmpty(ngInfo.NgDescription) ? "内阻过低" : "|内阻过低";
                     //ngInfo.IsNg = true;
@@ -406,7 +418,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                     RnDbOcv rnDbOcv = new RnDbOcv();
                     rnDbOcv.EqpId = "rn_" + (TestOption?.OcvType ?? "OCV3") + "_6"; //设备编码   //EquipmentCode;
                     rnDbOcv.PcId = (TestOption?.OcvType ?? "OCV3") + "_6";//设备号+线
-                    rnDbOcv.Operation = (TestOption?.OcvType ?? "OCV3");//设备号
+                    rnDbOcv.Operation = TestOption?.OcvType ?? "OCV3";//设备号
                     if (string.IsNullOrWhiteSpace(Tray.TrayCode))
                     {
                         LogHelper.UiLog.Error("托盘条码为空！");

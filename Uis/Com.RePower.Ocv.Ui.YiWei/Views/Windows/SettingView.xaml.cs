@@ -1,4 +1,4 @@
-﻿using Com.RePower.Ocv.Ui.YiWei.ViewModels;
+﻿using Com.RePower.Ocv.Ui.YiWei.ViewModels.Windows;
 using Com.RePower.WpfBase;
 using System;
 using System.Collections.Generic;
@@ -12,20 +12,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Com.RePower.Ocv.Ui.YiWei.Views
+namespace Com.RePower.Ocv.Ui.YiWei.Views.Windows
 {
     /// <summary>
-    /// UiLogView.xaml 的交互逻辑
+    /// SettingView.xaml 的交互逻辑
     /// </summary>
-    public partial class UiLogView : UserControl
+    public partial class SettingView : Window
     {
-        public UiLogView()
+        public SettingView()
         {
-            this.DataContext = IocHelper.Default.GetService<UiLogViewModel>();
             InitializeComponent();
+            DataContext = IocHelper.Default.GetService<SettingViewModel>();
         }
     }
 }

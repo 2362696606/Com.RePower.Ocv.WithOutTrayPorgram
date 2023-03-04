@@ -16,6 +16,20 @@ namespace Com.RePower.Ocv.Ui.Cp06.Ocv0.ViewModels
         public MainViewModel()
         {
         }
+
+        /// <summary>
+        /// 是否可以校准
+        /// </summary>
+        public bool CanCalibration
+        {
+            get 
+            {
+                if (SettingManager.Instance.CurrentOcvType == Project.Cp06.Ocv0.Enums.OcvTypeEnmu.OCV3)
+                    return false;
+                else return true;
+            }
+        }
+
         [RelayCommand]
         private void DoCalibration()
         {
@@ -34,5 +48,6 @@ namespace Com.RePower.Ocv.Ui.Cp06.Ocv0.ViewModels
             var dataSearchView = new DataSearchView();
             dataSearchView.Show();
         }
+        
     }
 }

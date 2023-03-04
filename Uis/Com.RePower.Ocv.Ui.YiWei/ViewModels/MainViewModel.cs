@@ -1,4 +1,5 @@
 ﻿using Com.RePower.Ocv.Project;
+using Com.RePower.Ocv.Ui.UiBase.ViewModels;
 using Com.RePower.Ocv.Ui.YiWei.Views;
 using Com.RePower.Ocv.Ui.YiWei.Views.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -17,9 +18,15 @@ namespace Com.RePower.Ocv.Ui.YiWei.ViewModels
         {
         }
         [RelayCommand]
-        private void DevicesManager()
+        private void SettingManager()
         {
-            var view = new DevicesManagerView();
+            var view = new SettingView();
+            view.Show();
+        }
+        [RelayCommand]
+        private void OpenDataSearchView()
+        {
+            var view = new DataSearchView();
             view.Show();
         }
     }

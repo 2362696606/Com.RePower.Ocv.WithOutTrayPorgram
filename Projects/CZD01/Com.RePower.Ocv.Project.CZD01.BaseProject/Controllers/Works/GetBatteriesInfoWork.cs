@@ -48,6 +48,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                     ngInfo.Battery.BarCode = item.BarCode;
                     ngInfo.Battery.OcvType = resultDto.HandleResult.Procedure;
                     ngInfo.Battery.TaskCode = resultDto.HandleResult.TaskCode;
+                    ngInfo.Battery.IsExsit = item.IsExist;
                     if(item.AttachedNgInfo is { })
                     {
                         if(item.AttachedNgInfo.IsOk !=null && item.AttachedNgInfo.IsOk == false)

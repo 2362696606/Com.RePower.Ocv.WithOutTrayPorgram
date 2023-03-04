@@ -18,6 +18,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Settings
         /// 上传设备状态
         /// </summary>
         public string UploadMachineStatusUrl { get; set; } = "http://10.10.1.240:8578/mes/third/thirdPartyAPI!doUploadMachineStatus_Change.action";
+        public string? LoadShopOrderListUrl { get; set; } = "http://10.10.1.240:8578/mes/third/thirdPartyAPI!loadShopOrderList.action";
 
         /// <summary>
         /// 站点

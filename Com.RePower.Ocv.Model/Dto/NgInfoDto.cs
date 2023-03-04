@@ -21,7 +21,7 @@ namespace Com.RePower.Ocv.Model.Dto
         /// <summary>
         /// 附加Ng描述
         /// </summary>
-        private string? ExtraNgDescription { get; set; }
+        //private string? ExtraNgDescription { get; set; }
         /// <summary>
         /// 是否ng
         /// </summary>

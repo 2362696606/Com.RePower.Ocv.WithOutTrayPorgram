@@ -97,12 +97,12 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 var testOptionForOcv1Str = testOptionForOcv1?.JsonValue ?? string.Empty;
                 this._testOptionForOcv1 = JsonConvert.DeserializeObject<Services.Settings.TestOption>(testOptionForOcv1Str);
                 if (_testOptionForOcv1 is ISettingSaveChanged)
-                    _testOptionForOcv1.DoSaveChanged = DoSaveChanged;
+                    _testOptionForOcv1.DoSaveChanged = DoSaveChangedForOcv1;
                 var testOptionForOcv2 = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "TestOptionForOcv2");
                 var testOptionForOcv2Str = testOptionForOcv2?.JsonValue ?? string.Empty;
                 this._testOptionForOcv2 = JsonConvert.DeserializeObject<Services.Settings.TestOption>(testOptionForOcv2Str);
                 if (_testOptionForOcv2 is ISettingSaveChanged)
-                    _testOptionForOcv2.DoSaveChanged = DoSaveChanged;
+                    _testOptionForOcv2.DoSaveChanged = DoSaveChangedForOcv2;
                 var testOptionForOcv3 = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "TestOptionForOcv3");
                 var testOptionForOcv3Str = testOptionForOcv3?.JsonValue ?? string.Empty;
                 this._testOptionForOcv3 = JsonConvert.DeserializeObject<Services.Settings.TestOption>(testOptionForOcv3Str);
@@ -119,12 +119,12 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 var batteryStandardForOcv1Str = batteryStandardForOcv1?.JsonValue ?? string.Empty;
                 this._batteryStandardForOcv1 = JsonConvert.DeserializeObject<BatteryStandard>(batteryStandardForOcv1Str);
                 if (_batteryStandardForOcv1 is ISettingSaveChanged)
-                    _batteryStandardForOcv1.DoSaveChanged = DoSaveChanged;
+                    _batteryStandardForOcv1.DoSaveChanged = DoSaveChangedForOcv1;
                 var batteryStandardForOcv2 = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "BatteryStandardForOcv2");
                 var batteryStandardForOcv2Str = batteryStandardForOcv2?.JsonValue ?? string.Empty;
                 this._batteryStandardForOcv2 = JsonConvert.DeserializeObject<BatteryStandard>(batteryStandardForOcv2Str);
                 if (_batteryStandardForOcv2 is ISettingSaveChanged)
-                    _batteryStandardForOcv2.DoSaveChanged = DoSaveChanged;
+                    _batteryStandardForOcv2.DoSaveChanged = DoSaveChangedForOcv2;
                 var batteryStandardForOcv3 = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "BatteryStandardForOcv3");
                 var batteryStandardForOcv3Str = batteryStandardForOcv3?.JsonValue ?? string.Empty;
                 this._batteryStandardForOcv3 = JsonConvert.DeserializeObject<BatteryStandard>(batteryStandardForOcv3Str);
@@ -211,6 +211,9 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 }
             }
         }
+        public Services.Settings.TestOption? Ocv1TestOption => _testOptionForOcv1;
+        public Services.Settings.TestOption? Ocv2TestOption => _testOptionForOcv2;
+
         public Services.Settings.BatteryStandard? CurrentBatteryStandard 
         {
             get
@@ -230,6 +233,10 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 }
             }
         }
+
+        public Services.Settings.BatteryStandard? Ocv1BatteryStandard => _batteryStandardForOcv1;
+        public Services.Settings.BatteryStandard? Ocv2BatteryStandard => _batteryStandardForOcv2;
+
         private Services.Settings.CalibrationSetting? _calibrationSetting;
 
         public Services.Settings.CalibrationSetting? CurrentCalibrationSetting
@@ -330,6 +337,110 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 }
                 return OperateResult.CreateSuccessResult(); 
             }
+        }
+
+        private OperateResult DoSaveChangedForOcv1(string name)
+        {
+            string? settingName = null;
+            string? jStr = null;
+            switch (name)
+            {
+                case "TestOption":
+                    settingName = "TestOptionForOcv1";
+                    jStr = JsonConvert.SerializeObject(_testOptionForOcv1);
+                    break;
+                case "BatteryStandard":
+                    settingName = "BatteryStandardForOcv1";
+                    jStr = JsonConvert.SerializeObject(_batteryStandardForOcv1);
+                    break;
+                default:
+                    return OperateResult.CreateFailedResult($"未实现{name}的保存修改");
+            }
+            if (string.IsNullOrEmpty(settingName))
+            {
+                return OperateResult.CreateFailedResult($"未实现\"{name}\"的保存修改");
+            }
+            else
+            {
+                using (var settingContext = new OcvSettingDbContext())
+                {
+                    var item = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == settingName);
+                    if (item is { })
+                    {
+                        item.JsonValue = jStr;
+                        settingContext.Update(item);
+                        settingContext.SaveChanges();
+                    }
+                    else
+                        return OperateResult.CreateFailedResult($"无法在配置数据库中找到\"{settingName}\"对应的配置项");
+                }
+                return OperateResult.CreateSuccessResult();
+            }
+        }
+
+        private OperateResult DoSaveChangedForOcv2(string name)
+        {
+            string? settingName = null;
+            string? jStr = null;
+            switch (name)
+            {
+                case "TestOption":
+                    settingName = "TestOptionForOcv2";
+                    jStr = JsonConvert.SerializeObject(_testOptionForOcv2);
+                    break;
+                case "BatteryStandard":
+                    settingName = "BatteryStandardForOcv2";
+                    jStr = JsonConvert.SerializeObject(_batteryStandardForOcv2);
+                    break;
+                default:
+                    return OperateResult.CreateFailedResult($"未实现{name}的保存修改");
+            }
+            if (string.IsNullOrEmpty(settingName))
+            {
+                return OperateResult.CreateFailedResult($"未实现\"{name}\"的保存修改");
+            }
+            else
+            {
+                using (var settingContext = new OcvSettingDbContext())
+                {
+                    var item = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == settingName);
+                    if (item is { })
+                    {
+                        item.JsonValue = jStr;
+                        settingContext.Update(item);
+                        settingContext.SaveChanges();
+                    }
+                    else
+                        return OperateResult.CreateFailedResult($"无法在配置数据库中找到\"{settingName}\"对应的配置项");
+                }
+                return OperateResult.CreateSuccessResult();
+            }
+        }
+
+
+        private Dictionary<string,string>? _orderList;
+        /// <summary>
+        /// 工单列表
+        /// </summary>
+        public Dictionary<string,string>? OrderList
+        {
+            get { return _orderList; }
+            set 
+            {
+                if (SetProperty(ref _orderList, value))
+                {
+                    this.Order = value?.First().Value;
+                } 
+            }
+        }
+        private string? _order;
+        /// <summary>
+        /// 工单编号
+        /// </summary>
+        public string? Order
+        {
+            get { return _order; }
+            set { SetProperty(ref _order, value); }
         }
     }
 }

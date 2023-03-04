@@ -12,7 +12,6 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Settings
 {
     public class BatteryStandard:Model.Settings.BatteryStandard,ISettingSaveChanged
     {
-
         private double _maxVolDifference;
         /// <summary>
         /// 压差最大值
@@ -27,6 +26,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Settings
         /// <summary>
         /// 压差最小值
         /// </summary>
+        [SettingName("压差最小值")]
         public double MinVolDifference
         {
             get { return _minVolDifference; }
@@ -42,7 +42,6 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Settings
             get { return _xValue; }
             set { SetProperty(ref _xValue, value); }
         }
-
 
         /// <summary>
         /// 用于保存

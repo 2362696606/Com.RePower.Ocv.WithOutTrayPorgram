@@ -59,8 +59,16 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 else if (ngInfo.Battery.NVolValue < minNVol)
                     ngInfo.AddNgType(Model.Enums.NgTypeEnum.负极壳体电压过低);
             }
-            //ngInfo.SetNgDescritpion();
-            //ngInfo.SetIsNg();
+
+            if(ngInfo.IsNg)
+            {
+                var item = SettingManager.ChannelNgInfos?.FirstOrDefault(x => x.Channel == ngInfo.Battery.Position);
+                if(item is { })
+                {
+                    item.NgTimes += 1;
+                }
+            }
+
             return OperateResult.CreateSuccessResult();
         }
     }

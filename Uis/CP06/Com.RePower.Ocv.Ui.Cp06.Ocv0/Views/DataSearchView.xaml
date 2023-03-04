@@ -7,8 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uiBaseViews="clr-namespace:Com.RePower.Ocv.Ui.UiBase.Views;assembly=Com.RePower.Ocv.Ui.UiBase"
     Title="DataSearchView"
-    Width="800"
-    Height="450"
+    SizeToContent="WidthAndHeight"
     mc:Ignorable="d">
     <uiBaseViews:DataSearchView DataContext="{Binding DataContext}" />
 </Window>

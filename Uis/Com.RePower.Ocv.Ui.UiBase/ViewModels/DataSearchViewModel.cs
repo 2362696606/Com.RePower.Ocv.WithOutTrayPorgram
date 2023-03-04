@@ -2,6 +2,7 @@
 using Com.RePower.Ocv.Model.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
 using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections.Generic;
@@ -28,11 +29,11 @@ namespace Com.RePower.Ocv.Ui.UiBase.ViewModels
             get { return _dbContext; }
             set { SetProperty(ref _dbContext, value); }
         }
-        private List<Ocv.Model.Dto.BatteryDto>? _itemsSource;
+        private List<Ocv.Model.Dto.NgInfoDto>? _itemsSource;
         /// <summary>
         /// 数据源
         /// </summary>
-        public virtual List<Ocv.Model.Dto.BatteryDto>? ItemsSource
+        public virtual List<Ocv.Model.Dto.NgInfoDto>? ItemsSource
         {
             get { return _itemsSource; }
             set { SetProperty(ref _itemsSource, value); }
@@ -119,20 +120,23 @@ namespace Com.RePower.Ocv.Ui.UiBase.ViewModels
         {
             return Task.Factory.StartNew(() =>
             {
-                var count = DbContext.Batterys.Where(x =>
-                ((string.IsNullOrEmpty(_trayCode) ? true : x.TrayCode!.Contains(_trayCode))
-                                    && (string.IsNullOrEmpty(_barCode) ? true : x.BarCode!.Contains(_barCode))
-                                    && ((_startTime == null) ? true : (x.TestTime >= _startTime))
-                                    && ((_endTime == null) ? true : (x.TestTime <= _endTime))))
+                var count = DbContext.NgInfos.Where(x =>
+                ((string.IsNullOrEmpty(_trayCode) ? true : x.Battery.TrayCode!.Contains(_trayCode))
+                                    && (string.IsNullOrEmpty(_barCode) ? true : x.Battery.BarCode!.Contains(_barCode))
+                                    && (string.IsNullOrEmpty(_ocvType) ? true : x.Battery.OcvType!.Contains(_ocvType))
+                                    && ((_startTime == null) ? true : (x.Battery.TestTime >= _startTime))
+                                    && ((_endTime == null) ? true : (x.Battery.TestTime <= _endTime))))
                                     .OrderBy(x => x.Id)?.Count() ?? 0;
                 MaxPageCount = (count / _dataCountPerPage) + 1;
 
-                ItemsSource = DbContext.Batterys.Where(x =>
-                ((string.IsNullOrEmpty(_trayCode) ? true : x.TrayCode!.Contains(_trayCode))
-                                    && (string.IsNullOrEmpty(_barCode) ? true : x.BarCode!.Contains(_barCode))
-                                    && ((_startTime == null) ? true : (x.TestTime >= _startTime))
-                                    && ((_endTime == null) ? true : (x.TestTime <= _endTime))))
-                                .OrderBy(x => x.Id)
+                ItemsSource = DbContext.NgInfos.Where(x =>
+                ((string.IsNullOrEmpty(_trayCode) ? true : x.Battery.TrayCode!.Contains(_trayCode))
+                                    && (string.IsNullOrEmpty(_barCode) ? true : x.Battery.BarCode!.Contains(_barCode))
+                                    && (string.IsNullOrEmpty(_ocvType) ? true : x.Battery.OcvType!.Contains(_ocvType))
+                                    && ((_startTime == null) ? true : (x.Battery.TestTime >= _startTime))
+                                    && ((_endTime == null) ? true : (x.Battery.TestTime <= _endTime))))
+                                .Include(x => x.Battery)
+                                .OrderBy(x => x.Battery.Id)
                                 .Skip((_pageIndex - 1) * _dataCountPerPage)
                                 .Take(_dataCountPerPage).ToList();
             });

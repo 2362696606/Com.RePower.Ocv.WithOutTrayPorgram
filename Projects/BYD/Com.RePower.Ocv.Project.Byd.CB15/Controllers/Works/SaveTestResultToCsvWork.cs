@@ -26,15 +26,15 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
             switch (SettingManager.CurrentOcvType)
             {
                 case Enums.OcvTypeEnmu.OCV1:
-                    return SaveTestDateToCsv<Ocv1InfoDto>(path);
+                    return SaveTestDateToCsv<Ocv1InfoForCvsDto>(path);
                 case Enums.OcvTypeEnmu.OCV2:
-                    return SaveTestDateToCsv<Ocv2InfoDto>(path);
+                    return SaveTestDateToCsv<Ocv2InfoForCvsDto>(path);
                 case Enums.OcvTypeEnmu.OCV3:
-                    return SaveTestDateToCsv<Ocv3InfoDto>(path);
+                    return SaveTestDateToCsv<Ocv3InfoForCvsDto>(path);
                 case Enums.OcvTypeEnmu.OCV4:
-                    return SaveTestDateToCsv<Ocv4InfoDto>(path);
+                    return SaveTestDateToCsv<Ocv4InfoForCvsDto>(path);
                 default:
-                    return SaveTestDateToCsv<Ocv1InfoDto>(path);
+                    return SaveTestDateToCsv<Ocv1InfoForCvsDto>(path);
             }
         }
     }

@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:Com.RePower.Ocv.Ui.Byd.CB15.Views.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:entity="clr-namespace:Com.RePower.Ocv.Model.Entity;assembly=Com.RePower.Ocv.Model"
     xmlns:local="clr-namespace:Com.RePower.Ocv.Ui.Byd.CB15.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -15,6 +16,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:NgInfoToColorMultiValueConverter x:Key="NgInfoToColor" />
+            <converters:NgTypeToCodeValueConverter x:Key="NgTypeToCode" />
             <uiHelper:BindingProxy x:Key="proxy" Data="{Binding}" />
             <valueConvert:BoolToVisibility x:Key="BoolToVisibility" />
         </ResourceDictionary>
@@ -30,48 +32,147 @@
                 IsReadOnly="True"
                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
                 Text="{Binding Tray.TrayCode}" />
-            <DataGrid
-                Grid.Row="1"
-                AutoGenerateColumns="False"
-                CanUserAddRows="False"
-                IsReadOnly="True"
-                ItemsSource="{Binding Tray.NgInfos}">
-                <DataGrid.RowStyle>
-                    <Style BasedOn="{StaticResource MaterialDesignDataGridRow}" TargetType="DataGridRow">
-                        <Setter Property="Background">
-                            <Setter.Value>
-                                <MultiBinding Converter="{StaticResource NgInfoToColor}">
-                                    <Binding Path="IsNg" />
-                                    <Binding Path="Battery.IsTested" />
-                                </MultiBinding>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </DataGrid.RowStyle>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Battery.Position}" Header="位置" />
-                    <DataGridTextColumn Binding="{Binding Battery.BarCode}" Header="条码" />
-                    <DataGridTextColumn
-                        Binding="{Binding Battery.VolValue}"
-                        Header="电压"
-                        Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
-                    <DataGridTextColumn
-                        Binding="{Binding Battery.Res}"
-                        Header="内阻"
-                        Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestRes, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
-                    <DataGridTextColumn
-                        Binding="{Binding Battery.NVolValue}"
-                        Header="负极壳体电压"
-                        Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestNVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
-                    <DataGridTextColumn
-                        Binding="{Binding Battery.PTemp}"
-                        Header="正极温度"
-                        Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestPTemp, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
-                    <DataGridTextColumn
-                        Binding="{Binding Battery.NTemp}"
-                        Header="负极温度"
-                        Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestNTemp, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
-                    <!--<DataGridTextColumn
+            <DockPanel Grid.Row="1">
+                <StackPanel
+                    HorizontalAlignment="Right"
+                    DockPanel.Dock="Bottom"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        FontSize="30"
+                        FontWeight="Black"
+                        Text="总Ng：" />
+                    <TextBlock
+                        FontSize="30"
+                        FontWeight="Black"
+                        Text="{Binding TotalNg}" />
+                </StackPanel>
+                <ItemsControl ItemsSource="{Binding Tray.NgInfos}">
+                    <ItemsControl.Template>
+                        <ControlTemplate TargetType="ItemsControl">
+                            <ScrollViewer
+                                x:Name="ScrollViewer"
+                                Padding="{TemplateBinding Padding}"
+                                Template="{StaticResource MaterialDesignScrollViewerTemplate}"
+                                VerticalScrollBarVisibility="Auto">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="entity:NgInfo">
+                            <materialDesign:Card Margin="5" Padding="5">
+                                <materialDesign:Card.Style>
+                                    <Style TargetType="materialDesign:Card">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <MultiBinding Converter="{StaticResource NgInfoToColor}">
+                                                    <Binding Path="IsNg" />
+                                                    <Binding Path="Battery.IsTested" />
+                                                </MultiBinding>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </materialDesign:Card.Style>
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel.Resources>
+                                        <Style BasedOn="{StaticResource MaterialDesignTextBlock}" TargetType="TextBlock">
+                                            <Setter Property="Margin" Value="5,0" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                            <Setter Property="TextWrapping" Value="Wrap" />
+                                        </Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Orientation" Value="Horizontal" />
+                                        </Style>
+                                    </StackPanel.Resources>
+                                    <StackPanel>
+                                        <TextBlock Text="位置:" />
+                                        <TextBlock Text="{Binding Battery.Position}" />
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBlock Text="电芯条码:" />
+                                        <TextBlock Text="{Binding Battery.BarCode}" />
+                                    </StackPanel>
+                                    <StackPanel Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}">
+                                        <TextBlock Text="电压:" />
+                                        <TextBlock Text="{Binding Battery.VolValue}" />
+                                    </StackPanel>
+                                    <StackPanel Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestRes, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}">
+                                        <TextBlock Text="内阻:" />
+                                        <TextBlock Text="{Binding Battery.Res}" />
+                                    </StackPanel>
+                                    <StackPanel Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestNVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}">
+                                        <TextBlock Text="负极壳体电压:" />
+                                        <TextBlock Text="{Binding Battery.NVolValue}" />
+                                    </StackPanel>
+                                    <StackPanel Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestPTemp, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}">
+                                        <TextBlock Text="正极温度:" />
+                                        <TextBlock Text="{Binding Battery.PTemp}" />
+                                    </StackPanel>
+                                    <StackPanel Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestNTemp, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}">
+                                        <TextBlock Text="负极温度:" />
+                                        <TextBlock Text="{Binding Battery.NTemp}" />
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBlock Text="Ng描述:" />
+                                        <TextBlock Text="{Binding NgDescription}" />
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBlock Text="Ng代码:" />
+                                        <TextBlock Text="{Binding NgType, Converter={StaticResource NgTypeToCode}}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </materialDesign:Card>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <!--<DataGrid
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    IsReadOnly="True"
+                    ItemsSource="{Binding Tray.NgInfos}">
+                    <DataGrid.RowStyle>
+                        <Style BasedOn="{StaticResource MaterialDesignDataGridRow}" TargetType="DataGridRow">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource NgInfoToColor}">
+                                        <Binding Path="IsNg" />
+                                        <Binding Path="Battery.IsTested" />
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Battery.Position}" Header="位置" />
+                        <DataGridTextColumn Binding="{Binding Battery.BarCode}" Header="条码" />
+                        <DataGridTextColumn
+                            Binding="{Binding Battery.VolValue}"
+                            Header="电压"
+                            Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                        <DataGridTextColumn
+                            Binding="{Binding Battery.Res}"
+                            Header="内阻"
+                            Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestRes, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                        <DataGridTextColumn
+                            Binding="{Binding Battery.NVolValue}"
+                            Header="负极壳体电压"
+                            Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestNVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                        <DataGridTextColumn
+                            Binding="{Binding Battery.PTemp}"
+                            Header="正极温度"
+                            Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestPTemp, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                        <DataGridTextColumn
+                            Binding="{Binding Battery.NTemp}"
+                            Header="负极温度"
+                            Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestNTemp, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                -->
+                <!--<DataGridTextColumn
                         Binding="{Binding Battery.KValue1}"
                         Header="K01"
                         Visibility="{Binding Data.SettingManager.CurrentTestOption.VerifyKValue, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
@@ -83,9 +184,11 @@
                         Binding="{Binding Battery.KValue3}"
                         Header="K23"
                         Visibility="{Binding Data.SettingManager.CurrentTestOption.VerifyKValue, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />-->
-                    <DataGridTextColumn Binding="{Binding NgDescription}" Header="Ng描述" />
-                </DataGrid.Columns>
-            </DataGrid>
+                <!--
+                        <DataGridTextColumn Binding="{Binding NgDescription}" Header="Ng描述" />
+                    </DataGrid.Columns>
+                </DataGrid>-->
+            </DockPanel>
         </Grid>
     </materialDesign:Card>
 </UserControl>

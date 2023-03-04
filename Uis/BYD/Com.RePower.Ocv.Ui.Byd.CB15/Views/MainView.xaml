@@ -26,6 +26,8 @@
                     </Grid.RowDefinitions>
                     <Menu IsMainMenu="True">
                         <MenuItem Command="{Binding OpenSettingViewCommand}" Header="打开配置" />
+                        <MenuItem Command="{Binding OpenChannelNgInfoViewCommand}" Header="通道Ng详情" />
+                        <MenuItem Command="{Binding OpenDataSearchCommand}" Header="数据查询" />
                     </Menu>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>

@@ -56,7 +56,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                 string message = string.Empty;
                 if(this.WorkStatus == 0)
                 {
-                    status = 0;
+                    status = 3;
                     isShutdown = true;
                     message = "停止";
                 }
@@ -109,6 +109,10 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     var getBatteriesInfoResult = GetBatteriesInfo();
                     if (getBatteriesInfoResult.IsFailed)
                         return getBatteriesInfoResult;
+                    DoPauseOrStop();
+                    var getShopOrderListResult = GetShopOrderList();
+                    if (getShopOrderListResult.IsFailed)
+                        return getShopOrderListResult;
                     DoPauseOrStop();
                     var testBatteriesResult = TestBatteries();
                     if (testBatteriesResult.IsFailed)
@@ -318,6 +322,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     ngInfo.Battery.Position = item.Index;
                     ngInfo.Battery.BarCode = item.BarCode;
                     ngInfo.Battery.OcvType = resultDto.HandleResult.Procedure;
+                    ngInfo.Battery.IsExsit = item.IsExist;
                     ngInfos.Add(ngInfo);
                 }
                 ngInfos.OrderBy(x => x.Battery.Position);
@@ -914,28 +919,35 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
         private OperateResult<int> GetNgValue(NgInfo ngInfo)
         {
             int sendValue = 1;
-            if (SettingManager.CurrentOcvType == OcvTypeEnmu.OCV0 || SettingManager.CurrentOcvType == OcvTypeEnmu.OCV3)
+            if (ngInfo.Battery.IsExsit == false)
             {
-                sendValue = ngInfo.IsNg ? 2 : 1;
+                sendValue = 1;
             }
             else
             {
-                if (ngInfo.HasNgType(NgTypeEnum.电压过低 | NgTypeEnum.电压过高))
+                if (SettingManager.CurrentOcvType == OcvTypeEnmu.OCV0 || SettingManager.CurrentOcvType == OcvTypeEnmu.OCV3)
                 {
-                    sendValue = SettingManager.CurrentTestOption?.VolNgChannel ?? 2;
+                    sendValue = ngInfo.IsNg ? 2 : 1;
                 }
-                else if (ngInfo.HasNgType(NgTypeEnum.内阻过低 | NgTypeEnum.内阻过高))
+                else
                 {
-                    sendValue = SettingManager.CurrentTestOption?.ResNgChannel ?? 2;
-                }
-                else if (ngInfo.HasNgType(NgTypeEnum.负极壳体电压过低 | NgTypeEnum.负极壳体电压过高))
-                {
-                    sendValue = SettingManager.CurrentTestOption?.NVolNgChannel ?? 2;
-                }
-                else if (ngInfo.HasNgType(NgTypeEnum.K1过低 | NgTypeEnum.K1过高 | NgTypeEnum.K2过低 | NgTypeEnum.K2过高 | NgTypeEnum.K3过低 | NgTypeEnum.K3过高 | NgTypeEnum.K值计算失败))
-                {
-                    sendValue = SettingManager.CurrentTestOption?.KValueNgChannel ?? 2;
-                }
+                    if (ngInfo.HasNgType(NgTypeEnum.电压过低 | NgTypeEnum.电压过高))
+                    {
+                        sendValue = SettingManager.CurrentTestOption?.VolNgChannel ?? 2;
+                    }
+                    else if (ngInfo.HasNgType(NgTypeEnum.内阻过低 | NgTypeEnum.内阻过高))
+                    {
+                        sendValue = SettingManager.CurrentTestOption?.ResNgChannel ?? 2;
+                    }
+                    else if (ngInfo.HasNgType(NgTypeEnum.负极壳体电压过低 | NgTypeEnum.负极壳体电压过高))
+                    {
+                        sendValue = SettingManager.CurrentTestOption?.NVolNgChannel ?? 2;
+                    }
+                    else if (ngInfo.HasNgType(NgTypeEnum.K1过低 | NgTypeEnum.K1过高 | NgTypeEnum.K2过低 | NgTypeEnum.K2过高 | NgTypeEnum.K3过低 | NgTypeEnum.K3过高 | NgTypeEnum.K值计算失败))
+                    {
+                        sendValue = SettingManager.CurrentTestOption?.KValueNgChannel ?? 2;
+                    }
+                } 
             }
             return OperateResult.CreateSuccessResult(sendValue);
         }

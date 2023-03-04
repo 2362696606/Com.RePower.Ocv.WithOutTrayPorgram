@@ -1,4 +1,5 @@
 ﻿using Com.RePower.Ocv.Model.DataBaseContext;
+using Com.RePower.Ocv.Project.Byd.CB15.Entities;
 using Com.RePower.Ocv.Project.Byd.CB15.Enums;
 using Com.RePower.Ocv.Project.Byd.CB15.Services.Setting;
 using Com.RePower.Ocv.Project.Byd.CB15.Settings;
@@ -6,6 +7,7 @@ using Com.RePower.WpfBase;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NPOI.XSSF.Streaming.Values;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -50,6 +52,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
         private MesSetting? _mesSettingForOcv2;
         private MesSetting? _mesSettingForOcv3;
         private MesSetting? _mesSettingForOcv4;
+        private List<ChannelNgInfo>? _channelNgInfos;
+
+
+        private readonly string channelNgInfosCacheName = "ChannelNgInfoCache";
 
         private static readonly Lazy<SettingManager> _instance =
            new Lazy<SettingManager>(() => new SettingManager());
@@ -234,7 +240,28 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
                 #region 初始化默认工站
                 var defaultOcvType = context.SettingItems.FirstOrDefault(x => x.SettingName == "DefaultOcvType");
                 string defaultOcvTypeStr = defaultOcvType?.JsonValue ?? string.Empty;
-                this.CurrentOcvType = Enum.Parse<OcvTypeEnmu>(defaultOcvTypeStr); 
+                this.CurrentOcvType = Enum.Parse<OcvTypeEnmu>(defaultOcvTypeStr);
+                #endregion
+
+                #region 初始化ChannelNgInfos
+                var channelNgInfoCacheStr = context.CacheValues.FirstOrDefault(x => x.SettingName == channelNgInfosCacheName)?.Value;
+                if (!string.IsNullOrEmpty(channelNgInfoCacheStr))
+                {
+                    _channelNgInfos  = JsonConvert.DeserializeObject<List<ChannelNgInfo>>(channelNgInfoCacheStr);
+                }
+                if (_channelNgInfos == null || _channelNgInfos.Count() < (CurrentTestOption?.BatteryCount ?? 0)) 
+                {
+                    _channelNgInfos = new List<ChannelNgInfo>();
+                    for (int i = 1; i <= (CurrentTestOption?.BatteryCount ?? 0); i++)
+                    {
+                        ChannelNgInfo channelNgInfo = new ChannelNgInfo { Channel = i, NgTimes = 0 };
+                        _channelNgInfos.Add(channelNgInfo);
+                    }
+                }
+                foreach(var item in _channelNgInfos)
+                {
+                    item.SaveEvent = SaveChannelNgInfo;
+                }
                 #endregion
             }
         }
@@ -354,6 +381,14 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
             }
         }
 
+
+        public List<ChannelNgInfo>? ChannelNgInfos
+        {
+            get { return _channelNgInfos; }
+            set { SetProperty(ref _channelNgInfos, value); }
+        }
+
+
         private OperateResult SaveChanged(string name)
         {
             string? settingName = null;
@@ -429,6 +464,31 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
             {
                 return OperateResult.CreateFailedResult($"未找到{name}对应配置项");
             }
+        }
+
+        private OperateResult SaveChannelNgInfo()
+        {
+            var jStr = JsonConvert.SerializeObject(ChannelNgInfos);
+            using (var context = new OcvSettingDbContext())
+            {
+                try
+                {
+                    var item = context.SettingItems.FirstOrDefault(x => x.SettingName == channelNgInfosCacheName);
+                    if (item is { })
+                    {
+                        item.JsonValue = jStr ?? string.Empty;
+                        context.SettingItems.Update(item);
+                        context.SaveChanges();
+                    }
+                    else
+                        return OperateResult.CreateFailedResult($"未找到{channelNgInfosCacheName}对应的缓存项");
+                }
+                catch (Exception e)
+                {
+                    return OperateResult.CreateFailedResult($"保存通道Ng信息失败:{e.Message},内部异常：{e.InnerException}");
+                }
+            }
+            return OperateResult.CreateSuccessResult();
         }
     }
 }

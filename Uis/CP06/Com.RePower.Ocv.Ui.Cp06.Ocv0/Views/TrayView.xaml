@@ -21,51 +21,78 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <TextBox
-                materialDesign:HintAssist.Hint="托盘条码"
-                IsReadOnly="True"
-                Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                Text="{Binding Tray.TrayCode}" />
-            <DataGrid
-                Grid.Row="1"
-                AutoGenerateColumns="False"
-                CanUserAddRows="False"
-                IsReadOnly="True"
-                ItemsSource="{Binding Tray.NgInfos}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Battery.Position}" Header="位置" />
-                    <DataGridTextColumn Binding="{Binding Battery.BarCode}" Header="条码" />
-                    <DataGridTextColumn
-                        Binding="{Binding Battery.VolValue}"
-                        Header="电压"
-                        Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
-                    <DataGridTextColumn
-                        Binding="{Binding Battery.Res}"
-                        Header="内阻"
-                        Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestRes, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
-                    <DataGridTextColumn
-                        Binding="{Binding Battery.NVolValue}"
-                        Header="负极壳体电压"
-                        Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestNVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
-                    <DataGridTextColumn
-                        Binding="{Binding Battery.PVolValue}"
-                        Header="正极壳体电压"
-                        Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestPVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
-                    <DataGridTextColumn
-                        Binding="{Binding Battery.KValue1}"
-                        Header="K01"
-                        Visibility="{Binding Data.SettingManager.CurrentTestOption.IsVerifyKValue, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
-                    <DataGridTextColumn
-                        Binding="{Binding Battery.KValue2}"
-                        Header="K12"
-                        Visibility="{Binding Data.SettingManager.CurrentTestOption.IsVerifyKValue, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
-                    <DataGridTextColumn
-                        Binding="{Binding Battery.KValue3}"
-                        Header="K23"
-                        Visibility="{Binding Data.SettingManager.CurrentTestOption.IsVerifyKValue, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
-                    <DataGridTextColumn Binding="{Binding NgDescription}" Header="Ng描述" />
-                </DataGrid.Columns>
-            </DataGrid>
+            <UniformGrid Rows="1">
+                <TextBox
+                    Margin="0,0,5,0"
+                    materialDesign:HintAssist.Hint="托盘条码"
+                    IsReadOnly="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    Text="{Binding Tray.TrayCode}" />
+                <ComboBox
+                    Margin="5,0,0,0"
+                    materialDesign:HintAssist.Hint="工单号"
+                    DisplayMemberPath="Key"
+                    SelectedValue="{Binding SettingManager.Order}"
+                    ItemsSource="{Binding SettingManager.OrderList}"
+                    SelectedIndex="0"
+                    SelectedValuePath="Value"
+                    Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+            </UniformGrid>
+            <DockPanel Grid.Row="1">
+                <StackPanel
+                    HorizontalAlignment="Right"
+                    DockPanel.Dock="Bottom"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        FontSize="30"
+                        FontWeight="Black"
+                        Text="总Ng：" />
+                    <TextBlock
+                        Margin="30,0,0,0"
+                        FontSize="30"
+                        FontWeight="Black"
+                        Text="{Binding TotalNg}" />
+                </StackPanel>
+                <DataGrid
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    IsReadOnly="True"
+                    ItemsSource="{Binding Tray.NgInfos}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Battery.Position}" Header="位置" />
+                        <DataGridTextColumn Binding="{Binding Battery.BarCode}" Header="条码" />
+                        <DataGridTextColumn
+                            Binding="{Binding Battery.VolValue}"
+                            Header="电压"
+                            Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                        <DataGridTextColumn
+                            Binding="{Binding Battery.Res}"
+                            Header="内阻"
+                            Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestRes, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                        <DataGridTextColumn
+                            Binding="{Binding Battery.NVolValue}"
+                            Header="负极壳体电压"
+                            Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestNVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                        <DataGridTextColumn
+                            Binding="{Binding Battery.PVolValue}"
+                            Header="正极壳体电压"
+                            Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestPVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                        <DataGridTextColumn
+                            Binding="{Binding Battery.KValue1}"
+                            Header="K01"
+                            Visibility="{Binding Data.SettingManager.CurrentTestOption.IsVerifyKValue, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                        <DataGridTextColumn
+                            Binding="{Binding Battery.KValue2}"
+                            Header="K12"
+                            Visibility="{Binding Data.SettingManager.CurrentTestOption.IsVerifyKValue, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                        <DataGridTextColumn
+                            Binding="{Binding Battery.KValue3}"
+                            Header="K23"
+                            Visibility="{Binding Data.SettingManager.CurrentTestOption.IsVerifyKValue, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                        <DataGridTextColumn Binding="{Binding NgDescription}" Header="Ng描述" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
         </Grid>
     </materialDesign:Card>
 </UserControl>

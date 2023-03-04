@@ -7,12 +7,16 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uiBaseViews="clr-namespace:Com.RePower.Ocv.Ui.UiBase.Views;assembly=Com.RePower.Ocv.Ui.UiBase"
+    xmlns:valueConverter="clr-namespace:Com.RePower.Ocv.Ui.Cp06.Ocv0.ValueConverter"
     xmlns:views="clr-namespace:Com.RePower.Ocv.Ui.Cp06.Ocv0.Views"
     Title="瑞能OCV"
     Width="1920"
     Height="1080"
     WindowState="Maximized"
     mc:Ignorable="d">
+    <Window.Resources>
+        <valueConverter:BoolToVisibility x:Key="BoolToVisibility" />
+    </Window.Resources>
     <Viewbox Stretch="Fill">
         <materialDesign:DialogHost
             DialogTheme="Inherit"
@@ -25,7 +29,10 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Menu>
-                        <MenuItem Command="{Binding DoCalibrationCommand}" Header="校准工具" />
+                        <MenuItem
+                            Command="{Binding DoCalibrationCommand}"
+                            Header="校准工具"
+                            Visibility="{Binding CanCalibration, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <MenuItem Command="{Binding OpenSettingCommand}" Header="参数配置" />
                         <MenuItem Command="{Binding OpenDataSearchCommand}" Header="数据查询" />
                     </Menu>

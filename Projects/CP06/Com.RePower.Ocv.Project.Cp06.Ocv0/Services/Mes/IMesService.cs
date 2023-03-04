@@ -51,5 +51,10 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
         /// </summary>
         /// <returns></returns>
         public OperateResult<string> UserAuthentication(string userName, string password);
+        /// <summary>
+        /// 获取工单列表
+        /// </summary>
+        /// <returns></returns>
+        public OperateResult<string> GetShopOrderList();
     }
 }

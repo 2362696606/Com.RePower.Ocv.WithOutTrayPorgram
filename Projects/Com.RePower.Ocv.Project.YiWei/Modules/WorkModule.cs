@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using Com.RePower.Ocv.Project.YiWei.Controllers;
+using Com.RePower.Ocv.Project.YiWei.Controllers.Works;
 using System;
 using System.Collections.Generic;
 using System.Linq;

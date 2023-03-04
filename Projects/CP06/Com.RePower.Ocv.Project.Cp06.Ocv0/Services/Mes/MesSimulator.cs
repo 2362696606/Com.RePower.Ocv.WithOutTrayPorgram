@@ -27,6 +27,24 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             throw new NotImplementedException();
         }
 
+        public OperateResult<string> GetShopOrderList()
+        {
+            var result = new MesGetShopOrderListResultDto();
+            result.status = true;
+            List<MesGetShopOrderListItem> resultList = new List<MesGetShopOrderListItem>();
+            for (int i = 0; i < 3; i++) 
+            {
+                var resultItem = new MesGetShopOrderListItem();
+                string orderRandom = string.Format("{0:D5}", new Random().Next(10000));
+                resultItem.value = "OrderValue_" + orderRandom;
+                resultItem.text = "OrderText_" + orderRandom;
+                resultList.Add(resultItem);
+            }
+            result.result = resultList;
+            string jStr = JsonConvert.SerializeObject(result);
+            return OperateResult.CreateSuccessResult<string>(jStr);
+        }
+
         public OperateResult<string> UploadHistoricalResult(List<NgInfoDto> ngInfos)
         {
             throw new NotImplementedException();

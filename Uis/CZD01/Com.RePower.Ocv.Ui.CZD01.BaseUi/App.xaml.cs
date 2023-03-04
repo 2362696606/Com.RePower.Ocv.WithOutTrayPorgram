@@ -7,16 +7,10 @@ using Com.RePower.Ocv.Project.CZD01.BaseProject.DbContext;
 using Com.RePower.Ocv.Project.CZD01.BaseProject.Profiles;
 using Com.RePower.Ocv.Ui.UiBase;
 using Com.RePower.WpfBase;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace Com.RePower.Ocv.Ui.CZD01.BaseUi
 {
@@ -30,7 +24,7 @@ namespace Com.RePower.Ocv.Ui.CZD01.BaseUi
             serviceCollection.AddDbContext<LocalTestResultDbContext>();
             serviceCollection.AddHttpClient();
             string sceneConnectStr = SettingManager.Instance.SceneConnectString ?? string.Empty;
-            if(!string.IsNullOrEmpty(sceneConnectStr))
+            if (!string.IsNullOrEmpty(sceneConnectStr))
             {
                 serviceCollection.AddDbContext<OcvSceneContext>();
             }
@@ -48,7 +42,7 @@ namespace Com.RePower.Ocv.Ui.CZD01.BaseUi
         protected override void OnInitComplate()
         {
             var sceneContext = IocHelper.Default.GetService<OcvSceneContext>();
-            if(sceneContext is { })
+            if (sceneContext is { })
                 sceneContext.Database.EnsureCreated();
             //var localContext = IocHelper.Default.GetService<LocalTestResultDbContext>();
             //if(localContext is { })

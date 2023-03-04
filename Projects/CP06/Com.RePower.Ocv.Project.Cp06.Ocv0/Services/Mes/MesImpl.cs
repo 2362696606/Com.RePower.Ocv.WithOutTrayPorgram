@@ -52,7 +52,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
                 RESOURCE_NO = MesSetting?.RESOURCE_NO??string.Empty,
                 DC_USER = MesSetting?.DC_USER??string.Empty,
                 TRAY_NO = Tray.TrayCode,
-                SHOP_ORDER_NO = string.Empty,
+                SHOP_ORDER_NO = SettingManager.Order ?? (SettingManager.OrderList?.First().Value ?? string.Empty),
                 IS_FIRST_INSPECTION = true.ToString()
             };
             return Post(mesUploadDto, MesSetting?.SfcTrayOnceUnbindUrl?? "thirdPartyAPI!sfc_tray_once_unbind.action", "Mes拆盘数据上传");
@@ -77,11 +77,11 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
         {
             MesDeviceStatusDto dto = new MesDeviceStatusDto()
             {
-                Site = SettingManager.CurrentMesSetting?.SITE ?? "25",
-                MachineNo = SettingManager.CurrentMesSetting?.RESOURCE_NO ?? string.Empty,
-                Status = status.ToString().PadLeft(2, '0'),
-                IsShutdown = isShutdown ? "Y" : "N",
-                Message = message,
+                site = SettingManager.CurrentMesSetting?.SITE ?? "25",
+                machineNo = SettingManager.CurrentMesSetting?.RESOURCE_NO ?? string.Empty,
+                status = status.ToString().PadLeft(2, '0'),
+                isShutdown = isShutdown ? "Y" : "N",
+                message = message,
                 Operator = SettingManager.CurrentMesSetting?.DC_USER ?? "MACHINE_JCD",
             };
             return Post(dto, SettingManager.CurrentMesSetting?.UploadMachineStatusUrl ?? "http://10.10.1.240:8578/mes/third/thirdPartyAPI!doUploadMachineStatus_Change.action", "上传设备状态至mes");
@@ -123,7 +123,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             {
                 SITE = MesSetting?.SITE??string.Empty,
                 ITEM_NO = string.Empty,
-                SHOP_ORDER_NO = string.Empty,
+                SHOP_ORDER_NO = SettingManager.Order ?? (SettingManager.OrderList?.First().Value ?? string.Empty),
                 OPERATION_NO = string.Empty,
                 TRAY_NO = Tray.TrayCode,
                 RESOURCE_NO = MesSetting?.RESOURCE_NO??string.Empty,
@@ -175,7 +175,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             {
                 SITE = MesSetting?.SITE ?? string.Empty,
                 ITEM_NO = string.Empty,
-                SHOP_ORDER_NO = string.Empty,
+                SHOP_ORDER_NO = SettingManager.Order ?? (SettingManager.OrderList?.First().Value ?? string.Empty),
                 OPERATION_NO = string.Empty,
                 TRAY_NO = Tray.TrayCode,
                 RESOURCE_NO = MesSetting?.RESOURCE_NO ?? string.Empty,
@@ -234,7 +234,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             {
                 SITE = MesSetting?.SITE ?? string.Empty,
                 ITEM_NO = string.Empty,
-                SHOP_ORDER_NO = string.Empty,
+                SHOP_ORDER_NO = SettingManager.Order ?? (SettingManager.OrderList?.First().Value ?? string.Empty),
                 OPERATION_NO = string.Empty,
                 TRAY_NO = Tray.TrayCode,
                 RESOURCE_NO = MesSetting?.RESOURCE_NO ?? string.Empty,
@@ -310,7 +310,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             {
                 SITE = MesSetting?.SITE ?? string.Empty,
                 ITEM_NO = string.Empty,
-                SHOP_ORDER_NO = string.Empty,
+                SHOP_ORDER_NO = SettingManager.Order ?? (SettingManager.OrderList?.First().Value ?? string.Empty),
                 OPERATION_NO = string.Empty,
                 TRAY_NO = Tray.TrayCode,
                 RESOURCE_NO = MesSetting?.RESOURCE_NO ?? string.Empty,
@@ -372,6 +372,17 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
                 LogHelper.MesServiceLog.Error($"{optionName}失败，内容{jStr},无法成功与调度通讯");
                 return OperateResult.CreateFailedResult<string>($"{optionName}失败，内容{jStr}无法成功与调度通讯");
             }
+        }
+
+        public OperateResult<string> GetShopOrderList()
+        {
+            var obj = new MesGetShopOrderListRequestDto()
+            {
+                site = SettingManager.CurrentMesSetting?.SITE ?? "25",
+                resourceNo = MesSetting?.RESOURCE_NO ?? string.Empty,
+            };
+            return Post(obj, MesSetting?.LoadShopOrderListUrl ?? "http://10.10.1.240:8578/mes/third/thirdPartyAPI!loadShopOrderList.action"
+                , "获取工单列表");
         }
     }
 }

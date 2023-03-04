@@ -1,4 +1,5 @@
-﻿using Com.RePower.Ocv.Model.Helper;
+﻿using Com.RePower.Device.Ohm.Impl.Hioki_BT3562;
+using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.WpfBase;
 using System;
 using System.Collections.Generic;
@@ -56,6 +57,15 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 if (result.IsSuccess)
                 {
                     LogHelper.UiLog.Info("成功连接内阻仪");
+                    if(DevicesController.Ohm is Hioki_BT3562Impl tempOhm)
+                    {
+                        LogHelper.UiLog.Info("正在初始化内阻仪");
+                        var setResult = tempOhm.SetRang();
+                        if (setResult.IsFailed) return setResult;
+                        setResult = tempOhm.SetInitiateContinuous();
+                        if (setResult.IsFailed) return setResult;
+                        LogHelper.UiLog.Info("初始化内阻仪成功");
+                    }
                 }
                 else
                 {

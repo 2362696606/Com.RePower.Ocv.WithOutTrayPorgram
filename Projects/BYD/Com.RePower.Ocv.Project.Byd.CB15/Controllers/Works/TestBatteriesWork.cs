@@ -73,7 +73,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 var nvolResult = DevicesController.DMM?.ReadDc();
                 if(nvolResult?.IsFailed??true)
                     return nvolResult ?? OperateResult.CreateFailedResult($"读取电池{ngInfo.Battery.Position}负极壳体电压失败,因为万用表实例为null");
-                ngInfo.Battery.NVolValue = nvolResult.Content;
+                ngInfo.Battery.NVolValue = Math.Abs(nvolResult.Content);
                 var closeNvolChannelResult = SwitchChannel(boardIndex, channelIndex, true, false);
                 if (closeNvolChannelResult.IsFailed)
                     return closeNvolChannelResult;
