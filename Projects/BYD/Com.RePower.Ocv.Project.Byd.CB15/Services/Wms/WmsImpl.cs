@@ -19,7 +19,20 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Wms
         {
             Tray = tray;
             Mapper = mapper;
-            WebServiceClient = new OCVWebServiceSoapClient(new OCVWebServiceSoapClient.EndpointConfiguration());
+            switch(SettingManager.CurrentOcvType)
+            {
+                case Enums.OcvTypeEnmu.OCV1:
+                case Enums.OcvTypeEnmu.OCV2:
+                    WebServiceClient = new OCVWebServiceSoapClient(OCVWebServiceSoapClient.EndpointConfiguration.OCVWebServiceSoap12);
+                    break;
+                case Enums.OcvTypeEnmu.OCV3:
+                case Enums.OcvTypeEnmu.OCV4:
+                    WebServiceClient = new OCVWebServiceSoapClient(OCVWebServiceSoapClient.EndpointConfiguration.OCVWebServiceSoap);
+                    break;
+                default:
+                    WebServiceClient = new OCVWebServiceSoapClient(OCVWebServiceSoapClient.EndpointConfiguration.OCVWebServiceSoap);
+                    break;
+            }
         }
 
         public Tray Tray { get; }
