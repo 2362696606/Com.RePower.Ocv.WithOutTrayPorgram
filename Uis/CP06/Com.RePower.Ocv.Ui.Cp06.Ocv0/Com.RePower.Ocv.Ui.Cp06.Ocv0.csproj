@@ -15,7 +15,7 @@
   <ItemGroup>
     <Content Include="Logo.ico" />
     <Content Include="OcvSetting.dbs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

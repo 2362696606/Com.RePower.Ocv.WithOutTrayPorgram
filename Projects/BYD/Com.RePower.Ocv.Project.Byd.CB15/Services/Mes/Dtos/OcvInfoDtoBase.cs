@@ -61,6 +61,16 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes.Dtos
         [CsvHelper.Configuration.Attributes.Index(6)]
         public string? NGCode { get; set; }
         /// <summary>
+        /// 负对壳电压
+        /// </summary>
+        [Column(TypeName ="DECIMAL(10,4)")]
+        public decimal? NTSVResult { get; set; }
+        /// <summary>
+        /// 正对壳电压
+        /// </summary>
+        [Column(TypeName = "DECIMAL(10,4)")]
+        public decimal? PTSVResult { get; set; }
+        /// <summary>
         /// 例O102
         /// </summary>
         [Column(TypeName = "varchar(4)")]

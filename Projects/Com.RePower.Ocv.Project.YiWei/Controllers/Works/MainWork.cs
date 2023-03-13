@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure;
+using Com.RePower.Device.Ohm.Impl.Hioki_BT3562;
 using Com.RePower.Ocv.Model;
 using Com.RePower.Ocv.Model.DataBaseContext;
 using Com.RePower.Ocv.Model.Entity;
@@ -128,11 +129,25 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                 }
                 if (!(DevicesController.Ohm?.IsConnected ?? true))
                 {
-                    var result = DevicesController.Ohm.Connect();//万用表
-                    if (result.IsFailed)
+                    var result = DevicesController.Ohm.Connect();//内阻仪
+                    if (result.IsSuccess)
+                    {
+                        LogHelper.UiLog.Info("成功连接内阻仪");
+                        if (DevicesController.Ohm is Hioki_BT3562Impl tempOhm)
+                        {
+                            LogHelper.UiLog.Info("正在初始化内阻仪");
+                            var setResult = tempOhm.SetRang();
+                            if (setResult.IsFailed) return setResult;
+                            setResult = tempOhm.SetInitiateContinuous();
+                            if (setResult.IsFailed) return setResult;
+                            LogHelper.UiLog.Info("初始化内阻仪成功");
+                        }
+                    }
+                    else
                     {
                         return result;
                     }
+
                 }
                 #endregion
 

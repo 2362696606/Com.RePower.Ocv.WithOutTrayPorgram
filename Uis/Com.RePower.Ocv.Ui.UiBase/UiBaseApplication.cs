@@ -7,27 +7,118 @@ using Com.RePower.WpfBase;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Navigation;
 
 namespace Com.RePower.Ocv.Ui.UiBase
 {
     public abstract class UiBaseApplication:Application
     {
-        public UiBaseApplication()
+        #region Windows API
+
+        // ShowWindow 参数  
+        public const int SW_RESTORE = 9;
+
+        /// <summary>
+        /// 在桌面窗口列表中寻找与指定条件相符的第一个窗口。
+        /// </summary>
+        /// <param name="lpClassName">指向指定窗口的类名。如果 lpClassName 是 NULL，所有类名匹配。</param>
+        /// <param name="lpWindowName">指向指定窗口名称(窗口的标题）。如果 lpWindowName 是 NULL，所有windows命名匹配。</param>
+        /// <returns>返回指定窗口句柄</returns>
+        [DllImport("USER32.DLL", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        /// <summary>
+        /// 将窗口还原,可从最小化还原
+        /// </summary>
+        /// <param name="hWnd"></param>
+        /// <param name="nCmdShow"></param>
+        /// <returns></returns>
+        [DllImport("USER32.DLL")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        /// <summary>
+        /// 激活指定窗口
+        /// </summary>
+        /// <param name="hWnd">指定窗口句柄</param>
+        /// <returns></returns>
+        [DllImport("USER32.DLL")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+ 
+        #endregion
+
+
+
+        public UiBaseApplication(bool isSingle = true,string? mainWindowsName = null)
         {
+            this.isSingle = isSingle;
+            this.mainWindowsName = mainWindowsName;
             this.Startup += new StartupEventHandler(App_Startup);
             Resources.MergedDictionaries.Add(
                 new ResourceDictionary { Source = new Uri("/Com.RePower.Ocv.Ui.UiBase;component/Views/Dictionarys/BaseDictionary.xaml", UriKind.RelativeOrAbsolute) }
                 );
         }
+
+        /// <summary>
+        /// 应用程序是否应为单例
+        /// </summary>
+        private bool isSingle = true;
+        /// <summary>
+        /// 主窗口名
+        /// </summary>
+        private string? mainWindowsName;
+        Mutex? mutex;
+
+        protected virtual void App_SingleStart()
+        {
+            if(isSingle)
+            {
+                mutex = new Mutex(true, "OcvApplication", out bool isUnExists);
+                if(!isUnExists)
+                {
+                    if(!string.IsNullOrEmpty(mainWindowsName))
+                    {
+                        // 找到已经在运行的实例句柄(给出你的窗体标题名 “Deamon Club”)
+                        IntPtr? hWndPtr = FindWindow(null!, mainWindowsName);
+
+                        if ((hWndPtr is { } tempPtr) && tempPtr != new IntPtr(0)) 
+                        {
+                            // 还原窗口
+                            ShowWindow(tempPtr, SW_RESTORE);
+
+                            // 激活窗口
+                            SetForegroundWindow(tempPtr);
+                        }
+                        else
+                        {
+                            MessageBox.Show("程序已经在运行", "错误", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("程序已经在运行", "错误", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                    // 退出当前实例程序
+                    Environment.Exit(0);
+                }
+            }
+        }
+
         private void App_Startup(object sender, StartupEventArgs e)
         {
             try
             {
+                //var stackInfo = new StackTrace(true);
+                App_SingleStart();
                 #region 初始化IOC容器
                 var serviceCollection = new ServiceCollection();
                 //添加本地存储数据库
@@ -45,7 +136,7 @@ namespace Com.RePower.Ocv.Ui.UiBase
                 localDb?.Database.EnsureCreated();
                 #endregion
                 #region 初始化完成后调用
-                OnInitComplate(); 
+                OnInitComplate();
                 #endregion
                 #region 初始化UiLog
                 LogHelper.RegisterUiLogEvent(new System.Action<object?, log4net.Core.LoggingEvent>((sender, e) =>
@@ -73,6 +164,9 @@ namespace Com.RePower.Ocv.Ui.UiBase
 
         protected abstract void AddService(ServiceCollection serviceCollection);
         protected abstract void IocRegister(ContainerBuilder builder);
+
+        
+
         protected virtual void OnInitComplate()
         { }
 

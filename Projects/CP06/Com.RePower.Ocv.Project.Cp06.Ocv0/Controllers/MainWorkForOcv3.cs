@@ -207,6 +207,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             NgInfo ngInfo = this.Tray.NgInfos[0];
             int vChannel = SettingManager.CurrentTestOption?.VolChannelForOcv3 ?? 1;
             int nvChannel = SettingManager.CurrentTestOption?.NVolChannelForOcv3 ?? 7;
+            int pvChannel = SettingManager.CurrentTestOption?.PVolChannelForOcv3 ?? 13;
             LogHelper.UiLog.Info($"打开通道{vChannel}");
             var openResult = DevicesController.SwitchBoard?.OpenChannel(1, vChannel) ?? OperateResult.CreateFailedResult("未找到切换板");
             if (openResult.IsFailed)
@@ -252,6 +253,22 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 if (closeResult1.IsFailed)
                     return closeResult1;
             }
+            if (SettingManager.CurrentTestOption?.IsTestPVol ?? false)
+            {
+                LogHelper.UiLog.Info($"打开通道{pvChannel}");
+                openResult = DevicesController.SwitchBoard?.OpenChannel(1, pvChannel) ?? OperateResult.CreateFailedResult("未找到切换板");
+                if (openResult.IsFailed)
+                    return openResult;
+                LogHelper.UiLog.Info("读取正极壳体电压");
+                var readPVolResult = DevicesController.DMM?.ReadDc() ?? OperateResult.CreateFailedResult<double>("未找到万用表");
+                if (readPVolResult.IsFailed)
+                    return readPVolResult;
+                ngInfo.Battery.PVolValue = readPVolResult.Content;
+                var closeResult1 = DevicesController.SwitchBoard?.CloseChannel(1, pvChannel) ?? OperateResult.CreateFailedResult("未找到切换板");
+                if (closeResult1.IsFailed)
+                    return closeResult1;
+            }
+
             ngInfo.Battery.IsTested = true;
             ngInfo.Battery.TestTime = DateTime.Now;
             var validateResult = ValidateOneBatteryLocalNgStatus(this.Tray.NgInfos[0]);

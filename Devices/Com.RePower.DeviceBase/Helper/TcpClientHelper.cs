@@ -37,7 +37,7 @@ namespace Com.RePower.DeviceBase.Helper
             }
             catch (Exception err)
             {
-                return OperateResult.CreateFailedResult<byte[]>(err.Message, err.HResult);
+                return OperateResult.CreateFailedResult<byte[]>(err.ToString(), err.HResult);
             }
         }
 

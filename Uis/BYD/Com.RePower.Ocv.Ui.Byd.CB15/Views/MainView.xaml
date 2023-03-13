@@ -36,8 +36,8 @@
                         </Grid.ColumnDefinitions>
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="0.6*" />
-                                <RowDefinition Height="0.4*" />
+                                <RowDefinition Height="0.8*" />
+                                <RowDefinition Height="0.2*" />
                             </Grid.RowDefinitions>
                             <views:TrayView />
                             <views:CraftView Grid.Row="1" />

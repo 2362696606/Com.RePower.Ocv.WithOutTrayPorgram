@@ -15,12 +15,14 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes.Dtos
         public int Index { get; set; }
         [Name("上传时间")]
         [Index(1)]
+        [Format("yyyy/MM/dd HH:mm:ss")]
         public DateTime UploadTime { get; set; }
         [Name("电芯条码")]
         [Index(2)]
         public string BarCode { get; set; } = string.Empty;
         [Name("结束时间")]
         [Index(3)]
+        [Format("yyyy/MM/dd HH:mm:ss")]
         public DateTime EndTime { get; set; } = DateTime.Now;
         [Name("托盘条码")]
         [Index(4)]

@@ -3,6 +3,7 @@ using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Model.Extensions;
 using Com.RePower.Ocv.Project.Byd.CB15.Controllers;
 using Com.RePower.WpfBase;
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,6 +58,17 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Wms
                 trayInfoResult.Position = i;
                 trayInfoResults.Add(trayInfoResult);
             }
+
+            var r = new Random();
+            for (var i = trayInfoResults.Count() - 1; i > 0; --i)
+            {
+                int randomIndex = r.Next(i + 1);
+
+                var temp = trayInfoResults[i];
+                trayInfoResults[i] = trayInfoResults[randomIndex];
+                trayInfoResults[randomIndex] = temp;
+            }
+
             trayInfoOCV.TrayInfoLstResult = trayInfoResults.ToArray();
             Status status = new Status();
             status.Code = 0;

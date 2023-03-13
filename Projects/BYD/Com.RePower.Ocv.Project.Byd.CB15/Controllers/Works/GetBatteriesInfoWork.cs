@@ -38,6 +38,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 tempNgInfo.Battery.Position = item.Position;
                 ngInfos.Add(tempNgInfo);
             }
+            ngInfos = ngInfos.OrderBy(x => x.Battery.Position).ToList();
             Tray.NgInfos = ngInfos;
             return OperateResult.CreateSuccessResult();
         }

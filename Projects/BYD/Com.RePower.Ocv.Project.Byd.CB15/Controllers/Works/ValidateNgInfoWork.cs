@@ -31,6 +31,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
             bool isTestVol = SettingManager.CurrentTestOption?.IsTestVol ?? false;
             bool isTestRes = SettingManager.CurrentTestOption?.IsTestRes ?? false;
             bool isTestNVol = SettingManager.CurrentTestOption?.IsTestNVol ?? false;
+            bool isTestPVol = SettingManager.CurrentTestOption?.IsTestPVol ?? false;
             ngInfo.NgType = 0;
             if(isTestVol)
             {
@@ -59,6 +60,15 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 else if (ngInfo.Battery.NVolValue < minNVol)
                     ngInfo.AddNgType(Model.Enums.NgTypeEnum.负极壳体电压过低);
             }
+            //if(isTestPVol)
+            //{
+            //    double maxNVol = SettingManager.CurrentBatteryStandard?.MaxNVol ?? double.MaxValue;
+            //    double minNVol = SettingManager.CurrentBatteryStandard?.MinNVol ?? double.MinValue;
+            //    if (ngInfo.Battery.NVolValue > maxNVol)
+            //        ngInfo.AddNgType(Model.Enums.NgTypeEnum.正极壳体电压过高);
+            //    else if (ngInfo.Battery.NVolValue < minNVol)
+            //        ngInfo.AddNgType(Model.Enums.NgTypeEnum.正极壳体电压过低);
+            //}
 
             if(ngInfo.IsNg)
             {

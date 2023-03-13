@@ -18,6 +18,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Navigation;
 
 namespace Com.RePower.Ocv.Ui.Byd.CB15
 {
@@ -26,6 +27,10 @@ namespace Com.RePower.Ocv.Ui.Byd.CB15
     /// </summary>
     public partial class App : UiBaseApplication
     {
+        public App():base(mainWindowsName: "瑞能OCV")
+        {
+
+        }
         protected override void AddService(ServiceCollection serviceCollection)
         {
             serviceCollection.AddAutoMapper(typeof(OrganizationProfile),typeof(MesDtoProfile));
@@ -66,5 +71,22 @@ namespace Com.RePower.Ocv.Ui.Byd.CB15
                 }
             }
         }
+        //protected override void App_LoadComplate(object sender, NavigationEventArgs e)
+        //{
+        //    using (var settingContext = new OcvSettingDbContext())
+        //    {
+        //        var fObj = settingContext.SettingItems.First(x => x.SettingName == "FacticityManager");
+        //        FacticityManager? facticityManager = JsonConvert.DeserializeObject<FacticityManager>(fObj.JsonValue);
+        //        bool isReal = facticityManager?.IsRealMes ?? false;
+        //        if (isReal)
+        //        {
+        //            var context = IocHelper.Default.GetService<MesDbContext>();
+        //            context?.Database.EnsureCreated();
+
+        //            //var creator = context?.GetService<IRelationalDatabaseCreator>();
+        //            //creator?.CreateTables();
+        //        }
+        //    }
+        //}
     }
 }

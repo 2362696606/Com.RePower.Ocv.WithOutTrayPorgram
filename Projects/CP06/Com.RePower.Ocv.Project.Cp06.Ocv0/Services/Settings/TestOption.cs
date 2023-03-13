@@ -56,6 +56,17 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Settings
             get { return _nVolChannelForOcv3; }
             set { SetProperty(ref _nVolChannelForOcv3, value); }
         }
+
+        private int? _pVolChannelForOcv3;
+        /// <summary>
+        /// OCV3正极壳体电压通道
+        /// </summary>
+        [SettingName("OCV3正极壳体电压通道")]
+        public int? PVolChannelForOcv3
+        {
+            get { return _pVolChannelForOcv3; }
+            set { SetProperty(ref _pVolChannelForOcv3, value); }
+        }
         private int? _volNgChannel;
         /// <summary>
         /// 电压ng通道

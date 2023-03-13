@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Model.Extensions;
+using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.Byd.CB15.Controllers;
 using Com.RePower.WpfBase;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +21,20 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Wms
         {
             Tray = tray;
             Mapper = mapper;
-            WebServiceClient = new OCVWebServiceSoapClient(new OCVWebServiceSoapClient.EndpointConfiguration());
+            switch (SettingManager.CurrentOcvType)
+            {
+                case Enums.OcvTypeEnmu.OCV1:
+                case Enums.OcvTypeEnmu.OCV2:
+                    WebServiceClient = new OCVWebServiceSoapClient(OCVWebServiceSoapClient.EndpointConfiguration.OCVWebServiceSoap12);
+                    break;
+                case Enums.OcvTypeEnmu.OCV3:
+                case Enums.OcvTypeEnmu.OCV4:
+                    WebServiceClient = new OCVWebServiceSoapClient(OCVWebServiceSoapClient.EndpointConfiguration.OCVWebServiceSoap);
+                    break;
+                default:
+                    WebServiceClient = new OCVWebServiceSoapClient(OCVWebServiceSoapClient.EndpointConfiguration.OCVWebServiceSoap);
+                    break;
+            }
         }
 
         public Tray Tray { get; }
@@ -31,7 +46,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Wms
         {
             try
             {
+                var address = WebServiceClient.Endpoint.Address;
+                var name = WebServiceClient.Endpoint.Name;
                 var result = WebServiceClient.getTechnologyInfoByBarCodeAsync(SettingManager.CurrentWmeSetting?.EquipNum ?? string.Empty, Tray.TrayCode).Result;
+                LogHelper.WmsServiceLog.Info($"获取电芯条码:\r\nEndpointName:{name};\r\nAddress:{address};\r\n参数:{SettingManager.CurrentWmeSetting?.EquipNum ?? ""},{Tray.TrayCode}\r\nResult:{JsonConvert.SerializeObject(result)}");
                 return OperateResult.CreateSuccessResult(result.Body.getTechnologyInfoByBarCodeResult);
             }
             catch (Exception e)

@@ -888,6 +888,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                 var writeResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache[$"位置{item.Battery.Position}托盘电池状态"], (short)sendValue);
                 if (writeResult.IsFailed)
                     return writeResult;
+                LogHelper.UiLog.Info($"电池{item.Battery.Position}写入结果{sendValue}成功");
             }
             LogHelper.UiLog.Info("等待拆盘请求");
             //等待拆盘请求
@@ -942,6 +943,10 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     else if (ngInfo.HasNgType(NgTypeEnum.负极壳体电压过低 | NgTypeEnum.负极壳体电压过高))
                     {
                         sendValue = SettingManager.CurrentTestOption?.NVolNgChannel ?? 2;
+                    }
+                    else if (ngInfo.HasNgType(NgTypeEnum.正极壳体电压过低 | NgTypeEnum.正极壳体电压过高))
+                    {
+                        sendValue = SettingManager.CurrentTestOption?.PVolNgChannel ?? 2;
                     }
                     else if (ngInfo.HasNgType(NgTypeEnum.K1过低 | NgTypeEnum.K1过高 | NgTypeEnum.K2过低 | NgTypeEnum.K2过高 | NgTypeEnum.K3过低 | NgTypeEnum.K3过高 | NgTypeEnum.K值计算失败))
                     {

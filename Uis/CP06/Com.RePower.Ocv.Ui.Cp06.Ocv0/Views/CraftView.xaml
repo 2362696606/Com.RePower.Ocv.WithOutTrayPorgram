@@ -52,6 +52,16 @@
                     <TextBlock Text="负极壳体电压最大值：" />
                     <TextBlock Text="{Binding SettingManager.CurrentBatteryStandard.MaxNVol}" />
                 </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="正极壳体电压最小值：" />
+                    <TextBlock Text="{Binding SettingManager.CurrentBatteryStandard.MinPVol}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="正极壳体电压最大值：" />
+                    <TextBlock Text="{Binding SettingManager.CurrentBatteryStandard.MaxPVol}" />
+                </StackPanel>
+
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="最大K值：" />
                     <TextBlock Text="{Binding SettingManager.CurrentBatteryStandard.MaxKValue}" />

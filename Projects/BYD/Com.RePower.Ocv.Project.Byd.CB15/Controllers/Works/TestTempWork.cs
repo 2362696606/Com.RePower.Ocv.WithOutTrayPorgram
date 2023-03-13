@@ -15,7 +15,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
         {
             if(SettingManager.CurrentTestOption?.IsTestPTemp??false)
             {
-                LogHelper.UiLog.Info("开始正极测试温度");
+                LogHelper.UiLog.Info("开始测试正极温度");
                 var readResult = DevicesController.PTemperatureSensor?.ReadTemp() ?? OperateResult.CreateFailedResult<double[]>("正极温度MTVS设备为null");
                 if (readResult.IsFailed)
                     return readResult;
@@ -39,7 +39,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
             }
             if(SettingManager.CurrentTestOption?.IsTestNTemp??false)
             {
-                LogHelper.UiLog.Info("开始负极测试温度");
+                LogHelper.UiLog.Info("开始测试负极温度");
                 var readResult = DevicesController.NTemperatureSensor?.ReadTemp() ?? OperateResult.CreateFailedResult<double[]>("负极温度MTVS设备为null");
                 if (readResult.IsFailed)
                     return readResult;

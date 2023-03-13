@@ -163,9 +163,21 @@ namespace Com.RePower.Ocv.Ui.UiBase.Views
                 }
                 else
                 {
-                    var convertValue = Convert.ChangeType(value, PropertyInfo?.PropertyType ?? typeof(string));
-                    if(convertValue?.GetType().IsAssignableFrom(PropertyInfo?.PropertyType) ?? false)
+                    if((PropertyInfo?.PropertyType.IsGenericType??true) && PropertyInfo?.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
                     {
+                        if(value == null)
+                        {
+                            PropertyInfo?.SetValue(DependObj, null);
+                        }
+                        else
+                        {
+                            var convertValue = Convert.ChangeType(value, PropertyInfo?.PropertyType.GetGenericArguments()[0] ?? typeof(string));
+                            PropertyInfo?.SetValue(DependObj, convertValue);
+                        }
+                    }
+                    else
+                    {
+                        var convertValue = Convert.ChangeType(value, PropertyInfo?.PropertyType ?? typeof(string));
                         PropertyInfo?.SetValue(DependObj, convertValue);
                     }
                 }

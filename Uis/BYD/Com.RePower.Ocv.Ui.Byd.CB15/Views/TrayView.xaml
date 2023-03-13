@@ -61,7 +61,7 @@
 
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <UniformGrid Columns="4" />
+                            <UniformGrid Columns="5" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
@@ -105,6 +105,10 @@
                                     <StackPanel Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestRes, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}">
                                         <TextBlock Text="内阻:" />
                                         <TextBlock Text="{Binding Battery.Res}" />
+                                    </StackPanel>
+                                    <StackPanel Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestPVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}">
+                                        <TextBlock Text="正极壳体电压:" />
+                                        <TextBlock Text="{Binding Battery.PVolValue}" />
                                     </StackPanel>
                                     <StackPanel Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestNVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}">
                                         <TextBlock Text="负极壳体电压:" />

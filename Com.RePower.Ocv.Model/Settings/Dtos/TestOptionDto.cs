@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Com.RePower.Ocv.Model.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,10 @@ namespace Com.RePower.Ocv.Model.Settings.Dtos
         /// </summary>
         public bool IsTestNVol { get; set; }
         /// <summary>
+        /// 是否测试温度
+        /// </summary>
+        public bool IsTestTemp { get; set; }
+        /// <summary>
         /// 是否测试正极温度
         /// </summary>
         public bool IsTestPTemp { get; set; }
@@ -44,5 +49,6 @@ namespace Com.RePower.Ocv.Model.Settings.Dtos
         /// 是否验证k值
         /// </summary>
         public bool IsVerifyKValue { get; set; }
+
     }
 }

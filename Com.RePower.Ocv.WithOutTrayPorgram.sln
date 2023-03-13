@@ -63,9 +63,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CZD01", "CZD01", "{4A09B615
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CZD01", "CZD01", "{30510A13-796C-4B67-8FCF-4E29253DCFD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.RePower.Ocv.Ui.CZD01.BaseUi", "Uis\CZD01\Com.RePower.Ocv.Ui.CZD01.BaseUi\Com.RePower.Ocv.Ui.CZD01.BaseUi.csproj", "{E1F40020-34ED-4DCF-B579-C3A9A3E69742}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.RePower.Ocv.Ui.CZD01.BaseUi", "Uis\CZD01\Com.RePower.Ocv.Ui.CZD01.BaseUi\Com.RePower.Ocv.Ui.CZD01.BaseUi.csproj", "{E1F40020-34ED-4DCF-B579-C3A9A3E69742}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.RePower.Ocv.Project.CZD01.BaseProject", "Projects\CZD01\Com.RePower.Ocv.Project.CZD01.BaseProject\Com.RePower.Ocv.Project.CZD01.BaseProject.csproj", "{98776AED-E86A-49B6-911C-CE7CA0301150}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.RePower.Ocv.Project.CZD01.BaseProject", "Projects\CZD01\Com.RePower.Ocv.Project.CZD01.BaseProject\Com.RePower.Ocv.Project.CZD01.BaseProject.csproj", "{98776AED-E86A-49B6-911C-CE7CA0301150}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SetupProject", "SetupProject", "{F5819A61-5BD9-4A4D-8659-3898127CD313}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

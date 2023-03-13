@@ -1,7 +1,9 @@
 ﻿using Com.RePower.Ocv.Model.Entity;
+using Com.RePower.Ocv.Model.Extensions;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.Byd.CB15.Modules;
 using Com.RePower.WpfBase;
+using ICSharpCode.SharpZipLib.Zip;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,28 +47,36 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
             LogHelper.UiLog.Info($"开始测试电池{ngInfo.Battery.Position}");
             int boardIndex = ngInfo.Battery.Position > 20 ? 2 : 1;
             int channelIndex = ngInfo.Battery.Position > 20 ? ngInfo.Battery.Position - 20 : ngInfo.Battery.Position;
-            var openResult = SwitchChannel(boardIndex, channelIndex);
-            if(openResult.IsFailed)
-                return openResult;
-            if(SettingManager.CurrentTestOption?.IsTestVol??false)
+            //var openResult = SwitchChannel(boardIndex, channelIndex);
+            //if(openResult.IsFailed)
+            //    return openResult;
+            var openResult1 = DevicesController.SwitchBoard?.OpenChannel(boardIndex, channelIndex) ?? OperateResult.CreateFailedResult($"切换箱号{boardIndex}的切换板通道{channelIndex}失败，因为切换板实例为null");
+            if (openResult1.IsFailed) return openResult1;
+            if (SettingManager.CurrentTestOption?.IsTestRes ?? false)
             {
-                var volResult = DevicesController.DMM?.ReadDc();
-                if (volResult?.IsFailed ?? true)
-                    return volResult ?? OperateResult.CreateFailedResult($"读取电池{ngInfo.Battery.Position}电压失败,因为万用表实例为null");
-                ngInfo.Battery.VolValue = volResult.Content;
-            }
-            if(SettingManager.CurrentTestOption?.IsTestRes??false)
-            {
+                LogHelper.UiLog.Info("开始读取内阻");
                 var resResult = DevicesController.Ohm?.ReadRes();
                 if (resResult?.IsFailed ?? true)
                     return resResult ?? OperateResult.CreateFailedResult($"读取电池{ngInfo.Battery.Position}内阻失败,因为内阻仪实例为null");
                 ngInfo.Battery.Res = resResult.Content;
+            }
+            var channels = new int[] { 21, 23 };
+            var openResult2 = DevicesController.SwitchBoard?.OpenChannels(boardIndex, channels) ?? OperateResult.CreateFailedResult($"切换箱号{boardIndex}的切换板通道\"21,23\"失败，因为切换板实例为null");
+            if (openResult2.IsFailed) return openResult2;
+            if (SettingManager.CurrentTestOption?.IsTestVol??false)
+            {
+                LogHelper.UiLog.Info("开始读取电压");
+                var volResult = DevicesController.DMM?.ReadDc();
+                if (volResult?.IsFailed ?? true)
+                    return volResult ?? OperateResult.CreateFailedResult($"读取电池{ngInfo.Battery.Position}电压失败,因为万用表实例为null");
+                ngInfo.Battery.VolValue = volResult.Content;
             }
             var closeResult = SwitchChannel(boardIndex, channelIndex, false, false);
             if (closeResult.IsFailed)
                 return closeResult;
             if (SettingManager.CurrentTestOption?.IsTestNVol??false)
             {
+                LogHelper.UiLog.Info("开始读取负极壳体电压");
                 var openNvolChannelResult = SwitchChannel(boardIndex, channelIndex, true);
                 if(openNvolChannelResult.IsFailed)
                     return openNvolChannelResult;
@@ -78,6 +88,19 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 if (closeNvolChannelResult.IsFailed)
                     return closeNvolChannelResult;
             }
+            //if(SettingManager.CurrentTestOption?.IsTestPVol??false)
+            //{
+            //    if(!(SettingManager.CurrentTestOption?.IsTestVol??false)||!(SettingManager.CurrentTestOption?.IsTestNVol??false))
+            //    {
+            //        ngInfo.AttachedIsNg = true;
+            //        ngInfo.AttachedNgDescription += " 正极壳体电压计算失败";
+            //    }
+            //    else
+            //    {
+            //        ngInfo.Battery.PVolValue = ngInfo.Battery.VolValue.sub(ngInfo.Battery.NVolValue);
+            //    }
+            //}
+
             ngInfo.Battery.IsTested = true;
             return OperateResult.CreateSuccessResult();
         }

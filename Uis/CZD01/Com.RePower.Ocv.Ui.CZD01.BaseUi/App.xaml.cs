@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Navigation;
 
 namespace Com.RePower.Ocv.Ui.CZD01.BaseUi
 {
@@ -41,12 +42,12 @@ namespace Com.RePower.Ocv.Ui.CZD01.BaseUi
         }
         protected override void OnInitComplate()
         {
-            var sceneContext = IocHelper.Default.GetService<OcvSceneContext>();
-            if (sceneContext is { })
-                sceneContext.Database.EnsureCreated();
-            //var localContext = IocHelper.Default.GetService<LocalTestResultDbContext>();
-            //if(localContext is { })
-            //    localContext.Database.EnsureCreated();
+            if (SettingManager.Instance.CurrentFacticity?.IsRealWms ?? false)
+            {
+                var sceneContext = IocHelper.Default.GetService<OcvSceneContext>();
+                if (sceneContext is { })
+                    sceneContext.Database.EnsureCreated();
+            }
         }
     }
 }

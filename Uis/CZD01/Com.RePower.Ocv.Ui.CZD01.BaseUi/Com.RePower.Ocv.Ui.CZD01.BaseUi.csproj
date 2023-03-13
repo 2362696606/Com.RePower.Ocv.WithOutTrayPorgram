@@ -19,7 +19,7 @@
   <ItemGroup>
     <Content Include="Logo.ico" />
     <Content Include="OcvSetting.dbs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

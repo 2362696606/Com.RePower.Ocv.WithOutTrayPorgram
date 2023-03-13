@@ -22,6 +22,8 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
                 .ForMember(desc => desc.TrayCode, opt => opt.MapFrom(x => x.Battery.TrayCode))
                 .ForMember(desc => desc.BatChannel, opt => opt.MapFrom(x => x.Battery.Position))
                 .ForMember(desc => desc.BatTemp, opt => opt.MapFrom(x => x.Battery.PTemp))
+                .ForMember(desc=>desc.NTSVResult,opt=>opt.MapFrom(x=>x.Battery.NVolValue))
+                .ForMember(desc=>desc.PTSVResult,opt=>opt.MapFrom(x=>x.Battery.PVolValue))
                 .ForMember(desc => desc.NGCode, opt => opt.MapFrom(x => x.IsNg ? "Ng" : "OK"));
             CreateMap<NgInfo, Ocv1InfoDto>()
                 .IncludeBase<NgInfo, OcvInfoDtoBase>()
@@ -64,7 +66,8 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
                 .ForMember(desc => desc.Vol, opt => opt.MapFrom(x => x.Battery.VolValue));
             CreateMap<NgInfo, Ocv4InfoForCvsDto>()
                 .IncludeBase<NgInfo, OcvInfoForCvsDtoBase>()
-                .ForMember(desc => desc.Vol, opt => opt.MapFrom(x => x.Battery.VolValue));
+                .ForMember(desc => desc.Vol, opt => opt.MapFrom(x => x.Battery.VolValue))
+                .ForMember(desc => desc.AcirOriginal, opt => opt.MapFrom(x => x.Battery.Res));
         }
 
 

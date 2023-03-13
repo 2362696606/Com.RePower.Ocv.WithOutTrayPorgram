@@ -63,6 +63,10 @@
                         Header="负极壳体电压"
                         Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestNVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
                     <DataGridTextColumn
+                        Binding="{Binding Battery.Temp}"
+                        Header="温度"
+                        Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestTemp, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                    <DataGridTextColumn
                         Binding="{Binding Battery.PTemp}"
                         Header="正极温度"
                         Visibility="{Binding Data.SettingManager.CurrentTestOption.IsTestPTemp, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
@@ -83,6 +87,7 @@
                         Header="K23"
                         Visibility="{Binding Data.SettingManager.CurrentTestOption.IsVerifyKValue, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
                     <DataGridTextColumn Binding="{Binding NgDescription}" Header="Ng描述" />
+                    <DataGridTextColumn Binding="{Binding Battery.ReserveInt1}" Header="复测次数" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

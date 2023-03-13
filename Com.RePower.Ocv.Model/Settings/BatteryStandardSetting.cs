@@ -30,7 +30,7 @@ namespace Com.RePower.Ocv.Model.Settings
         /// <summary>
         /// 最大电压
         /// </summary>
-        [SettingName("最大电压")]
+        [SettingName("最大电压(mV)")]
         public double MaxVol
         {
             get { return _maxVol; }
@@ -40,7 +40,7 @@ namespace Com.RePower.Ocv.Model.Settings
         /// <summary>
         /// 最小电压
         /// </summary>
-        [SettingName("最小电压")]
+        [SettingName("最小电压(mV)")]
         public double MinVol
         {
             get { return _minVol; }
@@ -50,7 +50,7 @@ namespace Com.RePower.Ocv.Model.Settings
         /// <summary>
         /// 最大内阻
         /// </summary>
-        [SettingName("最大内阻")]
+        [SettingName("最大内阻(mΩ)")]
         public double MaxRes
         {
             get { return _maxRes; }
@@ -60,7 +60,7 @@ namespace Com.RePower.Ocv.Model.Settings
         /// <summary>
         /// 最小内阻
         /// </summary>
-        [SettingName("最小内阻")]
+        [SettingName("最小内阻(mΩ)")]
         public double MinRes
         {
             get { return _minRes; }

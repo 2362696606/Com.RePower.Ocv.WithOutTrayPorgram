@@ -330,10 +330,10 @@
   </wsdl:binding>
   <wsdl:service name="OCVWebService">
     <wsdl:port name="OCVWebServiceSoap" binding="tns:OCVWebServiceSoap">
-      <soap:address location="http://172.22.20.16:9006/OCVWebService.asmx" />
+      <soap:address location="http://172.22.20.10:9006/OCVWebService.asmx" />
     </wsdl:port>
     <wsdl:port name="OCVWebServiceSoap12" binding="tns:OCVWebServiceSoap12">
-      <soap12:address location="http://172.22.20.16:9006/OCVWebService.asmx" />
+      <soap12:address location="http://172.22.20.10:9006/OCVWebService.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
