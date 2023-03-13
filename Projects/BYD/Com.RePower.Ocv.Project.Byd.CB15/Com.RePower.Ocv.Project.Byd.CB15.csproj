@@ -13,7 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Resource\Web_References_Cb15\OCVWebService.cs" />
     <Compile Remove="Resource\Web_References_Cb15\Reference.cs" />
+    <Compile Remove="Services\Wms\OCVWebService.cs" />
+    <Compile Remove="Services\Wms\WebServiceHelper.cs" />
   </ItemGroup>
 
   <ItemGroup>
