@@ -25,8 +25,19 @@
                 AutoGenerateColumns="False"
                 CanUserAddRows="False"
                 FontSize="16"
-                IsReadOnly="True"
-                ItemsSource="{Binding Tray.NgInfos}">
+                IsReadOnly="True">
+
+                <DataGrid.Resources>
+                    <CollectionViewSource x:Key="CurrentNgInfos" Source="{Binding CurrentNgInfos}" />
+                    <CollectionViewSource x:Key="HistoryNgInfos" Source="{Binding HistoryNgInfos}" />
+                </DataGrid.Resources>
+                <DataGrid.ItemsSource>
+                    <CompositeCollection>
+                        <CollectionContainer Collection="{Binding Source={StaticResource CurrentNgInfos}}" />
+                        <CollectionContainer Collection="{Binding Source={StaticResource HistoryNgInfos}}" />
+                    </CompositeCollection>
+                </DataGrid.ItemsSource>
+
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Battery.Position}" Header="电芯位置" />
                     <DataGridTextColumn Binding="{Binding Battery.BarCode}" Header="电芯条码" />

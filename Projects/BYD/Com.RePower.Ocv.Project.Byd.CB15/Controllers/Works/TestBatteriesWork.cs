@@ -59,6 +59,20 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 if (resResult?.IsFailed ?? true)
                     return resResult ?? OperateResult.CreateFailedResult($"读取电池{ngInfo.Battery.Position}内阻失败,因为内阻仪实例为null");
                 ngInfo.Battery.Res = resResult.Content;
+                if(SettingManager.CurrentOcvType == Enums.OcvTypeEnmu.OCV4 && SettingManager.AcirOption is { } acirOption && (SettingManager.AcirOption?.IsAcirEnable??false))
+                {
+                    decimal fitFactor = 0;
+                    decimal temp = (decimal)(ngInfo.Battery.PTemp ?? 0);
+                    foreach(var item in acirOption.TempFits)
+                    {
+                        if(temp > item.MinTemp && temp<item.MaxTemp)
+                        {
+                            fitFactor = item.FitFactor ?? 0;
+                            break;
+                        }
+                    }
+                    ngInfo.Battery.ReserveValue1 = (double?)((decimal)(ngInfo.Battery.Res??0) + (acirOption.NominalTemp - temp) * fitFactor);
+                }
             }
             var channels = new int[] { 21, 23 };
             var openResult2 = DevicesController.SwitchBoard?.OpenChannels(boardIndex, channels) ?? OperateResult.CreateFailedResult($"切换箱号{boardIndex}的切换板通道\"21,23\"失败，因为切换板实例为null");

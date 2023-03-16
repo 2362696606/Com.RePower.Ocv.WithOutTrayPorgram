@@ -106,7 +106,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 if(validateNgInfoResult.IsFailed)
                     return validateNgInfoResult;
                 DoPauseOrStop();
-                if(IsMsaTest)
+                if (IsMsaTest)
                 {
                     _lastTimesIsMsa = true;
                     var saveMsaDataResult = SaveMsaData(1);
@@ -136,8 +136,8 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                             return validateNgInfoResult1;
                         DoPauseOrStop();
                         var saveMsaDataResult1 = SaveMsaData(_msaCount + 1);
-                        if (saveMsaDataResult.IsFailed)
-                            return saveMsaDataResult;
+                        if (saveMsaDataResult1.IsFailed)
+                            return saveMsaDataResult1;
                         DoPauseOrStop();
                         _msaCount++;
                     }
@@ -163,6 +163,13 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                         return validateNgInfoResult1;
                     DoPauseOrStop();
                 }
+
+                //验证同盘极差
+                var getCurrentTrayRangeResult = GetCurrentTrayRange();
+                if (getCurrentTrayRangeResult.IsFailed)
+                    return getCurrentTrayRangeResult;
+                DoPauseOrStop();
+
                 //向plc发送测试结果
                 var sendPlcNgInfoResult = SendPlcNgInfo();
                 if(sendPlcNgInfoResult.IsFailed)

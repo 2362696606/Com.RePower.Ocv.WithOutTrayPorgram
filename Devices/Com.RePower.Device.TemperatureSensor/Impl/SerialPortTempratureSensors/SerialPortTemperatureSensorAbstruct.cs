@@ -13,6 +13,7 @@ namespace Com.RePower.Device.TemperatureSensor.Impl.SerialPortTempratureSensors
     {
         public abstract string PortName { get; set; }
         public abstract int BaudRate { get; set; }
+        public abstract int ReadDelsy { get; set; }
 
         public abstract OperateResult Connect(string portName, int baudRate);
 

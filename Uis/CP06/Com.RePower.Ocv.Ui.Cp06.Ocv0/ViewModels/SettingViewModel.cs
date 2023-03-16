@@ -24,6 +24,5 @@ namespace Com.RePower.Ocv.Ui.Cp06.Ocv0.ViewModels
 				return false;
 			}
 		}
-
 	}
 }

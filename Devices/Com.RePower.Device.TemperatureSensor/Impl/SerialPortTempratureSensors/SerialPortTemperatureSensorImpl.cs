@@ -22,6 +22,7 @@ namespace Com.RePower.Device.TemperatureSensor.Impl.SerialPortTempratureSensors
         public override bool IsConnected => serialPortDeviceBase.IsConnected;
 
         public override string DeviceName { get => serialPortDeviceBase.DeviceName; set => serialPortDeviceBase.DeviceName = value; }
+        public override int ReadDelsy { get => serialPortDeviceBase.ReadDelay; set => serialPortDeviceBase.ReadDelay = value; }
 
         public override OperateResult Connect(string portName, int baudRate)
         {

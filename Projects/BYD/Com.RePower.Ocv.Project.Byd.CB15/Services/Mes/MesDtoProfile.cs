@@ -41,7 +41,9 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
                 .IncludeBase<NgInfo, OcvInfoDtoBase>()
                 //.ForMember(desc => desc.ACIR_RO, opt => opt.MapFrom(x => x.Battery.Res))
                 .ForMember(desc => desc.OCV4_V1, opt => opt.MapFrom(x => x.Battery.VolValue))
-                .ForMember(desc => desc.OCV4_V2, opt => opt.MapFrom(x => x.Battery.NVolValue));
+                .ForMember(desc => desc.OCV4_V2, opt => opt.MapFrom(x => x.Battery.NVolValue))
+                .ForMember(desc => desc.ACIR_RO, opt => opt.MapFrom(x => x.Battery.Res))
+                .ForMember(desc => desc.ACIR_R, opt => opt.MapFrom(x => x.Battery.ReserveValue1));
 
             CreateMap<NgInfo, OcvInfoForCvsDtoBase>()
                 .ForMember(desc => desc.BarCode, opt => opt.MapFrom(x => x.Battery.BarCode))
@@ -67,7 +69,8 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
             CreateMap<NgInfo, Ocv4InfoForCvsDto>()
                 .IncludeBase<NgInfo, OcvInfoForCvsDtoBase>()
                 .ForMember(desc => desc.Vol, opt => opt.MapFrom(x => x.Battery.VolValue))
-                .ForMember(desc => desc.AcirOriginal, opt => opt.MapFrom(x => x.Battery.Res));
+                .ForMember(desc => desc.AcirOriginal, opt => opt.MapFrom(x => x.Battery.Res))
+                .ForMember(desc => desc.AcirFit, opt => opt.MapFrom(x => x.Battery.ReserveValue1));
         }
 
 

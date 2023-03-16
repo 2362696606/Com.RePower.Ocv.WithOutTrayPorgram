@@ -28,6 +28,10 @@
                         <MenuItem Command="{Binding OpenSettingViewCommand}" Header="打开配置" />
                         <MenuItem Command="{Binding OpenChannelNgInfoViewCommand}" Header="通道Ng详情" />
                         <MenuItem Command="{Binding OpenDataSearchCommand}" Header="数据查询" />
+                        <MenuItem
+                            Command="{Binding OpenAcirOptionCommand}"
+                            Header="Acir选项"
+                            Visibility="{Binding IsOcv4, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     </Menu>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>

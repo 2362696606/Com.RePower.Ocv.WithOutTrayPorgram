@@ -7,7 +7,7 @@
     xmlns:local="clr-namespace:Com.RePower.Ocv.Ui.Cp06.Ocv0.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="CalibrationView"
+    Title="校准工具"
     Width="800"
     Height="450"
     mc:Ignorable="d">

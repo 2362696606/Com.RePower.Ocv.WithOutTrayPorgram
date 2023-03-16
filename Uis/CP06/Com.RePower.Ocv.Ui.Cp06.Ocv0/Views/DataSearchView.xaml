@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:Com.RePower.Ocv.Ui.Cp06.Ocv0.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uiBaseViews="clr-namespace:Com.RePower.Ocv.Ui.UiBase.Views;assembly=Com.RePower.Ocv.Ui.UiBase"
-    Title="DataSearchView"
+    Title="数据查询"
     SizeToContent="WidthAndHeight"
     mc:Ignorable="d">
     <uiBaseViews:DataSearchView DataContext="{Binding DataContext}" />

@@ -1,4 +1,5 @@
-﻿using Com.RePower.Ocv.Ui.Byd.CB15.Views;
+﻿using Com.RePower.Ocv.Project.Byd.CB15.Controllers;
+using Com.RePower.Ocv.Ui.Byd.CB15.Views;
 using Com.RePower.WpfBase;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -10,6 +11,22 @@ namespace Com.RePower.Ocv.Ui.Byd.CB15.ViewModels
         public MainViewModel()
         {
         }
+
+        public bool IsOcv4 
+        { 
+            get
+            {
+                if(SettingManager.Instance.CurrentOcvType == Project.Byd.CB15.Enums.OcvTypeEnmu.OCV4)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            } 
+        }
+
         [RelayCommand]
         private void OpenSettingView()
         {
@@ -28,6 +45,12 @@ namespace Com.RePower.Ocv.Ui.Byd.CB15.ViewModels
         {
             var dataSearchView = new DataSearchView();
             dataSearchView.Show();
+        }
+        [RelayCommand]
+        private void OpenAcirOption()
+        {
+            var view = new AcirOptionView();
+            view.Show();
         }
     }
 }

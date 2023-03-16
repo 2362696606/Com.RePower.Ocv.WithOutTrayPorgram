@@ -57,7 +57,7 @@ namespace Com.RePower.Ocv.Model.Extensions
 
         public static double? div(this double? v1, double? v2)
         {
-            if (v1 == null || v2 == null) return null;
+            if (v1 == null || v2 == null || v2 == 0) return null;
 
             decimal b1 = new decimal(v1 ?? 0);
 

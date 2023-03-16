@@ -36,6 +36,11 @@ namespace Com.RePower.Ocv.Ui.UiBase.ViewModels
             });
             Mapper = configuration.CreateMapper();//或者var mapper=new Mapper(configuration);
             MessageQueue = new SnackbarMessageQueue();
+
+            this.OrderOptions = new List<OrderOption>();
+            this.OrderOptions.Add(new OrderOption { Name = "时间顺序", Value = 1 });
+            this.OrderOptions.Add(new OrderOption { Name = "时间逆序", Value = 2 });
+            this.OrderOptionSelectedItem = OrderOptions[1];
         }
         public IMapper Mapper { get; }
 
@@ -132,6 +137,60 @@ namespace Com.RePower.Ocv.Ui.UiBase.ViewModels
                 } 
             }
         }
+        private string? _startTimeText;
+
+        public string? StartTimeText
+        {
+            get { return _startTimeText; }
+            set { SetProperty(ref _startTimeText, value); }
+        }
+        private string? _endTimeText;
+
+        public string? EndTimeText
+        {
+            get { return _endTimeText; }
+            set { SetProperty(ref _endTimeText, value); }
+        }
+
+        private string? _batteryCount;
+        /// <summary>
+        /// 查找出的电池总数
+        /// </summary>
+        public string? BatteryCount
+        {
+            get { return _batteryCount; }
+            set { SetProperty(ref _batteryCount, value); }
+        }
+        private string? _okCount;
+        /// <summary>
+        /// Ok电池总数
+        /// </summary>
+        public string? OkCount
+        {
+            get { return _okCount; }
+            set { SetProperty(ref _okCount, value); }
+        }
+        private string? _ngCount;
+        /// <summary>
+        /// Ng电池总数
+        /// </summary>
+        public string? NgCount
+        {
+            get { return _ngCount; }
+            set { SetProperty(ref _ngCount, value); }
+        }
+        private string? _ngRate;
+        /// <summary>
+        /// Ng率
+        /// </summary>
+        public string? NgRate
+        {
+            get { return _ngRate; }
+            set { SetProperty(ref _ngRate, value); }
+        }
+
+        public List<OrderOption> OrderOptions { get; set; }
+        public OrderOption OrderOptionSelectedItem { get; set; }
 
         public IAsyncRelayCommand DoSearchCommand { get; }
         public IAsyncRelayCommand DoExportCommand { get; }
@@ -141,24 +200,63 @@ namespace Com.RePower.Ocv.Ui.UiBase.ViewModels
             return Task.Factory.StartNew(() =>
             {
                 var count = DbContext.NgInfos.Where(x =>
-                ((string.IsNullOrEmpty(_trayCode) ? true : x.Battery.TrayCode!.Contains(_trayCode))
+                ((string.IsNullOrEmpty(TrayCode) ? true : x.Battery.TrayCode!.Contains(TrayCode))
                                     && (string.IsNullOrEmpty(_barCode) ? true : x.Battery.BarCode!.Contains(_barCode))
                                     && (string.IsNullOrEmpty(_ocvType) ? true : x.Battery.OcvType!.Contains(_ocvType))
-                                    && ((_startTime == null) ? true : (x.Battery.TestTime >= _startTime))
-                                    && ((_endTime == null) ? true : (x.Battery.TestTime <= _endTime))))
+                                    && ((StartTime == null) ? true : (x.Battery.TestTime >= StartTime))
+                                    && ((EndTime == null) ? true : (x.Battery.TestTime <= EndTime))))
                                     .OrderBy(x => x.Id)?.Count() ?? 0;
-                MaxPageCount = (count / _dataCountPerPage) + 1;
+                MaxPageCount = (count / DataCountPerPage) + 1;
 
-                ItemsSource = DbContext.NgInfos.Where(x =>
-                ((string.IsNullOrEmpty(_trayCode) ? true : x.Battery.TrayCode!.Contains(_trayCode))
+                BatteryCount = count.ToString();
+                var okCount = DbContext.NgInfos.Where(x =>
+                                    ((string.IsNullOrEmpty(TrayCode) ? true : x.Battery.TrayCode!.Contains(TrayCode))
                                     && (string.IsNullOrEmpty(_barCode) ? true : x.Battery.BarCode!.Contains(_barCode))
                                     && (string.IsNullOrEmpty(_ocvType) ? true : x.Battery.OcvType!.Contains(_ocvType))
-                                    && ((_startTime == null) ? true : (x.Battery.TestTime >= _startTime))
-                                    && ((_endTime == null) ? true : (x.Battery.TestTime <= _endTime))))
-                                .Include(x => x.Battery)
-                                .OrderBy(x => x.Battery.Id)
-                                .Skip((_pageIndex - 1) * _dataCountPerPage)
-                                .Take(_dataCountPerPage).ToList();
+                                    && ((StartTime == null) ? true : (x.Battery.TestTime >= StartTime))
+                                    && ((EndTime == null) ? true : (x.Battery.TestTime <= EndTime))
+                                    && (x.IsNg == false)))
+                                    ?.Count() ?? 0;
+                OkCount = okCount.ToString();
+                var ngCount = DbContext.NgInfos.Where(x =>
+                                    ((string.IsNullOrEmpty(TrayCode) ? true : x.Battery.TrayCode!.Contains(TrayCode))
+                                    && (string.IsNullOrEmpty(_barCode) ? true : x.Battery.BarCode!.Contains(_barCode))
+                                    && (string.IsNullOrEmpty(_ocvType) ? true : x.Battery.OcvType!.Contains(_ocvType))
+                                    && ((StartTime == null) ? true : (x.Battery.TestTime >= StartTime))
+                                    && ((EndTime == null) ? true : (x.Battery.TestTime <= EndTime))
+                                    && (x.IsNg == true)))
+                                    ?.Count() ?? 0;
+                NgCount = ngCount.ToString();
+                NgRate = ((double?)ngCount).div(count)?.ToString("0.##%");
+
+                if(OrderOptionSelectedItem.Value == 1)
+                {
+
+                    ItemsSource = DbContext.NgInfos.Where(x =>
+                    ((string.IsNullOrEmpty(TrayCode) ? true : x.Battery.TrayCode!.Contains(TrayCode))
+                                        && (string.IsNullOrEmpty(BarCode) ? true : x.Battery.BarCode!.Contains(BarCode))
+                                        && (string.IsNullOrEmpty(OcvType) ? true : x.Battery.OcvType!.Contains(OcvType))
+                                        && ((StartTime == null) ? true : (x.Battery.TestTime >= StartTime))
+                                        && ((EndTime == null) ? true : (x.Battery.TestTime <= EndTime))))
+                                    .Include(x => x.Battery)
+                                    .OrderBy(x => x.Battery.TestTime)
+                                    .Skip((PageIndex - 1) * DataCountPerPage)
+                                    .Take(DataCountPerPage).ToList();
+                }
+                else
+                {
+                    ItemsSource = DbContext.NgInfos.Where(x =>
+                    ((string.IsNullOrEmpty(TrayCode) ? true : x.Battery.TrayCode!.Contains(TrayCode))
+                                        && (string.IsNullOrEmpty(BarCode) ? true : x.Battery.BarCode!.Contains(BarCode))
+                                        && (string.IsNullOrEmpty(OcvType) ? true : x.Battery.OcvType!.Contains(OcvType))
+                                        && ((StartTime == null) ? true : (x.Battery.TestTime >= StartTime))
+                                        && ((EndTime == null) ? true : (x.Battery.TestTime <= EndTime))))
+                                    .Include(x => x.Battery)
+                                    .OrderByDescending(x => x.Battery.TestTime)
+                                    .Skip((PageIndex - 1) * DataCountPerPage)
+                                    .Take(DataCountPerPage).ToList();
+                }
+
             });
         }
         private Task DoExport()
@@ -191,38 +289,9 @@ namespace Com.RePower.Ocv.Ui.UiBase.ViewModels
                 {
                     MessageQueue.Enqueue($"导出失败:{e}");
                 }
-
-                //SaveFileDialog saveFileDialog = new SaveFileDialog();
-                //saveFileDialog.Filter = "Image1|*.bmp;*.png|Image2|*.jepg";
-                //saveFileDialog.InitialDirectory = "C:\\Users\\Desktop\\Image"; //设置初始目录
-                //if (saveFileDialog.ShowDialog() && Image = null)
-                //{
-                //    string name = saveFileDialog.FileName; //获取选择的文件，或者自定义的文件名的全路径。
-                //    Image.ImWrite(name);    //将文件进行保存，这里IO流或者其它保存文件方法都可以
-                //}
             });
         }
     }
-    //public class NgInfoToExcelDto
-    //{
-    //    public long Id { get; set; }
-    //    /// <summary>
-    //    /// 对应电池
-    //    /// </summary>
-    //    public virtual BatteryDto Battery { get; set; } = new BatteryDto();
-    //    /// <summary>
-    //    /// mg描述
-    //    /// </summary>
-    //    public string? NgDescription { get; set; }
-    //    /// <summary>
-    //    /// 是否ng
-    //    /// </summary>
-    //    public bool IsNg { get; set; } = false;
-    //    /// <summary>
-    //    /// ng类型
-    //    /// </summary>
-    //    public int? NgType { get; set; }
-    //}
     public class BatteryToExcelDto
     {
         /// <summary>
@@ -313,5 +382,11 @@ namespace Com.RePower.Ocv.Ui.UiBase.ViewModels
         /// 任务号
         /// </summary>
         public long? TaskCode { get; set; }
+    }
+
+    public class OrderOption
+    {
+        public string? Name { get; set; }
+        public int Value { get; set; }
     }
 }

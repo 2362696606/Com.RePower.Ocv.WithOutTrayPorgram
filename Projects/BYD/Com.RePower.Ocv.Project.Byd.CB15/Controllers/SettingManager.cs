@@ -19,6 +19,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
 {
     public partial class SettingManager: ObservableObject
     {
+
+        private readonly string AcirOptionSettingName = "AcirOption";
+
+
         [NotifyPropertyChangedFor(nameof(CurrentOtherSetting))]
         [NotifyPropertyChangedFor(nameof(CurrentTestOption))]
         [NotifyPropertyChangedFor(nameof(CurrentBatteryStandard))]
@@ -263,6 +267,21 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
                     item.SaveEvent = SaveChannelNgInfo;
                 }
                 #endregion
+
+                if(CurrentOcvType == OcvTypeEnmu.OCV4)
+                {
+                    var acirOptionStr = context.SettingItems.FirstOrDefault(x => x.SettingName == AcirOptionSettingName)?.JsonValue;
+                    if(!string.IsNullOrEmpty(acirOptionStr))
+                    {
+                        _acirOption = JsonConvert.DeserializeObject<AcirOption>(acirOptionStr);
+                    }
+                    else
+                    {
+                        _acirOption = new AcirOption();
+                    }
+                    if(_acirOption is { })
+                        _acirOption.SaveEvent = SaveChanged;
+                }
             }
         }
 
@@ -381,6 +400,14 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
             }
         }
 
+        private AcirOption? _acirOption;
+
+        public AcirOption? AcirOption
+        {
+            get { return _acirOption; }
+        }
+
+
 
         public List<ChannelNgInfo>? ChannelNgInfos
         {
@@ -433,6 +460,12 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
                                 break;
                         }
                         settingValue = JsonConvert.SerializeObject(CurrentBatteryStandard);
+                        break;
+                    }
+                case "AcirOption":
+                    {
+                        settingName = AcirOptionSettingName;
+                        settingValue = JsonConvert.SerializeObject(AcirOption);
                         break;
                     }
             }

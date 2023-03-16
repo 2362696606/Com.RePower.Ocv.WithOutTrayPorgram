@@ -82,4 +82,10 @@
     <AdditionalDesignTimeBuildInput Remove="FakesAssemblies\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="ObservableConcurrentQueue">
+      <HintPath>Libs\ObservableConcurrentQueue.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

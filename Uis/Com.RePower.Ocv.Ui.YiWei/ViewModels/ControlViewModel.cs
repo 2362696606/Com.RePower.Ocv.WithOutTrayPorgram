@@ -16,10 +16,14 @@ namespace Com.RePower.Ocv.Ui.YiWei.ViewModels
         {
             this.Work = projectMainWork;
         }
+
         [RelayCommand]
         private void DoStart()
         {
-            Work.StartWorkAsync();
+            if (Work?.WorkStatus == 0 || Work?.WorkStatus == 2)
+                Work.StartWorkAsync();
+            else
+                Work?.PauseWorkAsync();
         }
         [RelayCommand]
         private void DoStop()
