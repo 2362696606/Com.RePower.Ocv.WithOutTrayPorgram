@@ -13,7 +13,9 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
-                <RowDefinition />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <TextBox
                 materialDesign:HintAssist.Hint="托盘条码"
@@ -25,9 +27,10 @@
                 AutoGenerateColumns="False"
                 CanUserAddRows="False"
                 FontSize="16"
-                IsReadOnly="True">
+                IsReadOnly="True"
+                ItemsSource="{Binding CurrentNgInfos}">
 
-                <DataGrid.Resources>
+                <!--<DataGrid.Resources>
                     <CollectionViewSource x:Key="CurrentNgInfos" Source="{Binding CurrentNgInfos}" />
                     <CollectionViewSource x:Key="HistoryNgInfos" Source="{Binding HistoryNgInfos}" />
                 </DataGrid.Resources>
@@ -36,7 +39,50 @@
                         <CollectionContainer Collection="{Binding Source={StaticResource CurrentNgInfos}}" />
                         <CollectionContainer Collection="{Binding Source={StaticResource HistoryNgInfos}}" />
                     </CompositeCollection>
-                </DataGrid.ItemsSource>
+                </DataGrid.ItemsSource>-->
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Battery.Position}" Header="电芯位置" />
+                    <DataGridTextColumn Binding="{Binding Battery.BarCode}" Header="电芯条码" />
+                    <DataGridTextColumn Binding="{Binding Battery.VolValue}" Header="电压" />
+                    <DataGridTextColumn Binding="{Binding Battery.Res}" Header="内阻" />
+                    <DataGridTextColumn Binding="{Binding NgDescription}" Header="Ng描述" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Separator />
+                <TextBlock
+                    Grid.Column="1"
+                    Margin="10,0"
+                    FontSize="16"
+                    FontWeight="Black"
+                    Text="历史" />
+                <Separator Grid.Column="2" />
+            </Grid>
+
+            <DataGrid
+                Grid.Row="3"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                FontSize="16"
+                IsReadOnly="True"
+                ItemsSource="{Binding HistoryNgInfos}">
+
+                <!--<DataGrid.Resources>
+                    <CollectionViewSource x:Key="CurrentNgInfos" Source="{Binding CurrentNgInfos}" />
+                    <CollectionViewSource x:Key="HistoryNgInfos" Source="{Binding HistoryNgInfos}" />
+                </DataGrid.Resources>
+                <DataGrid.ItemsSource>
+                    <CompositeCollection>
+                        <CollectionContainer Collection="{Binding Source={StaticResource CurrentNgInfos}}" />
+                        <CollectionContainer Collection="{Binding Source={StaticResource HistoryNgInfos}}" />
+                    </CompositeCollection>
+                </DataGrid.ItemsSource>-->
 
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Battery.Position}" Header="电芯位置" />

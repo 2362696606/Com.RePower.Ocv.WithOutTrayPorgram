@@ -1,5 +1,6 @@
 ﻿using Com.RePower.Ocv.Model;
 using Com.RePower.Ocv.Model.Entity;
+using Com.RePower.Ocv.Ui.UiBase.ViewModels;
 using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -20,8 +21,8 @@ namespace Com.RePower.Ocv.Ui.YiWei.ViewModels
         private Tray _tray;
         public TrayViewModel(Tray tray)
         {
-            this.CurrentNgInfos = new ObservableConcurrentQueue<NgInfo>();
-            this.HistoryNgInfos = new ObservableConcurrentQueue<NgInfo>();
+            this.CurrentNgInfos = new ObservableLinkedList<NgInfo>();
+            this.HistoryNgInfos = new ObservableLinkedList<NgInfo>();
             _tray = tray;
             tray.PropertyChanged += Tray_PropertyChanged;
         }
@@ -32,23 +33,40 @@ namespace Com.RePower.Ocv.Ui.YiWei.ViewModels
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    while (CurrentNgInfos.TryDequeue(out NgInfo dequeItem))
+                    //while (CurrentNgInfos.TryDequeue(out NgInfo dequeItem))
+                    //{
+                    //    if (HistoryNgInfos.Count() >= 50)
+                    //        HistoryNgInfos.TryDequeue(out _);
+                    //    HistoryNgInfos.Enqueue(dequeItem);
+                    //}
+                    //if (sender is Tray currentTray)
+                    //{
+                    //    foreach (var item in currentTray.NgInfos)
+                    //        CurrentNgInfos.Enqueue(item);
+                    //}
+                    int count = CurrentNgInfos.Count;
+                    for(int i = 0;i<count;i++)
                     {
-                        if (HistoryNgInfos.Count() >= 50)
-                            HistoryNgInfos.TryDequeue(out _);
-                        HistoryNgInfos.Enqueue(dequeItem);
+                        var lastItem = CurrentNgInfos.Last();
+                        if (lastItem is { })
+                        {
+                            CurrentNgInfos.RemoveLast();
+                            if (HistoryNgInfos.Count >= 50)
+                                HistoryNgInfos.RemoveLast();
+                            HistoryNgInfos.AddFirst(lastItem);
+                        }
                     }
-                    if (sender is Tray currentTray)
+                    if(sender is Tray currentTray)
                     {
                         foreach (var item in currentTray.NgInfos)
-                            CurrentNgInfos.Enqueue(item);
+                            CurrentNgInfos.AddLast(item);
                     }
                 });
             }
         }
 
-        public ObservableConcurrentQueue<NgInfo> CurrentNgInfos { get; }
-        public ObservableConcurrentQueue<NgInfo> HistoryNgInfos { get; }
+        public ObservableLinkedList<NgInfo> CurrentNgInfos { get; }
+        public ObservableLinkedList<NgInfo> HistoryNgInfos { get; }
 
     }
 }
