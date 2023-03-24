@@ -974,7 +974,16 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     {
                         sendValue = SettingManager.CurrentTestOption?.KValueNgChannel ?? 2;
                     }
+                    else if(ngInfo.AttachedIsNg??false)
+                    {
+                        sendValue = SettingManager.CurrentTestOption?.KValueNgChannel ?? 2;
+                    }
                 } 
+
+                if(ngInfo.IsNg && sendValue == 1)
+                {
+                    sendValue = 2;
+                }
             }
             return OperateResult.CreateSuccessResult(sendValue);
         }
