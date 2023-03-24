@@ -40,6 +40,31 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             Tray = tray;
             Mapper = mapper;
             Task.Run(KeepHeartbeat);
+            Task.Run(() => UploadDevicesStatusToMes());
+        }
+
+        private void UploadDevicesStatusToMes()
+        {
+            while (true)
+            {
+                int status = 1;
+                bool isShutdown = false;
+                string message = string.Empty;
+                if (this.WorkStatus == 0)
+                {
+                    status = 3;
+                    isShutdown = true;
+                    message = "停止";
+                }
+                else
+                {
+                    status = 1;
+                    isShutdown = false;
+                    message = "正在运行";
+                }
+                MesService.UploadingDeviceStatus(status, isShutdown, message);
+                Thread.Sleep(1000 * 60 * 3);
+            }
         }
 
         public DevicesController DevicesController { get; }
@@ -574,10 +599,6 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                         return OperateResult.CreateFailedResult($"上传mes失败:{contentObj.Message ?? "未知异常"}");
                     }
                 }
-            }
-            if (contentObj.ErrorCode == "warn")
-            {
-                LogHelper.UiLog.Warn(contentObj.Message);
             }
             return OperateResult.CreateSuccessResult();
         }

@@ -890,10 +890,6 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     }
                 }
             }
-            if (contentObj.ErrorCode == "warn")
-            {
-                LogHelper.UiLog.Warn(contentObj.Message ?? "未知异常");
-            }
             return OperateResult.CreateSuccessResult();
         }
 

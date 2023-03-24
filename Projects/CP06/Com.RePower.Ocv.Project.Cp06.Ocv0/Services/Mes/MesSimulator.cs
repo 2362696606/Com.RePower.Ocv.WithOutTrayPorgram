@@ -1,4 +1,5 @@
 ﻿using Com.RePower.Ocv.Model.Dto;
+using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Dto;
 using Com.RePower.WpfBase;
 using Newtonsoft.Json;
@@ -12,6 +13,13 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
 {
     public class MesSimulator : IMesService
     {
+        public MesSimulator(Tray tray)
+        {
+            Tray = tray;
+        }
+
+        public Tray Tray { get; }
+
         public OperateResult<string> BatteryDismantlingDiskDataUploadToMes()
         {
             throw new NotImplementedException();
@@ -62,11 +70,24 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
 
         public OperateResult<string> UploadResult()
         {
-            MesBatteryResultReturnDto mesBatteryResultReturnDto = new MesBatteryResultReturnDto
-            {
-                Status = true,
-            };
-            string str = JsonConvert.SerializeObject(mesBatteryResultReturnDto);
+            //MesBatteryResultReturnDto mesBatteryResultReturnDto = new MesBatteryResultReturnDto
+            //{
+            //    Status = true,
+            //};
+            //string str = JsonConvert.SerializeObject(mesBatteryResultReturnDto);
+
+            //List<MesBatteryRecovertDot> temp = new List<MesBatteryRecovertDot>();
+            //temp.Add(new MesBatteryRecovertDot { sfcNO = Tray.NgInfos[5].Battery.BarCode, errMsg = "测试错误", result = "false" });
+            //temp.Add(new MesBatteryRecovertDot { sfcNO = Tray.NgInfos[7].Battery.BarCode, errMsg = "测试错误", result = "false" });
+            //var messageStr = JsonConvert.SerializeObject(temp);
+            //MesBatteryResultReturnDto mesBatteryResultReturnDto = new MesBatteryResultReturnDto
+            //{
+            //    Status = false,
+            //    Message = messageStr
+            //};
+            //string str = JsonConvert.SerializeObject(mesBatteryResultReturnDto);
+            string str = @"{""status"":false,""message"":""[{\""sfcNo\"":\""\"",\""errMsg\"":\""电芯条码不能为空\"",\""result\"":\""pick\""}]"",""errorCode"":""warn""}";
+            //string str = @"{""status"":false,""message"":""[{""sfcNo"":""02KCBB411280AGD361003544"",""trayNo"":""LZ1AP0002239"",""seq"":""5"",""errMsg"":""条码【02KCBB411280AGD361003544】被标记隔离【23-03-20001：负极片划痕】，请【排出后联系品质廖春文15277102428】！""}]"",""errorCode"":""warn""}";
             return OperateResult.CreateSuccessResult<string>(str);
         }
 

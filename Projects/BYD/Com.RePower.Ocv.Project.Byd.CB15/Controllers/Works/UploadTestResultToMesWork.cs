@@ -12,6 +12,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
     {
         private OperateResult UploadTestResultToMes()
         {
+            LogHelper.UiLog.Info("上传到Mes");
             if(MesService == null)
             {
                 LogHelper.UiLog.Warn("Mes服务为null，未上传mes数据");

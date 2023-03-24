@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -52,14 +53,26 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Services.Wms
             content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
             content.Headers.ContentType.CharSet = "utf-8";
 
+            var requestUri = new Uri(url, UriKind.RelativeOrAbsolute);
+            var baseUri = HttpClient.BaseAddress;
+            Uri? fullUri = null;
+            if(baseUri!=null)
+            {
+                fullUri = new Uri(baseUri, requestUri);
+            }
+            else
+            {
+                fullUri = requestUri;
+            }
+
             var result = HttpClient.PostAsync(url, content).Result;
             if (result.IsSuccessStatusCode)
             {
                 string strResult = result.Content.ReadAsStringAsync().Result;
-                LogHelper.WmsServiceLog.Info($"{optionName}，请求内容{jStr},返回{strResult}");
+                LogHelper.WmsServiceLog.Info($"{optionName}:请求地址:{fullUri?.AbsoluteUri};请求内容:{jStr};返回{strResult}");
                 if (string.IsNullOrEmpty(strResult))
                 {
-                    return OperateResult.CreateFailedResult<string>($"{optionName}失败，返回为空或null");
+                    return OperateResult.CreateFailedResult<string>($"{optionName}失败，请求地址:{fullUri?.AbsoluteUri};返回为空或null");
                 }
                 else
                 {
@@ -68,8 +81,8 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Services.Wms
             }
             else
             {
-                LogHelper.WmsServiceLog.Error($"{optionName}失败，内容{jStr},无法成功与调度通讯");
-                return OperateResult.CreateFailedResult<string>($"{optionName}失败，内容{jStr}无法成功与调度通讯");
+                LogHelper.WmsServiceLog.Error($"{optionName}失败，请求地址:{fullUri?.AbsoluteUri};内容{jStr},无法成功与调度通讯");
+                return OperateResult.CreateFailedResult<string>($"{optionName}失败，请求地址:{fullUri?.AbsoluteUri};内容{jStr}无法成功与调度通讯");
             }
         }
 

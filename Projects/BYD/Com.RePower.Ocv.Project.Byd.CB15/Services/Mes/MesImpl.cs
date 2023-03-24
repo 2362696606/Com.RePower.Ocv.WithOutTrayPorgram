@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Com.RePower.Ocv.Model.Entity;
+using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.Byd.CB15.Controllers;
 using Com.RePower.Ocv.Project.Byd.CB15.Services.Mes.Dtos;
 using Com.RePower.WpfBase;
@@ -45,8 +46,8 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
             }
             catch (Exception e)
             {
+                LogHelper.WorkErrorDetailLog.Error($"Message:{e.Message};\r\nInnerExceptionMessage:{e.InnerException?.Message};\r\nToString:{e.ToString()};");
                 return OperateResult.CreateFailedResult(e.Message);
-                throw;
             }
         }
         /// <summary>
@@ -62,7 +63,11 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
                 dto.UploadTime = DateTime.Now;
                 dtos.Add(dto);
             }
-            Context.AddRange(dtos);
+            foreach(var dto in dtos)
+            {
+                Context.OCV1BatData.Add(dto);
+            }
+            //Context.OCV1BatData.AddRange(dtos);
             Context.SaveChanges();
             return OperateResult.CreateSuccessResult();
         }
@@ -79,7 +84,12 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
                 dto.UploadTime = DateTime.Now;
                 dtos.Add(dto);
             }
-            Context.AddRange(dtos);
+            //Context.AddRange(dtos);
+
+            foreach (var dto in dtos)
+            {
+                Context.OCV2BatData.Add(dto);
+            }
             Context.SaveChanges();
             return OperateResult.CreateSuccessResult();
         }
@@ -96,7 +106,12 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
                 dto.UploadTime = DateTime.Now;
                 dtos.Add(dto);
             }
-            Context.AddRange(dtos);
+
+            foreach (var dto in dtos)
+            {
+                Context.OCV3BatData.Add(dto);
+            }
+            //Context.AddRange(dtos);
             Context.SaveChanges();
             return OperateResult.CreateSuccessResult();
         }
@@ -113,7 +128,12 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
                 dto.UploadTime = DateTime.Now;
                 dtos.Add(dto);
             }
-            Context.AddRange(dtos);
+
+            foreach (var dto in dtos)
+            {
+                Context.OCV4BatData.Add(dto);
+            }
+            //Context.AddRange(dtos);
             Context.SaveChanges();
             return OperateResult.CreateSuccessResult();
         }
