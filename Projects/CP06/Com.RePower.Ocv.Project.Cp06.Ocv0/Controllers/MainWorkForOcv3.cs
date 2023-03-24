@@ -547,7 +547,33 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             var contentObj = JsonConvert.DeserializeObject<MesBatteryResultReturnDto>(returnContentStr) ?? new MesBatteryResultReturnDto();
             if (!contentObj.Status)
             {
-                return OperateResult.CreateFailedResult($"上传mes失败:{contentObj.Message}");
+                if (!string.IsNullOrEmpty(contentObj.Message))
+                {
+                    List<MesBatteryRecovertDot>? mesBatteryRecovertDots = JsonConvert.DeserializeObject<List<MesBatteryRecovertDot>>(contentObj.Message);
+                    if (mesBatteryRecovertDots is { } && mesBatteryRecovertDots.Count > 0)
+                    {
+                        foreach (var item in mesBatteryRecovertDots)
+                        {
+                            var ngInfo = this.Tray.NgInfos.FirstOrDefault(x => x.Battery.BarCode == item.sfcNO);
+                            if (ngInfo is { })
+                            {
+                                if (item.result == "pick")
+                                {
+                                    ngInfo.AttachedIsNg = true;
+                                    ngInfo.AttachedNgDescription += $" {item.errMsg}";
+                                }
+                                else if (item.result == "warn")
+                                {
+                                    ngInfo.AttachedNgDescription += $" {item.errMsg}";
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return OperateResult.CreateFailedResult($"上传mes失败:{contentObj.Message ?? "未知异常"}");
+                    }
+                }
             }
             if (contentObj.ErrorCode == "warn")
             {
@@ -596,11 +622,18 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             bool currentBeat = false;
             while(true)
             {
-                currentBeat = !currentBeat;
-                var writeResult = this.DevicesController.Plc.Write(this.DevicesController.PlcAddressCache["上位机心跳"], currentBeat ? (short)1 : (short)0);
-                if (writeResult.IsFailed)
-                    return writeResult;
-                Thread.Sleep(500);
+                try
+                {
+                    currentBeat = !currentBeat;
+                    var writeResult = this.DevicesController.Plc.Write(this.DevicesController.PlcAddressCache["上位机心跳"], currentBeat ? (short)1 : (short)0);
+                    //if (writeResult.IsFailed)
+                    //    return writeResult;
+                    Thread.Sleep(500);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.WorkErrorDetailLog.Warn($"Message:{e.Message};\r\nInnerExceptionMessage:{e.InnerException?.Message};\r\nToString:{e.ToString()}");
+                }
             }
         }
     }

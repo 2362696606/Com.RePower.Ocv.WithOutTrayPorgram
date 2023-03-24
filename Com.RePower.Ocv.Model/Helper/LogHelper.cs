@@ -5,6 +5,7 @@ using log4net.Layout;
 using log4net.Repository.Hierarchy;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,34 +14,37 @@ namespace Com.RePower.Ocv.Model.Helper
 {
     public static class LogHelper
     {
-		private static ILog _uiLog = Log.getMessageFile("UiLog");
 
 		public static ILog UiLog
 		{
-			get { return _uiLog; }
+			get { return Log.getMessageFile("UiLog"); }
 		}
-        private static ILog _wmsServiceLog = Log.getMessageFile("WmsLog");
 
         public static ILog WmsServiceLog
         {
-            get { return _wmsServiceLog; }
-            set { _wmsServiceLog = value; }
+            get { return Log.getMessageFile("WmsLog"); }
         }
-        private static ILog _mesServiceLog = Log.getMessageFile("MesLog");
 
         public static ILog MesServiceLog
         {
-            get { return _mesServiceLog; }
-            set { _mesServiceLog = value; }
+            get { return Log.getMessageFile("MesLog"); }
         }
 
-        private static ILog _plcLog = Log.getMessageFile("PlcLog");
-
+        /// <summary>
+        /// 流程错误详情日志
+        /// </summary>
         public static ILog PlcLog
         {
-            get { return _plcLog; }
-            set { _plcLog = value; }
+            get { return Log.getMessageFile("PlcLog"); ; }
         }
+
+
+        public static ILog WorkErrorDetailLog
+        {
+            get { return Log.getMessageFile("WorkErrorDetail"); ; }
+        }
+
+
 
         public static void RegisterUiLogEvent(Action<object?, LoggingEvent> action)
         {

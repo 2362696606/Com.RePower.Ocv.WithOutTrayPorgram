@@ -1,6 +1,7 @@
 ﻿using Com.RePower.Ocv.Model;
 using Com.RePower.Ocv.Model.DataBaseContext;
 using Com.RePower.Ocv.Model.Entity;
+using Com.RePower.Ocv.Project.ProjectBase.Controllers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -11,6 +12,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Com.RePower.Ocv.Ui.YiWei.ViewModels
@@ -22,64 +24,32 @@ namespace Com.RePower.Ocv.Ui.YiWei.ViewModels
         public MonitorViewModel()
         {
             this.LocalPlcCacheValues = new ObservableCollection<PlcCacheValue>();
-            //this.LogisticsPlcCacheValues = new ObservableCollection<PlcCacheValue>();
             InitCacheValues();
         }
+        public Project.YiWei.Controllers.SettingManager SettingManager => Project.ProjectBase.Controllers.SettingManager<Project.YiWei.Controllers.SettingManager>.Instance;
+
         public ObservableCollection<PlcCacheValue> LocalPlcCacheValues { get; set; }
-        //public ObservableCollection<PlcCacheValue> LogisticsPlcCacheValues{ get; set; }
-        private async void InitCacheValues()
+        private void InitCacheValues()
         {
             List<PlcCacheValue> tempLocal = new List<PlcCacheValue>();
             List<PlcCacheValue> tempLogistics = new List<PlcCacheValue>();
-            await Task.Run(() =>
+            Task.Factory.StartNew(() =>
             {
-                using (OcvSettingDbContext settingContext = new OcvSettingDbContext())
+                var localPlcAddressCacheSettingJson = SettingManager.PlcCacheJsonValue;
+                if (!string.IsNullOrEmpty(localPlcAddressCacheSettingJson))
                 {
-                    var localPlcAddressCacheSettingObj = settingContext.SettingItems.First(x => x.SettingName == "本地Plc缓存");
-                    if (localPlcAddressCacheSettingObj != null)
+                    JArray localPlcAddressCacheSettingArray = JArray.Parse(localPlcAddressCacheSettingJson);
+                    foreach (var item in localPlcAddressCacheSettingArray)
                     {
-                        var localPlcAddressCacheSettingJson = localPlcAddressCacheSettingObj.JsonValue;
-                        if (!string.IsNullOrEmpty(localPlcAddressCacheSettingJson))
+                        var obj = item.ToObject<PlcCacheValue>();
+                        if (obj != null)
                         {
-                            JArray localPlcAddressCacheSettingArray = JArray.Parse(localPlcAddressCacheSettingJson);
-                            foreach (var item in localPlcAddressCacheSettingArray)
-                            {
-                                var obj = item.ToObject<PlcCacheValue>();
-                                if(obj!=null)
-                                {
-                                    tempLocal.Add(obj);
-                                }
-                            }
+                            Application.Current.Dispatcher.Invoke(() => { LocalPlcCacheValues.Add(obj); });
+                            //tempLocal.Add(obj);
                         }
                     }
-
-                    //var logisticsPlcAddressCacheSettingObj = settingContext.SettingItems.First(x => x.SettingName == "物流Plc缓存");
-                    //if (logisticsPlcAddressCacheSettingObj != null)
-                    //{
-                    //    var logisticsPlcAddressCacheSettingJson = logisticsPlcAddressCacheSettingObj.JsonValue;
-                    //    if (!string.IsNullOrEmpty(logisticsPlcAddressCacheSettingJson))
-                    //    {
-                    //        JArray logisticsPlcAddressCacheSettingArray = JArray.Parse(logisticsPlcAddressCacheSettingJson);
-                    //        foreach (var item in logisticsPlcAddressCacheSettingArray)
-                    //        {
-                    //            var obj = item.ToObject<PlcCacheValue>();
-                    //            if(obj!=null)
-                    //            {
-                    //                tempLogistics.Add(obj);
-                    //            }
-                    //        }
-                    //    }
-                    //}
                 }
             });
-            foreach(var item in tempLocal)
-            {
-                LocalPlcCacheValues.Add(item);
-            }
-            //foreach(var item in tempLogistics)
-            //{
-            //    LogisticsPlcCacheValues.Add(item);
-            //}
             this.ShowWaitDialog = false;
         }
     }

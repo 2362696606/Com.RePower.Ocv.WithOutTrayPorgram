@@ -65,6 +65,7 @@ namespace Com.RePower.Ocv.Project.ProjectBase.Controllers
                             else
                             {
                                 LogHelper.UiLog.Error(e.Message);
+                                LogHelper.WorkErrorDetailLog.Error($"Message:{e.Message};\r\nInnerExceptionMessage:{e.InnerException?.Message};\r\nToString:{e.ToString()};");
                             }
                         }
                         finally

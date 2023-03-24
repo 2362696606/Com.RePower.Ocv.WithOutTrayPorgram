@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Org.BouncyCastle.Asn1.X509.Qualified;
 
 namespace Com.RePower.Ocv.Model.Extensions
 {
@@ -26,6 +27,9 @@ namespace Com.RePower.Ocv.Model.Extensions
                     break;
                 case "Byte[]":
                     type = typeof(byte[]);
+                    break;
+                case "Bool":
+                    type = typeof(bool);
                     break;
                 case "Int16":
                     type = typeof(short);

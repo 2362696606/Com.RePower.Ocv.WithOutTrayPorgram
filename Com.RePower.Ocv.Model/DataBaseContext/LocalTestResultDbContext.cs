@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Model.DataBaseContext
 {
-    public class LocalTestResultDbContext:DbContext
+    public class LocalTestResultDbContext : DbContext
     {
         //public LocalTestResultDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions) { }
         //public LocalTestResultDbContext(DbContextOptions<LocalTestResultDbContext> dbContextOptions):base(dbContextOptions) { }

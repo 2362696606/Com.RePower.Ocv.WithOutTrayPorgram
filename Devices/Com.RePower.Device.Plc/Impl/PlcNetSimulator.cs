@@ -11,6 +11,17 @@ namespace Com.RePower.Device.Plc.Impl
 {
     public class PlcNetSimulator : IPlcNet
     {
+        private Timer _timer;
+        private bool _isInterval = false;
+        public PlcNetSimulator()
+        {
+            _timer = new Timer((a) =>
+            {
+                _isInterval = !_isInterval;
+            }, null, 5000, 5000);
+        }
+
+
         public string IpAddress { get; set; } = "127.0.0.1";
         public int Port { get ; set ; }
 
@@ -75,7 +86,7 @@ namespace Com.RePower.Device.Plc.Impl
 
         public OperateResult<bool> ReadBool(string address)
         {
-            throw new NotImplementedException();
+            return OperateResult.CreateSuccessResult<bool>(_isInterval);
         }
 
         public Task<OperateResult<bool[]>> ReadBoolAsync(string address, ushort length)
@@ -130,7 +141,7 @@ namespace Com.RePower.Device.Plc.Impl
 
         public OperateResult<short> ReadInt16(string address)
         {
-            throw new NotImplementedException();
+            return OperateResult.CreateSuccessResult<short>(0);
         }
 
         public OperateResult<short[]> ReadInt16(string address, ushort length)

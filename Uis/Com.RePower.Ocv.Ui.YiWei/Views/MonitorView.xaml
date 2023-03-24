@@ -17,8 +17,9 @@
             </Grid.RowDefinitions>
             <DataGrid
                 CanUserAddRows="False"
+                FontSize="16"
                 IsReadOnly="True"
-                ItemsSource="{Binding LocalPlcCacheValues}" FontSize="16" />
+                ItemsSource="{Binding LocalPlcCacheValues}" />
             <!--<DataGrid
                 Grid.Row="1"
                 CanUserAddRows="False"

@@ -21,6 +21,8 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
         private readonly string ohmSettingName = "内阻仪";
         private readonly string dmmSettingName = "万用表";
         private readonly string switchBoardSettingName = "切换板";
+        private readonly string plcCacheValueSettingName = "本地Plc缓存";
+        private readonly string plcAlarmCacheValueSettingName = "Plc报警缓存";
 
 
         private SettingManager()
@@ -55,7 +57,11 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                 PlcSettingJson = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == plcSettingName)?.JsonValue;
                 OhmSettingJson = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == ohmSettingName)?.JsonValue;
                 DmmSettingJson = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == dmmSettingName)?.JsonValue;
-                SwitchBoardSettingJson = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == switchBoardSettingName)?.JsonValue; 
+                SwitchBoardSettingJson = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == switchBoardSettingName)?.JsonValue;
+
+
+                PlcCacheJsonValue = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == plcCacheValueSettingName)?.JsonValue;
+                PlcAlarmCacheJsonValue = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == plcAlarmCacheValueSettingName)?.JsonValue;
                 #endregion
 
             }
@@ -93,6 +99,11 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
         public string? OhmSettingJson { get; set; }
         public string? DmmSettingJson { get; set; }
         public string? SwitchBoardSettingJson { get; set; }
+        /// <summary>
+        /// Plc缓存地址Json
+        /// </summary>
+        public string? PlcCacheJsonValue { get; }
+        public string? PlcAlarmCacheJsonValue { get; }
 
         private OperateResult SaveSettingChanged(string name)
         {

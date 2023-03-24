@@ -1,0 +1,20 @@
+﻿<UserControl
+    x:Class="Com.RePower.Ocv.Ui.YiWei.Views.UserControls.AlarmBox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Com.RePower.Ocv.Ui.YiWei.Views.UserControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="450"
+    mc:Ignorable="d">
+    <Grid>
+        <Viewbox Grid.Column="0">
+            <Border
+                Name="Dot"
+                Width="40"
+                Height="40"
+                CornerRadius="20" />
+        </Viewbox>
+    </Grid>
+</UserControl>

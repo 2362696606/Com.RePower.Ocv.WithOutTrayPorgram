@@ -18,14 +18,14 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Services.Wms
 {
     public class WmsImpl:IWmsService
     {
-        public WmsImpl(IHttpClientFactory httpClientFactory, Tray tray, IMapper mapper)
+        public WmsImpl(IHttpClientFactory? httpClientFactory, Tray tray, IMapper mapper)
         {
             HttpClientFactory = httpClientFactory;
             Tray = tray;
             Mapper = mapper;
         }
         protected SettingManager SettingManager { get => SettingManager.Instance; }
-        protected IHttpClientFactory HttpClientFactory { get; }
+        protected IHttpClientFactory? HttpClientFactory { get; }
         protected Tray Tray { get; }
         protected IMapper Mapper { get; }
         public WmsSetting? WmsSetting { get => SettingManager.CurrentWmsSetting; }
@@ -33,12 +33,19 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Services.Wms
         {
             get
             {
-                var temp = HttpClientFactory.CreateClient("WmsHttpClient_" + (SettingManager.CurrentOcvType.ToString()));
-                temp.BaseAddress = new Uri(WmsSetting?.BaseAddress ?? "http://172.17.2.200:44311/api/services/app/ForeignInterfaceService/");
-                return temp;
+                var temp = HttpClientFactory?.CreateClient("WmsHttpClient_" + (SettingManager.CurrentOcvType.ToString()));
+                if (temp is { })
+                {
+                    temp.BaseAddress = new Uri(WmsSetting?.BaseAddress ?? "http://172.17.2.200:44311/api/services/app/ForeignInterfaceService/");
+                    return temp;
+                }
+                else
+                {
+                    return new HttpClient();
+                }
             }
         }
-        private OperateResult<string> Post(Object obj, string url, string optionName)
+        protected virtual OperateResult<string> Post(Object obj, string url, string optionName)
         {
             string jStr = JsonConvert.SerializeObject(obj);
             HttpContent content = new StringContent(jStr);

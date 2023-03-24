@@ -35,7 +35,7 @@
                             <RowDefinition Height="0.3*" />
                         </Grid.RowDefinitions>
                         <views:TrayView />
-                        <views:MonitorView Grid.Row="1" />
+                        <views:AlarmView Grid.Row="1" />
                     </Grid>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
