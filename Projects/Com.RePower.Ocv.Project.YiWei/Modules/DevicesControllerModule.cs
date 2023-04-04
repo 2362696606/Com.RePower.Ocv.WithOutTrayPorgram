@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Com.RePower.Ocv.Project.YiWei.Controllers;
 using Autofac.Features.AttributeFilters;
+using Com.RePower.Ocv.Project.ProjectBase.Controllers;
 
 namespace Com.RePower.Ocv.Project.YiWei.Modules
 {
@@ -40,11 +41,29 @@ namespace Com.RePower.Ocv.Project.YiWei.Modules
                         }
                     }
                 }
+
+                Dictionary<string, string> plcAlarmAddressCache = new();
+                var plcAlarmCacheJsonValue = SettingManager<SettingManager>.Instance.PlcAlarmCacheJsonValue;
+                if (!string.IsNullOrEmpty(plcAlarmCacheJsonValue))
+                {
+                    var plcAlarmAddressCacheSettingArray = JArray.Parse(plcAlarmCacheJsonValue);
+                    foreach (var item in plcAlarmAddressCacheSettingArray)
+                    {
+                        var name = item.Value<string>("Name");
+                        var address = item.Value<string>("Address");
+                        if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(address))
+                        {
+                            plcAlarmAddressCache.Add(name,address);
+                        }
+                    }
+                }
+
                 builder.RegisterType<DevicesController>()
                     .AsSelf()
                     .WithAttributeFiltering()
-                    .WithProperty("LocalPlcAddressCache", localPlcAddressCache);
-                    //.WithProperty("LogisticsPlcAddressCache", logisticsPlcAddressCache);
+                    .WithProperty("LocalPlcAddressCache", localPlcAddressCache)
+                    .WithProperty("PlcAlarmAddressCache", plcAlarmAddressCache);
+                //.WithProperty("LogisticsPlcAddressCache", logisticsPlcAddressCache);
             }
         }
     }

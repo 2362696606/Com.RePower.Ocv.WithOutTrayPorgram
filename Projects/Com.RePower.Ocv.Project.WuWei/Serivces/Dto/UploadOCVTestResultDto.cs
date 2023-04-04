@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Project.WuWei.Serivces.Dto
 {
-    public class UploadOCVTestResultDto
+    public class UploadOcvTestResultDto
     {
         /// <summary>
         /// 工位号
@@ -47,7 +47,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Serivces.Dto
         /// <summary>
         /// NG代码
         /// </summary>
-        public string? BatteryNGCode { get; set; }
+        public string? BatteryNgCode { get; set; }
         /// <summary>
         /// 电池位置
         /// </summary>

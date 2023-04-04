@@ -14,6 +14,6 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes.Dtos
         /// OCV1值mV
         /// </summary>
         [Column(TypeName = "DECIMAL(10,4)")]
-        public decimal? OCV1 { get; set; }
+        public decimal? Ocv1 { get; set; }
     }
 }

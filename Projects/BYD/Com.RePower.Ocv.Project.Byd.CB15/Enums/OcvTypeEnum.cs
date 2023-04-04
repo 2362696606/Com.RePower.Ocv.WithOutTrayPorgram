@@ -9,9 +9,9 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Enums
     public enum OcvTypeEnmu
     {
         Unknow,
-        OCV1,
-        OCV2,
-        OCV3,
-        OCV4,
+        Ocv1,
+        Ocv2,
+        Ocv3,
+        Ocv4,
     }
 }

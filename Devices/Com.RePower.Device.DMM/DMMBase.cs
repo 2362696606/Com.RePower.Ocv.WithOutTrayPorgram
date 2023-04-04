@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Device.DMM
 {
-    public abstract class DMMBase : IDMM
+    public abstract class DmmBase : IDmm
     {
         public abstract bool IsConnected { get; }
 

@@ -9,73 +9,73 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
 {
-    public class Keysight_34461AImpl : Keysight_34461AAbstract
+    public class Keysight34461AImpl : Keysight34461AAbstract
     {
-        protected INetDeviceBase netDeviceBase;
-        public Keysight_34461AImpl()
+        protected INetDeviceBase NetDeviceBase;
+        public Keysight34461AImpl()
         {
-            this.netDeviceBase = new TcpNetDeviceBase();
+            this.NetDeviceBase = new TcpNetDeviceBase();
         }
         public override bool IsConnected
         {
-            get { return netDeviceBase.IsConnected; }
+            get { return NetDeviceBase.IsConnected; }
         }
 
         public override string DeviceName
         {
-            get { return netDeviceBase.DeviceName; }
-            set { netDeviceBase.DeviceName = value; }
+            get { return NetDeviceBase.DeviceName; }
+            set { NetDeviceBase.DeviceName = value; }
         }
 
         public override int ReadDelay
         {
-            get { return netDeviceBase.ReadDelay;}
-            set { netDeviceBase.ReadDelay = value;}
+            get { return NetDeviceBase.ReadDelay;}
+            set { NetDeviceBase.ReadDelay = value;}
         }
 
         public override string IpAddress
         {
-            get { return netDeviceBase.IpAddress;}
-            set { netDeviceBase.IpAddress = value;}
+            get { return NetDeviceBase.IpAddress;}
+            set { NetDeviceBase.IpAddress = value;}
         }
         public override int Port
         {
-            get { return netDeviceBase.Port;}
-            set { netDeviceBase.Port = value;}
+            get { return NetDeviceBase.Port;}
+            set { NetDeviceBase.Port = value;}
         }
 
         public override OperateResult Connect()
         {
-            return netDeviceBase.Connect();
+            return NetDeviceBase.Connect();
         }
 
         public override OperateResult Connect(string ipAddress, int port)
         {
-            return netDeviceBase.Connect(ipAddress, port);
+            return NetDeviceBase.Connect(ipAddress, port);
         }
 
         public override async Task<OperateResult> ConnectAsync(string ipAddress, int port)
         {
-            return await netDeviceBase.ConnectAsync(ipAddress, port);
+            return await NetDeviceBase.ConnectAsync(ipAddress, port);
         }
 
         public override OperateResult DisConnect()
         {
-            return netDeviceBase.DisConnect();
+            return NetDeviceBase.DisConnect();
         }
 
         public override void Dispose()
         {
-            netDeviceBase.Dispose();
+            NetDeviceBase.Dispose();
         }
 
         public override OperateResult<byte[]> SendCmd(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
         {
-            return netDeviceBase.SendCmd(cmd, timeout, isNeedRecovery);
+            return NetDeviceBase.SendCmd(cmd, timeout, isNeedRecovery);
         }
         public override Task<OperateResult<byte[]>> SendCmdAsync(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
         {
-            return netDeviceBase.SendCmdAsync(cmd, timeout, isNeedRecovery);
+            return NetDeviceBase.SendCmdAsync(cmd, timeout, isNeedRecovery);
         }
     }
 }

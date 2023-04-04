@@ -11,10 +11,10 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Dto
         /// <summary>
         /// 站点
         /// </summary>
-        public string? site { get; set; }
+        public string? Site { get; set; }
         /// <summary>
         /// 资源编号
         /// </summary>
-        public string? resourceNo { get; set; }
+        public string? ResourceNo { get; set; }
     }
 }

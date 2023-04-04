@@ -1,101 +1,77 @@
 ﻿using Com.RePower.Ocv.Model.Attributes;
 using Com.RePower.Ocv.Model.Settings;
-using Com.RePower.Ocv.Ui.UiBase.CustomControls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
-using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Com.RePower.Ocv.Ui.UiBase.Views
 {
     /// <summary>
     /// SettingView.xaml 的交互逻辑
     /// </summary>
-    public partial class SettingView : UserControl
+    public partial class SettingView
     {
         public SettingView()
         {
             InitializeComponent();
         }
 
-
         public object SettingObj
         {
-            get { return (object)GetValue(SettingObjProperty); }
-            set { SetValue(SettingObjProperty, value); }
+            get => GetValue(SettingObjProperty);
+            set => SetValue(SettingObjProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for SettingObj.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SettingObjProperty =
-            DependencyProperty.Register("SettingObj", typeof(object), typeof(SettingView), new PropertyMetadata(default(object),OnSettingObjChanged));
+            DependencyProperty.Register(nameof(SettingObj), typeof(object), typeof(SettingView), new PropertyMetadata(default(object), OnSettingObjChanged));
 
         private static void OnSettingObjChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var newValue = (object)e.NewValue;
-            var oldValue = (object)e.OldValue;
+            var newValue = e.NewValue;
+            var oldValue = e.OldValue;
             if (oldValue == newValue)
                 return;
             var target = d as SettingView;
-            target?.OnSettingObjChanged(newValue, oldValue);
+            target?.OnSettingObjChanged(newValue);
         }
 
-        private void OnSettingObjChanged(object newValue, object oldValue)
+        private void OnSettingObjChanged(object newValue)
         {
             this.SettingObj = newValue;
             var properties = SettingObj.GetType().GetProperties();
-            List<SettingViewItem> itemList = new List<SettingViewItem>();
-            foreach(var item in properties)
-            {
-                var attr = item.GetCustomAttribute<IgnorSettingAttribute>();
-                if (attr == null)
-                {
-                    SettingViewItem temp = new SettingViewItem
-                    {
-                        DependObj = SettingObj,
-                        PropertyInfo = item,
-                    };
-                    itemList.Add(temp); 
-                }
-            }
+            var itemList = (from item in properties let attr = item.GetCustomAttribute<IgnorSettingAttribute>() where attr == null select new SettingViewItem { DependObj = SettingObj, PropertyInfo = item, }).ToList();
             this.SaveButton.Visibility = SaveButtonVisibility;
             this.OnPropertiesChanged(itemList);
         }
 
-
         public IEnumerable<SettingViewItem> Properties
         {
-            get { return (IEnumerable<SettingViewItem>)GetValue(PropertiesProperty); }
-            set { SetValue(PropertiesProperty, value); }
+            get => (IEnumerable<SettingViewItem>)GetValue(PropertiesProperty);
+            set => SetValue(PropertiesProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for Properties.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PropertiesProperty =
-            DependencyProperty.Register("Properties", typeof(IEnumerable<SettingViewItem>), typeof(SettingView), new PropertyMetadata(new List<SettingViewItem>(), OnPropertiesChanged));
+            DependencyProperty.Register(nameof(Properties), typeof(IEnumerable<SettingViewItem>), typeof(SettingView), new PropertyMetadata(new List<SettingViewItem>(), OnPropertiesChanged));
 
         private static void OnPropertiesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var newValue = (IEnumerable<SettingViewItem>)e.NewValue;
             var oldValue = (IEnumerable<SettingViewItem>)e.OldValue;
-            if (oldValue == newValue)
+            if (Equals(oldValue, newValue))
                 return;
             var target = d as SettingView;
-            target?.OnPropertiesChanged(newValue, oldValue);
+            target?.OnPropertiesChanged(newValue);
         }
 
-        private void OnPropertiesChanged(IEnumerable<SettingViewItem> newValue, IEnumerable<SettingViewItem>? oldValue = null)
+        private void OnPropertiesChanged(IEnumerable<SettingViewItem> newValue)
         {
             this.Properties = newValue;
         }
@@ -104,7 +80,7 @@ namespace Com.RePower.Ocv.Ui.UiBase.Views
         {
             get
             {
-                if(CanSaved && (SettingObj is ISettingSaveChanged))
+                if (CanSaved && (SettingObj is ISettingSaveChanged))
                 {
                     return Visibility.Visible;
                 }
@@ -116,11 +92,11 @@ namespace Com.RePower.Ocv.Ui.UiBase.Views
 
         private async void DoSaveChanged(object sender, RoutedEventArgs e)
         {
-            if(SettingViewSnackbar.MessageQueue == null)
+            if (SettingViewSnackbar.MessageQueue == null)
             {
                 SettingViewSnackbar.MessageQueue = new MaterialDesignThemes.Wpf.SnackbarMessageQueue();
             }
-            if(SettingObj is ISettingSaveChanged tempSetting)
+            if (SettingObj is ISettingSaveChanged tempSetting)
             {
                 var result = await tempSetting.SaveChangedAsync();
                 if (result.IsFailed)
@@ -132,14 +108,25 @@ namespace Com.RePower.Ocv.Ui.UiBase.Views
                 this.SettingViewSnackbar.MessageQueue?.Enqueue($"当前对象非继承自\"ISettingSaveChanged\"接口");
         }
     }
-    public partial class SettingViewItem:ObservableObject
+
+    public class SettingViewItem : ObservableObject
     {
         public object? DependObj { get; set; }
-        [NotifyPropertyChangedFor(nameof(SettingName))]
-        [NotifyPropertyChangedFor(nameof(Value))]
-        [NotifyPropertyChangedFor(nameof(Content))]
-        [ObservableProperty]
-        public PropertyInfo? _propertyInfo;
+
+        private PropertyInfo? _propertyInfo;
+
+        public PropertyInfo? PropertyInfo
+        {
+            get => _propertyInfo;
+            set
+            {
+                if (!SetProperty(ref _propertyInfo, value)) return;
+                OnPropertyChanged(nameof(SettingName));
+                OnPropertyChanged(nameof(Value));
+                OnPropertyChanged(nameof(Content));
+            }
+        }
+
         public string? SettingName
         {
             get
@@ -152,20 +139,21 @@ namespace Com.RePower.Ocv.Ui.UiBase.Views
                 return PropertyInfo?.Name;
             }
         }
+
         public object? Value
         {
-            get { return PropertyInfo?.GetValue(DependObj); }
-            set 
+            get => PropertyInfo?.GetValue(DependObj);
+            set
             {
-                if (value?.GetType().IsAssignableFrom(PropertyInfo?.PropertyType) ?? false) 
+                if (value?.GetType().IsAssignableFrom(PropertyInfo?.PropertyType) ?? false)
                 {
                     PropertyInfo?.SetValue(DependObj, value);
                 }
                 else
                 {
-                    if((PropertyInfo?.PropertyType.IsGenericType??true) && PropertyInfo?.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    if ((PropertyInfo?.PropertyType.IsGenericType ?? true) && PropertyInfo?.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
                     {
-                        if(value == null)
+                        if (value == null)
                         {
                             PropertyInfo?.SetValue(DependObj, null);
                         }
@@ -184,64 +172,62 @@ namespace Com.RePower.Ocv.Ui.UiBase.Views
                 OnPropertyChanged();
             }
         }
-        public Control? Content
-        {
-            get { return CreateGenerateContent(); }
-        }
+
+        public Control? Content => CreateGenerateContent();
 
         private Control? CreateGenerateContent()
         {
             Control? contentControl = null;
             var propertyType = PropertyInfo?.PropertyType;
-            if(propertyType is { })
+            if (propertyType is null) return contentControl;
+            if (propertyType.IsEnum)
             {
-                if (propertyType.IsEnum)
+                contentControl = new ComboBox();
+                if (contentControl is ComboBox tempControl)
                 {
-                    contentControl = new ComboBox();
-                    if (contentControl is ComboBox tempControl)
-                    {
-                        tempControl.ItemsSource = Enum.GetValues(typeof(Enum));
-                        Binding valueBinding = new Binding();
-                        valueBinding.Source = this;
-                        valueBinding.Path = new PropertyPath("Value");
-                        tempControl.SetBinding(ComboBox.SelectedItemProperty, valueBinding);
-                    }
+                    tempControl.ItemsSource = Enum.GetValues(typeof(Enum));
+                    var valueBinding = new Binding();
+                    valueBinding.Source = this;
+                    valueBinding.Path = new PropertyPath("Value");
+                    tempControl.SetBinding(Selector.SelectedItemProperty, valueBinding);
                 }
-                else if (typeof(string).IsAssignableFrom(propertyType)) 
-                {
-                    contentControl = new TextBox();
-                    if (contentControl is TextBox tempControl)
-                    {
-                        Binding valueBinding = new Binding();
-                        valueBinding.Source = this;
-                        valueBinding.Path = new PropertyPath("Value");
-                        tempControl.SetBinding(TextBox.TextProperty, valueBinding);
-                    }
-                }
-                else if (typeof(bool).IsAssignableFrom(propertyType))
-                {
-                    contentControl = new CheckBox();
-                    if (contentControl is CheckBox tempControl)
-                    {
-                        Binding valueBinding = new Binding();
-                        valueBinding.Source = this;
-                        valueBinding.Path = new PropertyPath("Value");
-                        tempControl.SetBinding(CheckBox.IsCheckedProperty, valueBinding);
-                    }
-                }
-                else
-                {
-                    contentControl = new TextBox();
-                    if (contentControl is TextBox tempControl)
-                    {
-                        Binding valueBinding = new Binding();
-                        valueBinding.Source = this;
-                        valueBinding.Path = new PropertyPath("Value");
-                        tempControl.SetBinding(TextBox.TextProperty, valueBinding);
-                    }
-                }
-                contentControl.VerticalAlignment = VerticalAlignment.Center;
             }
+            else if (typeof(string).IsAssignableFrom(propertyType))
+            {
+                contentControl = new TextBox();
+                if (contentControl is TextBox tempControl)
+                {
+                    var valueBinding = new Binding
+                    {
+                        Source = this,
+                        Path = new PropertyPath("Value")
+                    };
+                    tempControl.SetBinding(TextBox.TextProperty, valueBinding);
+                }
+            }
+            else if (typeof(bool).IsAssignableFrom(propertyType))
+            {
+                contentControl = new CheckBox();
+                if (contentControl is CheckBox tempControl)
+                {
+                    var valueBinding = new Binding
+                    {
+                        Source = this,
+                        Path = new PropertyPath("Value")
+                    };
+                    tempControl.SetBinding(ToggleButton.IsCheckedProperty, valueBinding);
+                }
+            }
+            else
+            {
+                contentControl = new TextBox();
+                if (contentControl is TextBox tempControl)
+                {
+                    var valueBinding = new Binding { Source = this, Path = new PropertyPath("Value") };
+                    tempControl.SetBinding(TextBox.TextProperty, valueBinding);
+                }
+            }
+            contentControl.VerticalAlignment = VerticalAlignment.Center;
             return contentControl;
         }
     }

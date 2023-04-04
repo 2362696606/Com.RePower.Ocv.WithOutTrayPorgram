@@ -26,20 +26,20 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Modules
                 if (!string.IsNullOrEmpty(dmmSettingJStr))
                 {
                     bool isReal = SettingManager.Instance.CurrentFacticity?.IsRealDmm ?? false;
-                    IDMM? obj;
+                    IDmm? obj;
                     if (isReal)
                     {
-                        obj = JsonConvert.DeserializeObject<Keysight_34461AImpl>(dmmSettingJStr);
+                        obj = JsonConvert.DeserializeObject<Keysight34461AImpl>(dmmSettingJStr);
                     }
                     else
                     {
-                        obj = JsonConvert.DeserializeObject<Keysight_34461ASimulator>(dmmSettingJStr);
+                        obj = JsonConvert.DeserializeObject<Keysight34461ASimulator>(dmmSettingJStr);
                     }
                     if (obj is { })
                     {
                         builder.RegisterInstance(obj)
                             .AsSelf()
-                            .As<IDMM>()
+                            .As<IDmm>()
                             .As<IDevice>();
                     }
                 } 

@@ -12,7 +12,7 @@ namespace Com.RePower.WpfBase
         /// <summary>
         /// The <see cref="IServiceProvider"/> instance to use, if initialized.
         /// </summary>
-        private volatile IServiceProvider? serviceProvider;
+        private volatile IServiceProvider? _serviceProvider;
 
         /// <inheritdoc/>
         public object? GetService(Type serviceType)
@@ -30,7 +30,7 @@ namespace Com.RePower.WpfBase
             // assume this read is thread safe with respect to accesses to this property or to invocations to one
             // of the available configuration methods. So we can just read the field directly and make the necessary
             // check with our local copy, without the need of paying the locking overhead from this get accessor.
-            IServiceProvider? provider = this.serviceProvider;
+            IServiceProvider? provider = this._serviceProvider;
 
             if (provider is null)
             {
@@ -49,7 +49,7 @@ namespace Com.RePower.WpfBase
         public T? GetService<T>()
             where T : class
         {
-            IServiceProvider? provider = this.serviceProvider;
+            IServiceProvider? provider = this._serviceProvider;
 
             if (provider is null)
             {
@@ -71,7 +71,7 @@ namespace Com.RePower.WpfBase
         public T GetRequiredService<T>()
             where T : class
         {
-            IServiceProvider? provider = this.serviceProvider;
+            IServiceProvider? provider = this._serviceProvider;
 
             if (provider is null)
             {
@@ -97,7 +97,7 @@ namespace Com.RePower.WpfBase
         {
             ArgumentNullException.ThrowIfNull(serviceProvider);
 
-            IServiceProvider? oldServices = Interlocked.CompareExchange(ref this.serviceProvider, serviceProvider, null);
+            IServiceProvider? oldServices = Interlocked.CompareExchange(ref this._serviceProvider, serviceProvider, null);
 
             if (oldServices is not null)
             {
@@ -106,7 +106,7 @@ namespace Com.RePower.WpfBase
         }
         public IServiceProvider GetServiceProvider()
         {
-            IServiceProvider? provider = this.serviceProvider;
+            IServiceProvider? provider = this._serviceProvider;
 
             if (provider is null)
             {

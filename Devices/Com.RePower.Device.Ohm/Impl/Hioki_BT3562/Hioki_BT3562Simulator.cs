@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
 {
-    public class Hioki_BT3562Simulator:Hioki_BT3562Impl
+    public class HiokiBt3562Simulator:HiokiBt3562Impl
     {
-        public Hioki_BT3562Simulator()
+        public HiokiBt3562Simulator()
         {
-            this.deviceBase = new SerialPortDeviceBaseSimulator();
-            var dev = this.deviceBase as SerialPortDeviceBaseSimulator;
+            this.DeviceBase = new SerialPortDeviceBaseSimulator();
+            var dev = this.DeviceBase as SerialPortDeviceBaseSimulator;
             dev!.RecoveryMethod = RecoveryMethod;
         }
 

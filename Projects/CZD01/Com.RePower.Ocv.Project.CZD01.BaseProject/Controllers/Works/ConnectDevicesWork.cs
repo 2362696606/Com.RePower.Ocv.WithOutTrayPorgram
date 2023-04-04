@@ -59,7 +59,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                         if (result.IsFailed)
                             return result;
                         LogHelper.UiLog.Info("成功连接内阻仪");
-                        if(DevicesController.Ohm is Hioki_BT3562Impl tempOhm)
+                        if(DevicesController.Ohm is HiokiBt3562Impl tempOhm)
                         {
                             LogHelper.UiLog.Info("开始初始化内阻仪");
                             var setResult = tempOhm.SetInitiateContinuous();

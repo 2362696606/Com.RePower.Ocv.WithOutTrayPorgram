@@ -21,29 +21,29 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
                 .ForMember(desc => desc.WorkedTime, opt => opt.MapFrom(x => x.Battery.TestTime))
                 .ForMember(desc => desc.TrayCode, opt => opt.MapFrom(x => x.Battery.TrayCode))
                 .ForMember(desc => desc.BatChannel, opt => opt.MapFrom(x => x.Battery.Position))
-                .ForMember(desc => desc.BatTemp, opt => opt.MapFrom(x => x.Battery.PTemp))
-                .ForMember(desc=>desc.NTSVResult,opt=>opt.MapFrom(x=>x.Battery.NVolValue))
-                .ForMember(desc=>desc.PTSVResult,opt=>opt.MapFrom(x=>x.Battery.PVolValue))
-                .ForMember(desc => desc.NGCode, opt => opt.MapFrom(x => x.IsNg ? "Ng" : "OK"));
+                .ForMember(desc => desc.BatTemp, opt => opt.MapFrom(x => x.Battery.PTemp > 100000 ? 100000 : x.Battery.PTemp))
+                .ForMember(desc => desc.NtsvResult, opt => opt.MapFrom(x => x.Battery.NVolValue > 100000 ? 100000 : x.Battery.NVolValue))
+                .ForMember(desc => desc.PtsvResult, opt => opt.MapFrom(x => x.Battery.PVolValue > 100000 ? 100000 : x.Battery.PVolValue))
+                .ForMember(desc => desc.NgCode, opt => opt.MapFrom(x => x.IsNg ? "Ng" : "OK"));
             CreateMap<NgInfo, Ocv1InfoDto>()
                 .IncludeBase<NgInfo, OcvInfoDtoBase>()
-                .ForMember(desc => desc.OCV1, opt => opt.MapFrom(x => x.Battery.VolValue));
+                .ForMember(desc => desc.Ocv1, opt => opt.MapFrom(x => x.Battery.VolValue > 100000 ? 100000 : x.Battery.VolValue));
 
             CreateMap<NgInfo, Ocv2InfoDto>()
                 .IncludeBase<NgInfo, OcvInfoDtoBase>()
-                .ForMember(desc => desc.OCV2, opt => opt.MapFrom(x => x.Battery.VolValue));
+                .ForMember(desc => desc.Ocv2, opt => opt.MapFrom(x => x.Battery.VolValue > 100000 ? 100000 : x.Battery.VolValue));
 
             CreateMap<NgInfo, Ocv3InfoDto>()
                 .IncludeBase<NgInfo, OcvInfoDtoBase>()
-                .ForMember(desc => desc.OCV3, opt => opt.MapFrom(x => x.Battery.VolValue));
+                .ForMember(desc => desc.Ocv3, opt => opt.MapFrom(x => x.Battery.VolValue > 100000 ? 100000 : x.Battery.VolValue));
 
             CreateMap<NgInfo, Ocv4InfoDto>()
                 .IncludeBase<NgInfo, OcvInfoDtoBase>()
                 //.ForMember(desc => desc.ACIR_RO, opt => opt.MapFrom(x => x.Battery.Res))
-                .ForMember(desc => desc.OCV4_V1, opt => opt.MapFrom(x => x.Battery.VolValue))
-                .ForMember(desc => desc.OCV4_V2, opt => opt.MapFrom(x => x.Battery.NVolValue))
-                .ForMember(desc => desc.ACIR_RO, opt => opt.MapFrom(x => x.Battery.Res))
-                .ForMember(desc => desc.ACIR_R, opt => opt.MapFrom(x => x.Battery.ReserveValue1));
+                .ForMember(desc => desc.Ocv4V1, opt => opt.MapFrom(x => x.Battery.VolValue > 100000 ? 100000 : x.Battery.VolValue))
+                .ForMember(desc => desc.Ocv4V2, opt => opt.MapFrom(x => x.Battery.NVolValue > 100000 ? 100000 : x.Battery.NVolValue))
+                .ForMember(desc => desc.AcirRo, opt => opt.MapFrom(x => x.Battery.Res > 100000 ? 100000 : x.Battery.Res))
+                .ForMember(desc => desc.AcirR, opt => opt.MapFrom(x => x.Battery.ReserveValue1 > 100000 ? 100000 : x.Battery.ReserveValue1));
 
             CreateMap<NgInfo, OcvInfoForCvsDtoBase>()
                 .ForMember(desc => desc.BarCode, opt => opt.MapFrom(x => x.Battery.BarCode))

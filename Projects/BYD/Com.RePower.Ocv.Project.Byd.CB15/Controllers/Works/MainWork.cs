@@ -22,6 +22,37 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
         /// </summary>
         [ObservableProperty]
         private bool _isMsaTest = false;
+
+        private bool _isManualTesting;
+        /// <summary>
+        /// 是否是手动测试
+        /// </summary>
+        public bool IsManualTesting
+        {
+            get { return _isManualTesting; }
+            set 
+            {
+                if(value == true)
+                {
+                    this.MesService = IocHelper.Default.GetService<MesSimulator>()??this.MesService;
+                    this.WmsService = IocHelper.Default.GetService<WmsSimulator>()??this.WmsService;
+                }
+                else
+                {
+                    if(SettingManager.FacticityManager.IsRealMes)
+                    {
+                        this.MesService = IocHelper.Default.GetService<MesImpl>() ?? this.MesService;
+                    }
+                    if (SettingManager.FacticityManager.IsRealWms)
+                    {
+                        this.WmsService = IocHelper.Default.GetService<WmsImpl>() ?? this.WmsService;
+                    }
+                }
+                SetProperty(ref _isManualTesting, value); 
+            }
+        }
+
+
         /// <summary>
         /// msa计数
         /// </summary>
@@ -37,8 +68,8 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
         public DevicesController DevicesController { get; }
         public SettingManager SettingManager => SettingManager.Instance;
         public Tray Tray { get; }
-        public IWmsService WmsService { get; }
-        public IMesService? MesService { get; }
+        public IWmsService WmsService { get; private set; }
+        public IMesService? MesService { get; private set; }
         public IMapper Mapper { get; }
         /// <summary>
         /// Plc连接状态

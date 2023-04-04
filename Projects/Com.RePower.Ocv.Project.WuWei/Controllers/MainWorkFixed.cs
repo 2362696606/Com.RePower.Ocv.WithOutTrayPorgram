@@ -770,9 +770,9 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     return result;
                 }
             }
-            if (DevicesController.DMM.IsConnected == false)
+            if (DevicesController.Dmm.IsConnected == false)
             {
-                var result = DevicesController.DMM.Connect();
+                var result = DevicesController.Dmm.Connect();
                 if (result.IsFailed)
                 {
                     return result;
@@ -825,8 +825,8 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 return openResult;
             }
             LogHelper.UiLog.Info("读取电压");
-            Thread.Sleep(TestOption?.DMMReadDelayWhenSwitch??100);
-            var read1 = DevicesController.DMM.ReadDc();
+            Thread.Sleep(TestOption?.DmmReadDelayWhenSwitch??100);
+            var read1 = DevicesController.Dmm.ReadDc();
             if (read1.IsFailed)
             {
                 return OperateResult.CreateFailedResult(read1.Message ?? "读取电压失败", read1.ErrorCode);

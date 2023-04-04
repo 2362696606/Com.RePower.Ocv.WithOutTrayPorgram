@@ -10,23 +10,23 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
 {
-    public class Hioki_BT3562Impl : Hioki_BT3562Abstruct, IOhmSerialPort
+    public class HiokiBt3562Impl : HiokiBt3562Abstruct, IOhmSerialPort
     {
-        protected ISerialPortDeviceBase deviceBase;
-        public Hioki_BT3562Impl()
+        protected ISerialPortDeviceBase DeviceBase;
+        public HiokiBt3562Impl()
         {
-            this.deviceBase = new SerialPortDeviceBase();
+            this.DeviceBase = new SerialPortDeviceBase();
         }
         public virtual int ReadDelay
         {
             get 
             {
-                var dev = deviceBase as SerialPortDeviceBase;
+                var dev = DeviceBase as SerialPortDeviceBase;
                 return dev?.ReadDelay ?? -1;
             }
             set
             {
-                var dev = deviceBase as SerialPortDeviceBase;
+                var dev = DeviceBase as SerialPortDeviceBase;
                 if (dev != null)
                 {
                     dev.ReadDelay = value;
@@ -35,49 +35,49 @@ namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
         }
         public string PortName
         {
-            get { return deviceBase.PortName; }
-            set { deviceBase.PortName = value; }
+            get { return DeviceBase.PortName; }
+            set { DeviceBase.PortName = value; }
         }
         public int BaudRate
         {
-            get { return deviceBase.BaudRate; }
-            set { deviceBase.BaudRate = value; }
+            get { return DeviceBase.BaudRate; }
+            set { DeviceBase.BaudRate = value; }
         }
 
         public override bool IsConnected
         {
-            get { return deviceBase.IsConnected; }
+            get { return DeviceBase.IsConnected; }
         }
 
         public override string DeviceName
         {
-            get { return deviceBase.DeviceName; }
-            set { deviceBase.DeviceName = value; }
+            get { return DeviceBase.DeviceName; }
+            set { DeviceBase.DeviceName = value; }
         }
 
         public OperateResult Connect(string portName, int baudRate)
         {
-            return deviceBase.Connect(portName,baudRate);
+            return DeviceBase.Connect(portName,baudRate);
         }
 
         public override OperateResult Connect()
         {
-            return deviceBase.Connect();
+            return DeviceBase.Connect();
         }
 
         public Task<OperateResult> ConnectAsync(string portName, int baudRate)
         {
-            return deviceBase.ConnectAsync(portName, baudRate);
+            return DeviceBase.ConnectAsync(portName, baudRate);
         }
 
         public override OperateResult DisConnect()
         {
-            return deviceBase.DisConnect();
+            return DeviceBase.DisConnect();
         }
 
         public override void Dispose()
         {
-            deviceBase.Dispose();
+            DeviceBase.Dispose();
         }
         /// <summary>
         /// 配置连续测量开关
@@ -109,7 +109,7 @@ namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
 
         public override OperateResult<byte[]> SendCmd(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
         {
-            return deviceBase.SendCmd(cmd,timeout,isNeedRecovery);
+            return DeviceBase.SendCmd(cmd,timeout,isNeedRecovery);
         }
     }
 }

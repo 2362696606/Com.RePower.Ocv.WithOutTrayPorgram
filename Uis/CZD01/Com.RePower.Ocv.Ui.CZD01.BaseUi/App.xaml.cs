@@ -29,7 +29,7 @@ namespace Com.RePower.Ocv.Ui.CZD01.BaseUi
             {
                 serviceCollection.AddDbContext<OcvSceneContext>();
             }
-            serviceCollection.AddAutoMapper(typeof(OrganizationProfile), typeof(SettingForCZD01Profile));
+            serviceCollection.AddAutoMapper(typeof(OrganizationProfile), typeof(SettingForCzd01Profile));
         }
 
         protected override void IocRegister(ContainerBuilder builder)

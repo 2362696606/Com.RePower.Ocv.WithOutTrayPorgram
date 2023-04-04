@@ -22,7 +22,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Modules
                 OcvTypeEnmu ocvType = Enum.Parse<OcvTypeEnmu>(value);
                 switch(ocvType)
                 {
-                    case OcvTypeEnmu.OCV3:
+                    case OcvTypeEnmu.Ocv3:
                         builder.RegisterType<MainWorkForOcv3>()
                             .AsSelf()
                             .As<IProjectMainWork>()

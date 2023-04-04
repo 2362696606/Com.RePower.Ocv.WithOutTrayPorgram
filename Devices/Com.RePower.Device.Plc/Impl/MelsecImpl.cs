@@ -10,7 +10,7 @@ namespace Com.RePower.Device.Plc.Impl
     {
         public MelsecImpl()
         {
-            this.netWorkDeviceBase = new HslCommunication.Profinet.Melsec.MelsecMcNet();
+            this.NetWorkDeviceBase = new HslCommunication.Profinet.Melsec.MelsecMcNet();
             base.OnDeviceCreated();
         }
     }

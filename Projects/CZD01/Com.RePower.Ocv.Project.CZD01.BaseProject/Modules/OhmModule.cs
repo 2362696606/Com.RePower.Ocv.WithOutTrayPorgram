@@ -27,11 +27,11 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Modules
                     IOhm? obj;
                     if (isReal)
                     {
-                        obj = JsonConvert.DeserializeObject<Hioki_BT3562Impl>(ohmSettingJStr);
+                        obj = JsonConvert.DeserializeObject<HiokiBt3562Impl>(ohmSettingJStr);
                     }
                     else
                     {
-                        obj = JsonConvert.DeserializeObject<Hioki_BT3562Simulator>(ohmSettingJStr);
+                        obj = JsonConvert.DeserializeObject<HiokiBt3562Simulator>(ohmSettingJStr);
                     }
                     if (obj is { })
                     {

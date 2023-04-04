@@ -17,7 +17,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Com.RePower.Ocv.Project.WuWei.Modules
 {
-    public class DMMModule:Module
+    public class DmmModule:Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -31,20 +31,20 @@ namespace Com.RePower.Ocv.Project.WuWei.Modules
                     {
                         JObject jObj = JObject.Parse(dmmSettingJson);
                         bool isReal = jObj.Value<bool>("IsReal");
-                        IDMM? obj = null;
+                        IDmm? obj = null;
                         if (isReal)
                         {
-                            obj = JsonConvert.DeserializeObject<Keysight_34461AImpl>(dmmSettingJson);
+                            obj = JsonConvert.DeserializeObject<Keysight34461AImpl>(dmmSettingJson);
                         }
                         else
                         {
-                            obj = JsonConvert.DeserializeObject<Keysight_34461ASimulator>(dmmSettingJson);
+                            obj = JsonConvert.DeserializeObject<Keysight34461ASimulator>(dmmSettingJson);
                         }
                         if (obj is { })
                         {
                             builder.RegisterInstance(obj)
                                 .AsSelf()
-                                .As<IDMM>()
+                                .As<IDmm>()
                                 .As<IDevice>();
                         }
                     }

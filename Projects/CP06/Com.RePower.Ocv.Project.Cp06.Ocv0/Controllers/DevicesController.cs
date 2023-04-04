@@ -15,16 +15,16 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
 {
     public class DevicesController
     {
-        private IDMM? _dmm;
+        private IDmm? _dmm;
         private IOhm? _ohm;
         private ISwitchBoard? _switchBoard;
         public DevicesController(IPlc localPlc
-            , IDMM? dMM
+            , IDmm? dMm
             , IOhm? ohm
             , ISwitchBoard? switchBoard)
         {
             Plc = localPlc;
-            _dmm = dMM;
+            _dmm = dMm;
             _ohm = ohm;
             _switchBoard = switchBoard;
             this.PlcAddressCache = new Dictionary<string, string>();
@@ -54,7 +54,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
 
         public IPlc Plc { get; }
 
-        public IDMM? DMM
+        public IDmm? Dmm
         {
             get 
             {

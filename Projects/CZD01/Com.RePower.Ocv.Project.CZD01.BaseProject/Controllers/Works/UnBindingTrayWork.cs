@@ -22,18 +22,18 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                 {
                     sendValue = 1;
                 }
-                else if (SettingManager.CurrentOcvType ==  Model.Enums.OcvTypeEnum.OCV3)
+                else if (SettingManager.CurrentOcvType ==  Model.Enums.OcvTypeEnum.Ocv3)
                 {
                     if (item.IsNg)
                     {
                         if (SettingManager.CurrentTestOption?.IsVerifyCurrentKValue ?? false)
                         {
-                            if (item.HasNgType(Model.Enums.NgTypeEnum.单托盘K值过低 | Model.Enums.NgTypeEnum.单托盘K值过高 | Model.Enums.NgTypeEnum.K值计算失败))
+                            if (item.HasNgType(Model.Enums.NgTypeEnum.单托盘k值过低 | Model.Enums.NgTypeEnum.单托盘k值过高 | Model.Enums.NgTypeEnum.K值计算失败))
                                 sendValue = SettingManager.CurrentOtherSetting?.PalletKNgChannel ?? 5;
                         }
                         if (SettingManager.CurrentTestOption?.IsVerifyKValue ?? false)
                         {
-                            if (item.HasNgType(Model.Enums.NgTypeEnum.整体K值过低 | Model.Enums.NgTypeEnum.整体K值过高 | Model.Enums.NgTypeEnum.K值计算失败))
+                            if (item.HasNgType(Model.Enums.NgTypeEnum.整体k值过低 | Model.Enums.NgTypeEnum.整体k值过高 | Model.Enums.NgTypeEnum.K值计算失败))
                                 sendValue = SettingManager.CurrentOtherSetting?.IntegralKNgChannel ?? 5;
                         }
                         if (SettingManager.CurrentTestOption?.IsVerifyVolDifference ?? false)

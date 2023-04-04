@@ -14,7 +14,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
     {
         private OperateResult VerifyKValue()
         {
-            if (SettingManager.CurrentOcvType == Model.Enums.OcvTypeEnum.OCV3
+            if (SettingManager.CurrentOcvType == Model.Enums.OcvTypeEnum.Ocv3
                 && ((SettingManager.CurrentTestOption?.IsVerifyKValue ?? false)
                 || (SettingManager.CurrentTestOption?.IsVerifyVolDifference ?? false)
                 || (SettingManager.CurrentTestOption?.IsVerifyCurrentKValue ?? false))) 
@@ -40,9 +40,9 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                                 ngInfo.Battery.KValue1 = (kDifference / timeSpen);
 
                                 if(ngInfo.Battery.KValue1>SettingManager.CurrentBatteryStandard?.MaxKValue)
-                                    ngInfo.AddNgType(Model.Enums.NgTypeEnum.整体K值过高);
+                                    ngInfo.AddNgType(Model.Enums.NgTypeEnum.整体k值过高);
                                 if(ngInfo.Battery.KValue1<SettingManager.CurrentBatteryStandard?.MinKValue)
-                                    ngInfo.AddNgType(Model.Enums.NgTypeEnum.整体K值过低);
+                                    ngInfo.AddNgType(Model.Enums.NgTypeEnum.整体k值过低);
                             }
                             if(SettingManager.CurrentTestOption?.IsVerifyVolDifference??false)
                             {
@@ -89,9 +89,9 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                     foreach (var ngInfo in Tray.NgInfos)
                     {
                         if (ngInfo.Battery.KValue1 > max)
-                            ngInfo.AddNgType(Model.Enums.NgTypeEnum.单托盘K值过高);
+                            ngInfo.AddNgType(Model.Enums.NgTypeEnum.单托盘k值过高);
                         if (ngInfo.Battery.KValue1 < min)
-                            ngInfo.AddNgType(Model.Enums.NgTypeEnum.单托盘K值过低);
+                            ngInfo.AddNgType(Model.Enums.NgTypeEnum.单托盘k值过低);
                         //ngInfo.SetIsNg();
                         //ngInfo.SetNgDescritpion();
                     }

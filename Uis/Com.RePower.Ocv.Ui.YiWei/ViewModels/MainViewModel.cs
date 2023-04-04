@@ -29,5 +29,11 @@ namespace Com.RePower.Ocv.Ui.YiWei.ViewModels
             var view = new DataSearchView();
             view.Show();
         }
+        [RelayCommand]
+        private void OpenCalibrationSetting()
+        {
+            var view = new CalibrationSettingView();
+            view.Show();
+        }
     }
 }

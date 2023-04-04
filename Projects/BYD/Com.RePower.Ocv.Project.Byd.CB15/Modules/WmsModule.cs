@@ -23,16 +23,25 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Modules
                 bool isReal = facticityManager?.IsRealWms ?? false;
                 if (isReal)
                 {
+                    builder.RegisterType<WmsSimulator>()
+                        .AsSelf()
+                        .As<IWmsService>();
+
                     builder.RegisterType<WmsImpl>()
                         .AsSelf()
                         .As<IWmsService>();
                 }
                 else
                 {
+                    builder.RegisterType<WmsImpl>()
+                        .AsSelf()
+                        .As<IWmsService>();
+
                     builder.RegisterType<WmsSimulator>()
                         .AsSelf()
                         .As<IWmsService>();
                 }
+
             }
         }
     }

@@ -19,7 +19,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
         private int _port = 502;
         private string _deviceName = "UnnamedDevice";
         private bool _isConnected;
-        private bool disposedValue;
+        private bool _disposedValue;
 
         public UdpClient UdpClient
         {
@@ -158,7 +158,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposedValue)
             {
                 if (disposing)
                 {
@@ -168,7 +168,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
 
                 // TODO: 释放未托管的资源(未托管的对象)并重写终结器
                 // TODO: 将大型字段设置为 null
-                disposedValue = true;
+                _disposedValue = true;
             }
         }
 

@@ -9,8 +9,8 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
     public enum TestModel
     {
         Unknow,
-        AC,
-        DC,
-        RES
+        Ac,
+        Dc,
+        Res
     }
 }

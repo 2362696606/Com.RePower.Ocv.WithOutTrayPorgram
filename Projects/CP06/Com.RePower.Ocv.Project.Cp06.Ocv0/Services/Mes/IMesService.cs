@@ -30,17 +30,17 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
         /// OCV1/OCV2测试柜电芯拆盘数据校验
         /// </summary>
         /// <returns></returns>
-        public OperateResult<string> VerifyDataOCV1OCV2TestCabinet();
+        public OperateResult<string> VerifyDataOcv1Ocv2TestCabinet();
         /// <summary>
         /// 分容下柜NG
         /// </summary>
         /// <returns></returns>
-        public OperateResult<string> CapacitySortingNG();
+        public OperateResult<string> CapacitySortingNg();
         /// <summary>
         /// 化成下柜NG
         /// </summary>
         /// <returns></returns>
-        public OperateResult<string> FormingNG();
+        public OperateResult<string> FormingNg();
         /// <summary>
         /// 设备状态上传
         /// </summary>

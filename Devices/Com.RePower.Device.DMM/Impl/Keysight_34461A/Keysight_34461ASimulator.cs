@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
 {
-    public class Keysight_34461ASimulator:Keysight_34461AImpl
+    public class Keysight34461ASimulator:Keysight34461AImpl
     {
-        public Keysight_34461ASimulator()
+        public Keysight34461ASimulator()
         {
-            this.netDeviceBase = new NetDeviceBaseSimulator();
-            var dev = this.netDeviceBase as NetDeviceBaseSimulator;
+            this.NetDeviceBase = new NetDeviceBaseSimulator();
+            var dev = this.NetDeviceBase as NetDeviceBaseSimulator;
             dev!.RecoveryMethod = RecoveryMethod;
         }
 

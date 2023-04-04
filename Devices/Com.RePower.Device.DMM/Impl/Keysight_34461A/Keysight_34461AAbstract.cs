@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
 {
-    public abstract class Keysight_34461AAbstract : DMMBase,IDMMNet
+    public abstract class Keysight34461AAbstract : DmmBase,IDmmNet
     {
         /// <summary>
         /// 当前测试模式
         /// </summary>
-        private TestModel model = TestModel.Unknow;
+        private TestModel _model = TestModel.Unknow;
 
         /// <summary>
         /// 直流电压量程
@@ -50,7 +50,7 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
         /// <summary>
         /// 测量结果单位
         /// </summary>
-        public ResultUnit ResultUnit { get; set; } = ResultUnit.mV;
+        public ResultUnit ResultUnit { get; set; } = ResultUnit.MV;
 
         /// <summary>
         /// 保留小数位
@@ -122,7 +122,7 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
             switch(ResultUnit)
             {
                 default:
-                case ResultUnit.mV:
+                case ResultUnit.MV:
                     value = value * 1000;
                     value = Math.Round(value, Digits);
                     break;
@@ -135,9 +135,9 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
         public override OperateResult<double> ReadAc()
         {
             List<string> cmdlist = new List<string>();
-            if (this.model != TestModel.AC)
+            if (this._model != TestModel.Ac)
             {
-                this.model = TestModel.AC;
+                this._model = TestModel.Ac;
                 cmdlist.Add(GetCmd("SetAcFunc"));
                 cmdlist.Add(Environment.NewLine);
                 cmdlist.Add(GetCmd("SetAcRange"));
@@ -152,9 +152,9 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
         public override OperateResult<double> ReadDc()
         {
             List<string> cmdlist = new List<string>();
-            if (this.model != TestModel.DC)
+            if (this._model != TestModel.Dc)
             {
-                this.model = TestModel.DC;
+                this._model = TestModel.Dc;
                 cmdlist.Add(GetCmd("SetDcFunc"));
                 cmdlist.Add(Environment.NewLine);
                 cmdlist.Add(GetCmd("SetDcRange"));
@@ -169,9 +169,9 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
         public override OperateResult<double> ReadRes()
         {
             List<string> cmdlist = new List<string>();
-            if (this.model != TestModel.RES)
+            if (this._model != TestModel.Res)
             {
-                this.model = TestModel.RES;
+                this._model = TestModel.Res;
                 cmdlist.Add(GetCmd("SetResFunc"));
                 cmdlist.Add(Environment.NewLine);
                 cmdlist.Add(GetCmd("SetResRange"));

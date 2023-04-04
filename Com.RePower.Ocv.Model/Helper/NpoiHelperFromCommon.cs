@@ -25,7 +25,7 @@ namespace Com.RePower.Ocv.Model.Helper
         /// <param name="strHeaderText">表名</param>
         /// <param name="sheetnum">sheet的编号</param>
         /// <returns></returns>
-        static MemoryStream ExportDT(String strFileName, DataTable dtSource, string strHeaderText, Dictionary<string, string> dir, int sheetnum)
+        static MemoryStream ExportDt(String strFileName, DataTable dtSource, string strHeaderText, Dictionary<string, string> dir, int sheetnum)
         {
             //创建工作簿和sheet
             IWorkbook workbook = new HSSFWorkbook();
@@ -125,7 +125,7 @@ namespace Com.RePower.Ocv.Model.Helper
                         {
                             case "System.String": //字符串类型
                                 double result;
-                                if (isNumeric(drValue, out result))
+                                if (IsNumeric(drValue, out result))
                                 {
                                     //数字字符串
                                     double.TryParse(drValue, out result);
@@ -198,7 +198,7 @@ namespace Com.RePower.Ocv.Model.Helper
         /// <param name="fs">文件流</param>
         /// <param name="readfs">内存流</param>
         /// <param name="sheetnum">sheet索引</param>
-        static void ExportDTI(DataTable dtSource, string strHeaderText, FileStream fs, MemoryStream readfs, Dictionary<string, string> dir, int sheetnum)
+        static void ExportDti(DataTable dtSource, string strHeaderText, FileStream fs, MemoryStream readfs, Dictionary<string, string> dir, int sheetnum)
         {
 
             IWorkbook workbook = new XSSFWorkbook();
@@ -297,7 +297,7 @@ namespace Com.RePower.Ocv.Model.Helper
                         {
                             case "System.String": //字符串类型
                                 double result;
-                                if (isNumeric(drValue, out result))
+                                if (IsNumeric(drValue, out result))
                                 {
 
                                     double.TryParse(drValue, out result);
@@ -386,7 +386,7 @@ namespace Com.RePower.Ocv.Model.Helper
                         pageDataTable.ImportRow(dtSource.Rows[(i - currentSheetCount) * sheetRow + j]);
                     }
 
-                    using (MemoryStream ms = ExportDT(strFileName, pageDataTable, strHeaderText, dir, i))
+                    using (MemoryStream ms = ExportDt(strFileName, pageDataTable, strHeaderText, dir, i))
                     {
                         using (FileStream fs = new FileStream(strFileName, FileMode.Create, FileAccess.Write))
                         {
@@ -421,7 +421,7 @@ namespace Com.RePower.Ocv.Model.Helper
                     using (FileStream writefs = new FileStream(strFileName, FileMode.Create, FileAccess.Write))
                     {
 
-                        ExportDTI(pageDataTable, strHeaderText, writefs, readfsm, dir, i);
+                        ExportDti(pageDataTable, strHeaderText, writefs, readfsm, dir, i);
                     }
                     readfsm.Close();
                 }
@@ -435,10 +435,10 @@ namespace Com.RePower.Ocv.Model.Helper
         /// 将制定sheet中的数据导出到datatable中
         /// </summary>
         /// <param name="sheet">需要导出的sheet</param>
-        /// <param name="HeaderRowIndex">列头所在行号，-1表示没有列头</param>
+        /// <param name="headerRowIndex">列头所在行号，-1表示没有列头</param>
         /// <param name="dir">excel列名和DataTable列名的对应字典</param>
         /// <returns></returns>
-        static DataTable ImportDt(ISheet sheet, int HeaderRowIndex, Dictionary<string, string> dir)
+        static DataTable ImportDt(ISheet sheet, int headerRowIndex, Dictionary<string, string> dir)
         {
             DataTable table = new DataTable();
             IRow headerRow;
@@ -446,7 +446,7 @@ namespace Com.RePower.Ocv.Model.Helper
             try
             {
                 //没有标头或者不需要表头用excel列的序号（1,2,3..）作为DataTable的列名
-                if (HeaderRowIndex < 0)
+                if (headerRowIndex < 0)
                 {
                     headerRow = sheet.GetRow(0);
                     cellCount = headerRow.LastCellNum;
@@ -460,7 +460,7 @@ namespace Com.RePower.Ocv.Model.Helper
                 //有表头，使用表头做为DataTable的列名
                 else
                 {
-                    headerRow = sheet.GetRow(HeaderRowIndex);
+                    headerRow = sheet.GetRow(headerRowIndex);
                     cellCount = headerRow.LastCellNum;
                     for (int i = headerRow.FirstCellNum; i <= cellCount; i++)
                     {
@@ -495,7 +495,7 @@ namespace Com.RePower.Ocv.Model.Helper
                     }
                 }
                 int rowCount = sheet.LastRowNum;
-                for (int i = (HeaderRowIndex + 1); i <= sheet.LastRowNum; i++)//excel行遍历
+                for (int i = (headerRowIndex + 1); i <= sheet.LastRowNum; i++)//excel行遍历
                 {
                     try
                     {
@@ -550,10 +550,10 @@ namespace Com.RePower.Ocv.Model.Helper
                                             switch (row.GetCell(j).CachedFormulaResultType)
                                             {
                                                 case CellType.String:
-                                                    string strFORMULA = row.GetCell(j).StringCellValue;
-                                                    if (strFORMULA != null && strFORMULA.Length > 0)
+                                                    string strFormula = row.GetCell(j).StringCellValue;
+                                                    if (strFormula != null && strFormula.Length > 0)
                                                     {
-                                                        dataRow[j] = strFORMULA.ToString();
+                                                        dataRow[j] = strFormula.ToString();
                                                     }
                                                     else
                                                     {
@@ -605,10 +605,10 @@ namespace Com.RePower.Ocv.Model.Helper
         /// </summary>
         /// <param name="strFileName">excel文件路径</param>
         /// <param name="sheet">需要导出的sheet</param>
-        /// <param name="HeaderRowIndex">列头所在行号，-1表示没有列头</param>
+        /// <param name="headerRowIndex">列头所在行号，-1表示没有列头</param>
         /// <param name="dir">excel列名和DataTable列名的对应字典</param>
         /// <returns></returns>
-        public static DataTable ImportExceltoDt(string strFileName, Dictionary<string, string> dir, string SheetName, int HeaderRowIndex = 1)
+        public static DataTable ImportExceltoDt(string strFileName, Dictionary<string, string> dir, string sheetName, int headerRowIndex = 1)
         {
             DataTable table = new DataTable();
             using (FileStream file = new FileStream(strFileName, FileMode.Open, FileAccess.Read))
@@ -616,8 +616,8 @@ namespace Com.RePower.Ocv.Model.Helper
                 if (file.Length > 0)
                 {
                     IWorkbook wb = WorkbookFactory.Create(file);
-                    ISheet? isheet = wb.GetSheet(SheetName);
-                    table = ImportDt(isheet, HeaderRowIndex, dir);
+                    ISheet? isheet = wb.GetSheet(sheetName);
+                    table = ImportDt(isheet, headerRowIndex, dir);
                     isheet = null;
                 }
             }
@@ -629,10 +629,10 @@ namespace Com.RePower.Ocv.Model.Helper
         /// </summary>
         /// <param name="strFileName">excel文件路径</param>
         /// <param name="sheet">需要导出的sheet序号</param>
-        /// <param name="HeaderRowIndex">列头所在行号，-1表示没有列头</param>
+        /// <param name="headerRowIndex">列头所在行号，-1表示没有列头</param>
         /// <param name="dir">excel列名和DataTable列名的对应字典</param>
         /// <returns></returns>
-        public static DataTable ImportExceltoDt(string strFileName, Dictionary<string, string> dir, int HeaderRowIndex = 1, int SheetIndex = 0)
+        public static DataTable ImportExceltoDt(string strFileName, Dictionary<string, string> dir, int headerRowIndex = 1, int sheetIndex = 0)
         {
             DataTable table = new DataTable();
             using (FileStream file = new FileStream(strFileName, FileMode.Open, FileAccess.Read))
@@ -640,8 +640,8 @@ namespace Com.RePower.Ocv.Model.Helper
                 if (file.Length > 0)
                 {
                     IWorkbook wb = WorkbookFactory.Create(file);
-                    ISheet? isheet = wb.GetSheetAt(SheetIndex);
-                    table = ImportDt(isheet, HeaderRowIndex, dir);
+                    ISheet? isheet = wb.GetSheetAt(sheetIndex);
+                    table = ImportDt(isheet, headerRowIndex, dir);
                     isheet = null;
                 }
             }
@@ -677,7 +677,7 @@ namespace Com.RePower.Ocv.Model.Helper
         /// <param name="message"></param>
         /// <param name="result"></param>
         /// <returns></returns>
-        public static bool isNumeric(String message, out double result)
+        public static bool IsNumeric(String message, out double result)
         {
             Regex rex = new Regex(@"^[-]?\d+[.]?\d*$");
             result = -1;

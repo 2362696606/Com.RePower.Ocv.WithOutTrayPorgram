@@ -121,6 +121,13 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     var verfyKValueResult = VerifyKValue();
                     if (verfyKValueResult.IsFailed)
                         return verfyKValueResult;
+                    var uploadToMesResult = UploadTestResultToMes();
+                    if (uploadToMesResult.IsFailed)
+                        return uploadToMesResult;
+                    DoPauseOrStop();
+                    var uploadToWmsResult = UploadTestResultToWms();
+                    if (uploadToWmsResult.IsFailed)
+                        return uploadToWmsResult;
                     DoPauseOrStop();
                     var saveToLocationResult = SaveToLocation();
                     if (saveToLocationResult.IsFailed)
@@ -130,13 +137,6 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     if (saveToSceneDbResult.IsFailed)
                         return saveToSceneDbResult;
                     DoPauseOrStop();
-                    var uploadToMesResult = UploadTestResultToMes();
-                    if (uploadToMesResult.IsFailed)
-                        return uploadToMesResult;
-                    DoPauseOrStop();
-                    var uploadToWmsResult = UploadTestResultToWms();
-                    if (uploadToWmsResult.IsFailed)
-                        return uploadToWmsResult;
                     DoPauseOrStop();
                     var requestAllLocateCellResult = RequestAllLocateCellToWms();
                     if (requestAllLocateCellResult.IsFailed)
@@ -185,13 +185,13 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     return result;
                 }
             }
-            if ((!(DevicesController.DMM?.IsConnected ?? true)) 
+            if ((!(DevicesController.Dmm?.IsConnected ?? true)) 
                 && ((SettingManager.CurrentTestOption?.IsTestVol??false)
                 ||(SettingManager.CurrentTestOption?.IsTestNVol??false)
                 ||(SettingManager.CurrentTestOption?.IsTestPVol??false)))
             {
                 LogHelper.UiLog.Info("连接万用表");
-                var result = DevicesController.DMM.Connect();
+                var result = DevicesController.Dmm.Connect();
                 if (result.IsSuccess)
                 {
                     LogHelper.UiLog.Info("成功连接万用表");
@@ -210,7 +210,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                 {
                     LogHelper.UiLog.Info("成功连接内阻仪");
 
-                    if (DevicesController.Ohm is Hioki_BT3562Impl tempOhm)
+                    if (DevicesController.Ohm is HiokiBt3562Impl tempOhm)
                     {
                         LogHelper.UiLog.Info("当前是Hioki_BT3562Impl正在进行初始化");
                         var setResult = tempOhm.SetInitiateContinuous();
@@ -505,7 +505,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
             {
                 DoPauseOrStop();
                 LogHelper.UiLog.Info($"开始测试电芯{ngInfo.Battery.Position}电压");
-                var dmmReadValue = DevicesController.DMM?.ReadDc() ?? OperateResult.CreateFailedResult<double>("未找到万用表");
+                var dmmReadValue = DevicesController.Dmm?.ReadDc() ?? OperateResult.CreateFailedResult<double>("未找到万用表");
                 if (dmmReadValue.IsFailed)
                     return dmmReadValue;
                 ngInfo.Battery.IsTested = true;
@@ -548,7 +548,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
             {
                 DoPauseOrStop();
                 LogHelper.UiLog.Info($"开始测试电芯{ngInfo.Battery.Position}负极壳体电压");
-                var dmmReadValue = DevicesController.DMM?.ReadDc() ?? OperateResult.CreateFailedResult<double>("未找到万用表");
+                var dmmReadValue = DevicesController.Dmm?.ReadDc() ?? OperateResult.CreateFailedResult<double>("未找到万用表");
                 if (dmmReadValue.IsFailed)
                     return dmmReadValue;
                 ngInfo.Battery.IsTested = true;
@@ -571,7 +571,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
             {
                 DoPauseOrStop();
                 LogHelper.UiLog.Info($"开始测试电芯{ngInfo.Battery.Position}正极壳体电压");
-                var dmmReadValue = DevicesController.DMM?.ReadDc() ?? OperateResult.CreateFailedResult<double>("未找到万用表");
+                var dmmReadValue = DevicesController.Dmm?.ReadDc() ?? OperateResult.CreateFailedResult<double>("未找到万用表");
                 if (dmmReadValue.IsFailed)
                     return dmmReadValue;
                 ngInfo.Battery.IsTested = true;
@@ -670,13 +670,13 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     List<string> codeList = Tray.NgInfos.Select(x => x.Battery.BarCode).ToList();
                     switch (SettingManager.CurrentOcvType)
                     {
-                        case OcvTypeEnmu.OCV1:
+                        case OcvTypeEnmu.Ocv1:
                             batteryList = resultContext.Batterys
                                 .Where(x => codeList.Contains(x.BarCode) && x.OcvType == "OCV0")
                                 .AsNoTracking()
                                 .ToList();
                             break;
-                        case OcvTypeEnmu.OCV2:
+                        case OcvTypeEnmu.Ocv2:
                             batteryList = resultContext.Batterys
                                 .Where(x => codeList.Contains(x.BarCode) && x.OcvType == "OCV1")
                                 .AsNoTracking()
@@ -713,7 +713,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                         item.RemoveNgType(NgTypeEnum.K2过低);
                         switch (SettingManager.CurrentOcvType)
                         {
-                            case OcvTypeEnmu.OCV1:
+                            case OcvTypeEnmu.Ocv1:
                                 {
                                     item.Battery.KValue1 = kValue;
                                     if (kValue > maxK)
@@ -726,7 +726,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                                     }
                                     break;
                                 }
-                            case OcvTypeEnmu.OCV2:
+                            case OcvTypeEnmu.Ocv2:
                                 {
                                     item.Battery.KValue2 = kValue;
                                     if (kValue > maxK)
@@ -869,17 +869,17 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     {
                         foreach (var item in mesBatteryRecovertDots)
                         {
-                            var ngInfo = this.Tray.NgInfos.FirstOrDefault(x => x.Battery.BarCode == item.sfcNO);
+                            var ngInfo = this.Tray.NgInfos.FirstOrDefault(x => x.Battery.BarCode == item.SfcNo);
                             if (ngInfo is { })
                             {
-                                if (item.result == "pick")
+                                if (item.Result == "pick")
                                 {
                                     ngInfo.AttachedIsNg = true;
-                                    ngInfo.AttachedNgDescription += $" {item.errMsg}";
+                                    ngInfo.AttachedNgDescription += $" {item.ErrMsg}";
                                 }
-                                else if (item.result == "warn")
+                                else if (item.Result == "warn")
                                 {
-                                    ngInfo.AttachedNgDescription += $" {item.errMsg}";
+                                    ngInfo.AttachedNgDescription += $" {item.ErrMsg}";
                                 }
                             }
                         }
@@ -948,7 +948,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
             }
             else
             {
-                if (SettingManager.CurrentOcvType == OcvTypeEnmu.OCV0 || SettingManager.CurrentOcvType == OcvTypeEnmu.OCV3)
+                if (SettingManager.CurrentOcvType == OcvTypeEnmu.Ocv0 || SettingManager.CurrentOcvType == OcvTypeEnmu.Ocv3)
                 {
                     sendValue = ngInfo.IsNg ? 2 : 1;
                 }
@@ -1009,7 +1009,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
         /// <returns></returns>
         private OperateResult RequestAllLocateCellToWms()
         {
-            if (SettingManager.CurrentOcvType == OcvTypeEnmu.OCV0)
+            if (SettingManager.CurrentOcvType == OcvTypeEnmu.Ocv0)
             {
                 LogHelper.UiLog.Info("Ocv0调用Wms出库信号接口");
                 var result = WmsService.RequestAllLocateCellToWms();

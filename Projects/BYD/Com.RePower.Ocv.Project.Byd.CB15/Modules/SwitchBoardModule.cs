@@ -23,16 +23,16 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Modules
                 OcvSettingItemDto? switchBoardSettingObj = null;
                 switch(ocvType)
                 {
-                    case OcvTypeEnmu.OCV1:
+                    case OcvTypeEnmu.Ocv1:
                         switchBoardSettingObj = settingContext.SettingItems.First(x => x.SettingName == "SwitchBoardSetting_Ocv1");
                         break;
-                    case OcvTypeEnmu.OCV2:
+                    case OcvTypeEnmu.Ocv2:
                         switchBoardSettingObj = settingContext.SettingItems.First(x => x.SettingName == "SwitchBoardSetting_Ocv2");
                         break;
-                    case OcvTypeEnmu.OCV3:
+                    case OcvTypeEnmu.Ocv3:
                         switchBoardSettingObj = settingContext.SettingItems.First(x => x.SettingName == "SwitchBoardSetting_Ocv3");
                         break;
-                    case OcvTypeEnmu.OCV4:
+                    case OcvTypeEnmu.Ocv4:
                         switchBoardSettingObj = settingContext.SettingItems.First(x => x.SettingName == "SwitchBoardSetting_Ocv4");
                         break;
                 }

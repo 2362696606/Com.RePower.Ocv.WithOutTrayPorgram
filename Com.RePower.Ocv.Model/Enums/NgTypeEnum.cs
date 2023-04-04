@@ -145,22 +145,22 @@ namespace Com.RePower.Ocv.Model.Enums
         /// 保留Ng类型5
         /// </summary>
         [Description("单托盘K值过高")]
-        单托盘K值过高 = 1<<26,
+        单托盘k值过高 = 1<<26,
         /// <summary>
         /// 保留Ng类型6
         /// </summary>
         [Description("单托盘K值过低")]
-        单托盘K值过低 = 1<<27,
+        单托盘k值过低 = 1<<27,
         /// <summary>
         /// 保留Ng类型7
         /// </summary>
         [Description("整体K值过高")]
-        整体K值过高 = 1<<28,
+        整体k值过高 = 1<<28,
         /// <summary>
         /// 保留Ng类型8
         /// </summary>
         [Description("整体K值过低")]
-        整体K值过低 = 1<<29,
+        整体k值过低 = 1<<29,
         /// <summary>
         /// 保留Ng类型9
         /// </summary>

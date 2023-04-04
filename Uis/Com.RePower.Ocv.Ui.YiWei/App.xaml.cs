@@ -41,7 +41,7 @@ namespace Com.RePower.Ocv.Ui.YiWei
         protected override void IocRegister(ContainerBuilder builder)
         {
             builder.RegisterModule<DevicesControllerModule>();
-            builder.RegisterModule<DMMModule>();//万用表
+            builder.RegisterModule<DmmModule>();//万用表
             builder.RegisterModule<PlcModule>();
             builder.RegisterModule<WorkModule>();
             builder.RegisterModule<FlowControllerModule>();

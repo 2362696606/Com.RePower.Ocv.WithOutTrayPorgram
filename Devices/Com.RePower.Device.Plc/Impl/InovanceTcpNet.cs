@@ -130,14 +130,14 @@ namespace Com.RePower.Device.Plc.Impl
         {
             return series switch
             {
-                InovanceSeries.AM => PraseInovanceAMAddress(address, modbusCode),
+                InovanceSeries.AM => PraseInovanceAmAddress(address, modbusCode),
                 InovanceSeries.H3U => PraseInovanceH3UAddress(address, modbusCode),
                 InovanceSeries.H5U => PraseInovanceH5UAddress(address, modbusCode),
                 _ => new OperateResult<string>($"[{series}] Not supported series of plc"),
             };
         }
 
-        public static OperateResult<string> PraseInovanceAMAddress(string address, byte modbusCode)
+        public static OperateResult<string> PraseInovanceAmAddress(string address, byte modbusCode)
         {
             try
             {

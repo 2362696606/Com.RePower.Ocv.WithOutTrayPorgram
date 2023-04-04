@@ -14,7 +14,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms
 {
     public class WmsSimulator : IWmsService
     {
-        private SettingManager settingManager => SettingManager.Instance;
+        private SettingManager SettingManager => SettingManager.Instance;
 
         public WmsSimulator(Tray tray)
         {
@@ -30,15 +30,15 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms
                 Result = 1,
                 Message = "请求成功"
             };
-            switch(settingManager.CurrentOcvType)
+            switch(SettingManager.CurrentOcvType)
             {
-                case OcvTypeEnmu.OCV0:
-                case OcvTypeEnmu.OCV3:
-                    dto.HandleResult.Procedure = settingManager.CurrentOcvType.ToString();
+                case OcvTypeEnmu.Ocv0:
+                case OcvTypeEnmu.Ocv3:
+                    dto.HandleResult.Procedure = SettingManager.CurrentOcvType.ToString();
                     break;
-                case OcvTypeEnmu.OCV1:
-                case OcvTypeEnmu.OCV2:
-                    dto.HandleResult.Procedure = new Random().Next(2) == 1? OcvTypeEnmu.OCV1.ToString():OcvTypeEnmu.OCV2.ToString();
+                case OcvTypeEnmu.Ocv1:
+                case OcvTypeEnmu.Ocv2:
+                    dto.HandleResult.Procedure = new Random().Next(2) == 1? OcvTypeEnmu.Ocv1.ToString():OcvTypeEnmu.Ocv2.ToString();
                     break;
             }
 
@@ -47,7 +47,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms
             //string randomNumStr = string.Format("{0:D5}", new Random().Next(10000));
             dto.HandleResult.TrayCode = Tray.TrayCode;
             int batteryConut = 0;
-            foreach(var item in settingManager.CurrentTestOrder)
+            foreach(var item in SettingManager.CurrentTestOrder)
             {
                 batteryConut += item.Count();
             }

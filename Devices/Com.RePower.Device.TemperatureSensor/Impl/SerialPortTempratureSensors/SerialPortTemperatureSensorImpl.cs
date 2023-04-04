@@ -11,42 +11,42 @@ namespace Com.RePower.Device.TemperatureSensor.Impl.SerialPortTempratureSensors
 {
     public class SerialPortTemperatureSensorImpl : SerialPortTemperatureSensorAbstruct
     {
-        protected ISerialPortDeviceBase serialPortDeviceBase;
+        protected ISerialPortDeviceBase SerialPortDeviceBase;
         public SerialPortTemperatureSensorImpl()
         {
-            this.serialPortDeviceBase = new SerialPortDeviceBase();
+            this.SerialPortDeviceBase = new SerialPortDeviceBase();
         }
-        public override string PortName { get => serialPortDeviceBase.PortName; set => serialPortDeviceBase.PortName = value; }
-        public override int BaudRate { get => serialPortDeviceBase.BaudRate; set => serialPortDeviceBase.BaudRate = value; }
+        public override string PortName { get => SerialPortDeviceBase.PortName; set => SerialPortDeviceBase.PortName = value; }
+        public override int BaudRate { get => SerialPortDeviceBase.BaudRate; set => SerialPortDeviceBase.BaudRate = value; }
 
-        public override bool IsConnected => serialPortDeviceBase.IsConnected;
+        public override bool IsConnected => SerialPortDeviceBase.IsConnected;
 
-        public override string DeviceName { get => serialPortDeviceBase.DeviceName; set => serialPortDeviceBase.DeviceName = value; }
-        public override int ReadDelsy { get => serialPortDeviceBase.ReadDelay; set => serialPortDeviceBase.ReadDelay = value; }
+        public override string DeviceName { get => SerialPortDeviceBase.DeviceName; set => SerialPortDeviceBase.DeviceName = value; }
+        public override int ReadDelay { get => SerialPortDeviceBase.ReadDelay; set => SerialPortDeviceBase.ReadDelay = value; }
 
         public override OperateResult Connect(string portName, int baudRate)
         {
-            return serialPortDeviceBase.Connect(portName, baudRate);
+            return SerialPortDeviceBase.Connect(portName, baudRate);
         }
-
+        
         public override OperateResult Connect()
         {
-            return serialPortDeviceBase.Connect();
+            return SerialPortDeviceBase.Connect();
         }
 
         public override OperateResult DisConnect()
         {
-            return serialPortDeviceBase.DisConnect();
+            return SerialPortDeviceBase.DisConnect();
         }
 
         public override void Dispose()
         {
-            serialPortDeviceBase.Dispose();
+            SerialPortDeviceBase.Dispose();
         }
 
         public override OperateResult<byte[]> SendCmd(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
         {
-            return serialPortDeviceBase.SendCmd(cmd, timeout, isNeedRecovery);
+            return SerialPortDeviceBase.SendCmd(cmd, timeout, isNeedRecovery);
         }
     }
 }

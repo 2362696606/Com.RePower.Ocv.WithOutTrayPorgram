@@ -78,7 +78,7 @@ namespace Com.RePower.Ocv.Ui.WuWei
             builder.RegisterType<SnackbarMessageQueue>().As<ISnackbarMessageQueue>();
 
             builder.RegisterModule<DevicesControllerModule>();
-            builder.RegisterModule<DMMModule>();
+            builder.RegisterModule<DmmModule>();
             builder.RegisterModule<PlcModule>();
             builder.RegisterModule<WorkModule>();
             builder.RegisterModule<FlowControllerModule>();

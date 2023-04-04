@@ -19,7 +19,7 @@ using Com.RePower.Ocv.Project.ProjectBase.Controllers;
 
 namespace Com.RePower.Ocv.Project.YiWei.Modules
 {
-    public class DMMModule:Module
+    public class DmmModule:Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -27,20 +27,20 @@ namespace Com.RePower.Ocv.Project.YiWei.Modules
             if (!string.IsNullOrEmpty(dmmSettingJStr))
             {
                 bool isReal = SettingManager<Controllers.SettingManager>.Instance.CurrentFacticitySetting?.IsRealDmm ?? false;
-                IDMM? obj;
+                IDmm? obj;
                 if (isReal)
                 {
-                    obj = JsonConvert.DeserializeObject<Keysight_34461AImpl>(dmmSettingJStr);
+                    obj = JsonConvert.DeserializeObject<Keysight34461AImpl>(dmmSettingJStr);
                 }
                 else
                 {
-                    obj = JsonConvert.DeserializeObject<Keysight_34461ASimulator>(dmmSettingJStr);
+                    obj = JsonConvert.DeserializeObject<Keysight34461ASimulator>(dmmSettingJStr);
                 }
                 if (obj is { })
                 {
                     builder.RegisterInstance(obj)
                         .AsSelf()
-                        .As<IDMM>()
+                        .As<IDmm>()
                         .As<IDevice>();
                 }
             }

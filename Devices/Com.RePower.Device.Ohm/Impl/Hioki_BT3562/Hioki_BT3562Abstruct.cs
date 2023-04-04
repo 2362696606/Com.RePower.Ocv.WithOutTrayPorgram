@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
 {
-    public abstract class Hioki_BT3562Abstruct : OhmBase
+    public abstract class HiokiBt3562Abstruct : OhmBase
     {
         /// <summary>
         /// 结果单位
         /// </summary>
-        public ResultUnit ResultUnit { get; set; } = ResultUnit.mΩ;
+        public ResultUnit ResultUnit { get; set; } = ResultUnit.MΩ;
 
         /// <summary>
         /// 保留小数位
@@ -58,7 +58,7 @@ namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
             switch(ResultUnit)
             {
                 default:
-                case ResultUnit.mΩ:
+                case ResultUnit.MΩ:
                     value = value * 1000;
                     value = Math.Round(value, Digits);
                     break;

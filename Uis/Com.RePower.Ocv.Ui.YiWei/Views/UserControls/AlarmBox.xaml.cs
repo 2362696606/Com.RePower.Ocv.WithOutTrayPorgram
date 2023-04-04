@@ -22,15 +22,15 @@ namespace Com.RePower.Ocv.Ui.YiWei.Views.UserControls
     /// </summary>
     public partial class AlarmBox : UserControl
     {
-        System.Timers.Timer timerAlert = new System.Timers.Timer();
-        private Brush StopColor = new SolidColorBrush(Colors.LightGray);
+        System.Timers.Timer _timerAlert = new System.Timers.Timer();
+        private Brush _stopColor = new SolidColorBrush(Colors.LightGray);
 
-        private Brush RunningColorLight = new SolidColorBrush(Colors.LightSkyBlue);
-        private Brush RunningColorDark = new SolidColorBrush(Colors.DodgerBlue);
+        private Brush _runningColorLight = new SolidColorBrush(Colors.LightSkyBlue);
+        private Brush _runningColorDark = new SolidColorBrush(Colors.DodgerBlue);
 
-        private Brush WarningColor = new SolidColorBrush(Colors.Orange);
-        private Brush ErrorColor = new SolidColorBrush(Colors.OrangeRed);
-        private Brush FatalColor = new SolidColorBrush(Colors.Red);
+        private Brush _warningColor = new SolidColorBrush(Colors.Orange);
+        private Brush _errorColor = new SolidColorBrush(Colors.OrangeRed);
+        private Brush _fatalColor = new SolidColorBrush(Colors.Red);
 
         bool _isInterval = true;
 
@@ -40,7 +40,7 @@ namespace Com.RePower.Ocv.Ui.YiWei.Views.UserControls
         public AlarmBox()
         {
             InitializeComponent();
-            timerAlert.Elapsed += TimerAlert_Elapsed;
+            _timerAlert.Elapsed += TimerAlert_Elapsed;
             Draw(_alarmType);
         }
 
@@ -84,26 +84,26 @@ namespace Com.RePower.Ocv.Ui.YiWei.Views.UserControls
             switch (value)
             {
                 case AlarmType.Stop:
-                    timerAlert.Stop();
+                    _timerAlert.Stop();
                     Stop();
                     break;
                 case AlarmType.Start:
                     //timerAlert.Interval = 500;  //正常工作
                     //timerAlert.Start();
-                    timerAlert.Stop();
+                    _timerAlert.Stop();
                     Start();
                     break;
                 case AlarmType.Warning:
-                    timerAlert.Interval = 400;  //毫秒
-                    timerAlert.Start();
+                    _timerAlert.Interval = 400;  //毫秒
+                    _timerAlert.Start();
                     break;
                 case AlarmType.Error:
-                    timerAlert.Interval = 200;  //毫秒
-                    timerAlert.Start();
+                    _timerAlert.Interval = 200;  //毫秒
+                    _timerAlert.Start();
                     break;
                 case AlarmType.Fatal:
-                    timerAlert.Interval = 100;  //毫秒
-                    timerAlert.Start();
+                    _timerAlert.Interval = 100;  //毫秒
+                    _timerAlert.Start();
                     break;
                 default:
                     break;
@@ -117,7 +117,7 @@ namespace Com.RePower.Ocv.Ui.YiWei.Views.UserControls
             //}), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
             Application.Current.Dispatcher.Invoke(() =>
             {
-                Dot.Background = StopColor;
+                Dot.Background = _stopColor;
             });
         }
 
@@ -152,11 +152,11 @@ namespace Com.RePower.Ocv.Ui.YiWei.Views.UserControls
             {
                 if (_isInterval)
                 {
-                    Dot.Background = FatalColor;
+                    Dot.Background = _fatalColor;
                 }
                 else
                 {
-                    Dot.Background = StopColor;
+                    Dot.Background = _stopColor;
                 }
                 _isInterval = !_isInterval;
             });
@@ -169,11 +169,11 @@ namespace Com.RePower.Ocv.Ui.YiWei.Views.UserControls
 
                 if (_isInterval)
                 {
-                    Dot.Background = ErrorColor;
+                    Dot.Background = _errorColor;
                 }
                 else
                 {
-                    Dot.Background = StopColor;
+                    Dot.Background = _stopColor;
                 }
                 _isInterval = !_isInterval;
             });
@@ -185,11 +185,11 @@ namespace Com.RePower.Ocv.Ui.YiWei.Views.UserControls
             {
                 if (_isInterval)
                 {
-                    Dot.Background = WarningColor;
+                    Dot.Background = _warningColor;
                 }
                 else
                 {
-                    Dot.Background = StopColor;
+                    Dot.Background = _stopColor;
                 }
                 _isInterval = !_isInterval;
             });
@@ -197,7 +197,7 @@ namespace Com.RePower.Ocv.Ui.YiWei.Views.UserControls
 
         private void Start()
         {
-            Application.Current.Dispatcher.Invoke(() =>Dot.Background = RunningColorLight);
+            Application.Current.Dispatcher.Invoke(() =>Dot.Background = _runningColorLight);
         }
     }
 

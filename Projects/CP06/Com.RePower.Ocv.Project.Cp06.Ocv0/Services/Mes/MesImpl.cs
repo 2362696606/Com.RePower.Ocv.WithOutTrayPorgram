@@ -48,22 +48,22 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             }
             MesDismantlingDiskDto mesUploadDto = new MesDismantlingDiskDto()
             {
-                SITE = MesSetting?.SITE??string.Empty,
-                RESOURCE_NO = MesSetting?.RESOURCE_NO??string.Empty,
-                DC_USER = MesSetting?.DC_USER??string.Empty,
-                TRAY_NO = Tray.TrayCode,
-                SHOP_ORDER_NO = SettingManager.Order ?? (SettingManager.OrderList?.First().Value ?? string.Empty),
-                IS_FIRST_INSPECTION = true.ToString()
+                Site = MesSetting?.Site??string.Empty,
+                ResourceNo = MesSetting?.ResourceNo??string.Empty,
+                DcUser = MesSetting?.DcUser??string.Empty,
+                TrayNo = Tray.TrayCode,
+                ShopOrderNo = SettingManager.Order ?? (SettingManager.OrderList?.First().Value ?? string.Empty),
+                IsFirstInspection = true.ToString()
             };
             return Post(mesUploadDto, MesSetting?.SfcTrayOnceUnbindUrl?? "thirdPartyAPI!sfc_tray_once_unbind.action", "Mes拆盘数据上传");
         }
 
-        public OperateResult<string> CapacitySortingNG()
+        public OperateResult<string> CapacitySortingNg()
         {
             throw new NotImplementedException();
         }
 
-        public OperateResult<string> FormingNG()
+        public OperateResult<string> FormingNg()
         {
             throw new NotImplementedException();
         }
@@ -77,12 +77,12 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
         {
             MesDeviceStatusDto dto = new MesDeviceStatusDto()
             {
-                site = SettingManager.CurrentMesSetting?.SITE ?? "25",
-                machineNo = SettingManager.CurrentMesSetting?.RESOURCE_NO ?? string.Empty,
-                status = status.ToString().PadLeft(2, '0'),
-                isShutdown = isShutdown ? "Y" : "N",
-                message = message,
-                Operator = SettingManager.CurrentMesSetting?.DC_USER ?? "MACHINE_JCD",
+                Site = SettingManager.CurrentMesSetting?.Site ?? "25",
+                MachineNo = SettingManager.CurrentMesSetting?.ResourceNo ?? string.Empty,
+                Status = status.ToString().PadLeft(2, '0'),
+                IsShutdown = isShutdown ? "Y" : "N",
+                Message = message,
+                Operator = SettingManager.CurrentMesSetting?.DcUser ?? "MACHINE_JCD",
             };
             return Post(dto, SettingManager.CurrentMesSetting?.UploadMachineStatusUrl ?? "http://10.10.1.240:8578/mes/third/thirdPartyAPI!doUploadMachineStatus_Change.action", "上传设备状态至mes");
         }
@@ -91,13 +91,13 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
         {
             switch(SettingManager.CurrentOcvType)
             {
-                case Enums.OcvTypeEnmu.OCV0:
+                case Enums.OcvTypeEnmu.Ocv0:
                     return UploadResultForOcv0();
-                case Enums.OcvTypeEnmu.OCV1:
+                case Enums.OcvTypeEnmu.Ocv1:
                     return UploadResultForOcv1();
-                case Enums.OcvTypeEnmu.OCV2:
+                case Enums.OcvTypeEnmu.Ocv2:
                     return UploadResultForOcv2();
-                case Enums.OcvTypeEnmu.OCV3:
+                case Enums.OcvTypeEnmu.Ocv3:
                     return UploadResultForOcv3();
                 default:
                     return OperateResult.CreateFailedResult<string>("未实现当前ocv工站mes上传业务");
@@ -109,7 +109,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             throw new NotImplementedException();
         }
 
-        public OperateResult<string> VerifyDataOCV1OCV2TestCabinet()
+        public OperateResult<string> VerifyDataOcv1Ocv2TestCabinet()
         {
             throw new NotImplementedException();
         }
@@ -121,17 +121,17 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
         {
             MesUploadDto mesUploadDto = new MesUploadDto()
             {
-                SITE = MesSetting?.SITE??string.Empty,
-                ITEM_NO = string.Empty,
-                SHOP_ORDER_NO = SettingManager.Order ?? (SettingManager.OrderList?.First().Value ?? string.Empty),
-                OPERATION_NO = string.Empty,
-                TRAY_NO = Tray.TrayCode,
-                RESOURCE_NO = MesSetting?.RESOURCE_NO??string.Empty,
-                SHIFTS = DateTime.Now.Hour >= 8 && DateTime.Now.Hour < 20 ? "白班" : "夜班",
-                IS_FIRST_INSPECTION = "Y",
-                DC_DATE = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                DC_USER = MesSetting?.DC_USER ?? string.Empty,
-                OCV_TIMES = SettingManager.CurrentOcvType.ToString(),
+                Site = MesSetting?.Site??string.Empty,
+                ItemNo = string.Empty,
+                ShopOrderNo = SettingManager.Order ?? (SettingManager.OrderList?.First().Value ?? string.Empty),
+                OperationNo = string.Empty,
+                TrayNo = Tray.TrayCode,
+                ResourceNo = MesSetting?.ResourceNo??string.Empty,
+                Shifts = DateTime.Now.Hour >= 8 && DateTime.Now.Hour < 20 ? "白班" : "夜班",
+                IsFirstInspection = "Y",
+                DcDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                DcUser = MesSetting?.DcUser ?? string.Empty,
+                OcvTimes = SettingManager.CurrentOcvType.ToString(),
             };
             //var batteries = this.context.BatteryTray.Batteries;
             var ngInfos = Tray.NgInfos;
@@ -140,29 +140,29 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             {
                 MesBatteryResultForOcv0Dto batteryResultDtoForOcv0 = new MesBatteryResultForOcv0Dto
                 {
-                    LOCATION_NO = item.Battery.Position.ToString(),
-                    SFC_NO = item.Battery.BarCode,
-                    DC_RESULT = item.IsNg ? "NG" : "OK",
+                    LocationNo = item.Battery.Position.ToString(),
+                    SfcNo = item.Battery.BarCode,
+                    DcResult = item.IsNg ? "NG" : "OK",
                     //NG_REASON = item.NgDescription??string.Empty+item.ExtraNgDescription,
-                    NG_REASON = item.NgDescription??string.Empty,
-                    OCV0 = item.Battery.VolValue.ToString()??string.Empty,
-                    OCV0_MIN_VALUE = SettingManager.CurrentBatteryStandard?.MinVol.ToString()??string.Empty,
-                    OCV0_MAX_VALUE = SettingManager.CurrentBatteryStandard?.MaxVol.ToString() ?? string.Empty,
-                    OCR0 = item.Battery.Res.ToString()??string.Empty,
-                    OCR0_MIN_VALUE = SettingManager.CurrentBatteryStandard?.MinRes.ToString() ?? string.Empty,
-                    OCR0_MAX_VALUE = SettingManager.CurrentBatteryStandard?.MaxRes.ToString() ?? string.Empty,
-                    CCCR = string.Empty,
-                    CCCR_MIN_VALUE = string.Empty,
-                    CCCR_MAX_VALUE = string.Empty,
-                    SIDE_VOLTAGE = item.Battery.NVolValue.ToString()??string.Empty,
-                    SIDE_VOLTAGE_MIN_VALUE = SettingManager.CurrentBatteryStandard?.MinNVol.ToString() ?? string.Empty,
-                    SIDE_VOLTAGE_MAX_VALUE = SettingManager.CurrentBatteryStandard?.MaxNVol.ToString() ?? string.Empty,
-                    LEVEL_NAME = string.Empty,
-                    OCV0_DATE = item.Battery.TestTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                    NgReason = item.NgDescription??string.Empty,
+                    Ocv0 = item.Battery.VolValue.ToString()??string.Empty,
+                    Ocv0MinValue = SettingManager.CurrentBatteryStandard?.MinVol.ToString()??string.Empty,
+                    Ocv0MaxValue = SettingManager.CurrentBatteryStandard?.MaxVol.ToString() ?? string.Empty,
+                    Ocr0 = item.Battery.Res.ToString()??string.Empty,
+                    Ocr0MinValue = SettingManager.CurrentBatteryStandard?.MinRes.ToString() ?? string.Empty,
+                    Ocr0MaxValue = SettingManager.CurrentBatteryStandard?.MaxRes.ToString() ?? string.Empty,
+                    Cccr = string.Empty,
+                    CccrMinValue = string.Empty,
+                    CccrMaxValue = string.Empty,
+                    SideVoltage = item.Battery.NVolValue.ToString()??string.Empty,
+                    SideVoltageMinValue = SettingManager.CurrentBatteryStandard?.MinNVol.ToString() ?? string.Empty,
+                    SideVoltageMaxValue = SettingManager.CurrentBatteryStandard?.MaxNVol.ToString() ?? string.Empty,
+                    LevelName = string.Empty,
+                    Ocv0Date = item.Battery.TestTime.ToString("yyyy-MM-dd HH:mm:ss"),
                 };
                 batteryResults.Add(batteryResultDtoForOcv0);
             }
-            mesUploadDto.SFC_LIST = batteryResults;
+            mesUploadDto.SfcList = batteryResults;
             return Post(mesUploadDto, MesSetting?.SaveDataAutoUrl ?? "thirdPartyAPI!saveData_autoOCV0ForE.action", "Mes上传测试结果");
         }
         /// <summary>
@@ -173,17 +173,17 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
         {
             MesUploadDto mesUploadDto = new MesUploadDto()
             {
-                SITE = MesSetting?.SITE ?? string.Empty,
-                ITEM_NO = string.Empty,
-                SHOP_ORDER_NO = SettingManager.Order ?? (SettingManager.OrderList?.First().Value ?? string.Empty),
-                OPERATION_NO = string.Empty,
-                TRAY_NO = Tray.TrayCode,
-                RESOURCE_NO = MesSetting?.RESOURCE_NO ?? string.Empty,
-                SHIFTS = DateTime.Now.Hour >= 8 && DateTime.Now.Hour < 20 ? "白班" : "夜班",
-                IS_FIRST_INSPECTION = "Y",
-                DC_DATE = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                DC_USER = MesSetting?.DC_USER ?? string.Empty,
-                OCV_TIMES = SettingManager.CurrentOcvType.ToString(),
+                Site = MesSetting?.Site ?? string.Empty,
+                ItemNo = string.Empty,
+                ShopOrderNo = SettingManager.Order ?? (SettingManager.OrderList?.First().Value ?? string.Empty),
+                OperationNo = string.Empty,
+                TrayNo = Tray.TrayCode,
+                ResourceNo = MesSetting?.ResourceNo ?? string.Empty,
+                Shifts = DateTime.Now.Hour >= 8 && DateTime.Now.Hour < 20 ? "白班" : "夜班",
+                IsFirstInspection = "Y",
+                DcDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                DcUser = MesSetting?.DcUser ?? string.Empty,
+                OcvTimes = SettingManager.CurrentOcvType.ToString(),
             };
             var ngInfos = Tray.NgInfos;
             List<MesBatteryResultDto> batteryResults = new List<MesBatteryResultDto>();
@@ -191,37 +191,37 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             {
                 MesBatteryResultForOcv1Dto batteryResultDtoForOcv0 = new MesBatteryResultForOcv1Dto
                 {
-                    LOCATION_NO = item.Battery.Position.ToString(),
-                    SFC_NO = item.Battery.BarCode,
-                    DC_RESULT = item.IsNg ? "NG" : "OK",
+                    LocationNo = item.Battery.Position.ToString(),
+                    SfcNo = item.Battery.BarCode,
+                    DcResult = item.IsNg ? "NG" : "OK",
                     //NG_REASON = item.NgDescription ?? string.Empty + item.ExtraNgDescription,
-                    NG_REASON = item.NgDescription ?? string.Empty ,
+                    NgReason = item.NgDescription ?? string.Empty ,
 
-                    OCV0 = string.Empty,
-                    OCV0_MAX_VALUE = string.Empty,
-                    OCV0_MIN_VALUE = string.Empty,
-                    OCR0 = string.Empty,
-                    OCR0_MAX_VALUE = string.Empty,
-                    OCR0_MIN_VALUE = string.Empty,
+                    Ocv0 = string.Empty,
+                    Ocv0MaxValue = string.Empty,
+                    Ocv0MinValue = string.Empty,
+                    Ocr0 = string.Empty,
+                    Ocr0MaxValue = string.Empty,
+                    Ocr0MinValue = string.Empty,
 
-                    OCV1 = item.Battery.VolValue.ToString()??string.Empty,
-                    OCV1_MIN_VALUE = SettingManager.CurrentBatteryStandard?.MinVol.ToString() ?? string.Empty,
-                    OCV1_MAX_VALUE = SettingManager.CurrentBatteryStandard?.MaxVol.ToString() ?? string.Empty,
-                    OCR1 = item.Battery.Res.ToString()??string.Empty,
-                    OCR1_MIN_VALUE = SettingManager.CurrentBatteryStandard?.MinRes.ToString() ?? string.Empty,
-                    OCR1_MAX_VALUE = SettingManager.CurrentBatteryStandard?.MaxRes.ToString() ?? string.Empty,
-                    CCCR = string.Empty,
-                    CCCR_MIN_VALUE = string.Empty,
-                    CCCR_MAX_VALUE = string.Empty,
-                    SIDE_VOLTAGE = item.Battery.NVolValue.ToString()??string.Empty,
-                    SIDE_VOLTAGE_MIN_VALUE = SettingManager.CurrentBatteryStandard?.MinNVol.ToString() ?? string.Empty,
-                    SIDE_VOLTAGE_MAX_VALUE = SettingManager.CurrentBatteryStandard?.MaxNVol.ToString() ?? string.Empty,
-                    LEVEL_NAME = string.Empty,
-                    OCV1_DATE = item.Battery.TestTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                    Ocv1 = item.Battery.VolValue.ToString()??string.Empty,
+                    Ocv1MinValue = SettingManager.CurrentBatteryStandard?.MinVol.ToString() ?? string.Empty,
+                    Ocv1MaxValue = SettingManager.CurrentBatteryStandard?.MaxVol.ToString() ?? string.Empty,
+                    Ocr1 = item.Battery.Res.ToString()??string.Empty,
+                    Ocr1MinValue = SettingManager.CurrentBatteryStandard?.MinRes.ToString() ?? string.Empty,
+                    Ocr1MaxValue = SettingManager.CurrentBatteryStandard?.MaxRes.ToString() ?? string.Empty,
+                    Cccr = string.Empty,
+                    CccrMinValue = string.Empty,
+                    CccrMaxValue = string.Empty,
+                    SideVoltage = item.Battery.NVolValue.ToString()??string.Empty,
+                    SideVoltageMinValue = SettingManager.CurrentBatteryStandard?.MinNVol.ToString() ?? string.Empty,
+                    SideVoltageMaxValue = SettingManager.CurrentBatteryStandard?.MaxNVol.ToString() ?? string.Empty,
+                    LevelName = string.Empty,
+                    Ocv1Date = item.Battery.TestTime.ToString("yyyy-MM-dd HH:mm:ss"),
                 };
                 batteryResults.Add(batteryResultDtoForOcv0);
             }
-            mesUploadDto.SFC_LIST = batteryResults;
+            mesUploadDto.SfcList = batteryResults;
             return Post(mesUploadDto, MesSetting?.SaveDataAutoUrl ?? "thirdPartyAPI!saveData_autoOCV1ForE.action", "Mes上传测试结果");
         }
         /// <summary>
@@ -232,17 +232,17 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
         {
             MesUploadDto mesUploadDto = new MesUploadDto()
             {
-                SITE = MesSetting?.SITE ?? string.Empty,
-                ITEM_NO = string.Empty,
-                SHOP_ORDER_NO = SettingManager.Order ?? (SettingManager.OrderList?.First().Value ?? string.Empty),
-                OPERATION_NO = string.Empty,
-                TRAY_NO = Tray.TrayCode,
-                RESOURCE_NO = MesSetting?.RESOURCE_NO ?? string.Empty,
-                SHIFTS = DateTime.Now.Hour >= 8 && DateTime.Now.Hour < 20 ? "白班" : "夜班",
-                IS_FIRST_INSPECTION = "Y",
-                DC_DATE = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                DC_USER = MesSetting?.DC_USER ?? string.Empty,
-                OCV_TIMES = SettingManager.CurrentOcvType.ToString(),
+                Site = MesSetting?.Site ?? string.Empty,
+                ItemNo = string.Empty,
+                ShopOrderNo = SettingManager.Order ?? (SettingManager.OrderList?.First().Value ?? string.Empty),
+                OperationNo = string.Empty,
+                TrayNo = Tray.TrayCode,
+                ResourceNo = MesSetting?.ResourceNo ?? string.Empty,
+                Shifts = DateTime.Now.Hour >= 8 && DateTime.Now.Hour < 20 ? "白班" : "夜班",
+                IsFirstInspection = "Y",
+                DcDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                DcUser = MesSetting?.DcUser ?? string.Empty,
+                OcvTimes = SettingManager.CurrentOcvType.ToString(),
             };
             var ngInfos = Tray.NgInfos;
             List<MesBatteryResultDto> batteryResults = new List<MesBatteryResultDto>();
@@ -252,51 +252,51 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             {
                 MesBatteryResultForOcv2Dto batteryResultDtoForOcv0 = new MesBatteryResultForOcv2Dto
                 {
-                    LOCATION_NO = item.Battery.Position.ToString(),
-                    SFC_NO = item.Battery.BarCode,
-                    DC_RESULT = item.IsNg ? "NG" : "OK",
+                    LocationNo = item.Battery.Position.ToString(),
+                    SfcNo = item.Battery.BarCode,
+                    DcResult = item.IsNg ? "NG" : "OK",
                     //NG_REASON = item.NgDescription ?? string.Empty + item.ExtraNgDescription,
-                    NG_REASON = item.NgDescription ?? string.Empty,
+                    NgReason = item.NgDescription ?? string.Empty,
 
-                    OCV0 = string.Empty,
-                    OCV0_MAX_VALUE = string.Empty,
-                    OCV0_MIN_VALUE = string.Empty,
-                    OCR0 = string.Empty,
-                    OCR0_MAX_VALUE = string.Empty,
-                    OCR0_MIN_VALUE = string.Empty,
+                    Ocv0 = string.Empty,
+                    Ocv0MaxValue = string.Empty,
+                    Ocv0MinValue = string.Empty,
+                    Ocr0 = string.Empty,
+                    Ocr0MaxValue = string.Empty,
+                    Ocr0MinValue = string.Empty,
 
-                    OCV1 = string.Empty,
-                    OCV1_MIN_VALUE = string.Empty,
-                    OCV1_MAX_VALUE = string.Empty,
-                    OCR1 = string.Empty,
-                    OCR1_MIN_VALUE = string.Empty,
-                    OCR1_MAX_VALUE = string.Empty,
+                    Ocv1 = string.Empty,
+                    Ocv1MinValue = string.Empty,
+                    Ocv1MaxValue = string.Empty,
+                    Ocr1 = string.Empty,
+                    Ocr1MinValue = string.Empty,
+                    Ocr1MaxValue = string.Empty,
 
-                    OCV2 = item.Battery.VolValue.ToString() ?? string.Empty,
-                    OCV2_MIN_VALUE = SettingManager.CurrentBatteryStandard?.MinVol.ToString() ?? string.Empty,
-                    OCV2_MAX_VALUE = SettingManager.CurrentBatteryStandard?.MaxVol.ToString() ?? string.Empty,
-                    OCR2 = item.Battery.Res?.ToString() ?? string.Empty,
-                    OCR2_MIN_VALUE = SettingManager.CurrentBatteryStandard?.MinRes.ToString() ?? string.Empty,
-                    OCR2_MAX_VALUE = SettingManager.CurrentBatteryStandard?.MaxRes.ToString() ?? string.Empty,
-                    CCCR = string.Empty,
-                    CCCR_MIN_VALUE = string.Empty,
-                    CCCR_MAX_VALUE = string.Empty,
-                    SIDE_VOLTAGE = item.Battery.NVolValue?.ToString() ?? string.Empty,
-                    SIDE_VOLTAGE_MIN_VALUE = SettingManager.CurrentBatteryStandard?.MinNVol.ToString() ?? string.Empty,
-                    SIDE_VOLTAGE_MAX_VALUE = SettingManager.CurrentBatteryStandard?.MaxNVol.ToString() ?? string.Empty,
-                    LEVEL_NAME = string.Empty,
-                    OCV1_DATE = string.Empty,
-                    OCV2_DATE = item.Battery.TestTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                    Ocv2 = item.Battery.VolValue.ToString() ?? string.Empty,
+                    Ocv2MinValue = SettingManager.CurrentBatteryStandard?.MinVol.ToString() ?? string.Empty,
+                    Ocv2MaxValue = SettingManager.CurrentBatteryStandard?.MaxVol.ToString() ?? string.Empty,
+                    Ocr2 = item.Battery.Res?.ToString() ?? string.Empty,
+                    Ocr2MinValue = SettingManager.CurrentBatteryStandard?.MinRes.ToString() ?? string.Empty,
+                    Ocr2MaxValue = SettingManager.CurrentBatteryStandard?.MaxRes.ToString() ?? string.Empty,
+                    Cccr = string.Empty,
+                    CccrMinValue = string.Empty,
+                    CccrMaxValue = string.Empty,
+                    SideVoltage = item.Battery.NVolValue?.ToString() ?? string.Empty,
+                    SideVoltageMinValue = SettingManager.CurrentBatteryStandard?.MinNVol.ToString() ?? string.Empty,
+                    SideVoltageMaxValue = SettingManager.CurrentBatteryStandard?.MaxNVol.ToString() ?? string.Empty,
+                    LevelName = string.Empty,
+                    Ocv1Date = string.Empty,
+                    Ocv2Date = item.Battery.TestTime.ToString("yyyy-MM-dd HH:mm:ss"),
                     K12 = item.Battery.KValue2?.ToString() ?? string.Empty,
-                    K12_MAX_VALUE = string.Empty,
-                    K12_MIN_VALUE = string.Empty,
-                    OCV1_OCV2_INTERNAL = string.Empty,
-                    OCV1_OCV2_INTERNAL_MAX_VALUE = string.Empty,
-                    OCV1_OCV2_INTERNAL_MIN_VALUE = string.Empty
+                    K12MaxValue = string.Empty,
+                    K12MinValue = string.Empty,
+                    Ocv1Ocv2Internal = string.Empty,
+                    Ocv1Ocv2InternalMaxValue = string.Empty,
+                    Ocv1Ocv2InternalMinValue = string.Empty
                 };
                 batteryResults.Add(batteryResultDtoForOcv0);
             }
-            mesUploadDto.SFC_LIST = batteryResults;
+            mesUploadDto.SfcList = batteryResults;
             return Post(mesUploadDto, MesSetting?.SaveDataAutoUrl ?? "thirdPartyAPI!saveData_autoOCV2ForE.action", "Mes上传测试结果");
         }
         /// <summary>
@@ -308,41 +308,41 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             var ngInfo = Tray.NgInfos[0];
             MesUploadDtoForOcv3Dto dto = new MesUploadDtoForOcv3Dto
             {
-                SITE = MesSetting?.SITE ?? string.Empty,
-                ITEM_NO = string.Empty,
-                SHOP_ORDER_NO = SettingManager.Order ?? (SettingManager.OrderList?.First().Value ?? string.Empty),
-                OPERATION_NO = string.Empty,
-                TRAY_NO = Tray.TrayCode,
-                RESOURCE_NO = MesSetting?.RESOURCE_NO ?? string.Empty,
-                SHIFTS = ngInfo.Battery.TestTime.Hour >= 8 && ngInfo.Battery.TestTime.Hour < 20 ? "白班" : "夜班",
-                IS_FIRST_INSPECTION = "Y",
-                DC_DATE = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                DC_USER = MesSetting?.DC_USER ?? string.Empty,
-                OCV_TIMES = SettingManager.CurrentOcvType.ToString(),
+                Site = MesSetting?.Site ?? string.Empty,
+                ItemNo = string.Empty,
+                ShopOrderNo = SettingManager.Order ?? (SettingManager.OrderList?.First().Value ?? string.Empty),
+                OperationNo = string.Empty,
+                TrayNo = Tray.TrayCode,
+                ResourceNo = MesSetting?.ResourceNo ?? string.Empty,
+                Shifts = ngInfo.Battery.TestTime.Hour >= 8 && ngInfo.Battery.TestTime.Hour < 20 ? "白班" : "夜班",
+                IsFirstInspection = "Y",
+                DcDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                DcUser = MesSetting?.DcUser ?? string.Empty,
+                OcvTimes = SettingManager.CurrentOcvType.ToString(),
 
-                LOCATION_NO = ngInfo.Battery.Position.ToString(),
-                SFC_NO = ngInfo.Battery.BarCode,
-                DC_RESULT = ngInfo.IsNg ? "NG" : "OK",
-                NG_REASON = ngInfo.NgDescription ?? string.Empty,
-                OCV3_DATE = ngInfo.Battery.TestTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                LocationNo = ngInfo.Battery.Position.ToString(),
+                SfcNo = ngInfo.Battery.BarCode,
+                DcResult = ngInfo.IsNg ? "NG" : "OK",
+                NgReason = ngInfo.NgDescription ?? string.Empty,
+                Ocv3Date = ngInfo.Battery.TestTime.ToString("yyyy-MM-dd HH:mm:ss"),
 
-                OCV3 = ngInfo.Battery.VolValue?.ToString() ?? string.Empty,
-                OCV3_MIN_VALUE = SettingManager.CurrentBatteryStandard?.MinVol.ToString() ?? string.Empty,
-                OCV3_MAX_VALUE = SettingManager.CurrentBatteryStandard?.MaxVol.ToString() ?? string.Empty,
-                OCR3 = ngInfo.Battery.Res?.ToString() ?? string.Empty,
-                OCR3_MIN_VALUE = SettingManager.CurrentBatteryStandard?.MinRes.ToString() ?? string.Empty,
-                OCR3_MAX_VALUE = SettingManager.CurrentBatteryStandard?.MaxRes.ToString() ?? string.Empty,
+                Ocv3 = ngInfo.Battery.VolValue?.ToString() ?? string.Empty,
+                Ocv3MinValue = SettingManager.CurrentBatteryStandard?.MinVol.ToString() ?? string.Empty,
+                Ocv3MaxValue = SettingManager.CurrentBatteryStandard?.MaxVol.ToString() ?? string.Empty,
+                Ocr3 = ngInfo.Battery.Res?.ToString() ?? string.Empty,
+                Ocr3MinValue = SettingManager.CurrentBatteryStandard?.MinRes.ToString() ?? string.Empty,
+                Ocr3MaxValue = SettingManager.CurrentBatteryStandard?.MaxRes.ToString() ?? string.Empty,
 
-                CCCR_MIN_VALUE = string.Empty,
-                CCCR_MAX_VALUE = string.Empty,
-                SIDE_VOLTAGE = ngInfo.Battery.NVolValue?.ToString() ?? string.Empty,
-                SIDE_VOLTAGE_MIN_VALUE = SettingManager.CurrentBatteryStandard?.MinNVol.ToString() ?? string.Empty,
-                SIDE_VOLTAGE_MAX_VALUE = SettingManager.CurrentBatteryStandard?.MinNVol.ToString() ?? string.Empty,
-                LEVEL_NAME = string.Empty,
+                CccrMinValue = string.Empty,
+                CccrMaxValue = string.Empty,
+                SideVoltage = ngInfo.Battery.NVolValue?.ToString() ?? string.Empty,
+                SideVoltageMinValue = SettingManager.CurrentBatteryStandard?.MinNVol.ToString() ?? string.Empty,
+                SideVoltageMaxValue = SettingManager.CurrentBatteryStandard?.MinNVol.ToString() ?? string.Empty,
+                LevelName = string.Empty,
 
                 K23 = ngInfo.Battery.KValue3.ToString() ?? string.Empty,
-                K23_MAX_VALUE = SettingManager.CurrentBatteryStandard?.MaxKValue.ToString() ?? string.Empty,
-                K23_MIN_VALUE = SettingManager.CurrentBatteryStandard?.MinKValue.ToString() ?? string.Empty,
+                K23MaxValue = SettingManager.CurrentBatteryStandard?.MaxKValue.ToString() ?? string.Empty,
+                K23MinValue = SettingManager.CurrentBatteryStandard?.MinKValue.ToString() ?? string.Empty,
             };
             return Post(dto, MesSetting?.SaveDataAutoUrl ?? "thirdPartyAPI!saveData_autoOCV2ForE.action", "Mes上传测试结果");
         }
@@ -378,8 +378,8 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
         {
             var obj = new MesGetShopOrderListRequestDto()
             {
-                site = SettingManager.CurrentMesSetting?.SITE ?? "25",
-                resourceNo = MesSetting?.RESOURCE_NO ?? string.Empty,
+                Site = SettingManager.CurrentMesSetting?.Site ?? "25",
+                ResourceNo = MesSetting?.ResourceNo ?? string.Empty,
             };
             return Post(obj, MesSetting?.LoadShopOrderListUrl ?? "http://10.10.1.240:8578/mes/third/thirdPartyAPI!loadShopOrderList.action"
                 , "获取工单列表");

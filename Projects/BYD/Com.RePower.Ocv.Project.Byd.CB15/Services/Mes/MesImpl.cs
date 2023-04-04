@@ -32,13 +32,13 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
             {
                 switch (SettingManager.CurrentOcvType)
                 {
-                    case Enums.OcvTypeEnmu.OCV1:
+                    case Enums.OcvTypeEnmu.Ocv1:
                         return UploadDataForOcv1();
-                    case Enums.OcvTypeEnmu.OCV2:
+                    case Enums.OcvTypeEnmu.Ocv2:
                         return UploadDataForOcv2();
-                    case Enums.OcvTypeEnmu.OCV3:
+                    case Enums.OcvTypeEnmu.Ocv3:
                         return UploadDataForOcv3();
-                    case Enums.OcvTypeEnmu.OCV4:
+                    case Enums.OcvTypeEnmu.Ocv4:
                         return UploadDataForOcv4();
                     default:
                         return OperateResult.CreateFailedResult("无当前ocv工站MES上传流程");
@@ -65,7 +65,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
             }
             foreach(var dto in dtos)
             {
-                Context.OCV1BatData.Add(dto);
+                Context.Ocv1BatData.Add(dto);
             }
             //Context.OCV1BatData.AddRange(dtos);
             Context.SaveChanges();
@@ -88,7 +88,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
 
             foreach (var dto in dtos)
             {
-                Context.OCV2BatData.Add(dto);
+                Context.Ocv2BatData.Add(dto);
             }
             Context.SaveChanges();
             return OperateResult.CreateSuccessResult();
@@ -109,7 +109,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
 
             foreach (var dto in dtos)
             {
-                Context.OCV3BatData.Add(dto);
+                Context.Ocv3BatData.Add(dto);
             }
             //Context.AddRange(dtos);
             Context.SaveChanges();
@@ -131,7 +131,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
 
             foreach (var dto in dtos)
             {
-                Context.OCV4BatData.Add(dto);
+                Context.Ocv4BatData.Add(dto);
             }
             //Context.AddRange(dtos);
             Context.SaveChanges();

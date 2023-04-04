@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using Azure;
 using Com.RePower.Device.Ohm.Impl.Hioki_BT3562;
-using Com.RePower.Ocv.Model;
 using Com.RePower.Ocv.Model.DataBaseContext;
 using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Model.Extensions;
@@ -10,32 +8,19 @@ using Com.RePower.Ocv.Project.ProjectBase.Controllers;
 using Com.RePower.Ocv.Project.YiWei.DataBaseContext;
 using Com.RePower.Ocv.Project.YiWei.Model;
 using Com.RePower.Ocv.Project.YiWei.Models;
-using Com.RePower.Ocv.Project.YiWei.Serivces;
-using Com.RePower.Ocv.Project.YiWei.Serivces.Dto;
-using Com.RePower.Ocv.Project.YiWei.Serivces.Module;
 using Com.RePower.WpfBase;
-using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design.Internal;
-using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
 {
     public partial class MainWork : MainWorkAbstract
     {
-
         //public MainWork(DevicesController devicesController
         //    , FlowController flowController
         //    , Tray tray
@@ -49,8 +34,8 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
 
         public MainWork(Tray tray
             , DevicesController devicesController
-            ,LocalTestResultDbContext dbContext
-            ,IMapper mapper) : base()
+            , LocalTestResultDbContext dbContext
+            , IMapper mapper) : base()
         {
             Tray = tray;
             DevicesController = devicesController;
@@ -58,13 +43,13 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
             Mapper = mapper;
         }
 
-
         public DevicesController DevicesController { get; }
         public LocalTestResultDbContext LocalDbContext { get; }
         public IMapper Mapper { get; }
         public Tray Tray { get; }
         public BatteryNgCriteria? BatteryNgCriteria => SettingManager<SettingManager>.Instance.CurrentBatteryNgCriteria;
         public TestOption? TestOption => SettingManager<SettingManager>.Instance.CurrentTestOption;
+        public CalibrationSetting? CalibrationSetting => SettingManager<SettingManager>.Instance.CurrentCalibrationSetting;
         //public IWmsService WmsService { get; }
 
         public bool IsDoUploadToMes
@@ -79,6 +64,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
         {
             get { return TestOption?.IsDoRetest ?? false; }
         }
+
         /// <summary>
         /// 复测次数
         /// </summary>
@@ -98,7 +84,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                 //    return init1;
                 //}
                 DoPauseOrStop();
-                #endregion
+                #endregion 初始化Plc
                 #region 等待测试准备信号
 
                 //LogHelper.UiLog.Info("连接PLC");
@@ -119,9 +105,9 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                         return result;
                     }
                 }
-                if (!(DevicesController.DMM?.IsConnected ?? true))
+                if (!(DevicesController.Dmm?.IsConnected ?? true))
                 {
-                    var result = DevicesController.DMM.Connect();//万用表
+                    var result = DevicesController.Dmm.Connect();//万用表
                     if (result.IsFailed)
                     {
                         return result;
@@ -133,7 +119,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                     if (result.IsSuccess)
                     {
                         LogHelper.UiLog.Info("成功连接内阻仪");
-                        if (DevicesController.Ohm is Hioki_BT3562Impl tempOhm)
+                        if (DevicesController.Ohm is HiokiBt3562Impl tempOhm)
                         {
                             LogHelper.UiLog.Info("正在初始化内阻仪");
                             var setResult = tempOhm.SetRang();
@@ -147,9 +133,8 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                     {
                         return result;
                     }
-
                 }
-                #endregion
+                #endregion 链接设备
 
                 DoPauseOrStop();
                 LogHelper.UiLog.Info("等待Plc[上位机交互] = 0");
@@ -165,7 +150,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                 {
                     return OperateResult.CreateFailedResult(wait1.Message ?? "等待本地Plc[上位机交互] = 5失败", wait1.ErrorCode);
                 }
-                #endregion
+                #endregion 等待测试准备信号
                 var tempNgInfos = new List<NgInfo>();
 
                 DoPauseOrStop();
@@ -188,7 +173,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                 ngInfo.Battery.BarCode = batteryCode;
                 ngInfo.Battery.Position = 1;
                 tempNgInfos.Add(ngInfo);
-                #endregion
+                #endregion 读取电池条码1
 
                 DoPauseOrStop();
 
@@ -212,7 +197,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                 tempNgInfos.Add(ngInfo);
                 Tray.TrayCode = "null";
                 Tray.NgInfos = tempNgInfos;
-                #endregion
+                #endregion 读取电池条码2
 
                 int reTestTimes = 0;
                 do
@@ -230,9 +215,18 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                     //验证ng结果
                     ValidateNgResult();
                     break;
-
                 } while (IsDoRetest && reTestTimes < RetestTimes);
                 DoPauseOrStop();
+
+                #region 下发测试结果
+
+                var sendResult = SendTestResultToPlc();
+                if (sendResult.IsFailed)
+                {
+                    return sendResult;
+                }
+
+                #endregion
 
                 var saveToLocalResult = SaveToLocalDb();
                 if (saveToLocalResult.IsFailed) return saveToLocalResult;
@@ -246,10 +240,27 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                 }
             }
         }
+
+        private OperateResult SendTestResultToPlc()
+        {
+            LogHelper.UiLog.Info("下发测试结果到Plc");
+            if (Tray.NgInfos.Any(x => x.IsNg))
+            {
+                var writeResult = DevicesController.LocalPlc.Write(DevicesController.PlcAlarmAddressCache["测试结果NG报警"], true);
+                if (writeResult.IsFailed)
+                {
+                    return writeResult;
+                }
+            }
+
+            return OperateResult.CreateSuccessResult();
+        }
+
         private bool ValidateBatteryCode(string batteryCode)
         {
             return true;
         }
+
         private OperateResult TestBatteries()
         {
             if (!(DevicesController.SwitchBoard?.IsConnected ?? true))
@@ -260,9 +271,9 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                     return result;
                 }
             }
-            if (!(DevicesController.DMM?.IsConnected ?? true))
+            if (!(DevicesController.Dmm?.IsConnected ?? true))
             {
-                var result = DevicesController.DMM.Connect();//万用表
+                var result = DevicesController.Dmm.Connect();//万用表
                 if (result.IsFailed)
                 {
                     return result;
@@ -277,7 +288,6 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                 }
             }
 
-
             //关闭所有通道
             var closeResult = DevicesController.SwitchBoard?.CloseAllChannels(1) ?? OperateResult.CreateFailedResult("切换板实例为null");
             if (closeResult.IsFailed)
@@ -287,7 +297,6 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
 
             foreach (var item in Tray.NgInfos)
             {
-
                 DoPauseOrStop();
 
                 var result = TestOneBattery(item);
@@ -307,6 +316,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
             //Battery.TestTime = DateTime.Now;
             //return OperateResult.CreateSuccessResult();
         }
+
         private OperateResult TestOneBattery(NgInfo ngInfo)
         {
             DoPauseOrStop();
@@ -327,7 +337,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
             Thread.Sleep(1000);
             #endregion
             LogHelper.UiLog.Info("读取电压");
-            var read1 = DevicesController.DMM?.ReadDc() ?? OperateResult.CreateFailedResult<double>("万用表实例为null");
+            var read1 = DevicesController.Dmm?.ReadDc() ?? OperateResult.CreateFailedResult<double>("万用表实例为null");
             if (read1.IsFailed)
             {
                 return OperateResult.CreateFailedResult($"读取电压失败{read1.Message ?? "未知原因"}", read1.ErrorCode);
@@ -338,7 +348,23 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
             {
                 return OperateResult.CreateFailedResult($"读取内阻失败{read2.Message ?? "未知原因"}", read2.ErrorCode);
             }
-            battery.Res = read2.Content;
+            if ((CalibrationSetting?.IsUseCalibration ?? false))
+            {
+                var cItem = CalibrationSetting.CalibrationValues?.FirstOrDefault(x => x.Channel == battery.Position);
+                if (cItem is { })
+                {
+                    var cValue = DoubleExtensions.Add(read2.Content, cItem.ManuallyValue ?? 0);
+                    battery.Res = cValue;
+                }
+                else
+                {
+                    battery.Res = read2.Content;
+                }
+            }
+            else
+            {
+                battery.Res = read2.Content;
+            }
             battery.IsTested = true;
             battery.TestTime = DateTime.Now;
             //打开对应通道
@@ -349,6 +375,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
             }
             return OperateResult.CreateSuccessResult();
         }
+
         private OperateResult SwitchChannel(int channel, bool open = true)
         {
             OperateResult openResult;
@@ -376,6 +403,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
             }
             return openResult;
         }
+
         private void ValidateNgResult()
         {
             foreach (var ngInfo in Tray.NgInfos)
@@ -409,6 +437,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                 }
             }
         }
+
         private OperateResult InitWork()
         {
             Tray.NgInfos = new List<NgInfo>();
@@ -426,7 +455,6 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
             OperateResult result = OperateResult.CreateFailedResult();
             try
             {
-
                 List<RnDbOcv> listrnDbs = new List<RnDbOcv>();
                 foreach (var item in Tray.NgInfos)
                 {
@@ -445,7 +473,6 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                     rnDbOcv.ModelNo = (TestOption?.OcvType ?? "OCV3") + "_6";//设备号+线
                     if (Tray.NgInfos.FirstOrDefault(s => s.IsNg == true) != null)
                     {
-
                         rnDbOcv.TotalNgState = "NG";
                     }
                     rnDbOcv.CellId = item.Battery.BarCode ?? "KONG";
@@ -464,21 +491,17 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                 //listrnDbs.Add(rnDbOcv);
                 using (var context = new OcvDataDbContext())
                 {
-
                     foreach (var item in listrnDbs)
                     {
                         context.Set<RnDbOcv>().Add(item);
                     }
                     context.SaveChanges();
-
                 }
                 result.IsSuccess = true;
                 return result;
-
             }
             catch (Exception ex)
             {
-
                 LogHelper.UiLog.Error(ex.Message);
                 result.Message = ex.Message;
                 return result;
@@ -486,7 +509,6 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
         }
 
         //public NgInfo tempNgInfo(string Cellode,int Position) {
-
         //   NgInfo result = new NgInfo();
         //   result.Battery.BarCode=Cellode;
         //    result.Battery.Position = Position;

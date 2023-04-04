@@ -59,7 +59,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 if (resResult?.IsFailed ?? true)
                     return resResult ?? OperateResult.CreateFailedResult($"读取电池{ngInfo.Battery.Position}内阻失败,因为内阻仪实例为null");
                 ngInfo.Battery.Res = resResult.Content;
-                if(SettingManager.CurrentOcvType == Enums.OcvTypeEnmu.OCV4 && SettingManager.AcirOption is { } acirOption && (SettingManager.AcirOption?.IsAcirEnable??false))
+                if(SettingManager.CurrentOcvType == Enums.OcvTypeEnmu.Ocv4 && SettingManager.AcirOption is { } acirOption && (SettingManager.AcirOption?.IsAcirEnable??false))
                 {
                     decimal fitFactor = 0;
                     decimal temp = (decimal)(ngInfo.Battery.PTemp ?? 0);
@@ -80,7 +80,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
             if (SettingManager.CurrentTestOption?.IsTestVol??false)
             {
                 LogHelper.UiLog.Info("开始读取电压");
-                var volResult = DevicesController.DMM?.ReadDc();
+                var volResult = DevicesController.Dmm?.ReadDc();
                 if (volResult?.IsFailed ?? true)
                     return volResult ?? OperateResult.CreateFailedResult($"读取电池{ngInfo.Battery.Position}电压失败,因为万用表实例为null");
                 ngInfo.Battery.VolValue = volResult.Content;
@@ -94,7 +94,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 var openNvolChannelResult = SwitchChannel(boardIndex, channelIndex, true);
                 if(openNvolChannelResult.IsFailed)
                     return openNvolChannelResult;
-                var nvolResult = DevicesController.DMM?.ReadDc();
+                var nvolResult = DevicesController.Dmm?.ReadDc();
                 if(nvolResult?.IsFailed??true)
                     return nvolResult ?? OperateResult.CreateFailedResult($"读取电池{ngInfo.Battery.Position}负极壳体电压失败,因为万用表实例为null");
                 ngInfo.Battery.NVolValue = Math.Abs(nvolResult.Content);

@@ -12,6 +12,6 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Dto
         /// <summary>
         /// ocv0时间
         /// </summary>
-        public string OCV0_DATE { get; set; } = string.Empty;
+        public string Ocv0Date { get; set; } = string.Empty;
     }
 }

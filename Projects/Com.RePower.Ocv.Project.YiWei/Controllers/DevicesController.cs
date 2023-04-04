@@ -15,12 +15,12 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
     public class DevicesController
     {
         public DevicesController(IPlc localPlc
-            , IDMM? dMM = null
+            , IDmm? dMm = null
             , ISwitchBoard? switchBoard = null
             , IOhm? ohm = null)
         {
             LocalPlc = localPlc;
-            DMM = dMM;
+            Dmm = dMm;
             SwitchBoard = switchBoard;
             Ohm = ohm;
             this.LocalPlcAddressCache = new Dictionary<string, string>();
@@ -33,7 +33,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
         /// <summary>
         /// 万用表
         /// </summary>
-        public IDMM? DMM { get; }
+        public IDmm? Dmm { get; }
         public ISwitchBoard? SwitchBoard { get; }
         public IOhm? Ohm { get; }
 
@@ -41,6 +41,8 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
         /// Plc地址映射字典
         /// </summary>
         public Dictionary<string,string> LocalPlcAddressCache { get; set; }
+
+        public Dictionary<string,string> PlcAlarmAddressCache { get; set; }
         //public Dictionary<string,string> LogisticsPlcAddressCache { get; set; }
     }
 }

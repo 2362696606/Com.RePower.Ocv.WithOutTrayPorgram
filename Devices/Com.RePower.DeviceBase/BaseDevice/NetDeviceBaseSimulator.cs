@@ -10,7 +10,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
 {
     public class NetDeviceBaseSimulator : INetDeviceBase,ISimulatorRecovery
     {
-        private bool disposedValue;
+        private bool _disposedValue;
 
         public string IpAddress { get; set; } = "127.0.0.1";
 
@@ -79,7 +79,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposedValue)
             {
                 if (disposing)
                 {
@@ -88,7 +88,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
 
                 // TODO: 释放未托管的资源(未托管的对象)并重写终结器
                 // TODO: 将大型字段设置为 null
-                disposedValue = true;
+                _disposedValue = true;
             }
         }
 

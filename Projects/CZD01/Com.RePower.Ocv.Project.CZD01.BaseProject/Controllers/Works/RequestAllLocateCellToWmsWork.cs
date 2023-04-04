@@ -14,7 +14,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
     {
         private OperateResult RequestAllLocateCellToWms()
         {
-            if (SettingManager.CurrentOcvType == Model.Enums.OcvTypeEnum.OCV0)
+            if (SettingManager.CurrentOcvType == Model.Enums.OcvTypeEnum.Ocv0)
             {
                 LogHelper.UiLog.Info("Ocv0调用Wms出库信号接口");
                 var result = WmsService?.RequestAllLocateCellToWms() ?? OperateResult.CreateFailedResult<string>("调度服务实例为null");

@@ -10,7 +10,7 @@ namespace Com.RePower.Ocv.Model.Extensions
     {
         //两个Double数相加
 
-        public static double? add(this double? v1, double? v2)
+        public static double? Add(this double? v1, double? v2)
         {
             if(v1 == null || v2 == null) return null;
 
@@ -25,7 +25,7 @@ namespace Com.RePower.Ocv.Model.Extensions
 
         //两个Double数相减
 
-        public static double? sub(this double? v1, double? v2)
+        public static double? Sub(this double? v1, double? v2)
         {
             if (v1 == null || v2 == null) return null;
 
@@ -40,7 +40,7 @@ namespace Com.RePower.Ocv.Model.Extensions
 
         // 两个Double数相乘
 
-        public static double? mul(this double? v1, double? v2)
+        public static double? Mul(this double? v1, double? v2)
         {
             if (v1 == null || v2 == null) return null;
 
@@ -55,7 +55,7 @@ namespace Com.RePower.Ocv.Model.Extensions
 
         //两个Double数相除
 
-        public static double? div(this double? v1, double? v2)
+        public static double? Div(this double? v1, double? v2)
         {
             if (v1 == null || v2 == null || v2 == 0) return null;
 

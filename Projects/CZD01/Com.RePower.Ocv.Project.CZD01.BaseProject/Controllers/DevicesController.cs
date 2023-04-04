@@ -14,7 +14,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers
 {
     public class DevicesController
     {
-        public DevicesController(IPlc? plc = null,ISwitchBoard? switchBoard = null,IOhm? ohm = null,IDMM? dmm = null,ITemperatureSensor? temperatureSensor = null)
+        public DevicesController(IPlc? plc = null,ISwitchBoard? switchBoard = null,IOhm? ohm = null,IDmm? dmm = null,ITemperatureSensor? temperatureSensor = null)
         {
             _plc = plc;
             _switchBoard = switchBoard;
@@ -41,9 +41,9 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers
         {
             get { return _ohm; }
         }
-        private IDMM? _dmm;
+        private IDmm? _dmm;
 
-        public IDMM? Dmm
+        public IDmm? Dmm
         {
             get { return _dmm; }
         }

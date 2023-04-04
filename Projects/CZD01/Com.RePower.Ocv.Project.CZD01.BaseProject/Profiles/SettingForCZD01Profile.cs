@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Profiles
 {
-    public class SettingForCZD01Profile : Profile
+    public class SettingForCzd01Profile : Profile
     {
-        public SettingForCZD01Profile()
+        public SettingForCzd01Profile()
         {
             CreateMap<Settings.TestOption, Settings.Dtos.TestOptionDto>()
                 .ReverseMap();

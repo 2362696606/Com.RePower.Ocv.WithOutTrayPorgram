@@ -16,8 +16,8 @@ namespace Com.RePower.Ocv.Ui.Cp06.Ocv0.ViewModels
 		{
 			get
 			{
-				if(SettingManager.CurrentOcvType == Project.Cp06.Ocv0.Enums.OcvTypeEnmu.OCV1
-					||SettingManager.CurrentOcvType == Project.Cp06.Ocv0.Enums.OcvTypeEnmu.OCV2)
+				if(SettingManager.CurrentOcvType == Project.Cp06.Ocv0.Enums.OcvTypeEnmu.Ocv1
+					||SettingManager.CurrentOcvType == Project.Cp06.Ocv0.Enums.OcvTypeEnmu.Ocv2)
 				{
 					return true;
 				}

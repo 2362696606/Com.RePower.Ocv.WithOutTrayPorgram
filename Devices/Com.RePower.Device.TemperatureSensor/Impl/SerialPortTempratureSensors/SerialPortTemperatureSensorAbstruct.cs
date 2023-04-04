@@ -13,7 +13,7 @@ namespace Com.RePower.Device.TemperatureSensor.Impl.SerialPortTempratureSensors
     {
         public abstract string PortName { get; set; }
         public abstract int BaudRate { get; set; }
-        public abstract int ReadDelsy { get; set; }
+        public abstract int ReadDelay { get; set; }
 
         public abstract OperateResult Connect(string portName, int baudRate);
 
@@ -55,10 +55,12 @@ namespace Com.RePower.Device.TemperatureSensor.Impl.SerialPortTempratureSensors
                         //}
                         //return OperateResult.CreateSuccessResult(tempDoubleDatas.ToArray());
                         List<double> resultList = new List<double>();
-                        for (int t = 2; t < 9; t += 2)
+                        for (int t = 3; t < 10; t += 2)
                         {
-                            var realValue = BitConverter.ToInt16(recoveryBytes, t);
-                            resultList.Add((double)realValue * 0.1);
+                            byte[] currentBytes = recoveryBytes.Skip(i).Take(2).Reverse().ToArray();
+                            var realValue = BitConverter.ToInt16(currentBytes);
+                            decimal decValue = (decimal)realValue * (decimal)0.1;
+                            resultList.Add((double)decValue);
                         }
                         return OperateResult.CreateSuccessResult(resultList.ToArray());
                     }

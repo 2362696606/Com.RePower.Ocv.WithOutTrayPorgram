@@ -8,8 +8,8 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Dto
 {
     public class MesBatteryRecovertDot
     {
-        public string sfcNO { get; set; } = string.Empty;
-        public string errMsg { get; set; } = string.Empty;
-        public string result { get; set; } = string.Empty;
+        public string SfcNo { get; set; } = string.Empty;
+        public string ErrMsg { get; set; } = string.Empty;
+        public string Result { get; set; } = string.Empty;
     }
 }

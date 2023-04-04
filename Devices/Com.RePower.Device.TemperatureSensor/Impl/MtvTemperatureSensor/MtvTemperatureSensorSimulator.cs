@@ -13,9 +13,9 @@ namespace Com.RePower.Device.TemperatureSensor.Impl.MtvTemperatureSensor
     {
         public MtvTemperatureSensorSimulator()
         {
-            this.netDeviceBase = new NetDeviceBaseSimulator();
+            this.NetDeviceBase = new NetDeviceBaseSimulator();
 
-            var temp = netDeviceBase as NetDeviceBaseSimulator;
+            var temp = NetDeviceBase as NetDeviceBaseSimulator;
             if(temp is { })
                 temp.RecoveryMethod += RecoveryMethod;
         }

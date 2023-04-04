@@ -9,7 +9,7 @@ namespace Com.RePower.DeviceBase.Plc
     /// <summary>
     /// Plc
     /// </summary>
-    [DeviceInfo(DeviceType.PLC)]
+    [DeviceInfo(DeviceType.Plc)]
     public interface IPlc : IDevice
     {
         /// <summary>

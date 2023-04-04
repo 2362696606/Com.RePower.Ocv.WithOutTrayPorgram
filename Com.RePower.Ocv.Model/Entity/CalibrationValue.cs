@@ -55,7 +55,7 @@ namespace Com.RePower.Ocv.Model.Entity
 		[JsonIgnore]
         public double? DeviationValue
         {
-            get { return _gaugeValue.sub(_standardValue); }
+            get { return _gaugeValue.Sub(_standardValue); }
         }
         private double? _manuallyValue;
 		/// <summary>

@@ -21,12 +21,12 @@ namespace Com.RePower.DeviceBase.Models
         /// PLC
         /// </summary>
         [Description("PLC")]
-        PLC,
+        Plc,
         /// <summary>
         /// 万用表
         /// </summary>
         [Description("万用表")]
-        DMM,
+        Dmm,
         /// <summary>
         /// 内阻仪
         /// </summary>

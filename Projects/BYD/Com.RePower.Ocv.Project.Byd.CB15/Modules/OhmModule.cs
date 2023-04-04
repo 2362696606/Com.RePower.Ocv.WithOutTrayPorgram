@@ -23,16 +23,16 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Modules
                 OcvSettingItemDto? ohmSettingObj = null;
                 switch (ocvType)
                 {
-                    case OcvTypeEnmu.OCV1:
+                    case OcvTypeEnmu.Ocv1:
                         ohmSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "OhmSetting_Ocv1");
                         break;
-                    case OcvTypeEnmu.OCV2:
+                    case OcvTypeEnmu.Ocv2:
                         ohmSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "OhmSetting_Ocv2");
                         break;
-                    case OcvTypeEnmu.OCV3:
+                    case OcvTypeEnmu.Ocv3:
                         ohmSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "OhmSetting_Ocv3");
                         break;
-                    case OcvTypeEnmu.OCV4:
+                    case OcvTypeEnmu.Ocv4:
                         ohmSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "OhmSetting_Ocv4");
                         break;
                 }
@@ -47,11 +47,11 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Modules
                         IOhm? obj = null;
                         if(isReal)
                         {
-                            obj = JsonConvert.DeserializeObject<Hioki_BT3562Impl>(ohmSettingJson);
+                            obj = JsonConvert.DeserializeObject<HiokiBt3562Impl>(ohmSettingJson);
                         }
                         else
                         {
-                            obj = JsonConvert.DeserializeObject<Hioki_BT3562Simulator>(ohmSettingJson);
+                            obj = JsonConvert.DeserializeObject<HiokiBt3562Simulator>(ohmSettingJson);
                         }
                         if (obj is { })
                         {

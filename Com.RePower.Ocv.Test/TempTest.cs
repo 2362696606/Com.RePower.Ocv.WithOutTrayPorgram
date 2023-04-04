@@ -26,7 +26,7 @@ namespace Com.RePower.Ocv.Test
             OutputHelper = outputHelper;
         }
         [Fact]
-        public void PraseInovanceAMAddressTest()
+        public void PraseInovanceAmAddressTest()
         {
             int[] a = { 1, 2, 3, };
             OutputHelper.WriteLine(a.ToArrayString());
@@ -206,12 +206,12 @@ namespace Com.RePower.Ocv.Test
     public class TestClass
     {
         public string StringValue { get; set; } = string.Empty;
-        public TestEnum EnumValue { get; set; } = TestEnum.mΩ;
+        public TestEnum EnumValue { get; set; } = TestEnum.MΩ;
         public int IntValue { get; set; }
     }
     public enum TestEnum
     {
-        mΩ,
+        MΩ,
         Ω
     }
 

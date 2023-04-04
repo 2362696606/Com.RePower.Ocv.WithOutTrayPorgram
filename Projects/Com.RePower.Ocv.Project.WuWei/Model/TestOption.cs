@@ -20,8 +20,8 @@ namespace Com.RePower.Ocv.Project.WuWei.Model
         [SettingName("是否复测")]
         public bool IsDoRetest
         {
-            get { return _isDoRetest; }
-            set { SetProperty(ref _isDoRetest, value); }
+            get => _isDoRetest;
+            set => SetProperty(ref _isDoRetest, value);
         }
         private int _retestTimes;
         /// <summary>
@@ -30,8 +30,8 @@ namespace Com.RePower.Ocv.Project.WuWei.Model
         [SettingName("复测次数")]
         public int RetestTimes
         {
-            get { return _retestTimes; }
-            set { SetProperty(ref _retestTimes, value); }
+            get => _retestTimes;
+            set => SetProperty(ref _retestTimes, value);
         }
         private bool _isDoUploadToMes;
         /// <summary>
@@ -40,8 +40,8 @@ namespace Com.RePower.Ocv.Project.WuWei.Model
         [SettingName("是否上传结果到mes")]
         public bool IsDoUploadToMes
         {
-            get { return _isDoUploadToMes; }
-            set { SetProperty(ref _isDoUploadToMes, value); }
+            get => _isDoUploadToMes;
+            set => SetProperty(ref _isDoUploadToMes, value);
         }
         private string _ocvType = "Ocv3";
         /// <summary>
@@ -51,8 +51,8 @@ namespace Com.RePower.Ocv.Project.WuWei.Model
         [SettingName("Ocv类型")]
         public string OcvType
         {
-            get { return _ocvType; }
-            set { SetProperty(ref _ocvType, value); }
+            get => _ocvType;
+            set => SetProperty(ref _ocvType, value);
         }
         private int _switchDelay;
         /// <summary>
@@ -62,19 +62,19 @@ namespace Com.RePower.Ocv.Project.WuWei.Model
         [SettingName("切换版切换延迟")]
         public int SwitchDelay
         {
-            get { return _switchDelay; }
-            set { SetProperty(ref _switchDelay, value); }
+            get => _switchDelay;
+            set => SetProperty(ref _switchDelay, value);
         }
-        private int _dMMReadDelayWhenSwitch;
+        private int _dMmReadDelayWhenSwitch;
         /// <summary>
         /// 万用表在切换通道后延迟读取
         /// </summary>
         [IgnorSetting]
         [SettingName("万用表在切换通道后延迟读取")]
-        public int DMMReadDelayWhenSwitch
+        public int DmmReadDelayWhenSwitch
         {
-            get { return _dMMReadDelayWhenSwitch; }
-            set { SetProperty(ref _dMMReadDelayWhenSwitch, value); }
+            get => _dMmReadDelayWhenSwitch;
+            set => SetProperty(ref _dMmReadDelayWhenSwitch, value);
         }
         private int _msaTimes;
         /// <summary>
@@ -83,8 +83,8 @@ namespace Com.RePower.Ocv.Project.WuWei.Model
         [SettingName("Msa执行次数")]
         public int MsaTimes
         {
-            get { return _msaTimes; }
-            set { SetProperty(ref _msaTimes, value); }
+            get => _msaTimes;
+            set => SetProperty(ref _msaTimes, value);
         }
         /// <summary>
         /// 用于保存

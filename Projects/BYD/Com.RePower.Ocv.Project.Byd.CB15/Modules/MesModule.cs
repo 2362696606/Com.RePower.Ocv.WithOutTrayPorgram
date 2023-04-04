@@ -22,12 +22,21 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Modules
                 bool isReal = facticityManager?.IsRealMes ?? false;
                 if (isReal)
                 {
+
+                    builder.RegisterType<MesSimulator>()
+                        .AsSelf()
+                        .As<IMesService>();
+
                     builder.RegisterType<MesImpl>()
                         .AsSelf()
                         .As<IMesService>();
                 }
                 else
                 {
+                    builder.RegisterType<MesImpl>()
+                        .AsSelf()
+                        .As<IMesService>();
+
                     builder.RegisterType<MesSimulator>()
                         .AsSelf()
                         .As<IMesService>();

@@ -14,11 +14,11 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
     public class DevicesController
     {
         public DevicesController(IPlc localPlc
-            ,IDMM dMM
+            ,IDmm dMm
             ,ISwitchBoard switchBoard)
         {
             LocalPlc = localPlc;
-            DMM = dMM;
+            Dmm = dMm;
             SwitchBoard = switchBoard;
             this.LocalPlcAddressCache = new Dictionary<string, string>();
             //this.LogisticsPlcAddressCache = new Dictionary<string, string>();
@@ -30,7 +30,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// <summary>
         /// 万用表
         /// </summary>
-        public IDMM DMM { get; }
+        public IDmm Dmm { get; }
         public ISwitchBoard SwitchBoard { get; }
 
         /// <summary>

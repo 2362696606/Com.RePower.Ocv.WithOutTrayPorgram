@@ -39,7 +39,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Wms
             throw new NotImplementedException();
         }
 
-        public OperateResult<Status> UpdateOCVStatus()
+        public OperateResult<Status> UpdateOcvStatus()
         {
             throw new NotImplementedException();
         }

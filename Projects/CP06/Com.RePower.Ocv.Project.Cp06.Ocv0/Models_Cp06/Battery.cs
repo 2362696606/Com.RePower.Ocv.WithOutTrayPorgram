@@ -42,7 +42,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Models_Cp06
 				if (_resReadValue == null) return null;
 				else
 				{
-					return _resReadValue.add(_resCalibrationValue ?? 0);
+					return _resReadValue.Add(_resCalibrationValue ?? 0);
 				}
 			}
 		}

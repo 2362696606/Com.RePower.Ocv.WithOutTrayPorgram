@@ -12,68 +12,68 @@ namespace Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard
 {
     public class FourLinesSwitchBoardImpl : FourLinesSwitchBoardAbstract, ISwitchBoardSerialPort
     {
-        protected ISerialPortDeviceBase deviceBase;
+        protected ISerialPortDeviceBase DeviceBase;
 
         public FourLinesSwitchBoardImpl()
         {
-            deviceBase = new SerialPortDeviceBase();
+            DeviceBase = new SerialPortDeviceBase();
         }
 
-        public override bool IsConnected { get { return deviceBase.IsConnected; } }
+        public override bool IsConnected { get { return DeviceBase.IsConnected; } }
 
         public override string DeviceName
         {
-            get { return deviceBase.DeviceName; }
-            set { deviceBase.DeviceName = value; }
+            get { return DeviceBase.DeviceName; }
+            set { DeviceBase.DeviceName = value; }
         }
 
         public string PortName
         {
-            get { return deviceBase.PortName; }
-            set { deviceBase.PortName = value; }
+            get { return DeviceBase.PortName; }
+            set { DeviceBase.PortName = value; }
         }
         public int BaudRate
         {
-            get { return deviceBase.BaudRate; }
-            set { deviceBase.BaudRate = value; }
+            get { return DeviceBase.BaudRate; }
+            set { DeviceBase.BaudRate = value; }
         }
         /// <summary>
         /// 读取延迟
         /// </summary>
         public override int ReadDelay
         {
-            get { return deviceBase.ReadDelay;}
-            set { deviceBase.ReadDelay = value;}
+            get { return DeviceBase.ReadDelay;}
+            set { DeviceBase.ReadDelay = value;}
         }
 
         public override OperateResult Connect()
         {
-            return deviceBase.Connect();
+            return DeviceBase.Connect();
         }
 
         public OperateResult Connect(string portName, int baudRate)
         {
-            return deviceBase.Connect(portName, baudRate);
+            return DeviceBase.Connect(portName, baudRate);
         }
 
         public Task<OperateResult> ConnectAsync(string portName, int baudRate)
         {
-            return deviceBase.ConnectAsync(portName, baudRate);
+            return DeviceBase.ConnectAsync(portName, baudRate);
         }
 
         public override OperateResult DisConnect()
         {
-            return deviceBase.DisConnect();
+            return DeviceBase.DisConnect();
         }
 
         public override void Dispose()
         {
-            deviceBase.Dispose();
+            DeviceBase.Dispose();
         }
 
         public override OperateResult<byte[]> SendCmd(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
         {
-            return deviceBase.SendCmd(cmd, timeout, isNeedRecovery);
+            return DeviceBase.SendCmd(cmd, timeout, isNeedRecovery);
         }
     }
 }

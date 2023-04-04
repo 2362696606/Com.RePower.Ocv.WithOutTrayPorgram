@@ -62,7 +62,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms
         {
             WmsRequestAllRequestDto dto = new WmsRequestAllRequestDto
             {
-                whCode = WmsSetting?.WhCode ?? string.Empty,
+                WhCode = WmsSetting?.WhCode ?? string.Empty,
                 Location = WmsSetting?.Location ?? string.Empty,
                 TrayBarcode = Tray.TrayCode,
                 ProjectCode = WmsSetting?.ProjectCode ?? string.Empty,

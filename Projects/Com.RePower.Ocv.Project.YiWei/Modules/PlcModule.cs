@@ -28,7 +28,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Modules
                 IPlc? obj;
                 if (isReal)
                 {
-                    obj = JsonConvert.DeserializeObject<Siemens_S1500Impl>(plcSettingJStr);
+                    obj = JsonConvert.DeserializeObject<SiemensS1500Impl>(plcSettingJStr);
                 }
                 else
                 {

@@ -13,7 +13,7 @@ namespace Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard
     {
         public FourLinesSwitchBoardSimulator()
         {
-            deviceBase = new SerialPortDeviceBaseSimulator();
+            DeviceBase = new SerialPortDeviceBaseSimulator();
         }
     }
 }

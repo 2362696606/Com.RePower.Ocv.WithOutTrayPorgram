@@ -227,7 +227,7 @@ namespace Com.RePower.Ocv.Ui.UiBase.ViewModels
                                     && (x.IsNg == true)))
                                     ?.Count() ?? 0;
                 NgCount = ngCount.ToString();
-                NgRate = ((double?)ngCount).div(count)?.ToString("0.##%");
+                NgRate = ((double?)ngCount).Div(count)?.ToString("0.##%");
 
                 if(OrderOptionSelectedItem.Value == 1)
                 {
@@ -280,7 +280,10 @@ namespace Com.RePower.Ocv.Ui.UiBase.ViewModels
                         {
                             Directory.CreateDirectory(path);
                         }
-                        new Npoi.Mapper.Mapper().Save(fullPath, dtos, "sheet1");
+
+                        var excelMapper = new Npoi.Mapper.Mapper().Format<BatteryToExcelDto>(
+                            "yyyy/MM/dd HH:mm:ss",s=>s.TestTime);
+                        excelMapper.Save(fullPath, dtos, "sheet1");
                         MessageQueue.Enqueue("导出成功");
                         return;
                     }

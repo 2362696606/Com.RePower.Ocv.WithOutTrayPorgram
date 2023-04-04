@@ -4,6 +4,20 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+	  <Deterministic>false</Deterministic>
+
+	  <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+
+	  <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+
+	  <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+
+	  <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+
+	  <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+
+	  <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
   </PropertyGroup>
 
   <ItemGroup>

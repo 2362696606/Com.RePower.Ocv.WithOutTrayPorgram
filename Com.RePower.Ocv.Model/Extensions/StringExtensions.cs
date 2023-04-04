@@ -520,10 +520,10 @@ namespace Com.RePower.Ocv.Model.Extensions
             return Regex.Matches(str, pattern, option);
         }
         //是否是整数，必须有一个数字，且必须是正整数或者0
-        public static bool IsInt(this string StrSource)
+        public static bool IsInt(this string strSource)
         {
-            if (StrSource.IsNull()) return false;
-            return Regex.IsMatch(StrSource, @"^[0-9]$");
+            if (strSource.IsNull()) return false;
+            return Regex.IsMatch(strSource, @"^[0-9]$");
         }
 
         public static string TrimPath(this string path)

@@ -23,15 +23,15 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Settings
         /// <summary>
         /// 站点
         /// </summary>
-        public string SITE { get; set; } = string.Empty;
+        public string Site { get; set; } = string.Empty;
         /// <summary>
         /// 资源编号
         /// </summary>
-        public string RESOURCE_NO { get; set; } = string.Empty;
+        public string ResourceNo { get; set; } = string.Empty;
         /// <summary>
         /// 用户编号
         /// </summary>
-        public string DC_USER { get; set; } = string.Empty;
+        public string DcUser { get; set; } = string.Empty;
         /// <summary>
         /// 基础地址
         /// </summary>

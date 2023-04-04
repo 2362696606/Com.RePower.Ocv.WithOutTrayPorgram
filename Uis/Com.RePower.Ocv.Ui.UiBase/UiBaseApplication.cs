@@ -24,7 +24,7 @@ namespace Com.RePower.Ocv.Ui.UiBase
         #region Windows API
 
         // ShowWindow 参数  
-        public const int SW_RESTORE = 9;
+        public const int SwRestore = 9;
 
         /// <summary>
         /// 在桌面窗口列表中寻找与指定条件相符的第一个窗口。
@@ -60,8 +60,8 @@ namespace Com.RePower.Ocv.Ui.UiBase
 
         public UiBaseApplication(bool isSingle = true,string? mainWindowsName = null)
         {
-            this.isSingle = isSingle;
-            this.mainWindowsName = mainWindowsName;
+            this._isSingle = isSingle;
+            this._mainWindowsName = mainWindowsName;
             this.Startup += new StartupEventHandler(App_Startup);
             Resources.MergedDictionaries.Add(
                 new ResourceDictionary { Source = new Uri("/Com.RePower.Ocv.Ui.UiBase;component/Views/Dictionarys/BaseDictionary.xaml", UriKind.RelativeOrAbsolute) }
@@ -71,29 +71,29 @@ namespace Com.RePower.Ocv.Ui.UiBase
         /// <summary>
         /// 应用程序是否应为单例
         /// </summary>
-        private bool isSingle = true;
+        private bool _isSingle = true;
         /// <summary>
         /// 主窗口名
         /// </summary>
-        private string? mainWindowsName;
-        Mutex? mutex;
+        private string? _mainWindowsName;
+        Mutex? _mutex;
 
         protected virtual void App_SingleStart()
         {
-            if(isSingle)
+            if(_isSingle)
             {
-                mutex = new Mutex(true, "OcvApplication", out bool isUnExists);
+                _mutex = new Mutex(true, "OcvApplication", out bool isUnExists);
                 if(!isUnExists)
                 {
-                    if(!string.IsNullOrEmpty(mainWindowsName))
+                    if(!string.IsNullOrEmpty(_mainWindowsName))
                     {
                         // 找到已经在运行的实例句柄(给出你的窗体标题名 “Deamon Club”)
-                        IntPtr? hWndPtr = FindWindow(null!, mainWindowsName);
+                        IntPtr? hWndPtr = FindWindow(null!, _mainWindowsName);
 
                         if ((hWndPtr is { } tempPtr) && tempPtr != new IntPtr(0)) 
                         {
                             // 还原窗口
-                            ShowWindow(tempPtr, SW_RESTORE);
+                            ShowWindow(tempPtr, SwRestore);
 
                             // 激活窗口
                             SetForegroundWindow(tempPtr);

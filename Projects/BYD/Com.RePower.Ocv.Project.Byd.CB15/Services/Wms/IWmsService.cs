@@ -14,7 +14,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Wms
         /// 上传设备状态(可选)
         /// </summary>
         /// <returns></returns>
-        public OperateResult<Status> UpdateOCVStatus();
+        public OperateResult<Status> UpdateOcvStatus();
         /// <summary>
         /// 获取电芯条码(必选)
         /// </summary>

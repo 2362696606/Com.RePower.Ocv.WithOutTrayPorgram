@@ -8,18 +8,18 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Dto
 {
     public class MesBatteryResultForOcv2Dto: MesBatteryResultForOcv1Dto
     {
-        public string OCV2_DATE { get; set; } = string.Empty;
-        public string OCV2 { get; set; } = string.Empty;
-        public string OCV2_MIN_VALUE { get; set; } = string.Empty; 
-        public string OCV2_MAX_VALUE { get; set; } = string.Empty;
-        public string OCR2 { get; set; } = string.Empty;
-        public string OCR2_MIN_VALUE { get; set; } = string.Empty;
-        public string OCR2_MAX_VALUE { get; set; } = string.Empty;
+        public string Ocv2Date { get; set; } = string.Empty;
+        public string Ocv2 { get; set; } = string.Empty;
+        public string Ocv2MinValue { get; set; } = string.Empty; 
+        public string Ocv2MaxValue { get; set; } = string.Empty;
+        public string Ocr2 { get; set; } = string.Empty;
+        public string Ocr2MinValue { get; set; } = string.Empty;
+        public string Ocr2MaxValue { get; set; } = string.Empty;
         public string K12 { get; set; } = string.Empty;
-        public string K12_MIN_VALUE { get; set; } = string.Empty;
-        public string K12_MAX_VALUE { get; set; } = string.Empty;
-        public string OCV1_OCV2_INTERNAL { get; set; } = string.Empty;
-        public string OCV1_OCV2_INTERNAL_MIN_VALUE { get; set; } = string.Empty;
-        public string OCV1_OCV2_INTERNAL_MAX_VALUE { get; set; } = string.Empty;
+        public string K12MinValue { get; set; } = string.Empty;
+        public string K12MaxValue { get; set; } = string.Empty;
+        public string Ocv1Ocv2Internal { get; set; } = string.Empty;
+        public string Ocv1Ocv2InternalMinValue { get; set; } = string.Empty;
+        public string Ocv1Ocv2InternalMaxValue { get; set; } = string.Empty;
     }
 }

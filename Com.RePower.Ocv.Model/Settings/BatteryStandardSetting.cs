@@ -110,7 +110,7 @@ namespace Com.RePower.Ocv.Model.Settings
         /// <summary>
         /// 最大温度
         /// </summary>
-        [SettingName("最小温度")]
+        [SettingName("最大温度")]
         public double MaxTemp
         {
             get { return _maxTemp; }
@@ -120,7 +120,7 @@ namespace Com.RePower.Ocv.Model.Settings
         /// <summary>
         /// 最小温度
         /// </summary>
-        [SettingName("最大温度")]
+        [SettingName("最小温度")]
         public double MinTemp
         {
             get { return _minTemp; }

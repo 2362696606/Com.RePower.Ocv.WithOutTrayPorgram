@@ -25,12 +25,12 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             throw new NotImplementedException();
         }
 
-        public OperateResult<string> CapacitySortingNG()
+        public OperateResult<string> CapacitySortingNg()
         {
             throw new NotImplementedException();
         }
 
-        public OperateResult<string> FormingNG()
+        public OperateResult<string> FormingNg()
         {
             throw new NotImplementedException();
         }
@@ -38,17 +38,17 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
         public OperateResult<string> GetShopOrderList()
         {
             var result = new MesGetShopOrderListResultDto();
-            result.status = true;
+            result.Status = true;
             List<MesGetShopOrderListItem> resultList = new List<MesGetShopOrderListItem>();
             for (int i = 0; i < 3; i++) 
             {
                 var resultItem = new MesGetShopOrderListItem();
                 string orderRandom = string.Format("{0:D5}", new Random().Next(10000));
-                resultItem.value = "OrderValue_" + orderRandom;
-                resultItem.text = "OrderText_" + orderRandom;
+                resultItem.Value = "OrderValue_" + orderRandom;
+                resultItem.Text = "OrderText_" + orderRandom;
                 resultList.Add(resultItem);
             }
-            result.result = resultList;
+            result.Result = resultList;
             string jStr = JsonConvert.SerializeObject(result);
             return OperateResult.CreateSuccessResult<string>(jStr);
         }
@@ -96,7 +96,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Mes
             throw new NotImplementedException();
         }
 
-        public OperateResult<string> VerifyDataOCV1OCV2TestCabinet()
+        public OperateResult<string> VerifyDataOcv1Ocv2TestCabinet()
         {
             throw new NotImplementedException();
         }

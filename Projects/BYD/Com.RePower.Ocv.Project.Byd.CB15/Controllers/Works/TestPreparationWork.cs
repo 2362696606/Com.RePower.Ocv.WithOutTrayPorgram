@@ -37,10 +37,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                     return result;
                 }
             }
-            if (!(DevicesController.DMM?.IsConnected ?? true))
+            if (!(DevicesController.Dmm?.IsConnected ?? true))
             {
                 LogHelper.UiLog.Info("连接万用表");
-                var result = DevicesController.DMM.Connect();
+                var result = DevicesController.Dmm.Connect();
                 if (result.IsSuccess)
                 {
                     LogHelper.UiLog.Info("成功连接万用表");
@@ -57,7 +57,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 if (result.IsSuccess)
                 {
                     LogHelper.UiLog.Info("成功连接内阻仪");
-                    if(DevicesController.Ohm is Hioki_BT3562Impl tempOhm)
+                    if(DevicesController.Ohm is HiokiBt3562Impl tempOhm)
                     {
                         LogHelper.UiLog.Info("正在初始化内阻仪");
                         var setResult = tempOhm.SetRang();

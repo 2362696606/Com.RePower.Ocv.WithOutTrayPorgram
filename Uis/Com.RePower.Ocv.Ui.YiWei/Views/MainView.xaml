@@ -22,6 +22,7 @@
                 </Grid.RowDefinitions>
                 <Menu IsMainMenu="True">
                     <MenuItem Command="{Binding SettingManagerCommand}" Header="参数配置" />
+                    <MenuItem Command="{Binding OpenCalibrationSettingCommand}" Header="校准配置" />
                     <MenuItem Command="{Binding OpenDataSearchViewCommand}" Header="数据查询" />
                 </Menu>
                 <Grid Grid.Row="1">

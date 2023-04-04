@@ -27,28 +27,28 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Wms
 
         public OperateResult<TrayInfoOCV> GetTechnologyInfoByBarCode()
         {
-            TrayInfoOCV trayInfoOCV = new TrayInfoOCV();
-            trayInfoOCV.EquipNum = SettingManager.CurrentWmeSetting?.EquipNum;
-            trayInfoOCV.trayCode = Tray.TrayCode;
+            TrayInfoOCV trayInfoOcv = new TrayInfoOCV();
+            trayInfoOcv.EquipNum = SettingManager.CurrentWmeSetting?.EquipNum;
+            trayInfoOcv.trayCode = Tray.TrayCode;
             int ocvType;
             switch(SettingManager.CurrentOcvType)
             {
-                case Enums.OcvTypeEnmu.OCV1:
+                case Enums.OcvTypeEnmu.Ocv1:
                     ocvType = 1;
                     break;
-                case Enums.OcvTypeEnmu.OCV2:
+                case Enums.OcvTypeEnmu.Ocv2:
                     ocvType = 2;
                     break;
-                case Enums.OcvTypeEnmu.OCV3:
+                case Enums.OcvTypeEnmu.Ocv3:
                     ocvType = 3;
                     break;
-                case Enums.OcvTypeEnmu.OCV4:
+                case Enums.OcvTypeEnmu.Ocv4:
                     ocvType = 4;
                     break;
                 default: ocvType = 0; break;
             }
-            trayInfoOCV.oprationType = ocvType;
-            trayInfoOCV.oprationVersion = string.Empty;
+            trayInfoOcv.oprationType = ocvType;
+            trayInfoOcv.oprationVersion = string.Empty;
             List<TrayInfoResult> trayInfoResults = new List<TrayInfoResult>();
             for(int i = 1;i<=SettingManager.CurrentTestOption?.BatteryCount;i++)
             {
@@ -69,12 +69,12 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Wms
                 trayInfoResults[randomIndex] = temp;
             }
 
-            trayInfoOCV.TrayInfoLstResult = trayInfoResults.ToArray();
+            trayInfoOcv.TrayInfoLstResult = trayInfoResults.ToArray();
             Status status = new Status();
             status.Code = 0;
             status.Message = string.Empty;
-            trayInfoOCV.Status = status;
-            return OperateResult.CreateSuccessResult(trayInfoOCV);
+            trayInfoOcv.Status = status;
+            return OperateResult.CreateSuccessResult(trayInfoOcv);
         }
 
         public OperateResult<Result> GetTestResultByTrayCode()
@@ -93,7 +93,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Wms
             return OperateResult.CreateSuccessResult(result);
         }
 
-        public OperateResult<Status> UpdateOCVStatus()
+        public OperateResult<Status> UpdateOcvStatus()
         {
             throw new NotImplementedException();
         }

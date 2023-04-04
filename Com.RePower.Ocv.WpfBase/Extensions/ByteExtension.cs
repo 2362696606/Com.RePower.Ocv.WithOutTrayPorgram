@@ -22,24 +22,24 @@ namespace Com.RePower.WpfBase.Extensions
             }
             return checkCode;
         }
-        public static string ToHexString(this byte[] InBytes)
+        public static string ToHexString(this byte[] inBytes)
         {
-            return InBytes.ToHexString('\0');
+            return inBytes.ToHexString('\0');
         }
-        public static string ToHexString(this byte[] InBytes, char segment)
+        public static string ToHexString(this byte[] inBytes, char segment)
         {
-            return InBytes.ToHexString(segment, 0);
+            return inBytes.ToHexString(segment, 0);
         }
-        public static string ToHexString(this byte[] InBytes, char segment, int newLineCount)
+        public static string ToHexString(this byte[] inBytes, char segment, int newLineCount)
         {
-            if (InBytes == null)
+            if (inBytes == null)
             {
                 return string.Empty;
             }
 
             StringBuilder stringBuilder = new StringBuilder();
             long num = 0L;
-            foreach (byte b in InBytes)
+            foreach (byte b in inBytes)
             {
                 if (segment == '\0')
                 {

@@ -27,10 +27,32 @@
         <materialDesign:Card Margin="16" Padding="30">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition />
                     <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <UniformGrid Rows="1">
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <TextBlock
+                            Margin="0,0,5,0"
+                            FontSize="16"
+                            Text="MSA:" />
+                        <ToggleButton
+                            FontSize="16"
+                            IsChecked="{Binding Work.IsMsaTest}"
+                            Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" />
+                    </StackPanel>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <TextBlock
+                            Margin="0,0,5,0"
+                            FontSize="16"
+                            Text="手动测试:" />
+                        <ToggleButton
+                            FontSize="16"
+                            IsChecked="{Binding Work.IsManualTesting}"
+                            Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" />
+                    </StackPanel>
+                </UniformGrid>
+                <UniformGrid Grid.Row="1" Rows="1">
                     <UniformGrid.Resources>
                         <Style
                             x:Key="ButtonStyle"
@@ -56,6 +78,7 @@
                             <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp3" />
                         </Style>
                     </UniformGrid.Resources>
+
                     <Button Command="{Binding DoStartCommand}">
                         <Button.Style>
                             <Style BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
@@ -73,23 +96,10 @@
                             </Style>
                         </Button.Style>
                     </Button>
-                    <!--<Button Command="{Binding DoPauseCommand}" Content="暂停" />-->
                     <Button
                         Command="{Binding DoStopCommand}"
                         Content="停止"
                         Style="{StaticResource ButtonStyle}" />
-                    <!--<ToggleButton Content="MSA" IsChecked="{Binding Work.MsaFlag}" />
-                <Button
-                    Command="{Binding ReSetPlcCommand}"
-                    Content="复位"
-                    Style="{StaticResource ButtonStyle}" />-->
-                    <!--<ToggleButton Content="正常测试" IsChecked="{Binding Work.MsaFlag}" />-->
-                    <ToggleButton
-                        Width="100"
-                        Height="100"
-                        Content="MSA"
-                        IsChecked="{Binding Work.IsMsaTest}"
-                        Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" />
                 </UniformGrid>
             </Grid>
         </materialDesign:Card>

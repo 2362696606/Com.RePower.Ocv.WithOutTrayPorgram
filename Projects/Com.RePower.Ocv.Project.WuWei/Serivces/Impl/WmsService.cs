@@ -58,7 +58,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Serivces.Impl
 
         public OperateResult<string> UploadTestResult()
         {
-            UploadOCVTestResultDto dto = new UploadOCVTestResultDto();
+            UploadOcvTestResultDto dto = new UploadOcvTestResultDto();
             dto.EquipmentCode = EquipmentCode;
             dto.PalletBarcode = Tray.TrayCode;
             dto.FileName = WmsSetting.FileName;
@@ -69,7 +69,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Serivces.Impl
             {
                 OneBatteryTestResult tempResult = new OneBatteryTestResult();
                 tempResult.BatteryBarcode = item.Battery.BarCode;
-                tempResult.BatteryNGCode = item.IsNg?"Ng":"Ok";
+                tempResult.BatteryNgCode = item.IsNg?"Ng":"Ok";
                 tempResult.Result = item.IsNg ? 0 : 1;
                 tempResult.BatteryIndex = item.Battery.Position;
                 dto.BatteryTestResults.Add(tempResult);

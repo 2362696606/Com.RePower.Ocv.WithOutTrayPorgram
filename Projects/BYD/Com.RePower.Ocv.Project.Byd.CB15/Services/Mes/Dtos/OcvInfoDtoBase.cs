@@ -11,7 +11,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes.Dtos
         /// </summary>
         [Column(TypeName = "bigint")]
         [CsvHelper.Configuration.Attributes.Ignore]
-        public long ID { get; set; }
+        public long Id { get; set; }
         /// <summary>
         /// 上传时间
         /// </summary>
@@ -59,23 +59,23 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes.Dtos
         /// </summary>
         [Column(TypeName = "varchar(2)")]
         [CsvHelper.Configuration.Attributes.Index(6)]
-        public string? NGCode { get; set; }
+        public string? NgCode { get; set; }
         /// <summary>
         /// 负对壳电压
         /// </summary>
         [Column(TypeName ="DECIMAL(10,4)")]
-        public decimal? NTSVResult { get; set; }
+        public decimal? NtsvResult { get; set; }
         /// <summary>
         /// 正对壳电压
         /// </summary>
         [Column(TypeName = "DECIMAL(10,4)")]
-        public decimal? PTSVResult { get; set; }
+        public decimal? PtsvResult { get; set; }
         /// <summary>
         /// 例O102
         /// </summary>
         [Column(TypeName = "varchar(4)")]
         [CsvHelper.Configuration.Attributes.Ignore]
-        public string? PCID { get; set; } = SettingManager.Instance.CurrentMesSetting?.PcId ?? string.Empty;
+        public string? Pcid { get; set; } = SettingManager.Instance.CurrentMesSetting?.PcId ?? string.Empty;
         /// <summary>
         /// 例：6楼1单元OCV1
         /// </summary>

@@ -14,15 +14,16 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
 {
     public class SettingManager
     {
-        private readonly string testOptionSettingName = "测试选项";
-        private readonly string batteryNgCriteriaSettingName = "电池标准";
-        private readonly string facticitySettingName = "FacticitySetting";
-        private readonly string plcSettingName = "本地Plc";
-        private readonly string ohmSettingName = "内阻仪";
-        private readonly string dmmSettingName = "万用表";
-        private readonly string switchBoardSettingName = "切换板";
-        private readonly string plcCacheValueSettingName = "本地Plc缓存";
-        private readonly string plcAlarmCacheValueSettingName = "Plc报警缓存";
+        private readonly string _testOptionSettingName = "测试选项";
+        private readonly string _batteryNgCriteriaSettingName = "电池标准";
+        private readonly string _facticitySettingName = "FacticitySetting";
+        private readonly string _plcSettingName = "本地Plc";
+        private readonly string _ohmSettingName = "内阻仪";
+        private readonly string _dmmSettingName = "万用表";
+        private readonly string _switchBoardSettingName = "切换板";
+        private readonly string _plcCacheValueSettingName = "本地Plc缓存";
+        private readonly string _plcAlarmCacheValueSettingName = "Plc报警缓存";
+        private readonly string _calibrationSettingName = "校准选项";
 
 
         private SettingManager()
@@ -30,7 +31,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
             using (var dbContext = new OcvSettingDbContext())
             {
                 #region 初始化TestOption
-                var testOptionSettingJson = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == testOptionSettingName)?.JsonValue;
+                var testOptionSettingJson = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == _testOptionSettingName)?.JsonValue;
                 if (!string.IsNullOrEmpty(testOptionSettingJson))
                 {
                     _testOption = JsonConvert.DeserializeObject<Model.TestOption>(testOptionSettingJson);
@@ -39,7 +40,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                 #endregion
 
                 #region 初始化BatteryNgCriteria
-                var ngCriteriaJsonStr = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == batteryNgCriteriaSettingName)?.JsonValue;
+                var ngCriteriaJsonStr = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == _batteryNgCriteriaSettingName)?.JsonValue;
                 if (!string.IsNullOrEmpty(ngCriteriaJsonStr))
                 {
                     _batteryNgCriteria = JsonConvert.DeserializeObject<BatteryNgCriteria>(ngCriteriaJsonStr);
@@ -47,25 +48,40 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
                 }
                 #endregion
 
+                var calibrationJsonStr = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == _calibrationSettingName)?.JsonValue;
+                if(!string.IsNullOrEmpty(calibrationJsonStr))
+                {
+                    _calibrationSetting = JsonConvert.DeserializeObject<Model.CalibrationSetting>(calibrationJsonStr);
+                    if(_calibrationSetting is { }) _calibrationSetting.SaveAction = SaveSettingChanged;
+                }
+
                 #region 设备真实性配置
-                var facticitySettingJsonStr = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == facticitySettingName)?.JsonValue;
+                var facticitySettingJsonStr = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == _facticitySettingName)?.JsonValue;
                 if (!string.IsNullOrEmpty(facticitySettingJsonStr))
                     _facticitySetting = JsonConvert.DeserializeObject<FacticitySetting>(facticitySettingJsonStr); 
                 #endregion
 
                 #region 获取硬件配置字符串
-                PlcSettingJson = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == plcSettingName)?.JsonValue;
-                OhmSettingJson = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == ohmSettingName)?.JsonValue;
-                DmmSettingJson = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == dmmSettingName)?.JsonValue;
-                SwitchBoardSettingJson = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == switchBoardSettingName)?.JsonValue;
+                PlcSettingJson = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == _plcSettingName)?.JsonValue;
+                OhmSettingJson = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == _ohmSettingName)?.JsonValue;
+                DmmSettingJson = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == _dmmSettingName)?.JsonValue;
+                SwitchBoardSettingJson = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == _switchBoardSettingName)?.JsonValue;
 
 
-                PlcCacheJsonValue = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == plcCacheValueSettingName)?.JsonValue;
-                PlcAlarmCacheJsonValue = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == plcAlarmCacheValueSettingName)?.JsonValue;
+                PlcCacheJsonValue = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == _plcCacheValueSettingName)?.JsonValue;
+                PlcAlarmCacheJsonValue = dbContext.SettingItems.FirstOrDefault(x => x.SettingName == _plcAlarmCacheValueSettingName)?.JsonValue;
                 #endregion
 
             }
         }
+        private Model.CalibrationSetting? _calibrationSetting;
+
+        public Model.CalibrationSetting? CurrentCalibrationSetting
+        {
+            get { return _calibrationSetting; }
+            set { _calibrationSetting = value; }
+        }
+
 
         private BatteryNgCriteria? _batteryNgCriteria;
         /// <summary>
@@ -113,14 +129,20 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers
             {
                 case "TestOption":
                     {
-                        settingName = testOptionSettingName;
+                        settingName = _testOptionSettingName;
                         settingValue = JsonConvert.SerializeObject(CurrentTestOption);
                         break;
                     }
                 case "BatteryNgCriteria":
                     {
-                        settingName = batteryNgCriteriaSettingName;
+                        settingName = _batteryNgCriteriaSettingName;
                         settingValue = JsonConvert.SerializeObject(CurrentBatteryNgCriteria);
+                        break;
+                    }
+                case "CalibrationSetting":
+                    {
+                        settingName = _calibrationSettingName;
+                        settingValue = JsonConvert.SerializeObject(CurrentCalibrationSetting);
                         break;
                     }
             }

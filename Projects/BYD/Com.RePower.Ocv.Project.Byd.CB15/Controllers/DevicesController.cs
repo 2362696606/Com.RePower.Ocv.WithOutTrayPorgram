@@ -16,20 +16,20 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
 {
     public class DevicesController
     {
-        private IDMM? _dmm;
+        private IDmm? _dmm;
         private IOhm? _ohm;
         private ISwitchBoard? _switchBoard;
         private ITemperatureSensor? _ptemperatureSensor;
         private ITemperatureSensor? _ntemperatureSensor;
         public DevicesController(IPlc localPlc
-            , IDMM? dMM = null
+            , IDmm? dMm = null
             , IOhm? ohm = null
             , ISwitchBoard? switchBoard = null
             , [KeyFilter("PTempSensor")]ITemperatureSensor? ptemperatureSensor = null
             , [KeyFilter("NTempSensor")]ITemperatureSensor? ntemperatureSensor = null)
         {
             Plc = localPlc;
-            _dmm = dMM;
+            _dmm = dMm;
             _ohm = ohm;
             _switchBoard = switchBoard;
             _ptemperatureSensor = ptemperatureSensor;
@@ -38,7 +38,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers
 
         public IPlc Plc { get; }
 
-        public IDMM? DMM
+        public IDmm? Dmm
         {
             get
             {

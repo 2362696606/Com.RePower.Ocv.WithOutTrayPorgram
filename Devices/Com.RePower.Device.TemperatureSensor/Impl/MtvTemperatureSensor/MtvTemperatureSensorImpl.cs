@@ -10,63 +10,63 @@ namespace Com.RePower.Device.TemperatureSensor.Impl.MtvTemperatureSensor
 {
     public class MtvTemperatureSensorImpl : MtvTemperatureSensorAbstruct
     {
-        protected INetDeviceBase netDeviceBase;
+        protected INetDeviceBase NetDeviceBase;
         public MtvTemperatureSensorImpl()
         {
-            this.netDeviceBase = new UdpNetDeviceBase();
+            this.NetDeviceBase = new UdpNetDeviceBase();
         }
 
         public override string IpAddress
         {
-            get { return netDeviceBase.IpAddress; }
-            set { netDeviceBase.IpAddress = value; }
+            get { return NetDeviceBase.IpAddress; }
+            set { NetDeviceBase.IpAddress = value; }
         }
 
         public override int Port
         {
-            get { return netDeviceBase.Port; }
-            set { netDeviceBase.Port = value; }
+            get { return NetDeviceBase.Port; }
+            set { NetDeviceBase.Port = value; }
         }
 
         public override bool IsConnected
         {
-            get { return netDeviceBase.IsConnected; }
+            get { return NetDeviceBase.IsConnected; }
         }
 
         public override string DeviceName
         {
-            get { return netDeviceBase.DeviceName; }
-            set { netDeviceBase.DeviceName = value; }
+            get { return NetDeviceBase.DeviceName; }
+            set { NetDeviceBase.DeviceName = value; }
         }
         public override int ReadDelay
         {
-            get { return netDeviceBase.ReadDelay; }
-            set { netDeviceBase.ReadDelay = value; }
+            get { return NetDeviceBase.ReadDelay; }
+            set { NetDeviceBase.ReadDelay = value; }
         }
 
         public override OperateResult Connect(string ipAddress, int port)
         {
-            return netDeviceBase.Connect(ipAddress, port);
+            return NetDeviceBase.Connect(ipAddress, port);
         }
 
         public override OperateResult Connect()
         {
-            return netDeviceBase.Connect();
+            return NetDeviceBase.Connect();
         }
 
         public override OperateResult DisConnect()
         {
-            return netDeviceBase.DisConnect();
+            return NetDeviceBase.DisConnect();
         }
 
         public override void Dispose()
         {
-            netDeviceBase.Dispose();
+            NetDeviceBase.Dispose();
         }
 
         public override OperateResult<byte[]> SendCmd(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
         {
-            return netDeviceBase.SendCmd(cmd, timeout, isNeedRecovery);
+            return NetDeviceBase.SendCmd(cmd, timeout, isNeedRecovery);
         }
     }
 }

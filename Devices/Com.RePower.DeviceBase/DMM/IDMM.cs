@@ -11,8 +11,8 @@ namespace Com.RePower.DeviceBase.DMM
     /// <summary>
     /// 万用表
     /// </summary>
-    [DeviceInfo(Models.DeviceType.DMM)]
-    public interface IDMM:IDevice,ISendCmd
+    [DeviceInfo(Models.DeviceType.Dmm)]
+    public interface IDmm:IDevice,ISendCmd
     {
         /// <summary>
         /// 读直流电压
