@@ -1,10 +1,5 @@
 ﻿using Com.RePower.WpfBase;
-using Com.RePower.WpfBase.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
 {
@@ -19,6 +14,7 @@ namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
         /// 保留小数位
         /// </summary>
         public int Digits { get; set; } = 3;
+
         public override OperateResult<double> ReadRes()
         {
             byte[] cmd = Encoding.ASCII.GetBytes(":READ?" + "\r\n");
@@ -51,17 +47,19 @@ namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
                 }
             }
         }
+
         protected virtual double TranslateToDouble(string valueSource)
         {
             //var value = (double)Decimal.Parse(Encoding.ASCII.GetString(bytes), System.Globalization.NumberStyles.Float);
             var value = double.Parse(valueSource);
-            switch(ResultUnit)
+            switch (ResultUnit)
             {
                 default:
                 case ResultUnit.MΩ:
                     value = value * 1000;
                     value = Math.Round(value, Digits);
                     break;
+
                 case ResultUnit.Ω:
                     value = Math.Round(value, Digits);
                     break;

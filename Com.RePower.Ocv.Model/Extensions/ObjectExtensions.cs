@@ -1,16 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using NPOI.SS.Formula.PTG;
 
 namespace Com.RePower.Ocv.Model.Extensions
 {
@@ -27,6 +18,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             double sum = sequence.Sum(d => Math.Pow(d - average, 2));
             return Math.Sqrt((sum) / sequence.Count());
         }
+
         /// <summary>
         /// 返回对象格式化后的Json字符串
         /// </summary>
@@ -58,6 +50,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return formatString;
         }
+
         /// <summary>
         /// object对象转化为string，后强制转化为DateTime,此时要保证这个字符串一定能化为DateTime，不然会抛异常
         /// </summary>
@@ -73,6 +66,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return obj == null;
         }
+
         public static bool IsDefault<T>(this T obj)
         {
             T? theDefault = default;
@@ -90,6 +84,7 @@ namespace Com.RePower.Ocv.Model.Extensions
                 return obj?.Equals(theDefault) ?? false;
             }
         }
+
         /// <summary>
         /// 当前obj不为Null
         /// </summary>
@@ -99,6 +94,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return obj != null;
         }
+
         public static T? DoFunc<T>(this object obj, Func<T, T> action) where T : class
         {
             if (obj is T temp)
@@ -107,6 +103,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return null;
         }
+
         public static void DoAction<T>(this object obj, Action<T> action) where T : class
         {
             if (obj is T temp)
@@ -116,6 +113,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         }
 
         private static List<string> _basiceTypes = new List<string>() { "System.Boolean", "System.Byte", "System.SByte", "System.Char", "System.Decimal", "System.Double", "System.Single", "System.Int32", "System.UInt32", "System.Int64", "System.UInt64", "System.Object", "System.Int16", "System.UInt16", "System.String" };
+
         public static bool IsBasicType(this object obj)
         {
             if (obj == null)
@@ -124,6 +122,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return _basiceTypes.Any(p => p == obj.GetType().FullName);
         }
+
         public static bool IsTypeBaseType(this Type t)
         {
             if (t == null)
@@ -132,6 +131,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return _basiceTypes.Any(p => p == t.FullName);
         }
+
         /// <summary>
         /// 是否是枚举类型
         /// </summary>
@@ -149,6 +149,7 @@ namespace Com.RePower.Ocv.Model.Extensions
                 return memberInfo != null && memberInfo.FullName == "System.Enum";
             }
         }
+
         /// <summary>
         /// 判断对象是不是数组
         /// 如：  int[] obj = new[] { 5, 6, 7 };
@@ -159,6 +160,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return obj is Array;
         }
+
         /// <summary>
         /// 是不是一个List
         ///例如： List<int/> l = new List<int>() { 1, 3, 57 };</int>
@@ -169,6 +171,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return obj is IList;
         }
+
         /// <summary>
         /// 对象是不是一个Enumerable对象或者IEnumerable对象
         /// 如：IEnumerable<int> l2 = l.Select(p => p);</int>
@@ -179,13 +182,14 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return obj is IEnumerable;
         }
+
         public static T To<T>(this object obj) where T : struct
         {
             if (typeof(T) == typeof(Guid) || typeof(T) == typeof(TimeSpan))
             {
                 var typeConverter = TypeDescriptor.GetConverter(typeof(T));
-                var tempObj = typeConverter.ConvertFromInvariantString(obj.ToString()??string.Empty);
-                if(tempObj is T tempT)
+                var tempObj = typeConverter.ConvertFromInvariantString(obj.ToString() ?? string.Empty);
+                if (tempObj is T tempT)
                 {
                     return tempT;
                 }
@@ -204,6 +208,7 @@ namespace Com.RePower.Ocv.Model.Extensions
 
             return (T)Convert.ChangeType(obj, typeof(T), CultureInfo.InvariantCulture);
         }
+
         public static T As<T>(this object obj)
         {
             return (T)obj;

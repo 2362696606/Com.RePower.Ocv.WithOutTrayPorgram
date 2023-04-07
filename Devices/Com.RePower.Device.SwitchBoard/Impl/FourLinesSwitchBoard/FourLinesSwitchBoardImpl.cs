@@ -1,12 +1,6 @@
-﻿using Autofac.Core.Resolving.Middleware;
-using Com.RePower.DeviceBase.BaseDevice;
+﻿using Com.RePower.DeviceBase.BaseDevice;
 using Com.RePower.DeviceBase.SwitchBoard;
 using Com.RePower.WpfBase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard
 {
@@ -19,7 +13,8 @@ namespace Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard
             DeviceBase = new SerialPortDeviceBase();
         }
 
-        public override bool IsConnected { get { return DeviceBase.IsConnected; } }
+        public override bool IsConnected
+        { get { return DeviceBase.IsConnected; } }
 
         public override string DeviceName
         {
@@ -32,18 +27,20 @@ namespace Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard
             get { return DeviceBase.PortName; }
             set { DeviceBase.PortName = value; }
         }
+
         public int BaudRate
         {
             get { return DeviceBase.BaudRate; }
             set { DeviceBase.BaudRate = value; }
         }
+
         /// <summary>
         /// 读取延迟
         /// </summary>
         public override int ReadDelay
         {
-            get { return DeviceBase.ReadDelay;}
-            set { DeviceBase.ReadDelay = value;}
+            get { return DeviceBase.ReadDelay; }
+            set { DeviceBase.ReadDelay = value; }
         }
 
         public override OperateResult Connect()

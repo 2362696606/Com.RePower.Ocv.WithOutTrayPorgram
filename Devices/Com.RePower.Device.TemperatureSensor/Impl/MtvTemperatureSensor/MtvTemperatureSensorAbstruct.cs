@@ -1,11 +1,5 @@
-﻿using Com.RePower.DeviceBase.BaseDevice;
-using Com.RePower.DeviceBase.TemperatureSensor;
+﻿using Com.RePower.DeviceBase.TemperatureSensor;
 using Com.RePower.WpfBase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Device.TemperatureSensor.Impl.MtvTemperatureSensor
 {
@@ -64,7 +58,7 @@ namespace Com.RePower.Device.TemperatureSensor.Impl.MtvTemperatureSensor
         /// Init: 0xFFFF
         /// Refin: true
         /// Refout: true
-        /// Xorout: 0x0000    
+        /// Xorout: 0x0000
         ///*************************************************************************
         public static byte[] Crc(byte[] buffer, int start = 0, int len = 0)
         {
@@ -80,7 +74,7 @@ namespace Com.RePower.Device.TemperatureSensor.Impl.MtvTemperatureSensor
                 for (int j = 0; j < 8; j++)
                 {
                     if ((crc & 1) > 0)
-                        crc = (ushort)((crc >> 1) ^ 0xA001);// 0xA001 = reverse 0x8005 
+                        crc = (ushort)((crc >> 1) ^ 0xA001);// 0xA001 = reverse 0x8005
                     else
                         crc = (ushort)(crc >> 1);
                 }
@@ -90,11 +84,11 @@ namespace Com.RePower.Device.TemperatureSensor.Impl.MtvTemperatureSensor
             return ret;
         }
 
-
         public abstract string IpAddress { get; set; }
         public abstract int Port { get; set; }
 
         public abstract OperateResult Connect(string ipAddress, int port);
+
         public virtual async Task<OperateResult> ConnectAsync(string ipAddress, int port)
         {
             return await Task.Run(() => Connect(ipAddress, port));

@@ -1,16 +1,10 @@
-﻿using Com.RePower.DeviceBase;
-using Com.RePower.DeviceBase.BaseDevice;
-using Com.RePower.DeviceBase.DMM;
+﻿using Com.RePower.DeviceBase.DMM;
 using Com.RePower.WpfBase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
 {
-    public abstract class Keysight34461AAbstract : DmmBase,IDmmNet
+    public abstract class Keysight34461AAbstract : DmmBase, IDmmNet
     {
         /// <summary>
         /// 当前测试模式
@@ -56,6 +50,7 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
         /// 保留小数位
         /// </summary>
         public int Digits { get; set; } = 3;
+
         public abstract string IpAddress { get; set; }
         public abstract int Port { get; set; }
 
@@ -80,6 +75,7 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
                 return OperateResult.CreateFailedResult<double>(result.Message ?? "读取失败", result.ErrorCode);
             }
         }
+
         private string GetCmd(string name)
         {
             string cmdStr = string.Empty;
@@ -88,27 +84,35 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
                 case "SetDcFunc":
                     cmdStr = ":sens:func \"volt:dc\"";
                     break;
+
                 case "SetAcFunc":
                     cmdStr = ":sens:func \"volt:ac\"";
                     break;
+
                 case "SetResFunc":
                     cmdStr = ":sens:func \"res\"";
                     break;
+
                 case "SetDcRange":
                     cmdStr = $":sens:volt:dc:range:{DcRange}";
                     break;
+
                 case "SetAcRange":
                     cmdStr = $":sens:volt:ac:range:{AcRange}";
                     break;
+
                 case "SetResRange":
                     cmdStr = $":sens:res:range:{ResRange}";
                     break;
+
                 case "SetDcNplc":
                     cmdStr = $":sens:volt:dc:nplc:{DcNplc}";
                     break;
+
                 case "SetResNplc":
                     cmdStr = $":sens:res:nplc:{ResNplc}";
                     break;
+
                 case "Read":
                     cmdStr = "READ?";
                     break;
@@ -119,19 +123,21 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
         protected virtual double TranslateToDouble(byte[] bytes)
         {
             var value = (double)Decimal.Parse(Encoding.ASCII.GetString(bytes), System.Globalization.NumberStyles.Float);
-            switch(ResultUnit)
+            switch (ResultUnit)
             {
                 default:
                 case ResultUnit.MV:
                     value = value * 1000;
                     value = Math.Round(value, Digits);
                     break;
+
                 case ResultUnit.V:
                     value = Math.Round(value, Digits);
                     break;
             }
             return value;
         }
+
         public override OperateResult<double> ReadAc()
         {
             List<string> cmdlist = new List<string>();
@@ -149,6 +155,7 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
             byte[] command = ASCIIEncoding.ASCII.GetBytes(s);
             return ReadValue(command);
         }
+
         public override OperateResult<double> ReadDc()
         {
             List<string> cmdlist = new List<string>();
@@ -166,6 +173,7 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
             byte[] command = ASCIIEncoding.ASCII.GetBytes(s);
             return ReadValue(command);
         }
+
         public override OperateResult<double> ReadRes()
         {
             List<string> cmdlist = new List<string>();
@@ -185,6 +193,7 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
         }
 
         public abstract OperateResult Connect(string ipAddress, int port);
+
         public abstract Task<OperateResult> ConnectAsync(string ipAddress, int port);
     }
 }

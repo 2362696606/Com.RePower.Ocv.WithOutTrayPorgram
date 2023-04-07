@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace Com.RePower.WpfBase.Extensions
 {
@@ -22,14 +18,17 @@ namespace Com.RePower.WpfBase.Extensions
             }
             return checkCode;
         }
+
         public static string ToHexString(this byte[] inBytes)
         {
             return inBytes.ToHexString('\0');
         }
+
         public static string ToHexString(this byte[] inBytes, char segment)
         {
             return inBytes.ToHexString(segment, 0);
         }
+
         public static string ToHexString(this byte[] inBytes, char segment, int newLineCount)
         {
             if (inBytes == null)

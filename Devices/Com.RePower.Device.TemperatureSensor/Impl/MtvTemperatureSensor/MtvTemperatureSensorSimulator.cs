@@ -1,22 +1,15 @@
 ﻿using Com.RePower.DeviceBase.BaseDevice;
-using Com.RePower.WpfBase;
-using NPOI.POIFS.Crypt.Dsig;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Device.TemperatureSensor.Impl.MtvTemperatureSensor
 {
-    public class MtvTemperatureSensorSimulator:MtvTemperatureSensorImpl
+    public class MtvTemperatureSensorSimulator : MtvTemperatureSensorImpl
     {
         public MtvTemperatureSensorSimulator()
         {
             this.NetDeviceBase = new NetDeviceBaseSimulator();
 
             var temp = NetDeviceBase as NetDeviceBaseSimulator;
-            if(temp is { })
+            if (temp is { })
                 temp.RecoveryMethod += RecoveryMethod;
         }
 
@@ -25,7 +18,6 @@ namespace Com.RePower.Device.TemperatureSensor.Impl.MtvTemperatureSensor
             byte[]? result = null;
             byte[] sendBytes = new byte[] { 0x43, 0x54, 0x4f, 0x44, 0x20, 0x00, 0x01, 0x00, 0x01, 0x00, 0x04, 0x00, 0x01, 0x00, 0xb3, 0x5b };
             byte[] recoveryBytes = new byte[] { 0x64, 0x74, 0x70, 0x63, 0x20, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0e, 0x00, 0x01, 0x00, 0x56, 0x00, 0x00, 0x00, 0x06, 0x00, 0x28, 0xff, 0xff, 0x00, 0xa1, 0xa3 };
-
 
             byte[] cmdBase1 = new byte[] { 0x43, 0x54, 0x4f, 0x44, 0x20, 0x00, 0x01, 0x00, 0x02, 0x00, 0x04, 0x00, 0x01, 0x00, 0xb3, 0x68 };
             byte[] cmdBase2 = new byte[] { 0x43, 0x54, 0x4f, 0x44, 0x20, 0x00, 0x02, 0x00, 0x02, 0x00, 0x04, 0x00, 0x01, 0x00, 0xF3, 0x7d };

@@ -1,16 +1,8 @@
 ﻿using CLDC.Framework.Log;
-using Com.RePower.WpfBase.Extensions;
 using Com.RePower.WpfBase;
-using System;
-using System.Collections.Generic;
-using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Sockets;
-using System.Threading;
-using System.Net.Http;
+using Com.RePower.WpfBase.Extensions;
 using System.Net;
+using System.Net.Sockets;
 
 namespace Com.RePower.DeviceBase.Helper
 {
@@ -20,7 +12,7 @@ namespace Com.RePower.DeviceBase.Helper
         {
             try
             {
-                string ip = ((IPEndPoint?)tcpClient.Client.RemoteEndPoint)?.Address.ToString()??"未知IP";
+                string ip = ((IPEndPoint?)tcpClient.Client.RemoteEndPoint)?.Address.ToString() ?? "未知IP";
                 string port = ((IPEndPoint?)tcpClient.Client.RemoteEndPoint)?.Port.ToString() ?? "未知端口";
                 Log.getMessageFile("tcp通讯日志").Info($"IP:{ip},端口:{port},发送:{bytes.ToHexString(',')}");
                 tcpClient.GetStream().Write(bytes, 0, bytes.Length);
@@ -41,7 +33,7 @@ namespace Com.RePower.DeviceBase.Helper
             }
         }
 
-        public static async Task<OperateResult<byte[]>> SendAndRecoveryAsync(this TcpClient tcpClient, byte[] bytes, int timeOut = 10000,int readDelay = -1)
+        public static async Task<OperateResult<byte[]>> SendAndRecoveryAsync(this TcpClient tcpClient, byte[] bytes, int timeOut = 10000, int readDelay = -1)
         {
             try
             {

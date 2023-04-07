@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Com.RePower.Ocv.Model.Extensions
+﻿namespace Com.RePower.Ocv.Model.Extensions
 {
     public static class IntExtensions
     {

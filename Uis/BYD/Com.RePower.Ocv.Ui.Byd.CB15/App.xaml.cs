@@ -54,7 +54,7 @@ namespace Com.RePower.Ocv.Ui.Byd.CB15
             builder.RegisterModule<WmsModule>();
             builder.RegisterModule<MesModule>();
         }
-        protected override void OnInitComplate()
+        protected override void OnInitComplete()
         {
             using (var settingContext = new OcvSettingDbContext())
             {

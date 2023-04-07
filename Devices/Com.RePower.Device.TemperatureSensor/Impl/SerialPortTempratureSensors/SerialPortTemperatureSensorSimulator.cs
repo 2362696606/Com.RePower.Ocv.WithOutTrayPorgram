@@ -1,9 +1,4 @@
 ﻿using Com.RePower.DeviceBase.BaseDevice;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Device.TemperatureSensor.Impl.SerialPortTempratureSensors
 {
@@ -12,7 +7,7 @@ namespace Com.RePower.Device.TemperatureSensor.Impl.SerialPortTempratureSensors
         public SerialPortTemperatureSensorSimulator()
         {
             this.SerialPortDeviceBase = new SerialPortDeviceBaseSimulator();
-            if(SerialPortDeviceBase is SerialPortDeviceBaseSimulator tempDeviceBase)
+            if (SerialPortDeviceBase is SerialPortDeviceBaseSimulator tempDeviceBase)
             {
                 tempDeviceBase.RecoveryMethod = RecoveryMethod;
             }

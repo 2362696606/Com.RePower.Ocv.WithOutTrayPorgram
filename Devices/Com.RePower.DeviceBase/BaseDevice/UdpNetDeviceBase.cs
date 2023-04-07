@@ -1,12 +1,6 @@
-﻿using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-using Com.RePower.DeviceBase.Helper;
+﻿using Com.RePower.DeviceBase.Helper;
 using Com.RePower.WpfBase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.DeviceBase.BaseDevice
 {
@@ -44,7 +38,6 @@ namespace Com.RePower.DeviceBase.BaseDevice
             get { return _isConnected; }
             set { _isConnected = value; }
         }
-
 
         public string DeviceName
         {
@@ -112,7 +105,6 @@ namespace Com.RePower.DeviceBase.BaseDevice
         {
             return await Task.Run(() => DisConnect());
         }
-
 
         public OperateResult<byte[]> SendCmd(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
         {

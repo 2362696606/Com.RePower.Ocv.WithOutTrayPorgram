@@ -1,9 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Model.Settings
 {
@@ -17,6 +12,7 @@ namespace Com.RePower.Ocv.Model.Settings
         private bool _isRealMes;
         private bool _isRealWms;
         private bool _isRealTemperatureSensor;
+
         /// <summary>
         /// 是否是真实Plc
         /// </summary>
@@ -25,6 +21,7 @@ namespace Com.RePower.Ocv.Model.Settings
             get { return _isRealPlc; }
             set { SetProperty(ref _isRealPlc, value); }
         }
+
         /// <summary>
         /// 是否是真实内阻仪
         /// </summary>
@@ -33,6 +30,7 @@ namespace Com.RePower.Ocv.Model.Settings
             get { return _isRealOhm; }
             set { SetProperty(ref _isRealOhm, value); }
         }
+
         /// <summary>
         /// 是否是真实万用表
         /// </summary>
@@ -41,6 +39,7 @@ namespace Com.RePower.Ocv.Model.Settings
             get { return _isRealDmm; }
             set { SetProperty(ref _isRealDmm, value); }
         }
+
         /// <summary>
         /// 是否是真实Mtvs
         /// </summary>
@@ -58,6 +57,7 @@ namespace Com.RePower.Ocv.Model.Settings
             get { return _isRealSwitchBoard; }
             set { SetProperty(ref _isRealSwitchBoard, value); }
         }
+
         /// <summary>
         /// 是否是真实调度
         /// </summary>
@@ -66,6 +66,7 @@ namespace Com.RePower.Ocv.Model.Settings
             get { return _isRealWms; }
             set { SetProperty(ref _isRealWms, value); }
         }
+
         /// <summary>
         /// 是否是真实Mes
         /// </summary>
@@ -74,6 +75,7 @@ namespace Com.RePower.Ocv.Model.Settings
             get { return _isRealMes; }
             set { SetProperty(ref _isRealMes, value); }
         }
+
         /// <summary>
         /// 是否是真实温度传感器
         /// </summary>
@@ -82,6 +84,5 @@ namespace Com.RePower.Ocv.Model.Settings
             get { return _isRealTemperatureSensor; }
             set { SetProperty(ref _isRealTemperatureSensor, value); }
         }
-
     }
 }

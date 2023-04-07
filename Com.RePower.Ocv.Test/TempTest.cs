@@ -1,19 +1,10 @@
-﻿using Com.RePower.Ocv.Model;
-using Com.RePower.Ocv.Model.Entity;
+﻿using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Model.Enums;
-using Com.RePower.Ocv.Model.Extensions;
 using HslCommunication;
-using HslCommunication.Profinet.Inovance;
 using Newtonsoft.Json;
 using Npoi.Mapper;
-using System.Collections;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.IO.Ports;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Threading;
 using Xunit.Abstractions;
 
 namespace Com.RePower.Ocv.Test
@@ -21,16 +12,19 @@ namespace Com.RePower.Ocv.Test
     public class TempTest
     {
         public ITestOutputHelper OutputHelper { get; set; }
+
         public TempTest(ITestOutputHelper outputHelper)
         {
             OutputHelper = outputHelper;
         }
+
         [Fact]
         public void PraseInovanceAmAddressTest()
         {
             int[] a = { 1, 2, 3, };
             OutputHelper.WriteLine(a.ToArrayString());
         }
+
         [Fact]
         public void DoubleParseTest()
         {
@@ -41,6 +35,7 @@ namespace Com.RePower.Ocv.Test
             //string value = "0.6859E-3";
             //var value1 = double.Parse(value);
         }
+
         [Fact]
         public void WaitTest()
         {
@@ -59,7 +54,7 @@ namespace Com.RePower.Ocv.Test
                 setFlag.Invoke();
             });
             //serialPort.Write(bytes, 0, bytes.Length);
-            //Task t1 = Task.Run(() => 
+            //Task t1 = Task.Run(() =>
             //{
             //    OutputHelper.WriteLine($"开始睡眠，计时{stopwatch.ElapsedMilliseconds}");
             //    Thread.Sleep(readDelay);
@@ -79,6 +74,7 @@ namespace Com.RePower.Ocv.Test
                 OutputHelper.WriteLine("超时");
             }
         }
+
         [Fact]
         public void JsonConvertTest()
         {
@@ -101,12 +97,14 @@ namespace Com.RePower.Ocv.Test
             string resultString = JsonConvert.SerializeObject(plcCacheValues);
             OutputHelper.WriteLine(resultString);
         }
+
         [Fact]
         public void BitConvertTest()
         {
             NgTypeEnum e;
             var result = Enum.TryParse<NgTypeEnum>(100.ToString(), out e);
         }
+
         //[Fact]
         //public void NgTypeEnumTest()
         //{
@@ -152,19 +150,21 @@ namespace Com.RePower.Ocv.Test
                                       t.Status != TaskStatus.Canceled ? t.Result.ToString("N0") : "n/a");
             }
         }
+
         [Fact]
         private void OrderByDateTimeTest()
         {
             List<DateTimeTestClass> tasks = new List<DateTimeTestClass>();
-            for (int i = 0; i < 20; i++) 
+            for (int i = 0; i < 20; i++)
             {
                 int random = new Random().Next(100);
-                DateTimeTestClass dateTimeTestClass = new DateTimeTestClass { Id = i,Time = DateTime.Now.AddDays(random) };
+                DateTimeTestClass dateTimeTestClass = new DateTimeTestClass { Id = i, Time = DateTime.Now.AddDays(random) };
                 tasks.Add(dateTimeTestClass);
             }
             //tasks.OrderBy(x => x.Time);
             tasks.Sort((x, y) => DateTime.Compare(x.Time, y.Time));
         }
+
         [Fact]
         private void TranslationTest()
         {
@@ -196,7 +196,6 @@ namespace Com.RePower.Ocv.Test
         //}
     }
 
-
     public class DateTimeTestClass
     {
         public int Id { get; set; }
@@ -209,6 +208,7 @@ namespace Com.RePower.Ocv.Test
         public TestEnum EnumValue { get; set; } = TestEnum.MΩ;
         public int IntValue { get; set; }
     }
+
     public enum TestEnum
     {
         MΩ,
@@ -232,7 +232,6 @@ namespace Com.RePower.Ocv.Test
 
         //    for (int i = 0; i < s1.Length; i++)
         //    {
-
         //        if (s1[i] > s2[i]) return 1;
 
         //        if (s1[i] < s2[i]) return -1;
@@ -254,15 +253,12 @@ namespace Com.RePower.Ocv.Test
 
             for (int i = 0; i < s1.Length; i++)
             {
-
                 if (s1[i] > s2[i]) return 1;
 
                 if (s1[i] < s2[i]) return -1;
-
             }
 
             return 0;
         }
-        
     }
 }

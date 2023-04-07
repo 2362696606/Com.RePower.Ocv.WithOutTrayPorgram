@@ -1,14 +1,8 @@
 ﻿using Com.RePower.WpfBase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.DeviceBase.BaseDevice
 {
-    public class NetDeviceBaseSimulator : INetDeviceBase,ISimulatorRecovery
+    public class NetDeviceBaseSimulator : INetDeviceBase, ISimulatorRecovery
     {
         private bool _disposedValue;
 
@@ -16,12 +10,12 @@ namespace Com.RePower.DeviceBase.BaseDevice
 
         public int Port { get; set; } = 5020;
 
-        public bool IsConnected { get; private set; }= false;
+        public bool IsConnected { get; private set; } = false;
 
         public string DeviceName { get; set; } = "UnnamedDevice";
 
-        public int ReadDelay { get; set ; }
-        public Func<byte[], byte[]>? RecoveryMethod { get ; set; }
+        public int ReadDelay { get; set; }
+        public Func<byte[], byte[]>? RecoveryMethod { get; set; }
 
         public OperateResult Connect(string ipAddress, int port)
         {
@@ -39,7 +33,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
 
         public async Task<OperateResult> ConnectAsync(string ipAddress, int port)
         {
-            return await Task.Run(() => Connect(ipAddress,port));
+            return await Task.Run(() => Connect(ipAddress, port));
         }
 
         public async Task<OperateResult> ConnectAsync()

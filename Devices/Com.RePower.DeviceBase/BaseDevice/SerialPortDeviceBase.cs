@@ -1,13 +1,6 @@
-﻿using CLDC.Framework.Log;
-using Com.RePower.DeviceBase.Helper;
+﻿using Com.RePower.DeviceBase.Helper;
 using Com.RePower.WpfBase;
-using Com.RePower.WpfBase.Extensions;
-using System;
-using System.Collections.Generic;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.DeviceBase.BaseDevice
 {
@@ -22,12 +15,14 @@ namespace Com.RePower.DeviceBase.BaseDevice
             get { return _serialPort; }
             protected set { _serialPort = value; }
         }
+
         /// <summary>
         /// 读取延迟
         /// </summary>
         public int ReadDelay { get; set; }
 
         private string _deviceName = "UnnamedDevice";
+
         public string PortName
         {
             get
@@ -45,6 +40,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
             get { return SerialPort.BaudRate; }
             set { SerialPort.BaudRate = value; }
         }
+
         public bool IsConnected
         {
             get { return SerialPort.IsOpen; }

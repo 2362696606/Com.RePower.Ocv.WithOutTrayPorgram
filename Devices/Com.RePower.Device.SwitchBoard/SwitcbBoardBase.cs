@@ -1,16 +1,10 @@
 ﻿using Com.RePower.DeviceBase.SwitchBoard;
 using Com.RePower.WpfBase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Device.SwitchBoard
 {
     public abstract class SwitcbBoardBase : ISwitchBoard
     {
-
         public abstract bool IsConnected { get; }
 
         public abstract string DeviceName { get; set; }

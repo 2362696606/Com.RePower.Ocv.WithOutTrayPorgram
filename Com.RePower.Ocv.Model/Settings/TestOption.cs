@@ -1,15 +1,9 @@
 ﻿using Com.RePower.Ocv.Model.Attributes;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Model.Settings
 {
-    public partial class TestOption:ObservableObject
+    public partial class TestOption : ObservableObject
     {
         private bool _isTestVol;
         private bool _isTestRes;
@@ -60,6 +54,7 @@ namespace Com.RePower.Ocv.Model.Settings
             get { return _isTestNVol; }
             set { SetProperty(ref _isTestNVol, value); }
         }
+
         /// <summary>
         /// 是否测试温度
         /// </summary>
@@ -69,7 +64,6 @@ namespace Com.RePower.Ocv.Model.Settings
             get { return _isTestTemp; }
             set { SetProperty(ref _isTestTemp, value); }
         }
-
 
         /// <summary>
         /// 是否测试正极温度
@@ -110,7 +104,9 @@ namespace Com.RePower.Ocv.Model.Settings
             get { return _retestTimes; }
             set { SetProperty(ref _retestTimes, value); }
         }
+
         private bool _isVerifyKValue;
+
         /// <summary>
         /// 是否验证k值
         /// </summary>
@@ -120,6 +116,5 @@ namespace Com.RePower.Ocv.Model.Settings
             get { return _isVerifyKValue; }
             set { SetProperty(ref _isVerifyKValue, value); }
         }
-
     }
 }

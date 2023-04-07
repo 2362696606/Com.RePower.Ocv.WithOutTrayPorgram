@@ -1,17 +1,11 @@
 ﻿using HslCommunication;
 using HslCommunication.Core;
-using HslCommunication.LogNet;
 using HslCommunication.ModBus;
 using HslCommunication.Profinet.Inovance;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Device.Plc.Impl
 {
-    public class InovanceTcpNet: HslCommunication.Profinet.Inovance.InovanceTcpNet
+    public class InovanceTcpNet : HslCommunication.Profinet.Inovance.InovanceTcpNet
     {
         //public InovanceTcpNet()
         //{

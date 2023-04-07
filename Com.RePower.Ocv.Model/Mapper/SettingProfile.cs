@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
-using Com.RePower.Ocv.Model.Settings.Dtos;
 using Com.RePower.Ocv.Model.Settings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Com.RePower.Ocv.Model.Settings.Dtos;
 
 namespace Com.RePower.Ocv.Model.Mapper
 {
@@ -17,7 +12,7 @@ namespace Com.RePower.Ocv.Model.Mapper
                 .ReverseMap();
             CreateMap<BatteryStandard, BatteryStandardSettingDto>()
                 .ReverseMap();
-            CreateMap<FacticitySetting,FacticitySettingDto>()
+            CreateMap<FacticitySetting, FacticitySettingDto>()
                 .ReverseMap();
         }
     }

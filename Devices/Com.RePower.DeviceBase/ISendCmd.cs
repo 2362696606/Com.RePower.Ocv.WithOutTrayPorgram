@@ -1,9 +1,4 @@
 ﻿using Com.RePower.WpfBase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.DeviceBase
 {
@@ -17,6 +12,7 @@ namespace Com.RePower.DeviceBase
         /// <param name="isNeedRecovery">是否需要回复</param>
         /// <returns>指令返回结果</returns>
         OperateResult<byte[]> SendCmd(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true);
+
         /// <summary>
         /// 异步发送指令
         /// </summary>

@@ -3,12 +3,7 @@ using Com.RePower.DeviceBase.Plc;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.WpfBase.Extensions;
 using Com.RePower.WpfBase;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Project.WuWei.Decorators
 {
@@ -65,7 +60,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Decorators
 
         public OperateResult<byte[]> Read(string address, ushort length)
         {
-            var result =  _plc.Read(address, length);
+            var result = _plc.Read(address, length);
             LogHelper.UiLog.Debug($"读取byte[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
@@ -114,7 +109,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Decorators
 
         public OperateResult<double[]> ReadDouble(string address, ushort length)
         {
-            var result = _plc.ReadDouble(address,length);
+            var result = _plc.ReadDouble(address, length);
             LogHelper.UiLog.Debug($"读取double[],地址为{address},长度为{length},结果{result.IsSuccess},内容{result.Content?.ToArrayString()}");
             return result;
         }
@@ -415,7 +410,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Decorators
 
         public OperateResult<TimeSpan> Wait(string address, bool waitValue, int readInterval = 100, int waitTimeout = -1, CancellationToken? cancellation = null)
         {
-            var result = _plc.Wait(address, waitValue, readInterval, waitTimeout,cancellation);
+            var result = _plc.Wait(address, waitValue, readInterval, waitTimeout, cancellation);
             LogHelper.UiLog.Debug($"等待地址{address},类型{waitValue.GetType().Name},值{waitValue},等待结果{result.IsSuccess},等待时长{result.Content.TotalMinutes}ms");
             return result;
         }

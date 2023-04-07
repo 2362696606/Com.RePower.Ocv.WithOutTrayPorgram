@@ -1,5 +1,5 @@
-﻿using Xunit.Abstractions;
-using Com.RePower.WpfBase.Extensions;
+﻿using Com.RePower.WpfBase.Extensions;
+using Xunit.Abstractions;
 
 namespace Com.RePower.DeviceBase.Extensions.Tests
 {

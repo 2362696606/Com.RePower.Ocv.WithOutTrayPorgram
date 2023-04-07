@@ -1,25 +1,22 @@
 ﻿using Com.RePower.DeviceBase.BaseDevice;
-using Com.RePower.DeviceBase.Helper;
 using Com.RePower.DeviceBase.Ohm;
 using Com.RePower.WpfBase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
 {
     public class HiokiBt3562Impl : HiokiBt3562Abstruct, IOhmSerialPort
     {
         protected ISerialPortDeviceBase DeviceBase;
+
         public HiokiBt3562Impl()
         {
             this.DeviceBase = new SerialPortDeviceBase();
         }
+
         public virtual int ReadDelay
         {
-            get 
+            get
             {
                 var dev = DeviceBase as SerialPortDeviceBase;
                 return dev?.ReadDelay ?? -1;
@@ -33,11 +30,13 @@ namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
                 }
             }
         }
+
         public string PortName
         {
             get { return DeviceBase.PortName; }
             set { DeviceBase.PortName = value; }
         }
+
         public int BaudRate
         {
             get { return DeviceBase.BaudRate; }
@@ -57,7 +56,7 @@ namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
 
         public OperateResult Connect(string portName, int baudRate)
         {
-            return DeviceBase.Connect(portName,baudRate);
+            return DeviceBase.Connect(portName, baudRate);
         }
 
         public override OperateResult Connect()
@@ -79,6 +78,7 @@ namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
         {
             DeviceBase.Dispose();
         }
+
         /// <summary>
         /// 配置连续测量开关
         /// </summary>
@@ -86,7 +86,7 @@ namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
         /// <returns></returns>
         public OperateResult SetInitiateContinuous(bool isOpen = false)
         {
-            string cmdStr = ":INITIATE:CONTINUOUS " + (isOpen?"ON":"OFF")+ "\r\n";
+            string cmdStr = ":INITIATE:CONTINUOUS " + (isOpen ? "ON" : "OFF") + "\r\n";
             byte[] cmd = Encoding.ASCII.GetBytes(cmdStr);
             var result = SendCmd(cmd.ToArray(), isNeedRecovery: false);
             if (result.IsFailed)
@@ -95,6 +95,7 @@ namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
             }
             return OperateResult.CreateSuccessResult();
         }
+
         public OperateResult SetRang(string range = "30.000E-3")
         {
             string cmdStr = ":RES:RANG " + range + "\r\n";
@@ -109,7 +110,7 @@ namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
 
         public override OperateResult<byte[]> SendCmd(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
         {
-            return DeviceBase.SendCmd(cmd,timeout,isNeedRecovery);
+            return DeviceBase.SendCmd(cmd, timeout, isNeedRecovery);
         }
     }
 }

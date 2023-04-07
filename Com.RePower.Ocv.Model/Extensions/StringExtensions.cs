@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
-using Org.BouncyCastle.Operators;
 
 namespace Com.RePower.Ocv.Model.Extensions
 {
@@ -44,6 +39,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return decimal.Parse(str);
         }
+
         /// <summary>
         /// 为null或者长度为0
         /// </summary>
@@ -53,7 +49,6 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return string.IsNullOrEmpty(str);
         }
-
 
         /// <summary>
         /// 如果本向的字符串是null或者空格的话，就返回默认的defaultString,否则返回自身值
@@ -72,6 +67,7 @@ namespace Com.RePower.Ocv.Model.Extensions
                 return str;
             }
         }
+
         /// <summary>
         /// 为null或者长度为0
         /// </summary>
@@ -81,6 +77,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return str == null || str.Trim().Length == 0;
         }
+
         /// <summary>
         /// 即不为null同时长度也不为0
         /// </summary>
@@ -90,6 +87,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return str != null && str.Trim().Length != 0;
         }
+
         public static bool IsRangeLength(this string str, int minLength, int maxLength)
         {
             if (str != null)
@@ -98,11 +96,13 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return false;
         }
+
         public static string? TrimEx(this string str, string? defaultVal = null)
         {
             if (str == null) return defaultVal;
             return str.Trim();
         }
+
         public static string TrimRedisString(this string str)
         {
             if (str.IsNotNullAndWhiteSpace() && str.IsMatch(@"^\"".+\""$"))
@@ -111,6 +111,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return str;
         }
+
         public static string? TrimIfEmpty(this string? str, string? defaultVal = null)
         {
             if (str == null) return defaultVal;
@@ -118,6 +119,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             if (str.Length == 0) return defaultVal;
             return str;
         }
+
         public static DateTime ToDateTime(this string str, DateTime defaultVal)
         {
             if (str.IsNullOrWhitespace())
@@ -131,6 +133,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return defaultVal;
         }
+
         public static DateTime? ToDateTime(this string str, bool isThrowError = false)
         {
             DateTime i;
@@ -147,6 +150,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return null;
         }
+
         /// <summary>
         /// 字符串转化成日期对象，有异常直接抛出
         /// </summary>
@@ -156,6 +160,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return DateTime.Parse(str);
         }
+
         public static bool ToBool(this string str, bool throwError = false, bool defaultValue = false)
         {
             if (bool.TryParse(str.Trim(), out var result))
@@ -193,6 +198,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return defaultVal;
         }
+
         public static long ToLong(this string str, bool isThrowError = false, long defaultVal = 0L)
         {
             if (!str.IsNullOrWhitespace())
@@ -210,6 +216,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return defaultVal;
         }
+
         public static double ToDouble(this string str, double defaultVal = 0)
         {
             if (!str.IsNullOrWhitespace())
@@ -245,6 +252,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return defaultVal;
         }
+
         public static T? Deserialize<T>(this string str)
         {
             if (!string.IsNullOrWhiteSpace(str))
@@ -253,6 +261,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return default;
         }
+
         /// <summary>
         /// 把压缩版的Json字符串转换成标准版的Json字符串
         /// </summary>
@@ -268,9 +277,9 @@ namespace Com.RePower.Ocv.Model.Extensions
 
             return str;
         }
+
         public static string? ToMd5(this string str)
         {
-
             if (str != null)
             {
                 MD5 md5 = MD5.Create();
@@ -279,10 +288,12 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return null;
         }
+
         public static string FormatWith(this string str, params object[] args)
         {
             return string.Format(str, args);
         }
+
         public static string FormatWith2(this string str, params object[] arr)
         {
             if (string.IsNullOrWhiteSpace(str))
@@ -305,12 +316,14 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return tempStr;
         }
+
         public static int GetMonthWeek(this DateTime dt)
         {
             int firstWeek = dt.AddDays(-dt.Day + 1).DayOfWeek.GetHashCode();//第一周之前的天数
             var week = (dt.Day + firstWeek - 1) / 7;
             return (int)Math.Floor((double)week) + 1;
         }
+
         public static T ToEnum<T>(this string str) where T : struct
         {
             T en;
@@ -324,6 +337,7 @@ namespace Com.RePower.Ocv.Model.Extensions
                 return en;
             }
         }
+
         /// <summary>
         /// 能根据枚举值上面的Description信息来返回相应的枚举值，如果找不到，就报错，不会返回默认值
         /// </summary>
@@ -353,6 +367,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             throw new Exception($"不能根据枚举描述名称找到相应的枚举值：{str},需要转换的枚举类：{type.Name}");
         }
+
         public static T ToEnum<T>(this string str, T defaultVal) where T : struct
         {
             T en;
@@ -362,6 +377,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return defaultVal;
         }
+
         public static T? ToEnum<T>(this string str, T? defaultVal) where T : struct
         {
             T en;
@@ -371,11 +387,12 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             return defaultVal;
         }
+
         public static bool InArrayString(this string str, string stringArray, string split = ",")
         {
             return str.InArrayString(stringArray, new string[] { split }, StringComparison.CurrentCulture);
-
         }
+
         public static bool InArrayString(this string str, string stringArray, string[] split, StringComparison stringComparison)
         {
             if (str.IsNullOrWhitespace() || stringArray.IsNullOrWhitespace())
@@ -385,8 +402,8 @@ namespace Com.RePower.Ocv.Model.Extensions
             return
                 stringArray.Split(split, StringSplitOptions.RemoveEmptyEntries)
                     .Any(p => p.Equals(str, stringComparison));
-
         }
+
         /// <summary>
         /// 获得文件完整路径中的文件名称:如  D:\123.txt => 123.txt
         /// </summary>
@@ -422,6 +439,7 @@ namespace Com.RePower.Ocv.Model.Extensions
                 return Path.GetDirectoryName(path) ?? string.Empty;
             }
         }
+
         /// <summary>
         /// 获取Path的文件后缀，D:\1.txt  => .txt
         /// </summary>
@@ -431,6 +449,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return Path.GetExtension(path);
         }
+
         /// <summary>
         ///   D:\Backup\my.txt  => my
         /// </summary>
@@ -440,6 +459,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return Path.GetFileNameWithoutExtension(path);
         }
+
         /// <summary>
         /// 检测文件filepath是否存在:  如:  D:\1.txt
         /// </summary>
@@ -449,6 +469,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return File.Exists(filepath);
         }
+
         /// <summary>
         /// 检测文件夹directoryPath是否存在  如：  D:\dirname\    或者  D:\dirname
         /// </summary>
@@ -458,6 +479,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return Directory.Exists(directoryPath);
         }
+
         /// <summary>
         /// 获取一个文件夹路径的文件夹名称  如:  D:\123\  =>  123
         /// </summary>
@@ -467,6 +489,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return Path.GetFileName(directoryPath);
         }
+
         /// <summary>
         /// 判断日期格式是不是如：2019-01-02 11:12:13这种,或者2019-01-02T11:12:13
         /// </summary>
@@ -494,6 +517,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             if (str == null) return false;
             return Regex.IsMatch(str, pattern, option);
         }
+
         /// <summary>
         /// 字符串的正则表达式匹配，如果字符串为空，返回null,否则返回相应的结果
         /// </summary>
@@ -519,6 +543,7 @@ namespace Com.RePower.Ocv.Model.Extensions
 
             return Regex.Matches(str, pattern, option);
         }
+
         //是否是整数，必须有一个数字，且必须是正整数或者0
         public static bool IsInt(this string strSource)
         {
@@ -537,12 +562,12 @@ namespace Com.RePower.Ocv.Model.Extensions
                 }
                 catch
                 {
-
                     //ignore
                 }
             }
             return path;
         }
+
         /// <summary>
         /// 使用正则表达式判断是否为日期 ,包括中文的日期，及数字的日期
         /// </summary>
@@ -551,50 +576,50 @@ namespace Com.RePower.Ocv.Model.Extensions
         public static bool IsFullDateTime(this string str)
         {
             bool isDateTime = false;
-            // yyyy/MM/dd  
+            // yyyy/MM/dd
             if (Regex.IsMatch(str, "^(?<year>\\d{2,4})/(?<month>\\d{1,2})/(?<day>\\d{1,2})$"))
                 isDateTime = true;
-            // yyyy-MM-dd   
+            // yyyy-MM-dd
             else if (Regex.IsMatch(str, "^(?<year>\\d{2,4})-(?<month>\\d{1,2})-(?<day>\\d{1,2})$"))
                 isDateTime = true;
-            // yyyy.MM.dd   
+            // yyyy.MM.dd
             else if (Regex.IsMatch(str, "^(?<year>\\d{2,4})[.](?<month>\\d{1,2})[.](?<day>\\d{1,2})$"))
                 isDateTime = true;
-            // yyyy年MM月dd日  
+            // yyyy年MM月dd日
             else if (Regex.IsMatch(str, "^((?<year>\\d{2,4})年)?(?<month>\\d{1,2})月((?<day>\\d{1,2})日)?$"))
                 isDateTime = true;
-            // yyyy年MM月dd日  
+            // yyyy年MM月dd日
             else if (Regex.IsMatch(str, "^((?<year>\\d{2,4})年)?(正|一|二|三|四|五|六|七|八|九|十|十一|十二)月((一|二|三|四|五|六|七|八|九|十){1,3}日)?$"))
                 isDateTime = true;
 
-            // yyyy年MM月dd日  
+            // yyyy年MM月dd日
             else if (Regex.IsMatch(str, "^(零|〇|一|二|三|四|五|六|七|八|九|十){2,4}年((正|一|二|三|四|五|六|七|八|九|十|十一|十二)月((一|二|三|四|五|六|七|八|九|十){1,3}(日)?)?)?$"))
                 isDateTime = true;
-            // yyyy年  
-            //else if (Regex.IsMatch(str, "^(?<year>\\d{2,4})年$"))  
-            //    isDateTime = true;  
+            // yyyy年
+            //else if (Regex.IsMatch(str, "^(?<year>\\d{2,4})年$"))
+            //    isDateTime = true;
 
-            // 农历1  
+            // 农历1
             else if (Regex.IsMatch(str, "^(甲|乙|丙|丁|戊|己|庚|辛|壬|癸)(子|丑|寅|卯|辰|巳|午|未|申|酉|戌|亥)年((正|一|二|三|四|五|六|七|八|九|十|十一|十二)月((一|二|三|四|五|六|七|八|九|十){1,3}(日)?)?)?$"))
                 isDateTime = true;
-            // 农历2  
+            // 农历2
             else if (Regex.IsMatch(str, "^((甲|乙|丙|丁|戊|己|庚|辛|壬|癸)(子|丑|寅|卯|辰|巳|午|未|申|酉|戌|亥)年)?(正|一|二|三|四|五|六|七|八|九|十|十一|十二)月初(一|二|三|四|五|六|七|八|九|十)$"))
                 isDateTime = true;
 
-            // XX时XX分XX秒  
+            // XX时XX分XX秒
             else if (Regex.IsMatch(str, "^(?<hour>\\d{1,2})(时|点)(?<minute>\\d{1,2})分((?<second>\\d{1,2})秒)?$"))
                 isDateTime = true;
-            // XX时XX分XX秒  
+            // XX时XX分XX秒
             else if (Regex.IsMatch(str, "^((零|一|二|三|四|五|六|七|八|九|十){1,3})(时|点)((零|一|二|三|四|五|六|七|八|九|十){1,3})分(((零|一|二|三|四|五|六|七|八|九|十){1,3})秒)?$"))
                 isDateTime = true;
-            // XX分XX秒  
+            // XX分XX秒
             else if (Regex.IsMatch(str, "^(?<minute>\\d{1,2})分(?<second>\\d{1,2})秒$"))
                 isDateTime = true;
-            // XX分XX秒  
+            // XX分XX秒
             else if (Regex.IsMatch(str, "^((零|一|二|三|四|五|六|七|八|九|十){1,3})分((零|一|二|三|四|五|六|七|八|九|十){1,3})秒$"))
                 isDateTime = true;
 
-            // XX时  
+            // XX时
             else if (Regex.IsMatch(str, "\\b(?<hour>\\d{1,2})(时|点钟)\\b"))
                 isDateTime = true;
             else
@@ -602,6 +627,7 @@ namespace Com.RePower.Ocv.Model.Extensions
 
             return isDateTime;
         }
+
         /// <summary>
         /// 连接两个路径,使用Path.Combine()
         /// </summary>
@@ -612,6 +638,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return Path.Combine(str, path);
         }
+
         /// <summary>
         /// 把字符串转化成唯一的long数字，因为long最大数字为`9223372036854775807`.length==19位，所以，字符串的长度可以会有限制
         /// </summary>
@@ -638,7 +665,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         }
 
         /// <summary>
-        /// 生成随机字符串 
+        /// 生成随机字符串
         /// </summary>
         /// <param name="randomString">随便的一个字符串都能触发，相当于种子</param>
         /// <param name="length">目标字符串的长度</param>
@@ -671,6 +698,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return str + "".GetRandomString(4, true, true, true, false, "");
         }
+
         /// <summary>
         /// 把16进制字符串转化成byte[]
         /// 字符串示例：
@@ -707,7 +735,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="str"></param>
-        /// <returns></returns> 
+        /// <returns></returns>
         public static string? GetMethodNameByDescription<T>(this string str) where T : class
         {
             Type type = typeof(T);
@@ -733,6 +761,7 @@ namespace Com.RePower.Ocv.Model.Extensions
                 return null;
             }
         }
+
         /// <summary>
         /// 把16进制后的字符串变成byte数组,
         /// 如:0F 12 FF => byte[]数组:new byte[]{0x0F,0x12,pxFF}
@@ -745,6 +774,7 @@ namespace Com.RePower.Ocv.Model.Extensions
             byte[] array = strList.Select(HexStringToByte).ToArray();
             return array;
         }
+
         /// <summary>
         /// 把16进制的字符串转化为byte数组,只要是16进制的字符就可以，转化方式为每读取2个字符就转化一次，自动忽略空格
         /// "AA 00 01"=> new byte[]{0xAA,0x00,0x01}
@@ -769,6 +799,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return (byte)Convert.ToInt32(str, 16);
         }
+
         /// <summary>
         /// 从开头取字符串length长度的子串，如果不够，返回原字符串
         /// </summary>
@@ -800,6 +831,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return str + appendString;
         }
+
         /// <summary>
         /// 删除掉字符串中的注释，比如，以"abc   //注释内容",中的//后面的内容
         /// </summary>
@@ -809,8 +841,9 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return Regex.Replace(str, @"\/\/[^""]+\r?\n", "");
         }
+
         /// <summary>
-        /// 首字母大写，其余字母小写：  OCV0   =>  Ocv0  
+        /// 首字母大写，其余字母小写：  OCV0   =>  Ocv0
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
@@ -823,6 +856,7 @@ namespace Com.RePower.Ocv.Model.Extensions
 
             return str;
         }
+
         /// <summary>
         /// 获取绝对路径
         /// </summary>
@@ -832,6 +866,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         {
             return Path.GetFullPath(str);
         }
+
         /// <summary>
         /// 使用Path的Combine连接两个路径字符串
         /// </summary>

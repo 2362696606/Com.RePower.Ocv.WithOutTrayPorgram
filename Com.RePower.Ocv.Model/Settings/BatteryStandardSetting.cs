@@ -1,11 +1,5 @@
 ﻿using Com.RePower.Ocv.Model.Attributes;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Model.Settings
 {
@@ -27,6 +21,7 @@ namespace Com.RePower.Ocv.Model.Settings
         private double _minPTemp;
         private double _maxKValue;
         private double _minKValue;
+
         /// <summary>
         /// 最大电压
         /// </summary>
@@ -186,6 +181,5 @@ namespace Com.RePower.Ocv.Model.Settings
             get { return _minKValue; }
             set { SetProperty(ref _minKValue, value); }
         }
-
     }
 }

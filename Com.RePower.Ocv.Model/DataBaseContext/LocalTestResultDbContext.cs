@@ -1,10 +1,5 @@
 ﻿using Com.RePower.Ocv.Model.Dto;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Model.DataBaseContext
 {
@@ -14,11 +9,12 @@ namespace Com.RePower.Ocv.Model.DataBaseContext
         //public LocalTestResultDbContext(DbContextOptions<LocalTestResultDbContext> dbContextOptions):base(dbContextOptions) { }
         //public LocalTestResultDbContext():base()
         //{
-
         //}
         public DbSet<BatteryDto> Batterys { get; set; }
+
         public DbSet<NgInfoDto> NgInfos { get; set; }
         public DbSet<TrayDto> Trays { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string connectString = @"data source=.\LocalTestResult.dbs";

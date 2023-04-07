@@ -1,11 +1,5 @@
-﻿using HslCommunication.Core;
-using HslCommunication;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NPOI.SS.Formula.Functions;
+﻿using HslCommunication;
+using HslCommunication.Core;
 
 namespace Com.RePower.Device.Plc.Helper
 {
@@ -16,9 +10,9 @@ namespace Com.RePower.Device.Plc.Helper
             DateTime now = DateTime.Now;
             while (true)
             {
-                if(cancellation is { } cancel)
+                if (cancellation is { } cancel)
                 {
-                    if(cancel.IsCancellationRequested)
+                    if (cancel.IsCancellationRequested)
                     {
                         return new OperateResult<TimeSpan>("用户取消等待" + (DateTime.Now - now));
                     }
@@ -220,9 +214,9 @@ namespace Com.RePower.Device.Plc.Helper
             DateTime now = DateTime.Now;
             while (true)
             {
-                if(cancellation is { } cancel)
+                if (cancellation is { } cancel)
                 {
-                    if(cancel.IsCancellationRequested)
+                    if (cancel.IsCancellationRequested)
                     {
                         return new OperateResult<TimeSpan>("用户取消等待" + (DateTime.Now - now));
                     }

@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using NPOI.HSSF.UserModel;
+﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
+using System.Data;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Com.RePower.Ocv.Model.Helper
 {
     public class NpoiHelperFromCommon
     {
         #region 从DataTable导出到excel文件中，支持xls和xlsx格式
+
         #region 导出为xls文件内部方法
+
         /// <summary>
         /// 从datatable 中导出到excel
         /// </summary>
@@ -25,7 +23,7 @@ namespace Com.RePower.Ocv.Model.Helper
         /// <param name="strHeaderText">表名</param>
         /// <param name="sheetnum">sheet的编号</param>
         /// <returns></returns>
-        static MemoryStream ExportDt(String strFileName, DataTable dtSource, string strHeaderText, Dictionary<string, string> dir, int sheetnum)
+        private static MemoryStream ExportDt(String strFileName, DataTable dtSource, string strHeaderText, Dictionary<string, string> dir, int sheetnum)
         {
             //创建工作簿和sheet
             IWorkbook workbook = new HSSFWorkbook();
@@ -50,7 +48,7 @@ namespace Com.RePower.Ocv.Model.Helper
             {
                 for (int j = 0; j < dtSource.Columns.Count; j++)
                 {
-                    int intTemp = Encoding.GetEncoding(936).GetBytes(dtSource.Rows[i][j]?.ToString()??string.Empty).Length;
+                    int intTemp = Encoding.GetEncoding(936).GetBytes(dtSource.Rows[i][j]?.ToString() ?? string.Empty).Length;
                     if (intTemp > arrColWidth[j])
                     {
                         arrColWidth[j] = intTemp;
@@ -61,6 +59,7 @@ namespace Com.RePower.Ocv.Model.Helper
             foreach (DataRow row in dtSource.Rows)
             {
                 #region 新建表，填充表头，填充列头，样式
+
                 if (rowIndex == 0)
                 {
                     string sheetName = strHeaderText + (sheetnum == 0 ? "" : sheetnum.ToString());
@@ -69,7 +68,9 @@ namespace Com.RePower.Ocv.Model.Helper
                         workbook.RemoveSheetAt(workbook.GetSheetIndex(sheetName));
                     }
                     sheet = workbook.CreateSheet(sheetName);
+
                     #region 表头及样式
+
                     {
                         sheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, dtSource.Columns.Count - 1));
                         IRow headerRow = sheet.CreateRow(0);
@@ -86,7 +87,8 @@ namespace Com.RePower.Ocv.Model.Helper
 
                         rowIndex = 1;
                     }
-                    #endregion
+
+                    #endregion 表头及样式
 
                     #region 列头及样式
 
@@ -109,11 +111,14 @@ namespace Com.RePower.Ocv.Model.Helper
                         }
                         rowIndex = 2;
                     }
-                    #endregion
+
+                    #endregion 列头及样式
                 }
-                #endregion
+
+                #endregion 新建表，填充表头，填充列头，样式
 
                 #region 填充内容
+
                 if (sheet is { })
                 {
                     IRow dataRow = sheet.CreateRow(rowIndex);
@@ -145,11 +150,13 @@ namespace Com.RePower.Ocv.Model.Helper
 
                                 newCell.CellStyle = dateStyle; //格式化显示
                                 break;
+
                             case "System.Boolean": //布尔型
                                 bool boolV = false;
                                 bool.TryParse(drValue, out boolV);
                                 newCell.SetCellValue(boolV);
                                 break;
+
                             case "System.Int16": //整型
                             case "System.Int32":
                             case "System.Int64":
@@ -158,23 +165,27 @@ namespace Com.RePower.Ocv.Model.Helper
                                 int.TryParse(drValue, out intV);
                                 newCell.SetCellValue(intV);
                                 break;
+
                             case "System.Decimal": //浮点型
                             case "System.Double":
                                 double doubV = 0;
                                 double.TryParse(drValue, out doubV);
                                 newCell.SetCellValue(doubV);
                                 break;
+
                             case "System.DBNull": //空值处理
                                 newCell.SetCellValue("");
                                 break;
+
                             default:
                                 newCell.SetCellValue(drValue.ToString());
                                 break;
                         }
-
-                    } 
+                    }
                 }
-                #endregion
+
+                #endregion 填充内容
+
                 rowIndex++;
             }
 
@@ -185,11 +196,12 @@ namespace Com.RePower.Ocv.Model.Helper
                 ms.Position = 0;
                 return ms;
             }
-
         }
-        #endregion
+
+        #endregion 导出为xls文件内部方法
 
         #region 导出为xlsx文件内部方法
+
         /// <summary>
         /// 从datatable 中导出到excel
         /// </summary>
@@ -198,9 +210,8 @@ namespace Com.RePower.Ocv.Model.Helper
         /// <param name="fs">文件流</param>
         /// <param name="readfs">内存流</param>
         /// <param name="sheetnum">sheet索引</param>
-        static void ExportDti(DataTable dtSource, string strHeaderText, FileStream fs, MemoryStream readfs, Dictionary<string, string> dir, int sheetnum)
+        private static void ExportDti(DataTable dtSource, string strHeaderText, FileStream fs, MemoryStream readfs, Dictionary<string, string> dir, int sheetnum)
         {
-
             IWorkbook workbook = new XSSFWorkbook();
             if (readfs.Length > 0 && sheetnum > 0)
             {
@@ -221,7 +232,7 @@ namespace Com.RePower.Ocv.Model.Helper
             {
                 for (int j = 0; j < dtSource.Columns.Count; j++)
                 {
-                    int intTemp = Encoding.GetEncoding(936).GetBytes(dtSource.Rows[i][j].ToString()??string.Empty).Length;
+                    int intTemp = Encoding.GetEncoding(936).GetBytes(dtSource.Rows[i][j].ToString() ?? string.Empty).Length;
                     if (intTemp > arrColWidth[j])
                     {
                         arrColWidth[j] = intTemp;
@@ -237,6 +248,7 @@ namespace Com.RePower.Ocv.Model.Helper
                 if (rowIndex == 0)
                 {
                     #region 表头及样式
+
                     {
                         string sheetName = strHeaderText + (sheetnum == 0 ? "" : sheetnum.ToString());
                         if (workbook.GetSheetIndex(sheetName) >= 0)
@@ -257,9 +269,11 @@ namespace Com.RePower.Ocv.Model.Helper
                         headStyle.SetFont(font);
                         headerRow.GetCell(0).CellStyle = headStyle;
                     }
-                    #endregion
+
+                    #endregion 表头及样式
 
                     #region 列头及样式
+
                     {
                         IRow headerRow = sheet.CreateRow(1);
                         ICellStyle headStyle = workbook.CreateCellStyle();
@@ -268,7 +282,6 @@ namespace Com.RePower.Ocv.Model.Helper
                         font.FontHeightInPoints = 10;
                         //font.Boldweight = 700;
                         headStyle.SetFont(font);
-
 
                         foreach (DataColumn column in dtSource.Columns)
                         {
@@ -279,13 +292,15 @@ namespace Com.RePower.Ocv.Model.Helper
                         }
                     }
 
-                    #endregion
+                    #endregion 列头及样式
 
                     rowIndex = 2;
                 }
-                #endregion
+
+                #endregion 新建表，填充表头，填充列头，样式
 
                 #region 填充内容
+
                 if (sheet is { })
                 {
                     IRow dataRow = sheet.CreateRow(rowIndex);
@@ -299,7 +314,6 @@ namespace Com.RePower.Ocv.Model.Helper
                                 double result;
                                 if (IsNumeric(drValue, out result))
                                 {
-
                                     double.TryParse(drValue, out result);
                                     newCell.SetCellValue(result);
                                     break;
@@ -316,11 +330,13 @@ namespace Com.RePower.Ocv.Model.Helper
 
                                 newCell.CellStyle = dateStyle; //格式化显示
                                 break;
+
                             case "System.Boolean": //布尔型
                                 bool boolV = false;
                                 bool.TryParse(drValue, out boolV);
                                 newCell.SetCellValue(boolV);
                                 break;
+
                             case "System.Int16": //整型
                             case "System.Int32":
                             case "System.Int64":
@@ -329,30 +345,37 @@ namespace Com.RePower.Ocv.Model.Helper
                                 int.TryParse(drValue, out intV);
                                 newCell.SetCellValue(intV);
                                 break;
+
                             case "System.Decimal": //浮点型
                             case "System.Double":
                                 double doubV = 0;
                                 double.TryParse(drValue, out doubV);
                                 newCell.SetCellValue(doubV);
                                 break;
+
                             case "System.DBNull": //空值处理
                                 newCell.SetCellValue("");
                                 break;
+
                             default:
                                 newCell.SetCellValue(drValue.ToString());
                                 break;
                         }
-                    } 
+                    }
                 }
-                #endregion
+
+                #endregion 填充内容
+
                 rowIndex++;
             }
             workbook.Write(fs);
             fs.Close();
         }
-        #endregion
+
+        #endregion 导出为xlsx文件内部方法
 
         #region 导出excel表格
+
         /// <summary>
         ///  DataTable导出到Excel文件，xls文件
         /// </summary>
@@ -390,7 +413,6 @@ namespace Com.RePower.Ocv.Model.Helper
                     {
                         using (FileStream fs = new FileStream(strFileName, FileMode.Create, FileAccess.Write))
                         {
-
                             byte[] data = ms.ToArray();
                             fs.Write(data, 0, data.Length);
                             fs.Flush();
@@ -420,17 +442,19 @@ namespace Com.RePower.Ocv.Model.Helper
                     readfs.Close();
                     using (FileStream writefs = new FileStream(strFileName, FileMode.Create, FileAccess.Write))
                     {
-
                         ExportDti(pageDataTable, strHeaderText, writefs, readfsm, dir, i);
                     }
                     readfsm.Close();
                 }
             }
         }
-        #endregion 
-        #endregion
+
+        #endregion 导出excel表格
+
+        #endregion 从DataTable导出到excel文件中，支持xls和xlsx格式
 
         #region 从excel文件中将数据导出到datatable/datatable
+
         /// <summary>
         /// 将制定sheet中的数据导出到datatable中
         /// </summary>
@@ -438,7 +462,7 @@ namespace Com.RePower.Ocv.Model.Helper
         /// <param name="headerRowIndex">列头所在行号，-1表示没有列头</param>
         /// <param name="dir">excel列名和DataTable列名的对应字典</param>
         /// <returns></returns>
-        static DataTable ImportDt(ISheet sheet, int headerRowIndex, Dictionary<string, string> dir)
+        private static DataTable ImportDt(ISheet sheet, int headerRowIndex, Dictionary<string, string> dir)
         {
             DataTable table = new DataTable();
             IRow headerRow;
@@ -477,7 +501,6 @@ namespace Com.RePower.Ocv.Model.Helper
                                 DataColumn column = new DataColumn(Convert.ToString(i));
                                 table.Columns.Add(column);
                             }
-
                         }
                         //excel中的某一列列名不为空，但是重复了：对应的Datatable列名为“重复列名+序号”
                         else if (table.Columns.IndexOf(headerRow.GetCell(i).ToString()) > 0)
@@ -486,7 +509,7 @@ namespace Com.RePower.Ocv.Model.Helper
                             table.Columns.Add(column);
                         }
                         else
-                            //正常情况，列名存在且不重复：用excel中的列名作为datatable中对应的列名
+                        //正常情况，列名存在且不重复：用excel中的列名作为datatable中对应的列名
                         {
                             string colName = dir.Where(s => s.Value == headerRow.GetCell(i).ToString()).First().Key;
                             DataColumn column = new DataColumn(colName);
@@ -530,6 +553,7 @@ namespace Com.RePower.Ocv.Model.Helper
                                                 dataRow[j] = default(string);
                                             }
                                             break;
+
                                         case CellType.Numeric://数字
                                             if (DateUtil.IsCellDateFormatted(row.GetCell(j)))//时间戳数字
                                             {
@@ -540,12 +564,15 @@ namespace Com.RePower.Ocv.Model.Helper
                                                 dataRow[j] = Convert.ToDouble(row.GetCell(j).NumericCellValue);
                                             }
                                             break;
+
                                         case CellType.Boolean:
                                             dataRow[j] = Convert.ToString(row.GetCell(j).BooleanCellValue);
                                             break;
+
                                         case CellType.Error:
                                             dataRow[j] = ErrorEval.GetText(row.GetCell(j).ErrorCellValue);
                                             break;
+
                                         case CellType.Formula://公式
                                             switch (row.GetCell(j).CachedFormulaResultType)
                                             {
@@ -560,20 +587,25 @@ namespace Com.RePower.Ocv.Model.Helper
                                                         dataRow[j] = null;
                                                     }
                                                     break;
+
                                                 case CellType.Numeric:
                                                     dataRow[j] = Convert.ToString(row.GetCell(j).NumericCellValue);
                                                     break;
+
                                                 case CellType.Boolean:
                                                     dataRow[j] = Convert.ToString(row.GetCell(j).BooleanCellValue);
                                                     break;
+
                                                 case CellType.Error:
                                                     dataRow[j] = ErrorEval.GetText(row.GetCell(j).ErrorCellValue);
                                                     break;
+
                                                 default:
                                                     dataRow[j] = "";
                                                     break;
                                             }
                                             break;
+
                                         default:
                                             dataRow[j] = "";
                                             break;
@@ -646,11 +678,9 @@ namespace Com.RePower.Ocv.Model.Helper
                 }
             }
             return table;
-
         }
-        #endregion
 
-
+        #endregion 从excel文件中将数据导出到datatable/datatable
 
         /// <summary>
         /// 获取excel文件的sheet数目

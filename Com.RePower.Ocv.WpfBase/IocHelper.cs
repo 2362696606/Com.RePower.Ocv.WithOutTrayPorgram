@@ -104,6 +104,7 @@ namespace Com.RePower.WpfBase
                 ThrowInvalidOperationExceptionForRepeatedConfiguration();
             }
         }
+
         public IServiceProvider GetServiceProvider()
         {
             IServiceProvider? provider = this._serviceProvider;
@@ -114,7 +115,6 @@ namespace Com.RePower.WpfBase
             }
             return provider;
         }
-
 
         /// <summary>
         /// Throws an <see cref="InvalidOperationException"/> when the <see cref="IServiceProvider"/> property is used before initialization.

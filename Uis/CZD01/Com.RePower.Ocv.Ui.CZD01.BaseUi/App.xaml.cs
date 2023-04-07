@@ -40,7 +40,7 @@ namespace Com.RePower.Ocv.Ui.CZD01.BaseUi
             var assembly = typeof(MainWork).Assembly;
             builder.RegisterAssemblyModules(assembly);
         }
-        protected override void OnInitComplate()
+        protected override void OnInitComplete()
         {
             if (SettingManager.Instance.CurrentFacticity?.IsRealWms ?? false)
             {

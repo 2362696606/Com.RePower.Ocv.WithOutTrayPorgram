@@ -1,13 +1,5 @@
 ﻿using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Model.Enums;
-using NPOI.OpenXmlFormats.Dml;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Model.Extensions
 {
@@ -77,7 +69,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         //    //ngInfo.NgDescription = String.Join('|', ngDescriptions);
         //    SortedSet<string> ngDescriptions = new SortedSet<string>();
         //    var bits = (ngInfo.NgType??0).GetBitList().ToList();
-        //    for (int i = 0; i < bits.Count; i++) 
+        //    for (int i = 0; i < bits.Count; i++)
         //    {
         //        if (bits[i])
         //        {
@@ -149,11 +141,11 @@ namespace Com.RePower.Ocv.Model.Extensions
         /// <returns></returns>
         public static bool HasNgType(this NgInfo ngInfo, NgTypeEnum ngType)
         {
-
             bool has = ((((NgTypeEnum)(ngInfo.NgType ?? 0)) & ngType) != 0);
             // bool has = (borderTypeToTest & borderType) == borderType;//这种方法也可以
             return has;
         }
+
         public static void RemoveNgType(this NgInfo ngInfo, NgTypeEnum ngType)
         {
             bool has = ngInfo.HasNgType(ngType);
@@ -165,17 +157,19 @@ namespace Com.RePower.Ocv.Model.Extensions
             }
             ngInfo.NgType = (int)currentNgType;
         }
+
         /// <summary>
         /// 添加Ng
         /// </summary>
         /// <param name="ngInfo"></param>
         /// <param name="ngType"></param>
-        public static void AddNgType(this NgInfo ngInfo,NgTypeEnum ngType)
+        public static void AddNgType(this NgInfo ngInfo, NgTypeEnum ngType)
         {
             NgTypeEnum currentNgType = (NgTypeEnum)(ngInfo.NgType ?? 0);
             currentNgType = currentNgType | ngType;
             ngInfo.NgType = (int)currentNgType;
         }
+
         ///// <summary>
         ///// 设置Ng描述
         ///// </summary>

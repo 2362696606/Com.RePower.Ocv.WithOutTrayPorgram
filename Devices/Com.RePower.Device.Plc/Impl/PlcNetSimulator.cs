@@ -1,11 +1,6 @@
 ﻿using Com.RePower.DeviceBase.Plc;
 using Com.RePower.WpfBase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Device.Plc.Impl
 {
@@ -13,6 +8,7 @@ namespace Com.RePower.Device.Plc.Impl
     {
         private Timer _timer;
         private bool _isInterval = false;
+
         public PlcNetSimulator()
         {
             _timer = new Timer((a) =>
@@ -21,9 +17,8 @@ namespace Com.RePower.Device.Plc.Impl
             }, null, 5000, 5000);
         }
 
-
         public string IpAddress { get; set; } = "127.0.0.1";
-        public int Port { get ; set ; }
+        public int Port { get; set; }
 
         public bool IsConnected
         {
@@ -66,7 +61,6 @@ namespace Com.RePower.Device.Plc.Impl
 
         public void Dispose()
         {
-            
         }
 
         public OperateResult<byte[]> Read(string address, ushort length)

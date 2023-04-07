@@ -1,13 +1,7 @@
 ﻿using CLDC.Framework.Log;
 using Com.RePower.WpfBase;
 using Com.RePower.WpfBase.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.DeviceBase.Helper
 {
@@ -20,15 +14,17 @@ namespace Com.RePower.DeviceBase.Helper
         /// <param name="timeOut">超时时间，-1为无限等待，只有自动模式才有效</param>
         /// <param name="readDelay">读取延迟，-1为默认延迟，只有手动模式才有效</param>
         /// <returns></returns>
-        public static OperateResult<byte[]> SendAndRecovery(this SerialPort serialPort, byte[] bytes, int timeOut = 10000,int readDelay = -1)
+        public static OperateResult<byte[]> SendAndRecovery(this SerialPort serialPort, byte[] bytes, int timeOut = 10000, int readDelay = -1)
         {
             Log.getMessageFile("串口日志").Info($"串口:{serialPort.PortName}发送{bytes.ToHexString(',')}");
 
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
-            SerialDataReceivedEventHandler setFlag = (sender,e) => { manualResetEvent.Set(); };
+            SerialDataReceivedEventHandler setFlag = (sender, e) => { manualResetEvent.Set(); };
             serialPort.DataReceived += setFlag;
             serialPort.Write(bytes, 0, bytes.Length);
+
             #region 等待延迟
+
             Task t1;
             if (readDelay < 0)
                 t1 = Task.Delay(0);
@@ -45,8 +41,10 @@ namespace Com.RePower.DeviceBase.Helper
             {
                 Log.getMessageFile("串口日志").Error($"串口:{serialPort.PortName},等待回复超时");
                 return OperateResult.CreateFailedResult<byte[]>("等待回复超时");
-            } 
-            #endregion
+            }
+
+            #endregion 等待延迟
+
             int length = serialPort.BytesToRead;
             byte[] result = new byte[length];
             serialPort.Read(result, 0, length);

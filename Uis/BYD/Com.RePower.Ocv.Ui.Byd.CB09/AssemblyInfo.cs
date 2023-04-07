@@ -9,7 +9,7 @@ using System.Windows;
                                               //(used if a resource is not found in the page,
                                               // app, or any theme specific resource dictionaries)
 )]
-[assembly:AssemblyVersion("1.0.*")]
+[assembly:AssemblyVersion("1.0.0.1")]
 [assembly:AssemblyCompany("RePower")]
 [assembly:AssemblyProduct("CB09_Ocv_Ui")]
 [assembly: AssemblyCopyright("Copyright ©  2023")]

@@ -1,12 +1,6 @@
 ﻿using Com.RePower.DeviceBase.Helper;
 using Com.RePower.WpfBase;
-using System;
-using System.Collections.Generic;
-using System.IO.Ports;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.DeviceBase.BaseDevice
 {
@@ -19,7 +13,6 @@ namespace Com.RePower.DeviceBase.BaseDevice
             get { return _tcpClient; }
             protected set { _tcpClient = value; }
         }
-
 
         private string _deviceName = "UnnamedDevice";
 

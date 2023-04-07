@@ -1,11 +1,5 @@
 ﻿using Com.RePower.DeviceBase.TemperatureSensor;
 using Com.RePower.WpfBase;
-using NPOI.SS.UserModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Device.TemperatureSensor.Impl.SerialPortTempratureSensors
 {
@@ -21,6 +15,7 @@ namespace Com.RePower.Device.TemperatureSensor.Impl.SerialPortTempratureSensors
         {
             return await Task.Run(() => Connect(portName, baudRate));
         }
+
         public override OperateResult<double[]> ReadTemp()
         {
             byte[] cmdBase = new byte[] { 0x01, 0x03, 0x00, 0x08, 0x00, 0x08, 0xC5, 0xCE };
@@ -68,6 +63,5 @@ namespace Com.RePower.Device.TemperatureSensor.Impl.SerialPortTempratureSensors
             }
             return OperateResult.CreateFailedResult<double[]>("读取温度失败");
         }
-
     }
 }

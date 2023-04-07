@@ -136,7 +136,7 @@ namespace Com.RePower.Ocv.Ui.UiBase
                 localDb?.Database.EnsureCreated();
                 #endregion
                 #region 初始化完成后调用
-                OnInitComplate();
+                OnInitComplete();
                 #endregion
                 #region 初始化UiLog
                 LogHelper.RegisterUiLogEvent(new System.Action<object?, log4net.Core.LoggingEvent>((sender, e) =>
@@ -167,7 +167,7 @@ namespace Com.RePower.Ocv.Ui.UiBase
 
         
 
-        protected virtual void OnInitComplate()
+        protected virtual void OnInitComplete()
         { }
 
         private void BaseRegister(ContainerBuilder builder)

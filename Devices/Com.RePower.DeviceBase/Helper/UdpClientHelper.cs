@@ -1,13 +1,8 @@
-﻿using Com.RePower.WpfBase.Extensions;
+﻿using CLDC.Framework.Log;
 using Com.RePower.WpfBase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
+using Com.RePower.WpfBase.Extensions;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using CLDC.Framework.Log;
+using System.Net.Sockets;
 
 namespace Com.RePower.DeviceBase.Helper
 {
@@ -21,7 +16,7 @@ namespace Com.RePower.DeviceBase.Helper
                 string port = ((IPEndPoint?)udpClient.Client.RemoteEndPoint)?.Port.ToString() ?? "未知端口";
                 Log.getMessageFile("udp通讯日志").Info($"IP:{ip},端口:{port},发送:{bytes.ToHexString(',')}");
                 //udpClient.GetStream().Write(bytes, 0, bytes.Length);
-                udpClient.Send(bytes,bytes.Length);
+                udpClient.Send(bytes, bytes.Length);
                 byte[] rBuffer = new byte[1024 * 64];//接收临时缓存数组
                 udpClient.Client.ReceiveTimeout = timeOut;
                 if (readDelay < 0)

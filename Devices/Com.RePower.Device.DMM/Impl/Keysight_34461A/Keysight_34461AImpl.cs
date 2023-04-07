@@ -1,21 +1,17 @@
 ﻿using Com.RePower.DeviceBase.BaseDevice;
-using Com.RePower.DeviceBase.DMM;
 using Com.RePower.WpfBase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
 {
     public class Keysight34461AImpl : Keysight34461AAbstract
     {
         protected INetDeviceBase NetDeviceBase;
+
         public Keysight34461AImpl()
         {
             this.NetDeviceBase = new TcpNetDeviceBase();
         }
+
         public override bool IsConnected
         {
             get { return NetDeviceBase.IsConnected; }
@@ -29,19 +25,20 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
 
         public override int ReadDelay
         {
-            get { return NetDeviceBase.ReadDelay;}
-            set { NetDeviceBase.ReadDelay = value;}
+            get { return NetDeviceBase.ReadDelay; }
+            set { NetDeviceBase.ReadDelay = value; }
         }
 
         public override string IpAddress
         {
-            get { return NetDeviceBase.IpAddress;}
-            set { NetDeviceBase.IpAddress = value;}
+            get { return NetDeviceBase.IpAddress; }
+            set { NetDeviceBase.IpAddress = value; }
         }
+
         public override int Port
         {
-            get { return NetDeviceBase.Port;}
-            set { NetDeviceBase.Port = value;}
+            get { return NetDeviceBase.Port; }
+            set { NetDeviceBase.Port = value; }
         }
 
         public override OperateResult Connect()
@@ -73,6 +70,7 @@ namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
         {
             return NetDeviceBase.SendCmd(cmd, timeout, isNeedRecovery);
         }
+
         public override Task<OperateResult<byte[]>> SendCmdAsync(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
         {
             return NetDeviceBase.SendCmdAsync(cmd, timeout, isNeedRecovery);

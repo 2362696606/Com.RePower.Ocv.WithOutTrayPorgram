@@ -5,6 +5,7 @@
         public OperateResult()
         {
         }
+
         public static string ConvertExceptionMsg(Exception ex)
         {
             return ex.Message;
@@ -14,6 +15,7 @@
         /// 是否失败
         /// </summary>
         public bool IsFailed => !IsSuccess;
+
         /// <summary>
         /// 使用指定的消息实例化一个默认的结果对象
         /// </summary>
@@ -58,7 +60,6 @@
             return $"错误代码：{this.ErrorCode}   错误信息：{this.Message}";
         }
 
-
         /// <summary>
         /// 创建并返回一个失败的结果对象，该对象复制另一个结果对象的错误信息
         /// </summary>
@@ -95,7 +96,6 @@
             };
         }
 
-
         /// <summary>
         /// 创建失败的信息返回对象
         /// </summary>
@@ -130,6 +130,7 @@
                 Message = "失败",
             };
         }
+
         /// <summary>
         /// 创建失败结果
         /// </summary>
@@ -159,7 +160,6 @@
                 Message = msg,
             };
         }
-
 
         /// <summary>
         /// 创建并返回一个成功的结果对象
@@ -210,6 +210,7 @@
             };
         }
     }
+
     public class OperateResult<T> : OperateResult
     {
         #region Constructor
@@ -229,7 +230,6 @@
         public OperateResult(string? msg)
             : base(msg)
         {
-
         }
 
         /// <summary>
@@ -240,10 +240,9 @@
         public OperateResult(int errorCode, string msg)
             : base(errorCode, msg)
         {
-
         }
 
-        #endregion
+        #endregion Constructor
 
         /// <summary>
         /// 用户自定义的泛型数据

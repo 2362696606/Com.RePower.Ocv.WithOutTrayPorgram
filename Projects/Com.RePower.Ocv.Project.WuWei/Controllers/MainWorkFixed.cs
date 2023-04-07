@@ -1,6 +1,4 @@
-﻿using Azure;
-using Com.RePower.Ocv.Model;
-using Com.RePower.Ocv.Model.Entity;
+﻿using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Model.Extensions;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.WuWei.DataBaseContext;
@@ -9,25 +7,12 @@ using Com.RePower.Ocv.Project.WuWei.Model;
 using Com.RePower.Ocv.Project.WuWei.Models;
 using Com.RePower.Ocv.Project.WuWei.Serivces;
 using Com.RePower.Ocv.Project.WuWei.Serivces.Dto;
-using Com.RePower.Ocv.Project.WuWei.Serivces.Module;
 using Com.RePower.WpfBase;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design.Internal;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using Npoi.Mapper;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Drawing.Text;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace Com.RePower.Ocv.Project.WuWei.Controllers
 {
@@ -40,13 +25,11 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         ///// </summary>
         //private bool _doMsa;
 
-
         /// <summary>
         /// MSA标志
         /// </summary>
         [ObservableProperty]
         private bool _msaFlag;
-
 
         public MainWorkFixed(DevicesController devicesController
             , FlowController flowController
@@ -78,15 +61,12 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         public TestOption? TestOption => SettingManager.Instance.TestOption;
         public IWmsService WmsService { get; }
 
-        
-
-
         /// <summary>
         /// 是否上传到Mes
         /// </summary>
         public bool IsDoUploadToMes
         {
-            get { return TestOption?.IsDoUploadToMes??false; }
+            get { return TestOption?.IsDoUploadToMes ?? false; }
         }
 
         /// <summary>
@@ -94,7 +74,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// </summary>
         public bool IsDoRetest
         {
-            get { return TestOption?.IsDoRetest??false; }
+            get { return TestOption?.IsDoRetest ?? false; }
         }
 
         /// <summary>
@@ -102,7 +82,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// </summary>
         public int RetestTimes
         {
-            get { return TestOption?.RetestTimes??0; }
+            get { return TestOption?.RetestTimes ?? 0; }
         }
 
         /// <summary>
@@ -220,58 +200,88 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             while (true)
             {
                 #region 初始化Plc
+
                 //var init1 = InitWork();
                 //if (init1.IsFailed)
                 //{
                 //    return init1;
                 //}
-                #endregion
+
+                #endregion 初始化Plc
+
                 #region 暂停或停止
+
                 ResetEvent.WaitOne();
                 CancelToken.ThrowIfCancellationRequested();
-                #endregion
+
+                #endregion 暂停或停止
+
                 #region 等待测试准备信号
+
                 LogHelper.UiLog.Info("等待Plc[Read_1] = 1");
                 var wait1 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["Read_1"], (short)1, cancellation: this.CancelToken);
                 if (wait1.IsFailed)
                 {
                     return OperateResult.CreateFailedResult(wait1.Message ?? "等待Plc[Read_1] = 1失败", wait1.ErrorCode);
                 }
-                #endregion
+
+                #endregion 等待测试准备信号
+
                 #region 暂停或停止
+
                 ResetEvent.WaitOne();
                 CancelToken.ThrowIfCancellationRequested();
-                #endregion
+
+                #endregion 暂停或停止
+
                 #region 读取托盘条码
+
                 var readTrayCodeResult = ReadTrayCode();
                 if (readTrayCodeResult.IsFailed)
                     return readTrayCodeResult;
-                #endregion
+
+                #endregion 读取托盘条码
+
                 #region 暂停或停止
+
                 ResetEvent.WaitOne();
                 CancelToken.ThrowIfCancellationRequested();
-                #endregion
+
+                #endregion 暂停或停止
+
                 #region 获取电芯条码
+
                 var getBatterysCodeResult = GetBatterysCode();
                 if (getBatterysCodeResult.IsFailed)
                     return getBatterysCodeResult;
-                #endregion
+
+                #endregion 获取电芯条码
+
                 #region 暂停或停止
+
                 ResetEvent.WaitOne();
                 CancelToken.ThrowIfCancellationRequested();
-                #endregion
+
+                #endregion 暂停或停止
+
                 #region 下发可以开始测试
+
                 LogHelper.UiLog.Info("写入Plc[Send_1] = 1");
                 var write2 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_1"], (short)1);
                 if (write2.IsFailed)
                 {
                     return OperateResult.CreateFailedResult($"写入Plc[Send_1] = 1失败{write2.Message ?? "未知原因"}", write2.ErrorCode);
                 }
-                #endregion
+
+                #endregion 下发可以开始测试
+
                 #region 暂停或停止
+
                 ResetEvent.WaitOne();
                 CancelToken.ThrowIfCancellationRequested();
-                #endregion
+
+                #endregion 暂停或停止
+
                 if (MsaFlag)
                 {
                     var msaResult = DoMsaTest();
@@ -300,56 +310,85 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         private OperateResult DoNormalTest()
         {
             #region 暂停或停止
+
             ResetEvent.WaitOne();
             CancelToken.ThrowIfCancellationRequested();
-            #endregion
+
+            #endregion 暂停或停止
+
             #region 执行测试
+
             var testResult = DoTest();
             if (testResult.IsFailed)
             {
                 return testResult;
             }
-            #endregion
+
+            #endregion 执行测试
+
             #region 暂停或停止
+
             ResetEvent.WaitOne();
             CancelToken.ThrowIfCancellationRequested();
-            #endregion
+
+            #endregion 暂停或停止
+
             //验证ng
             ValidateNgResult();
+
             #region 复测
+
             var retestResult = Retest();
             if (retestResult.IsFailed)
             {
                 return retestResult;
             }
-            #endregion
+
+            #endregion 复测
+
             #region 暂停或停止
+
             ResetEvent.WaitOne();
             CancelToken.ThrowIfCancellationRequested();
-            #endregion
+
+            #endregion 暂停或停止
+
             #region 下发测试结果
+
             var sendTestResultToPlcResult = SendTestResultToPlc();
             if (sendTestResultToPlcResult.IsFailed)
             {
                 return sendTestResultToPlcResult;
             }
-            #endregion
+
+            #endregion 下发测试结果
+
             #region 暂停或停止
+
             ResetEvent.WaitOne();
             CancelToken.ThrowIfCancellationRequested();
-            #endregion
+
+            #endregion 暂停或停止
+
             #region 保存到本地excel
+
             var saveResult = SaveTestData();
             if (saveResult.IsFailed)
             {
                 return saveResult;
             }
-            #endregion
+
+            #endregion 保存到本地excel
+
             #region 暂停或停止
+
             ResetEvent.WaitOne();
             CancelToken.ThrowIfCancellationRequested();
-            #endregion
+
+            #endregion 暂停或停止
+
             #region 上传结果
+
             if (IsDoUploadToMes)
             {
                 var mesResult = UpLoadMesResult();
@@ -367,18 +406,26 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 return OperateResult.CreateFailedResult("上传调度OCV数据失败," + getupResult.Message);
             }
             LogHelper.UiLog.Info("上传调度OCV数据成功！");
-            #endregion
+
+            #endregion 上传结果
+
             #region 暂停或停止
+
             ResetEvent.WaitOne();
             CancelToken.ThrowIfCancellationRequested();
-            #endregion
+
+            #endregion 暂停或停止
+
             #region 下发放行电池
+
             var outPutResult = SendOutPutTray();
-            if(outPutResult.IsFailed)
+            if (outPutResult.IsFailed)
             {
                 return OperateResult.CreateFailedResult();
             }
-            #endregion
+
+            #endregion 下发放行电池
+
             return OperateResult.CreateSuccessResult();
         }
 
@@ -428,41 +475,51 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// <returns></returns>
         private OperateResult DoMsaTest()
         {
-            for(int msatestTimes = 0;msatestTimes<(TestOption?.MsaTimes??25); msatestTimes++)
+            for (int msatestTimes = 0; msatestTimes < (TestOption?.MsaTimes ?? 25); msatestTimes++)
             {
-
                 #region 暂停或停止
+
                 ResetEvent.WaitOne();
                 CancelToken.ThrowIfCancellationRequested();
-                #endregion
+
+                #endregion 暂停或停止
+
                 #region 执行测试
+
                 var testResult = DoTest(false);
                 if (testResult.IsFailed)
                 {
                     return testResult;
                 }
-                #endregion
+
+                #endregion 执行测试
+
                 #region 暂停或停止
+
                 ResetEvent.WaitOne();
                 CancelToken.ThrowIfCancellationRequested();
-                #endregion
+
+                #endregion 暂停或停止
+
                 //验证测试结果
                 ValidateNgResult();
                 var saveResult = SaveMsaData(msatestTimes);
-                if(saveResult.IsFailed)
+                if (saveResult.IsFailed)
                 {
                     return saveResult;
                 }
-                if (msatestTimes<(TestOption?.MsaTimes??25-1))
+                if (msatestTimes < (TestOption?.MsaTimes ?? 25 - 1))
                 {
                     #region 下发复测信号
+
                     LogHelper.UiLog.Info("写入Plc[Send_2] = 2");
                     var write4 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)2);
                     if (write4.IsFailed)
                     {
                         return OperateResult.CreateFailedResult(write4.Message ?? "写入Plc[Send_2] = 2失败", write4.ErrorCode);
                     }
-                    #endregion
+
+                    #endregion 下发复测信号
                 }
             }
             return OperateResult.CreateSuccessResult();
@@ -504,10 +561,11 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 throw;
             }
         }
+
         private OperateResult SaveTestData()
         {
             List<ExcelSaveDto> saveDtos = new List<ExcelSaveDto>();
-            foreach(var item in Tray.NgInfos)
+            foreach (var item in Tray.NgInfos)
             {
                 ExcelSaveDto temp = new ExcelSaveDto();
                 temp.Position = item.Battery.Position;
@@ -548,6 +606,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         private OperateResult SendTestResultToPlc()
         {
             #region 下发测试结果
+
             if (Tray.NgInfos.Any(x => x.IsNg))
             {
                 //LogHelper.UiLog.Info("下发测试结果");
@@ -568,50 +627,68 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     return OperateResult.CreateFailedResult($"写入Plc[Send_3] = 1失败:{write5.Message ?? "未知原因"}", write5.ErrorCode);
                 }
             }
-            #endregion
+
+            #endregion 下发测试结果
+
             return OperateResult.CreateSuccessResult();
         }
+
         /// <summary>
         /// 执行复测逻辑
         /// </summary>
         /// <returns></returns>
         private OperateResult Retest()
         {
-            if(IsDoRetest)
+            if (IsDoRetest)
             {
                 LogHelper.UiLog.Info("开始执行复测");
                 int retestTimes = 0;
-                while(retestTimes < RetestTimes)
+                while (retestTimes < RetestTimes)
                 {
                     #region 暂停或停止
+
                     ResetEvent.WaitOne();
                     CancelToken.ThrowIfCancellationRequested();
-                    #endregion
+
+                    #endregion 暂停或停止
+
                     if (Tray.NgInfos.Any(x => x.IsNg))
                     {
                         #region 下发复测信号
+
                         LogHelper.UiLog.Info("写入Plc[Send_2] = 2");
                         var write4 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_2"], (short)2);
                         if (write4.IsFailed)
                         {
                             return OperateResult.CreateFailedResult(write4.Message ?? "写入Plc[Send_2] = 2失败", write4.ErrorCode);
                         }
-                        #endregion
+
+                        #endregion 下发复测信号
+
                         #region 暂停或停止
+
                         ResetEvent.WaitOne();
                         CancelToken.ThrowIfCancellationRequested();
-                        #endregion
+
+                        #endregion 暂停或停止
+
                         #region 执行测试
+
                         var testResult = DoTest();
                         if (testResult.IsFailed)
                         {
                             return testResult;
                         }
-                        #endregion
+
+                        #endregion 执行测试
+
                         #region 暂停或停止
+
                         ResetEvent.WaitOne();
                         CancelToken.ThrowIfCancellationRequested();
-                        #endregion
+
+                        #endregion 暂停或停止
+
                         //验证ng
                         ValidateNgResult();
                         retestTimes++;
@@ -631,32 +708,44 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// <returns>操作结果</returns>
         private OperateResult DoTest(bool doNgCheck = true)
         {
-
             #region 等待气缸伸出到位
+
             LogHelper.UiLog.Info("等待本地Plc[Read_1] = 2");
             var wait3 = DevicesController.LocalPlc.Wait(DevicesController.LocalPlcAddressCache["Read_1"], (short)2, cancellation: this.CancelToken);
             if (wait3.IsFailed)
             {
                 return OperateResult.CreateFailedResult($"等待Plc[Read_1] = 2失败:{wait3.Message ?? "未知原因"}", wait3.ErrorCode);
             }
-            #endregion
+
+            #endregion 等待气缸伸出到位
+
             #region 暂停或停止
+
             ResetEvent.WaitOne();
             CancelToken.ThrowIfCancellationRequested();
-            #endregion
+
+            #endregion 暂停或停止
+
             #region 测试电池
+
             LogHelper.UiLog.Info("开始测试电池");
             var test1 = TestBatteries(doNgCheck);
             if (test1.IsFailed)
             {
                 return test1;
             }
-            #endregion
+
+            #endregion 测试电池
+
             #region 暂停或停止
+
             ResetEvent.WaitOne();
             CancelToken.ThrowIfCancellationRequested();
-            #endregion
+
+            #endregion 暂停或停止
+
             #region 下发测试完成
+
             LogHelper.UiLog.Info("下发测试完成");
             LogHelper.UiLog.Info("写入本地Plc[Send_1] = 2");
             var write3 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_1"], (short)2);
@@ -664,7 +753,9 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             {
                 return OperateResult.CreateFailedResult(write3.Message ?? "写入Plc[Send_1] = 2失败", write3.ErrorCode);
             }
-            #endregion
+
+            #endregion 下发测试完成
+
             return OperateResult.CreateSuccessResult();
         }
 
@@ -675,6 +766,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         private OperateResult ReadTrayCode()
         {
             #region 读取托盘条码
+
             bool validateResult = false;
             string trayCode = string.Empty;
             LogHelper.UiLog.Info("读取Plc[Read_2]");
@@ -692,7 +784,8 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 return OperateResult.CreateFailedResult($"读取托盘条码失败,{trayCode}不合规");
             }
             return OperateResult.CreateSuccessResult();
-            #endregion
+
+            #endregion 读取托盘条码
         }
 
         /// <summary>
@@ -701,8 +794,8 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// <returns>操作结果</returns>
         private OperateResult GetBatterysCode()
         {
-
             #region 请求电芯条码
+
             LogHelper.UiLog.Info("请求电芯条码");
             var getBatteriesInfoResult = WmsService.GetBatteriesInfo();
             if (getBatteriesInfoResult.IsFailed)
@@ -719,7 +812,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             if (resultObj.Result == 0)
             {
                 SetAlarm();
-                return OperateResult.CreateFailedResult($"请求电芯条码失败:{resultObj.Message??"未知原因"}");
+                return OperateResult.CreateFailedResult($"请求电芯条码失败:{resultObj.Message ?? "未知原因"}");
             }
             if (resultObj.PileContent == null)
             {
@@ -743,7 +836,8 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             tempNgInfos.OrderBy(x => x.Battery.Position);
             Tray.NgInfos = tempNgInfos;
             return OperateResult.CreateSuccessResult();
-            #endregion
+
+            #endregion 请求电芯条码
         }
 
         /// <summary>
@@ -780,12 +874,12 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             }
             //关闭所有通道
             var closeResult = DevicesController.SwitchBoard.CloseAllChannels(1);
-            if(closeResult.IsFailed)
+            if (closeResult.IsFailed)
             {
                 return closeResult;
             }
             closeResult = DevicesController.SwitchBoard.CloseAllChannels(2);
-            if(closeResult.IsFailed)
+            if (closeResult.IsFailed)
             {
                 return closeResult;
             }
@@ -793,10 +887,13 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             foreach (var item in Tray.NgInfos)
             {
                 #region 暂停或停止
+
                 ResetEvent.WaitOne();
                 CancelToken.ThrowIfCancellationRequested();
-                #endregion
-                var result = TestOneBattery(item,doNgCheck);
+
+                #endregion 暂停或停止
+
+                var result = TestOneBattery(item, doNgCheck);
                 if (result.IsFailed)
                 {
                     return result;
@@ -810,7 +907,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// </summary>
         /// <param name="ngInfo">单个电池ngInfo</param>
         /// <returns>操作结果</returns>
-        private OperateResult TestOneBattery(NgInfo ngInfo,bool doNgCheck = true)
+        private OperateResult TestOneBattery(NgInfo ngInfo, bool doNgCheck = true)
         {
             var battery = ngInfo.Battery;
             LogHelper.UiLog.Info($"开始测试电池{battery.Position}");
@@ -825,7 +922,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 return openResult;
             }
             LogHelper.UiLog.Info("读取电压");
-            Thread.Sleep(TestOption?.DmmReadDelayWhenSwitch??100);
+            Thread.Sleep(TestOption?.DmmReadDelayWhenSwitch ?? 100);
             var read1 = DevicesController.Dmm.ReadDc();
             if (read1.IsFailed)
             {
@@ -835,12 +932,12 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             battery.IsTested = true;
             battery.TestTime = DateTime.Now;
             //关闭对应通道
-            var closeResult = SwitchChannel(battery.Position,false);
+            var closeResult = SwitchChannel(battery.Position, false);
             if (closeResult.IsFailed)
             {
                 return closeResult;
             }
-            Thread.Sleep(TestOption?.SwitchDelay??100);
+            Thread.Sleep(TestOption?.SwitchDelay ?? 100);
             return OperateResult.CreateSuccessResult();
         }
 
@@ -850,7 +947,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
         /// <param name="channel">通道号</param>
         /// <param name="open">开或关</param>
         /// <returns>操作结果</returns>
-        private OperateResult SwitchChannel(int channel,bool open=true)
+        private OperateResult SwitchChannel(int channel, bool open = true)
         {
             OperateResult openResult;
             if (channel <= 19)
@@ -946,12 +1043,11 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             OperateResult result = OperateResult.CreateFailedResult();
             try
             {
-
                 List<RnDbOcv> listrnDbs = new List<RnDbOcv>();
                 foreach (var item in Tray.NgInfos)
                 {
                     RnDbOcv rnDbOcv = new RnDbOcv();
-                    rnDbOcv.EqpId = "rn_" + TestOption?.OcvType??"Ocv0" + "_6"; //设备编码   //EquipmentCode;
+                    rnDbOcv.EqpId = "rn_" + TestOption?.OcvType ?? "Ocv0" + "_6"; //设备编码   //EquipmentCode;
                     rnDbOcv.PcId = TestOption?.OcvType ?? "Ocv0" + "_6";//设备号+线
                     rnDbOcv.Operation = TestOption?.OcvType ?? "Ocv0";//设备号
                     if (string.IsNullOrWhiteSpace(Tray.TrayCode))
@@ -967,7 +1063,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     //{
                     //    rnDbOcv.TotalNgState = "NG";
                     //}
-                    if(Tray.NgInfos.Any(x=>x.IsNg))
+                    if (Tray.NgInfos.Any(x => x.IsNg))
                     {
                         rnDbOcv.TotalNgState = "NG";
                     }
@@ -985,14 +1081,16 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     rnDbOcv.TestMode = "自动";
                     rnDbOcv.ShellVoltage = Convert.ToDecimal(item.Battery.NVolValue);
                     rnDbOcv.SvResult = item.IsNg == true ? "NG" : "OK";
-                    switch(item.NgType)
+                    switch (item.NgType)
                     {
                         case 0:
                             rnDbOcv.SvNgCode = "00";
                             break;
+
                         case 1:
                             rnDbOcv.SvNgCode = "C1";
                             break;
+
                         case 2:
                             rnDbOcv.SvNgCode = "C2";
                             break;
@@ -1003,21 +1101,17 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 //listrnDbs.Add(rnDbOcv);
                 using (var context = new OcvDataDbContext())
                 {
-
                     foreach (var item in listrnDbs)
                     {
                         context.RnDbOcv0.Add(item);
                     }
                     context.SaveChanges();
-
                 }
                 result.IsSuccess = true;
                 return result;
-
             }
             catch (Exception ex)
             {
-
                 LogHelper.UiLog.Error(ex.Message);
                 result.Message = ex.Message;
                 return result;
@@ -1033,9 +1127,6 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
             var write3 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["Send_3"], (short)2);
             return write3;
         }
-
-
-
 
         #region 保存测试结果到本地Excel文件中
 

@@ -1,17 +1,13 @@
 ﻿using Com.RePower.Ocv.Model.Enums;
 using Com.RePower.Ocv.Model.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Model.Entity
 {
-    public partial class NgInfo:ObservableObject
+    public partial class NgInfo : ObservableObject
     {
         private Battery _battery = new Entity.Battery();
+
         /// <summary>
         /// 对应电池
         /// </summary>
@@ -21,13 +17,13 @@ namespace Com.RePower.Ocv.Model.Entity
             set { SetProperty(ref _battery, value); }
         }
 
-
         /// <summary>
         /// Ng描述
         /// </summary>
         public string? NgDescription => this.GetNgDescription();
 
         private bool? _attachedIsNg;
+
         /// <summary>
         /// 附加Ng，true为ng，false为非ng
         /// </summary>
@@ -44,13 +40,14 @@ namespace Com.RePower.Ocv.Model.Entity
         }
 
         private string? _attachedNgDescription;
+
         /// <summary>
         /// 附加Ng描述
         /// </summary>
         public string? AttachedNgDescription
         {
             get { return _attachedNgDescription; }
-            set 
+            set
             {
                 if (SetProperty(ref _attachedNgDescription, value))
                 {
@@ -60,25 +57,28 @@ namespace Com.RePower.Ocv.Model.Entity
         }
 
         private int? _ngType;
+
         /// <summary>
         /// ng类型
         /// </summary>
         public int? NgType
         {
             get { return _ngType; }
-            set 
-            { 
+            set
+            {
                 if (SetProperty(ref _ngType, value))
                 {
                     OnPropertyChanged(nameof(NgDescription));
                     OnPropertyChanged(nameof(IsNg));
-                } 
+                }
             }
         }
+
         /// <summary>
         /// 是否ng true为ng，false为非ng
         /// </summary>
         public bool IsNg => this.GetIsNg();
+
         /// <summary>
         /// 获取ng描述
         /// </summary>
@@ -99,6 +99,7 @@ namespace Com.RePower.Ocv.Model.Entity
             }
             return tempNgDescription;
         }
+
         /// <summary>
         /// 获取是否ng
         /// </summary>

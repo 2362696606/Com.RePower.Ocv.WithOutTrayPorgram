@@ -1,19 +1,19 @@
-using Xunit;
-using Com.RePower.Device.Plc;
 using Com.RePower.Device.Plc.Impl;
 using Com.RePower.DeviceBase.Plc;
-using Xunit.Abstractions;
 using HslCommunication.Profinet.Siemens;
+using Xunit.Abstractions;
 
 namespace Com.RePower.Device.Plc.Tests
 {
     public class PlcTest
     {
         public ITestOutputHelper OutPutHelper { get; set; }
+
         public PlcTest(ITestOutputHelper outputHelper)
         {
             this.OutPutHelper = outputHelper;
         }
+
         [Fact(DisplayName = "测试连接")]
         public void ConnectTest()
         {
@@ -76,21 +76,22 @@ namespace Com.RePower.Device.Plc.Tests
             plcNet.Connect();
             Assert.True(plcNet.IsConnected);
             var readResult = plcNet.ReadBool("MX100.0");
-            if(readResult.IsFailed)
+            if (readResult.IsFailed)
             {
                 OutPutHelper.WriteLine("ErrorCode:" + readResult.ErrorCode);
                 OutPutHelper.WriteLine("Message:" + readResult.Message);
             }
             Assert.True(readResult.IsSuccess);
         }
-        [Fact(DisplayName ="测试西门子PLC")]
+
+        [Fact(DisplayName = "测试西门子PLC")]
         public void SiemensTest()
         {
             SiemensS7Net plc = new SiemensS7Net(SiemensPLCS.S1500);
             plc.IpAddress = "192.168.0.10";
             plc.Port = 102;
             plc.ConnectServer();
-            var result = plc.Wait("DB20.DBW4",5);
+            var result = plc.Wait("DB20.DBW4", 5);
             OutPutHelper.WriteLine(result.Message);
             Assert.True(result.IsSuccess);
         }

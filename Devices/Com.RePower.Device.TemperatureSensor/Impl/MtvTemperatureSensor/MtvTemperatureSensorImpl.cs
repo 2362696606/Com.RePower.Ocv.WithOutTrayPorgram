@@ -1,16 +1,12 @@
 ﻿using Com.RePower.DeviceBase.BaseDevice;
 using Com.RePower.WpfBase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Device.TemperatureSensor.Impl.MtvTemperatureSensor
 {
     public class MtvTemperatureSensorImpl : MtvTemperatureSensorAbstruct
     {
         protected INetDeviceBase NetDeviceBase;
+
         public MtvTemperatureSensorImpl()
         {
             this.NetDeviceBase = new UdpNetDeviceBase();
@@ -38,6 +34,7 @@ namespace Com.RePower.Device.TemperatureSensor.Impl.MtvTemperatureSensor
             get { return NetDeviceBase.DeviceName; }
             set { NetDeviceBase.DeviceName = value; }
         }
+
         public override int ReadDelay
         {
             get { return NetDeviceBase.ReadDelay; }

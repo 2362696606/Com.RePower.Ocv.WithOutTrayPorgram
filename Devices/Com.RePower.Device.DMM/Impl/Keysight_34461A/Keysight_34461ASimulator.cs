@@ -1,13 +1,9 @@
 ﻿using Com.RePower.DeviceBase.BaseDevice;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Device.DMM.Impl.Keysight_34461A
 {
-    public class Keysight34461ASimulator:Keysight34461AImpl
+    public class Keysight34461ASimulator : Keysight34461AImpl
     {
         public Keysight34461ASimulator()
         {

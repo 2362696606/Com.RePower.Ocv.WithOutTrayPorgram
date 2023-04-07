@@ -3,22 +3,15 @@ using log4net;
 using log4net.Core;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Text;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Model.Helper
 {
     public static class LogHelper
     {
-
-		public static ILog UiLog
-		{
-			get { return Log.getMessageFile("UiLog"); }
-		}
+        public static ILog UiLog
+        {
+            get { return Log.getMessageFile("UiLog"); }
+        }
 
         public static ILog WmsServiceLog
         {
@@ -38,13 +31,10 @@ namespace Com.RePower.Ocv.Model.Helper
             get { return Log.getMessageFile("PlcLog"); ; }
         }
 
-
         public static ILog WorkErrorDetailLog
         {
             get { return Log.getMessageFile("WorkErrorDetail"); ; }
         }
-
-
 
         public static void RegisterUiLogEvent(Action<object?, LoggingEvent> action)
         {

@@ -2,17 +2,18 @@
 
 namespace {{namespace}}
 {
-    {{#if comment}}
+{{#if comment}}
     /// <summary>
-{{comment}}
-    /// </summary>
-    {{/if}}
-    {{#each class-annotations}}
-    {{{class-annotation}}}
-    {{/each}}
+    {{comment}}
+    ///
+</summary>
+{{/if}}
+{{#each class-annotations}}
+{{{class-annotation}}}
+{{/each}}
     public partial class {{class}}
     {
-        {{{> constructor}}}
-        {{{> properties}}}
+{{{> constructor}}}
+{{{> properties}}}
     }
 }

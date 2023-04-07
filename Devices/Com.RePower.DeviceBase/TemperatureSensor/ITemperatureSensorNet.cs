@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Com.RePower.DeviceBase.TemperatureSensor
+﻿namespace Com.RePower.DeviceBase.TemperatureSensor
 {
-    public interface ITemperatureSensorNet:ITemperatureSensor,INetDevice
+    public interface ITemperatureSensorNet : ITemperatureSensor, INetDevice
     {
     }
 }

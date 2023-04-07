@@ -2,11 +2,6 @@
 using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Project.Byd.CB15.Services.Mes;
 using Com.RePower.Ocv.Project.Byd.CB15.Services.Mes.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit.Abstractions;
 
 namespace Com.RePower.Ocv.Test.Byd.CB15
@@ -19,6 +14,7 @@ namespace Com.RePower.Ocv.Test.Byd.CB15
         }
 
         public ITestOutputHelper TestOutputHelper { get; }
+
         [Fact]
         public static void TestMapper()
         {

@@ -1,10 +1,9 @@
-﻿using Com.RePower.Ocv.Model.CommonModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Configuration;
 
 namespace Com.RePower.Ocv.Project.Byd.CB09.Settings
 {
-    public class TestOption : SingletonApplicationSettingsBase<TestOption>
+    public sealed class TestOption : ApplicationSettingsBase
     {
         /// <summary>
         /// 是否复测
@@ -13,7 +12,11 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Settings
         [DefaultSettingValue("false")]
         [DisplayName("是否复测")]
         [Description("是否复测")]
-        public bool IsDoRetest { get; set; }
+        public bool IsDoRetest
+        {
+            get => (bool)this[nameof(IsDoRetest)];
+            set => this[nameof(IsDoRetest)] = value;
+        }
 
         /// <summary>
         /// 是否上传到Mes
@@ -22,16 +25,11 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Settings
         [DefaultSettingValue("false")]
         [DisplayName("是否上传到Mes")]
         [Description("是否上传到Mes")]
-        public bool IsDoUploadToMes { get; set; }
-
-        /// <summary>
-        /// 复测次数
-        /// </summary>
-        [UserScopedSetting]
-        [DefaultSettingValue("0")]
-        [DisplayName("复测次数")]
-        [Description("复测次数")]
-        public int RetestTime { get; set; }
+        public bool IsDoUploadToMes
+        {
+            get => (bool)this[nameof(IsDoUploadToMes)];
+            set => this[nameof(IsDoUploadToMes)] = value;
+        }
 
         /// <summary>
         /// Msa测试次数
@@ -40,6 +38,23 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Settings
         [DefaultSettingValue("0")]
         [DisplayName("Msa测试次数")]
         [Description("Msa测试次数")]
-        public int MsaTestTime { get; set; }
+        public int MsaTestTimes
+        {
+            get => (int)this[nameof(MsaTestTimes)];
+            set => this[nameof(MsaTestTimes)] = value;
+        }
+
+        /// <summary>
+        /// 复测次数
+        /// </summary>
+        [UserScopedSetting]
+        [DefaultSettingValue("0")]
+        [DisplayName("复测次数")]
+        [Description("复测次数")]
+        public int RetestTime
+        {
+            get => (int)this[nameof(RetestTime)];
+            set => this[nameof(RetestTime)] = value;
+        }
     }
 }

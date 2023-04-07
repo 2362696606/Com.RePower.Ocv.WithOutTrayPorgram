@@ -8,6 +8,9 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Com.RePower.Ocv.Model.Helper;
+using Com.RePower.Ocv.Project.Byd.CB09.Modules;
+using System.Reflection;
 
 namespace Com.RePower.Ocv.Ui.Byd.CB09
 {
@@ -23,7 +26,12 @@ namespace Com.RePower.Ocv.Ui.Byd.CB09
 
         protected override void IocRegister(ContainerBuilder builder)
         {
-            
+            builder.RegisterModule<WorkModule>();
+        }
+
+        protected override void OnInitComplete()
+        {
+            var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         }
     }
 }

@@ -1,11 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Org.BouncyCastle.Asn1.X509.Qualified;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Com.RePower.Ocv.Model.Extensions
 {
@@ -25,63 +19,83 @@ namespace Com.RePower.Ocv.Model.Extensions
                 case "Byte":
                     type = typeof(byte);
                     break;
+
                 case "Byte[]":
                     type = typeof(byte[]);
                     break;
+
                 case "Bool":
                     type = typeof(bool);
                     break;
+
                 case "Int16":
                     type = typeof(short);
                     break;
+
                 case "Int16[]":
                     type = typeof(short[]);
                     break;
+
                 case "UInt16":
                     type = typeof(ushort);
                     break;
+
                 case "UInt16[]":
                     type = typeof(ushort[]);
                     break;
+
                 case "Int32":
                     type = typeof(int);
                     break;
+
                 case "Int32[]":
                     type = typeof(int[]);
                     break;
+
                 case "UInt32":
                     type = typeof(uint);
                     break;
+
                 case "UInt32[]":
                     type = typeof(uint[]);
                     break;
+
                 case "Int64":
                     type = typeof(long);
                     break;
+
                 case "Int64[]":
                     type = typeof(long[]);
                     break;
+
                 case "UInt64":
                     type = typeof(ulong);
                     break;
+
                 case "UInt64[]":
                     type = typeof(ulong[]);
                     break;
+
                 case "Single":
                     type = typeof(float);
                     break;
+
                 case "Single[]":
                     type = typeof(float[]);
                     break;
+
                 case "Double":
                     type = typeof(double);
                     break;
+
                 case "Double[]":
                     type = typeof(double[]);
                     break;
+
                 case "String":
                     type = typeof(string);
                     break;
+
                 default:
                     type = typeof(short);
                     break;
