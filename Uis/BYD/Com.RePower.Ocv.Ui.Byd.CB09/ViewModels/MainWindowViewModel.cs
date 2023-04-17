@@ -6,6 +6,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Com.RePower.Ocv.Ui.Byd.CB09.Views;
+using CommunityToolkit.Mvvm.Input;
+using MaterialDesignThemes.Wpf;
 
 namespace Com.RePower.Ocv.Ui.Byd.CB09.ViewModels
 {
@@ -13,8 +16,20 @@ namespace Com.RePower.Ocv.Ui.Byd.CB09.ViewModels
     {
         public MainWindowViewModel()
         {
-            AppVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "Unknow";
+            AppVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "Unknown";
+            this.OpenSettingsCommand = new RelayCommand(OpenSettings);
         }
+
+        private void OpenSettings()
+        {
+            SettingsView view = new SettingsView
+            {
+                DataContext = new SettingsViewModel()
+            };
+            DialogHost.Show(view, "MainDialog");
+        }
+
         public string AppVersion { get; }
+        public RelayCommand OpenSettingsCommand { get; set; }
     }
 }

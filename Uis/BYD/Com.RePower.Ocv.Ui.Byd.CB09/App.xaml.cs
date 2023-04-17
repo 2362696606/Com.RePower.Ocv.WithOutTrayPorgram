@@ -11,6 +11,7 @@ using System.Windows;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.Byd.CB09.Modules;
 using System.Reflection;
+using Com.RePower.Ocv.Project.Byd.CB09.Works;
 
 namespace Com.RePower.Ocv.Ui.Byd.CB09
 {
@@ -21,12 +22,14 @@ namespace Com.RePower.Ocv.Ui.Byd.CB09
     {
         protected override void AddService(ServiceCollection serviceCollection)
         {
-            
+            serviceCollection.AddHttpClient();
         }
 
         protected override void IocRegister(ContainerBuilder builder)
         {
-            builder.RegisterModule<WorkModule>();
+            //builder.RegisterModule<WorkModule>();
+            var assembly = typeof(MainWork).Assembly;
+            builder.RegisterAssemblyModules(assembly);
         }
 
         protected override void OnInitComplete()

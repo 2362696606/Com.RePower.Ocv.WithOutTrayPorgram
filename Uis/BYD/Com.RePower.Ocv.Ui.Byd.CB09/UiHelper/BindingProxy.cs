@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Com.RePower.Ocv.Ui.Byd.CB15.UiHelper
+namespace Com.RePower.Ocv.Ui.Byd.CB09.UiHelper
 {
     public class BindingProxy : Freezable
     {

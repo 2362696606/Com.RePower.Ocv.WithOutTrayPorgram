@@ -25,4 +25,10 @@
 	  <ProjectReference Include="..\..\Com.RePower.Ocv.Ui.UiBase\Com.RePower.Ocv.Ui.UiBase.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Views\SettingsView.xaml.cs">
+	    <SubType>Code</SubType>
+	  </Compile>
+	</ItemGroup>
+
 </Project>

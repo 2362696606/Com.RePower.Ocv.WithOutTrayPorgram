@@ -16,7 +16,7 @@ namespace Com.RePower.Ocv.Ui.Byd.CB15.ViewModels
         { 
             get
             {
-                if(SettingManager.Instance.CurrentOcvType == Project.Byd.CB15.Enums.OcvTypeEnmu.Ocv4)
+                if(SettingManager.Instance.CurrentOcvType == Project.Byd.CB15.Enums.OcvTypeEnmu.OCV4)
                 {
                     return true;
                 }

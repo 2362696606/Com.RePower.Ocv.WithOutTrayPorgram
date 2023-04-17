@@ -1,12 +1,131 @@
-﻿<UserControl x:Class="Com.RePower.Ocv.Ui.Byd.CB09.Views.TrayView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Com.RePower.Ocv.Ui.Byd.CB09.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+﻿<UserControl
+    x:Class="Com.RePower.Ocv.Ui.Byd.CB09.Views.TrayView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Com.RePower.Ocv.Ui.Byd.CB09.Views.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:entity="clr-namespace:Com.RePower.Ocv.Model.Entity;assembly=Com.RePower.Ocv.Model"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uiHelper="clr-namespace:Com.RePower.Ocv.Ui.Byd.CB09.UiHelper"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:NgInfoToColorMultiValueConverter x:Key="NgInfoToColor" />
+            <converters:NgTypeToCodeValueConverter x:Key="NgTypeToCode" />
+            <uiHelper:BindingProxy x:Key="proxy" Data="{Binding}" />
+            <converters:BoolToVisibility x:Key="BoolToVisibility" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <materialDesign:Card Margin="16" Padding="30">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBox
+                materialDesign:HintAssist.Hint="托盘条码"
+                IsReadOnly="True"
+                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                Text="{Binding Tray.TrayCode}" />
+            <DockPanel Grid.Row="1">
+                <StackPanel
+                    HorizontalAlignment="Right"
+                    DockPanel.Dock="Bottom"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        FontSize="30"
+                        FontWeight="Black"
+                        Text="总Ng：" />
+                    <TextBlock
+                        FontSize="30"
+                        FontWeight="Black"
+                        Text="{Binding TotalNg}" />
+                </StackPanel>
+                <ItemsControl ItemsSource="{Binding Tray.NgInfos}">
+                    <ItemsControl.Template>
+                        <ControlTemplate TargetType="ItemsControl">
+                            <ScrollViewer
+                                x:Name="ScrollViewer"
+                                Padding="{TemplateBinding Padding}"
+                                Template="{StaticResource MaterialDesignScrollViewerTemplate}"
+                                VerticalScrollBarVisibility="Auto">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="5" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type entity:NgInfo}">
+                            <materialDesign:Card Margin="5" Padding="5">
+                                <materialDesign:Card.Style>
+                                    <Style TargetType="materialDesign:Card">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <MultiBinding Converter="{StaticResource NgInfoToColor}">
+                                                    <Binding Path="IsNg" />
+                                                    <Binding Path="Battery.IsTested" />
+                                                </MultiBinding>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </materialDesign:Card.Style>
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel.Resources>
+                                        <Style BasedOn="{StaticResource MaterialDesignTextBlock}" TargetType="TextBlock">
+                                            <Setter Property="Margin" Value="5,0" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                            <Setter Property="TextWrapping" Value="Wrap" />
+                                        </Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Orientation" Value="Horizontal" />
+                                        </Style>
+                                    </StackPanel.Resources>
+                                    <StackPanel>
+                                        <TextBlock Text="位置:" />
+                                        <TextBlock Text="{Binding Battery.Position}" />
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBlock Text="电芯条码:" />
+                                        <TextBlock Text="{Binding Battery.BarCode}" />
+                                    </StackPanel>
+                                    <StackPanel Visibility="{Binding Data.SettingManager.IsTestVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}">
+                                        <TextBlock Text="电压:" />
+                                        <TextBlock Text="{Binding Battery.VolValue}" />
+                                    </StackPanel>
+                                    <StackPanel Visibility="{Binding Data.SettingManager.IsTestRes, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}">
+                                        <TextBlock Text="内阻:" />
+                                        <TextBlock Text="{Binding Battery.Res}" />
+                                    </StackPanel>
+                                    <StackPanel Visibility="{Binding Data.SettingManager.IsTestPVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}">
+                                        <TextBlock Text="正极壳体电压:" />
+                                        <TextBlock Text="{Binding Battery.PVolValue}" />
+                                    </StackPanel>
+                                    <StackPanel Visibility="{Binding Data.SettingManager.IsTestNVol, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}">
+                                        <TextBlock Text="负极壳体电压:" />
+                                        <TextBlock Text="{Binding Battery.NVolValue}" />
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBlock Text="Ng描述:" />
+                                        <TextBlock Text="{Binding NgDescription}" />
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBlock Text="Ng代码:" />
+                                        <TextBlock Text="{Binding NgType, Converter={StaticResource NgTypeToCode}}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </materialDesign:Card>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DockPanel>
+        </Grid>
+    </materialDesign:Card>
 </UserControl>
