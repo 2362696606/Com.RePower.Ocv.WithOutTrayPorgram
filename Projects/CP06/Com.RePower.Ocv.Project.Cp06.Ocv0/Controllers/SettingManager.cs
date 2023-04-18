@@ -178,16 +178,16 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             {
                 switch (_currentOcvType)
                 {
-                    case OcvTypeEnmu.Ocv0:
+                    case OcvTypeEnmu.OCV0:
                         return _wmsSettingForOcv0;
 
-                    case OcvTypeEnmu.Ocv1:
+                    case OcvTypeEnmu.OCV1:
                         return _wmsSettingForOcv1;
 
-                    case OcvTypeEnmu.Ocv2:
+                    case OcvTypeEnmu.OCV2:
                         return _wmsSettingForOcv2;
 
-                    case OcvTypeEnmu.Ocv3:
+                    case OcvTypeEnmu.OCV3:
                         return _wmsSettingForOcv3;
 
                     default:
@@ -202,16 +202,16 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             {
                 switch (_currentOcvType)
                 {
-                    case OcvTypeEnmu.Ocv0:
+                    case OcvTypeEnmu.OCV0:
                         return _mesSettingForOcv0;
 
-                    case OcvTypeEnmu.Ocv1:
+                    case OcvTypeEnmu.OCV1:
                         return _mesSettingForOcv1;
 
-                    case OcvTypeEnmu.Ocv2:
+                    case OcvTypeEnmu.OCV2:
                         return _mesSettingForOcv2;
 
-                    case OcvTypeEnmu.Ocv3:
+                    case OcvTypeEnmu.OCV3:
                         return _mesSettingForOcv3;
 
                     default:
@@ -226,16 +226,16 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             {
                 switch (_currentOcvType)
                 {
-                    case OcvTypeEnmu.Ocv0:
+                    case OcvTypeEnmu.OCV0:
                         return _testOptionForOcv0;
 
-                    case OcvTypeEnmu.Ocv1:
+                    case OcvTypeEnmu.OCV1:
                         return _testOptionForOcv1;
 
-                    case OcvTypeEnmu.Ocv2:
+                    case OcvTypeEnmu.OCV2:
                         return _testOptionForOcv2;
 
-                    case OcvTypeEnmu.Ocv3:
+                    case OcvTypeEnmu.OCV3:
                         return _testOptionForOcv3;
 
                     default:
@@ -253,16 +253,16 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             {
                 switch (_currentOcvType)
                 {
-                    case OcvTypeEnmu.Ocv0:
+                    case OcvTypeEnmu.OCV0:
                         return _batteryStandardForOcv0;
 
-                    case OcvTypeEnmu.Ocv1:
+                    case OcvTypeEnmu.OCV1:
                         return _batteryStandardForOcv1;
 
-                    case OcvTypeEnmu.Ocv2:
+                    case OcvTypeEnmu.OCV2:
                         return _batteryStandardForOcv2;
 
-                    case OcvTypeEnmu.Ocv3:
+                    case OcvTypeEnmu.OCV3:
                         return _batteryStandardForOcv3;
 
                     default:
@@ -307,19 +307,19 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                     {
                         switch (CurrentOcvType)
                         {
-                            case OcvTypeEnmu.Ocv0:
+                            case OcvTypeEnmu.OCV0:
                                 settingName = "TestOptionForOcv0";
                                 break;
 
-                            case OcvTypeEnmu.Ocv1:
+                            case OcvTypeEnmu.OCV1:
                                 settingName = "TestOptionForOcv1";
                                 break;
 
-                            case OcvTypeEnmu.Ocv2:
+                            case OcvTypeEnmu.OCV2:
                                 settingName = "TestOptionForOcv2";
                                 break;
 
-                            case OcvTypeEnmu.Ocv3:
+                            case OcvTypeEnmu.OCV3:
                                 settingName = "TestOptionForOcv3";
                                 break;
                         }
@@ -330,19 +330,19 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                     {
                         switch (CurrentOcvType)
                         {
-                            case OcvTypeEnmu.Ocv0:
+                            case OcvTypeEnmu.OCV0:
                                 settingName = "BatteryStandardForOcv0";
                                 break;
 
-                            case OcvTypeEnmu.Ocv1:
+                            case OcvTypeEnmu.OCV1:
                                 settingName = "BatteryStandardForOcv1";
                                 break;
 
-                            case OcvTypeEnmu.Ocv2:
+                            case OcvTypeEnmu.OCV2:
                                 settingName = "BatteryStandardForOcv2";
                                 break;
 
-                            case OcvTypeEnmu.Ocv3:
+                            case OcvTypeEnmu.OCV3:
                                 settingName = "BatteryStandardForOcv3";
                                 break;
                         }

@@ -32,13 +32,13 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Services.Wms
             };
             switch(SettingManager.CurrentOcvType)
             {
-                case OcvTypeEnmu.Ocv0:
-                case OcvTypeEnmu.Ocv3:
+                case OcvTypeEnmu.OCV0:
+                case OcvTypeEnmu.OCV3:
                     dto.HandleResult.Procedure = SettingManager.CurrentOcvType.ToString();
                     break;
-                case OcvTypeEnmu.Ocv1:
-                case OcvTypeEnmu.Ocv2:
-                    dto.HandleResult.Procedure = new Random().Next(2) == 1? OcvTypeEnmu.Ocv1.ToString():OcvTypeEnmu.Ocv2.ToString();
+                case OcvTypeEnmu.OCV1:
+                case OcvTypeEnmu.OCV2:
+                    dto.HandleResult.Procedure = new Random().Next(2) == 1? OcvTypeEnmu.OCV1.ToString():OcvTypeEnmu.OCV2.ToString();
                     break;
             }
 

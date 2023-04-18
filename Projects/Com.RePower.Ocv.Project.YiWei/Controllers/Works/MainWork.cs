@@ -172,6 +172,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                 var ngInfo = new NgInfo();
                 ngInfo.Battery.BarCode = batteryCode;
                 ngInfo.Battery.Position = 1;
+                ngInfo.Battery.OcvType = TestOption?.OcvType;
                 tempNgInfos.Add(ngInfo);
                 #endregion 读取电池条码1
 
@@ -194,6 +195,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                 ngInfo = new NgInfo();
                 ngInfo.Battery.BarCode = batteryCode;
                 ngInfo.Battery.Position = 2;
+                ngInfo.Battery.OcvType = TestOption?.OcvType;
                 tempNgInfos.Add(ngInfo);
                 Tray.TrayCode = "null";
                 Tray.NgInfos = tempNgInfos;

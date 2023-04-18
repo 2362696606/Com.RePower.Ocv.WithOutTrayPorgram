@@ -23,16 +23,16 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Modules
                 OcvSettingItemDto? ohmSettingObj = null;
                 switch (ocvType)
                 {
-                    case OcvTypeEnmu.Ocv1:
+                    case OcvTypeEnmu.OCV1:
                         ohmSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "OhmSetting_Ocv1");
                         break;
-                    case OcvTypeEnmu.Ocv2:
+                    case OcvTypeEnmu.OCV2:
                         ohmSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "OhmSetting_Ocv2");
                         break;
-                    case OcvTypeEnmu.Ocv3:
+                    case OcvTypeEnmu.OCV3:
                         ohmSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "OhmSetting_Ocv3");
                         break;
-                    case OcvTypeEnmu.Ocv4:
+                    case OcvTypeEnmu.OCV4:
                         ohmSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "OhmSetting_Ocv4");
                         break;
                 }

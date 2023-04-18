@@ -43,7 +43,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Model
             get => _isDoUploadToMes;
             set => SetProperty(ref _isDoUploadToMes, value);
         }
-        private string _ocvType = "Ocv3";
+        private string _ocvType = "OCV3";
         /// <summary>
         /// Ocv类型
         /// </summary>

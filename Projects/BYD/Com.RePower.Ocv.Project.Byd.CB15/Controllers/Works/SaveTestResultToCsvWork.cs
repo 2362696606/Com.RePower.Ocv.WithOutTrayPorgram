@@ -25,13 +25,13 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
             string path = @$"{dir}/{Tray.TrayCode}_{SettingManager.CurrentOcvType.ToString()}_{timeStr}.csv";
             switch (SettingManager.CurrentOcvType)
             {
-                case Enums.OcvTypeEnmu.Ocv1:
+                case Enums.OcvTypeEnmu.OCV1:
                     return SaveTestDateToCsv<Ocv1InfoForCvsDto>(path);
-                case Enums.OcvTypeEnmu.Ocv2:
+                case Enums.OcvTypeEnmu.OCV2:
                     return SaveTestDateToCsv<Ocv2InfoForCvsDto>(path);
-                case Enums.OcvTypeEnmu.Ocv3:
+                case Enums.OcvTypeEnmu.OCV3:
                     return SaveTestDateToCsv<Ocv3InfoForCvsDto>(path);
-                case Enums.OcvTypeEnmu.Ocv4:
+                case Enums.OcvTypeEnmu.OCV4:
                     return SaveTestDateToCsv<Ocv4InfoForCvsDto>(path);
                 default:
                     return SaveTestDateToCsv<Ocv1InfoForCvsDto>(path);

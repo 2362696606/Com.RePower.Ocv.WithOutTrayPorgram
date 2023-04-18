@@ -1,0 +1,209 @@
+[
+  {
+    "Name": "Group1",
+    "Items": [
+      {
+        "Name": "运行状态",
+        "Address": "MB10000",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "0:没启动;\r\n1:自动运行;\r\n2:手动运行;\r\n3:放行;\r\n4:故障;"
+      },
+      {
+        "Name": "设备故障代码",
+        "Address": "MB10002",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "PLC根据实际情况定义"
+      },
+      {
+        "Name": "请求测试",
+        "Address": "MB10004",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "0:初始状态;\r\n1:请求读条码，下发坐标;\r\n2:请求测试 ;"
+      },
+      {
+        "Name": "烟感状状",
+        "Address": "MB10006",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "0:正常;\r\n1:烟感1报警;\r\n2:烟感2报警;\r\n3:烟感1与2报警;"
+      },
+      {
+        "Name": "环境温度一",
+        "Address": "MB10008",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": ""
+      },
+      {
+        "Name": "环境温度二",
+        "Address": "MB10010",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": ""
+      },
+      {
+        "Name": "针床状态",
+        "Address": "MB10012",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "0:无托盘;\r\n1:有托盘;"
+      },
+      {
+        "Name": "预留一",
+        "Address": "MB10014",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": ""
+      },
+      {
+        "Name": "预留二",
+        "Address": "MB10016",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": ""
+      },
+      {
+        "Name": "预留三",
+        "Address": "MB10018",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": ""
+      },
+      {
+        "Name": "预留四",
+        "Address": "MB10020",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": ""
+      },
+      {
+        "Name": "预留五",
+        "Address": "MB10024",
+        "Type": "Single",
+        "Length": 1,
+        "Description": ""
+      },
+      {
+        "Name": "上托盘条码信息",
+        "Address": "MB10028",
+        "Type": "String",
+        "Length": 32,
+        "Description": ""
+      },
+      {
+        "Name": "预留六",
+        "Address": "MB10061",
+        "Type": "String",
+        "Length": 32,
+        "Description": ""
+      }
+    ]
+  },
+  {
+    "Name": "Group2",
+    "Items": [
+
+      {
+        "Name": "网络心跳",
+        "Address": "MB10094",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "网络心跳:上位机与PLC链接成功，1秒时钟交替1->0"
+      },
+      {
+        "Name": "托盘1_条码返回结果",
+        "Address": "MB10096",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "1:OK;\r\n2:电芯条码不合规格;\r\n5:电芯条码重复;\r\n6:其他;"
+      },
+      {
+        "Name": "预留",
+        "Address": "MB10098",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "备用"
+      },
+      {
+        "Name": "测试标志",
+        "Address": "MB10100",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "0:是初始状态;\r\n1:读码，下发坐标后写1;\r\n2:测试完成;\r\n3:脱开复测;"
+      },
+      {
+        "Name": "火警通知",
+        "Address": "MB10102",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "0:无火警;\r\n1:有火警;"
+      },
+      {
+        "Name": "测试结果",
+        "Address": "MB10104",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "0:有报警;\r\n1:测试超时;\r\n2:测试结果NG(PLC蜂鸣器响亮红灯);"
+      },
+      {
+        "Name": "出库",
+        "Address": "MB10106",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "1:允许出库(PLC复位);"
+      },
+      {
+        "Name": "预留一",
+        "Address": "MB10108",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": ""
+      },
+      {
+        "Name": "预留二",
+        "Address": "MB10110",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": ""
+      },
+      {
+        "Name": "预留三",
+        "Address": "MB10112",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": ""
+      },
+      {
+        "Name": "左压合X轴坐标",
+        "Address": "MB10116",
+        "Type": "Single",
+        "Length": 1,
+        "Description": ""
+      },
+      {
+        "Name": "左上下Z轴坐标",
+        "Address": "MB10120",
+        "Type": "Single",
+        "Length": 1,
+        "Description": ""
+      },
+      {
+        "Name": "右压合X轴坐标",
+        "Address": "MB10124",
+        "Type": "Single",
+        "Length": 1,
+        "Description": ""
+      },
+      {
+        "Name": "右上下Z轴坐标",
+        "Address": "MB10128",
+        "Type": "Single",
+        "Length": 1,
+        "Description": ""
+      }
+    ]
+  }
+]

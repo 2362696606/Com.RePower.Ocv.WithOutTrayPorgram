@@ -12,7 +12,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
     {
         private OperateResult GetCurrentTrayRange()
         {
-            if (SettingManager.CurrentOcvType == Enums.OcvTypeEnmu.Ocv4 && SettingManager.AcirOption is { } acirOption && (SettingManager.AcirOption?.IsAcirEnable ?? false))
+            if (SettingManager.CurrentOcvType == Enums.OcvTypeEnmu.OCV4 && SettingManager.AcirOption is { } acirOption && (SettingManager.AcirOption?.IsAcirEnable ?? false))
             {
                 var okNgInfos = this.Tray.NgInfos.Where(x => x.IsNg == false).ToList();
                 var minRes = okNgInfos.Select(x => x.Battery.Res).Min();

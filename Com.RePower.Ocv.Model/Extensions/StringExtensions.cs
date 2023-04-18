@@ -843,7 +843,7 @@ namespace Com.RePower.Ocv.Model.Extensions
         }
 
         /// <summary>
-        /// 首字母大写，其余字母小写：  OCV0   =>  Ocv0
+        /// 首字母大写，其余字母小写：  OCV0   =>  OCV0
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>

@@ -13,10 +13,11 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Settings
         [UserScopedSetting]
         [DefaultSettingValue("0.0")]
         [DisplayName("最大电压")]
+        [SettingsDescription("最大电压")]
         [Description("最大电压")]
-        public Decimal MaxVol
+        public double MaxVol
         {
-            get => (decimal)this[nameof(MaxVol)];
+            get => (double)this[nameof(MaxVol)];
             set => this[nameof(MaxVol)] = value;
         }
 
@@ -26,11 +27,63 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Settings
         [UserScopedSetting]
         [DefaultSettingValue("0.0")]
         [DisplayName("最小电压")]
-        [Description("最小电压")]
-        public Decimal MinVol
+        [SettingsDescription("最小电压")]
+        public double MinVol
         {
-            get => (decimal)this[nameof(MinVol)];
+            get => (double)this[nameof(MinVol)];
             set => this[nameof(MinVol)] = value;
+        }
+
+        /// <summary>
+        /// 最大正极壳体电压
+        /// </summary>
+        [UserScopedSetting]
+        [DefaultSettingValue("0.0")]
+        [DisplayName("最大正极壳体电压")]
+        [SettingsDescription("最大正极壳体电压")]
+        public double MaxPVol
+        {
+            get => (double)this[nameof(MaxPVol)];
+            set => this[nameof(MaxPVol)] = value;
+        }
+
+        /// <summary>
+        /// 最小正极壳体电压
+        /// </summary>
+        [UserScopedSetting]
+        [DefaultSettingValue("0.0")]
+        [DisplayName("最小正极壳体电压")]
+        [SettingsDescription("最小正极壳体电压")]
+        public double MinPVol
+        {
+            get => (double)this[nameof(MinPVol)];
+            set => this[nameof(MinPVol)] = value;
+        }
+
+        /// <summary>
+        /// 最大负极壳体电压
+        /// </summary>
+        [UserScopedSetting]
+        [DefaultSettingValue("0.0")]
+        [DisplayName("最大负极壳体电压")]
+        [SettingsDescription("最大负极壳体电压")]
+        public double MaxNVol
+        {
+            get => (double)this[nameof(MaxNVol)];
+            set => this[nameof(MaxNVol)] = value;
+        }
+
+        /// <summary>
+        /// 最小负极壳体电压
+        /// </summary>
+        [UserScopedSetting]
+        [DefaultSettingValue("0.0")]
+        [DisplayName("最小负极壳体电压")]
+        [SettingsDescription("最小负极壳体电压")]
+        public double MinNVol
+        {
+            get => (double)this[nameof(MinNVol)];
+            set => this[nameof(MinNVol)] = value;
         }
 
         /// <summary>
@@ -39,10 +92,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Settings
         [UserScopedSetting]
         [DefaultSettingValue("0.0")]
         [DisplayName("最大内阻")]
-        [Description("最大内阻")]
-        public Decimal MaxRes
+        [SettingsDescription("最大内阻")]
+        public double MaxRes
         {
-            get => (decimal)this[nameof(MaxRes)];
+            get => (double)this[nameof(MaxRes)];
             set => this[nameof(MaxRes)] = value;
         }
 
@@ -52,10 +105,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Settings
         [UserScopedSetting]
         [DefaultSettingValue("0.0")]
         [DisplayName("最小内阻")]
-        [Description("最小内阻")]
-        public Decimal MinRes
+        [SettingsDescription("最小内阻")]
+        public double MinRes
         {
-            get => (decimal)this[nameof(MinRes)];
+            get => (double)this[nameof(MinRes)];
             set => this[nameof(MinRes)] = value;
         }
 
@@ -65,10 +118,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Settings
         [UserScopedSetting]
         [DefaultSettingValue("0.0")]
         [DisplayName("最大温度")]
-        [Description("最大温度")]
-        public Decimal MaxTemp
+        [SettingsDescription("最大温度")]
+        public double MaxTemp
         {
-            get => (decimal)this[nameof(MaxTemp)];
+            get => (double)this[nameof(MaxTemp)];
             set => this[nameof(MaxTemp)] = value;
         }
 
@@ -78,10 +131,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Settings
         [UserScopedSetting]
         [DefaultSettingValue("0.0")]
         [DisplayName("最小温度")]
-        [Description("最小温度")]
-        public Decimal MinTemp
+        [SettingsDescription("最小温度")]
+        public double MinTemp
         {
-            get => (decimal)this[nameof(MinTemp)];
+            get => (double)this[nameof(MinTemp)];
             set => this[nameof(MinTemp)] = value;
         }
 
@@ -91,10 +144,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Settings
         [UserScopedSetting]
         [DefaultSettingValue("0.0")]
         [DisplayName("最大K1")]
-        [Description("最大K1")]
-        public Decimal MaxK1
+        [SettingsDescription("最大K1")]
+        public double MaxK1
         {
-            get => (decimal)this[nameof(MaxK1)];
+            get => (double)this[nameof(MaxK1)];
             set => this[nameof(MaxK1)] = value;
         }
 
@@ -104,10 +157,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Settings
         [UserScopedSetting]
         [DefaultSettingValue("0.0")]
         [DisplayName("最小K1")]
-        [Description("最小K1")]
-        public Decimal MinK1
+        [SettingsDescription("最小K1")]
+        public double MinK1
         {
-            get => (decimal)this[nameof(MinK1)];
+            get => (double)this[nameof(MinK1)];
             set => this[nameof(MinK1)] = value;
         }
     }

@@ -33,16 +33,16 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Wms
             int ocvType;
             switch(SettingManager.CurrentOcvType)
             {
-                case Enums.OcvTypeEnmu.Ocv1:
+                case Enums.OcvTypeEnmu.OCV1:
                     ocvType = 1;
                     break;
-                case Enums.OcvTypeEnmu.Ocv2:
+                case Enums.OcvTypeEnmu.OCV2:
                     ocvType = 2;
                     break;
-                case Enums.OcvTypeEnmu.Ocv3:
+                case Enums.OcvTypeEnmu.OCV3:
                     ocvType = 3;
                     break;
-                case Enums.OcvTypeEnmu.Ocv4:
+                case Enums.OcvTypeEnmu.OCV4:
                     ocvType = 4;
                     break;
                 default: ocvType = 0; break;

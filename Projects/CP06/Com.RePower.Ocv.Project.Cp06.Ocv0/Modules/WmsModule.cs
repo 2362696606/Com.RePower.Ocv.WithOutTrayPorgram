@@ -45,7 +45,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Modules
                 //if(!string.IsNullOrEmpty(wmsJsonStr))
                 //{
                 //    var jObj = JObject.Parse(wmsJsonStr);
-                //    bool isReal = jObj.Value<bool>("IsReal");
+                //    bool isReal = jObj.value<bool>("IsReal");
                 //    if(isReal)
                 //    {
                 //        builder.RegisterType<WmsImpl>()

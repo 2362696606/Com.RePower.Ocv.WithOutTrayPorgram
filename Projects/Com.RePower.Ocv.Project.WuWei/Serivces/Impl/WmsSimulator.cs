@@ -21,7 +21,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Serivces.Impl
             dto.PileContent = new PileContent()
             {
                 PalletBarcode = "trayCode0001",
-                FileName = "Ocv0",
+                FileName = "OCV0",
                 BatteryType = "114",
             };
             List<OneBattery> batteries = new List<OneBattery>();

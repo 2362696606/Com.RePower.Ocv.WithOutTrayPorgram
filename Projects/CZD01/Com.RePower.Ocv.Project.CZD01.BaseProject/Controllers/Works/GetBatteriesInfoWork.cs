@@ -49,14 +49,11 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                     ngInfo.Battery.OcvType = resultDto.HandleResult.Procedure;
                     ngInfo.Battery.TaskCode = resultDto.HandleResult.TaskCode;
                     ngInfo.Battery.IsExsit = item.IsExist;
-                    if(item.AttachedNgInfo is { })
+                    if(item.AttachedNgInfo is { IsOk: false })
                     {
-                        if(item.AttachedNgInfo.IsOk !=null && item.AttachedNgInfo.IsOk == false)
-                        {
-                            ngInfo.AttachedIsNg= true;
-                            if(!string.IsNullOrEmpty(item.AttachedNgInfo.Message))
-                                ngInfo.AttachedNgDescription = item.AttachedNgInfo.Message;
-                        }
+                        ngInfo.AttachedIsNg= true;
+                        if(!string.IsNullOrEmpty(item.AttachedNgInfo.Message))
+                            ngInfo.AttachedNgDescription = item.AttachedNgInfo.Message;
                     }
                     ngInfos.Add(ngInfo);
                 }

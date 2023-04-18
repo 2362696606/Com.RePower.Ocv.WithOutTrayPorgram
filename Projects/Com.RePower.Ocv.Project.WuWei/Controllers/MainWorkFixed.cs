@@ -1047,9 +1047,9 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                 foreach (var item in Tray.NgInfos)
                 {
                     RnDbOcv rnDbOcv = new RnDbOcv();
-                    rnDbOcv.EqpId = "rn_" + TestOption?.OcvType ?? "Ocv0" + "_6"; //设备编码   //EquipmentCode;
-                    rnDbOcv.PcId = TestOption?.OcvType ?? "Ocv0" + "_6";//设备号+线
-                    rnDbOcv.Operation = TestOption?.OcvType ?? "Ocv0";//设备号
+                    rnDbOcv.EqpId = "rn_" + TestOption?.OcvType ?? "OCV0" + "_6"; //设备编码   //EquipmentCode;
+                    rnDbOcv.PcId = TestOption?.OcvType ?? "OCV0" + "_6";//设备号+线
+                    rnDbOcv.Operation = TestOption?.OcvType ?? "OCV0";//设备号
                     if (string.IsNullOrWhiteSpace(Tray.TrayCode))
                     {
                         LogHelper.UiLog.Error("托盘条码为空！");
@@ -1058,7 +1058,7 @@ namespace Com.RePower.Ocv.Project.WuWei.Controllers
                     }
                     rnDbOcv.TrayId = Tray.TrayCode;//托盘号
                     rnDbOcv.IsTrans = 1;//是否跨线
-                    rnDbOcv.ModelNo = TestOption?.OcvType ?? "Ocv0" + "_6";//设备号+线
+                    rnDbOcv.ModelNo = TestOption?.OcvType ?? "OCV0" + "_6";//设备号+线
                     //if (Tray.NgInfos.FirstOrDefault(s => s.IsNg == true) != null)
                     //{
                     //    rnDbOcv.TotalNgState = "NG";

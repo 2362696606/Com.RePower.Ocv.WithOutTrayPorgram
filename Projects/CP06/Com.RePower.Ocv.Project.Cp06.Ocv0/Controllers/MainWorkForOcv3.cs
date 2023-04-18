@@ -186,7 +186,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 }
             }
             LogHelper.UiLog.Info("正在等待PLC请求测试");
-            var waitResult = DevicesController.Plc.Wait(DevicesController.PlcAddressCache["测试状态(Ocv3)"], (short)1, cancellation: FlowController.CancelToken);
+            var waitResult = DevicesController.Plc.Wait(DevicesController.PlcAddressCache["测试状态(OCV3)"], (short)1, cancellation: FlowController.CancelToken);
             if (waitResult.IsFailed)
             {
                 return waitResult;
@@ -218,7 +218,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             {
                 BarCode = batteryCode,
                 Position = 1,
-                OcvType = OcvTypeEnmu.Ocv3.ToString(),
+                OcvType = OcvTypeEnmu.OCV3.ToString(),
             };
             tempNgInfo.Add(ngInfo);
             this.Tray.NgInfos = tempNgInfo;
@@ -373,13 +373,13 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                     List<string> codeList = Tray.NgInfos.Select(x => x.Battery.BarCode).ToList();
                     switch (SettingManager.CurrentOcvType)
                     {
-                        case OcvTypeEnmu.Ocv1:
+                        case OcvTypeEnmu.OCV1:
                             batteryList = resultContext.Batterys
                                 .Where(x => codeList.Contains(x.BarCode) && x.OcvType == "OCV0")
                                 .AsNoTracking()
                                 .ToList();
                             break;
-                        case OcvTypeEnmu.Ocv2:
+                        case OcvTypeEnmu.OCV2:
                             batteryList = resultContext.Batterys
                                 .Where(x => codeList.Contains(x.BarCode) && x.OcvType == "OCV1")
                                 .AsNoTracking()
@@ -416,7 +416,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                         item.RemoveNgType(NgTypeEnum.K2过低);
                         switch (SettingManager.CurrentOcvType)
                         {
-                            case OcvTypeEnmu.Ocv1:
+                            case OcvTypeEnmu.OCV1:
                                 {
                                     item.Battery.KValue1 = kValue;
                                     if (kValue > maxK)
@@ -429,7 +429,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                                     }
                                     break;
                                 }
-                            case OcvTypeEnmu.Ocv2:
+                            case OcvTypeEnmu.OCV2:
                                 {
                                     item.Battery.KValue2 = kValue;
                                     if (kValue > maxK)
@@ -536,17 +536,17 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                     {
                         LogHelper.UiLog.Info("执行复测");
                         LogHelper.UiLog.Info("写入复测信号");
-                        var writeResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试状态(Ocv3)"], (short)5);
+                        var writeResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试状态(OCV3)"], (short)5);
                         if (writeResult.IsFailed)
                             return writeResult;
 
                         LogHelper.UiLog.Info("等待复测信号");
-                        var waitResult1 = DevicesController.Plc.Wait(DevicesController.PlcAddressCache["测试状态(Ocv3)"], (short)5, cancellation: FlowController.CancelToken);
+                        var waitResult1 = DevicesController.Plc.Wait(DevicesController.PlcAddressCache["测试状态(OCV3)"], (short)5, cancellation: FlowController.CancelToken);
                         if (waitResult1.IsFailed)
                             return waitResult1;
 
                         LogHelper.UiLog.Info("等待请求测试信号");
-                        var waitResult2 = DevicesController.Plc.Wait(DevicesController.PlcAddressCache["测试状态(Ocv3)"], (short)1, cancellation: FlowController.CancelToken);
+                        var waitResult2 = DevicesController.Plc.Wait(DevicesController.PlcAddressCache["测试状态(OCV3)"], (short)1, cancellation: FlowController.CancelToken);
                         if (waitResult2.IsFailed)
                             return waitResult2;
                         var testResult = TestBattery();
@@ -612,7 +612,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
             var ngInfo = Tray.NgInfos[0];
             var sentValue = ngInfo.IsNg ? 4 : 3;
             LogHelper.UiLog.Info("向Plc写入测试结果");
-            var writeResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试状态(Ocv3)"], (short)sentValue);
+            var writeResult = DevicesController.Plc.Write(DevicesController.PlcAddressCache["测试状态(OCV3)"], (short)sentValue);
             if(writeResult.IsFailed)
                 return writeResult;
             return OperateResult.CreateSuccessResult();
@@ -654,7 +654,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers
                 }
                 catch (Exception e)
                 {
-                    LogHelper.WorkErrorDetailLog.Warn($"Message:{e.Message};\r\nInnerExceptionMessage:{e.InnerException?.Message};\r\nToString:{e.ToString()}");
+                    LogHelper.WorkErrorDetailLog.Warn($"message:{e.Message};\r\nInnerExceptionMessage:{e.InnerException?.Message};\r\nToString:{e.ToString()}");
                 }
             }
         }

@@ -14,7 +14,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
     {
         private OperateResult VerifyKValue()
         {
-            if (SettingManager.CurrentOcvType == Model.Enums.OcvTypeEnum.Ocv3
+            if (SettingManager.CurrentOcvType == Model.Enums.OcvTypeEnum.OCV3
                 && ((SettingManager.CurrentTestOption?.IsVerifyKValue ?? false)
                 || (SettingManager.CurrentTestOption?.IsVerifyVolDifference ?? false)
                 || (SettingManager.CurrentTestOption?.IsVerifyCurrentKValue ?? false))) 
@@ -25,7 +25,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                     {
                         var ocv2InfoList = SceneContext.NgInfos.Where(x => x.Battery.BarCode == ngInfo.Battery.BarCode
                         && x.Battery.TaskCode == ngInfo.Battery.TaskCode
-                        && x.Battery.OcvType == ngInfo.Battery.OcvType)
+                        && x.Battery.OcvType == "OCV2")
                             .Include(x => x.Battery)?.ToList();
                         if (ocv2InfoList is { })
                         {

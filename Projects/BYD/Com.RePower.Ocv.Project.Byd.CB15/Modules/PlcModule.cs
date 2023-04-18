@@ -24,16 +24,16 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Modules
                 OcvSettingItemDto? localPlcSettingObj = null;
                 switch (ocvType)
                 {
-                    case OcvTypeEnmu.Ocv1:
+                    case OcvTypeEnmu.OCV1:
                         localPlcSettingObj = settingContext.SettingItems.First(x => x.SettingName == "PlcSetting_Ocv1");
                         break;
-                    case OcvTypeEnmu.Ocv2:
+                    case OcvTypeEnmu.OCV2:
                         localPlcSettingObj = settingContext.SettingItems.First(x => x.SettingName == "PlcSetting_Ocv2");
                         break;
-                    case OcvTypeEnmu.Ocv3:
+                    case OcvTypeEnmu.OCV3:
                         localPlcSettingObj = settingContext.SettingItems.First(x => x.SettingName == "PlcSetting_Ocv3");
                         break;
-                    case OcvTypeEnmu.Ocv4:
+                    case OcvTypeEnmu.OCV4:
                         localPlcSettingObj = settingContext.SettingItems.First(x => x.SettingName == "PlcSetting_Ocv4");
                         break;
                 }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -17,7 +17,47 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Settings\SettingManager.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Configs\PlcAddress.json" />
+	  <None Remove="Configs\SwitchBoardChannelSetting.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Configs\PlcAddress.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Configs\SwitchBoardChannelSetting.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="HandyControl" Version="3.4.0" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+	  <PackageReference Include="PortableJsonSettingsProvider" Version="0.2.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.DMM\Com.RePower.Device.DMM.csproj" />
+	  <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.Ohm\Com.RePower.Device.Ohm.csproj" />
+	  <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.Plc\Com.RePower.Device.Plc.csproj" />
+	  <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.SwitchBoard\Com.RePower.Device.SwitchBoard.csproj" />
 	  <ProjectReference Include="..\..\Com.RePower.Ocv.Project.ProjectBase\Com.RePower.Ocv.Project.ProjectBase.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Models\" />
+	  <Folder Include="Extensions\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="HslCommunication">
+	    <HintPath>..\..\..\Devices\Com.RePower.Device.Plc\Libs\HslCommunication.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 
 </Project>

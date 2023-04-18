@@ -17,15 +17,27 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
             foreach(var item in Tray.NgInfos)
             {
                 int sendValue = 1;
-
-                if(item.AttachedIsNg??false)
+                if (!item.Battery.IsExsit)
                 {
                     sendValue = 1;
                 }
-                else if (SettingManager.CurrentOcvType ==  Model.Enums.OcvTypeEnum.Ocv3)
+                else if(item.AttachedIsNg??false)
+                {
+                    sendValue = 2;
+                }
+                else if (SettingManager.CurrentOcvType ==  Model.Enums.OcvTypeEnum.OCV3)
                 {
                     if (item.IsNg)
                     {
+                        if ((SettingManager.CurrentTestOption?.IsTestTemp ?? false) ||
+                            (SettingManager.CurrentTestOption?.IsTestNTemp ?? false) ||
+                            (SettingManager.CurrentTestOption?.IsTestPTemp ?? false))
+                        {
+                            if (item.HasNgType(Model.Enums.NgTypeEnum.温度过高 | Model.Enums.NgTypeEnum.温度过低 |
+                                               Model.Enums.NgTypeEnum.正极温度过高 | Model.Enums.NgTypeEnum.正极温度过低 |
+                                               Model.Enums.NgTypeEnum.负极温度过高 | Model.Enums.NgTypeEnum.负极温度过低))
+                                sendValue = SettingManager.CurrentOtherSetting?.TempNgChannel ?? 2;
+                        }
                         if (SettingManager.CurrentTestOption?.IsVerifyCurrentKValue ?? false)
                         {
                             if (item.HasNgType(Model.Enums.NgTypeEnum.单托盘k值过低 | Model.Enums.NgTypeEnum.单托盘k值过高 | Model.Enums.NgTypeEnum.K值计算失败))
@@ -55,6 +67,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                             if (item.HasNgType(Model.Enums.NgTypeEnum.内阻过低 | Model.Enums.NgTypeEnum.内阻过高))
                                 sendValue = SettingManager.CurrentOtherSetting?.ResNgChannel ?? 2;
                         }
+
                         if (sendValue == 1)
                             sendValue = 2;
                     }

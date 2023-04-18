@@ -23,12 +23,12 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Wms
             Mapper = mapper;
             switch (SettingManager.CurrentOcvType)
             {
-                case Enums.OcvTypeEnmu.Ocv1:
-                case Enums.OcvTypeEnmu.Ocv2:
+                case Enums.OcvTypeEnmu.OCV1:
+                case Enums.OcvTypeEnmu.OCV2:
                     WebServiceClient = new OCVWebServiceSoapClient(OCVWebServiceSoapClient.EndpointConfiguration.OCVWebServiceSoap12);
                     break;
-                case Enums.OcvTypeEnmu.Ocv3:
-                case Enums.OcvTypeEnmu.Ocv4:
+                case Enums.OcvTypeEnmu.OCV3:
+                case Enums.OcvTypeEnmu.OCV4:
                     WebServiceClient = new OCVWebServiceSoapClient(OCVWebServiceSoapClient.EndpointConfiguration.OCVWebServiceSoap);
                     break;
                 default:

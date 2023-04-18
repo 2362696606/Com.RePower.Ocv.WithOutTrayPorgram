@@ -31,19 +31,19 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Modules
                 OcvSettingItemDto? ntempSettingObj = null;
                 switch (ocvType)
                 {
-                    case OcvTypeEnmu.Ocv1:
+                    case OcvTypeEnmu.OCV1:
                         ptempSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "PTempSensorSetting_Ocv1");
                         ntempSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "NTempSensorSetting_Ocv1");
                         break;
-                    case OcvTypeEnmu.Ocv2:
+                    case OcvTypeEnmu.OCV2:
                         ptempSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "PTempSensorSetting_Ocv2");
                         ntempSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "NTempSensorSetting_Ocv2");
                         break;
-                    case OcvTypeEnmu.Ocv3:
+                    case OcvTypeEnmu.OCV3:
                         ptempSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "PTempSensorSetting_Ocv3");
                         ntempSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "NTempSensorSetting_Ocv3");
                         break;
-                    case OcvTypeEnmu.Ocv4:
+                    case OcvTypeEnmu.OCV4:
                         ptempSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "PTempSensorSetting_Ocv4");
                         ntempSettingObj = settingContext.SettingItems.FirstOrDefault(x => x.SettingName == "NTempSensorSetting_Ocv4");
                         break;

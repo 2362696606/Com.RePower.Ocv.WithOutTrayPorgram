@@ -2,7 +2,13 @@
 {
     public class WmsBatteryInfo
     {
+        /// <summary>
+        /// 电芯条码
+        /// </summary>
         public string BarCode { get; set; } = string.Empty;
+        /// <summary>
+        /// 电芯位置
+        /// </summary>
         public int Index { get; set; }
         /// <summary>
         /// 电芯是否存在true为存在电芯，false不存在电芯

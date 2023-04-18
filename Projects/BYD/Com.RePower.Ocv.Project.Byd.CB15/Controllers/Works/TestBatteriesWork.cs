@@ -59,7 +59,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
                 if (resResult?.IsFailed ?? true)
                     return resResult ?? OperateResult.CreateFailedResult($"读取电池{ngInfo.Battery.Position}内阻失败,因为内阻仪实例为null");
                 ngInfo.Battery.Res = resResult.Content;
-                if(SettingManager.CurrentOcvType == Enums.OcvTypeEnmu.Ocv4 && SettingManager.AcirOption is { } acirOption && (SettingManager.AcirOption?.IsAcirEnable??false))
+                if(SettingManager.CurrentOcvType == Enums.OcvTypeEnmu.OCV4 && SettingManager.AcirOption is { } acirOption && (SettingManager.AcirOption?.IsAcirEnable??false))
                 {
                     decimal fitFactor = 0;
                     decimal temp = (decimal)(ngInfo.Battery.PTemp ?? 0);

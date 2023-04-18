@@ -110,6 +110,10 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                     //if (uploadToMesResult.IsFailed)
                     //    return uploadToMesResult;
                     //DoPauseOrStop();
+                    var uploadToWmsResult = UploadTestResultToWms();
+                    if (uploadToWmsResult.IsFailed)
+                        return uploadToWmsResult;
+                    DoPauseOrStop();
                     var unBindingResult = UnBindingTray();
                     if (unBindingResult.IsFailed)
                         return unBindingResult;
@@ -117,18 +121,18 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                     var waitRequestUbBindResult = WaitRequestUnBinding();
                     if (waitRequestUbBindResult.IsFailed)
                         return waitRequestUbBindResult;
+                    DoPauseOrStop();
                     var sendUnBindResult = SendStartUnBinding();
                     if (sendUnBindResult.IsFailed)
                         return sendUnBindResult;
+                    DoPauseOrStop();
                     var waitUnBindComplateResult = WaitUnBindComplate();
                     if (waitUnBindComplateResult.IsFailed)
                         return waitUnBindComplateResult;
+                    DoPauseOrStop();
                     var sendUnBindComplateResult = SendUnBindComplate();
                     if (sendUnBindComplateResult.IsFailed)
                         return sendUnBindComplateResult;
-                    var uploadToWmsResult = UploadTestResultToWms();
-                    if (uploadToWmsResult.IsFailed)
-                        return uploadToWmsResult;
                     DoPauseOrStop();
                     var requestAllLocateCellResult = RequestAllLocateCellToWms();
                     if (requestAllLocateCellResult.IsFailed)

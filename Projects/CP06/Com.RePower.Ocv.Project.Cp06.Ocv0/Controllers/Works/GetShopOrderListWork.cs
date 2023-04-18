@@ -20,16 +20,16 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                 MesGetShopOrderListResultDto? resultDto = JsonConvert.DeserializeObject<MesGetShopOrderListResultDto>(getResult.Content);
                 if(resultDto is { })
                 {
-                    if(!resultDto.Status)
+                    if(!resultDto.status)
                     {
-                        return OperateResult.CreateFailedResult($"获取工单列表Mes返回false,原因{resultDto.Message ?? "未知原因"}");
+                        return OperateResult.CreateFailedResult($"获取工单列表Mes返回false,原因{resultDto.message ?? "未知原因"}");
                     }
                     else
                     {
                         Dictionary<string,string> resultDic = new Dictionary<string,string>();
-                        foreach(var item in resultDto.Result)
+                        foreach(var item in resultDto.result)
                         {
-                            resultDic.Add(item.Value, item.Value);
+                            resultDic.Add(item.value, item.value);
                         }
                         SettingManager.OrderList = resultDic;
                     }

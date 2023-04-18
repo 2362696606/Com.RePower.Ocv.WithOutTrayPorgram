@@ -32,13 +32,13 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Services.Mes
             {
                 switch (SettingManager.CurrentOcvType)
                 {
-                    case Enums.OcvTypeEnmu.Ocv1:
+                    case Enums.OcvTypeEnmu.OCV1:
                         return UploadDataForOcv1();
-                    case Enums.OcvTypeEnmu.Ocv2:
+                    case Enums.OcvTypeEnmu.OCV2:
                         return UploadDataForOcv2();
-                    case Enums.OcvTypeEnmu.Ocv3:
+                    case Enums.OcvTypeEnmu.OCV3:
                         return UploadDataForOcv3();
-                    case Enums.OcvTypeEnmu.Ocv4:
+                    case Enums.OcvTypeEnmu.OCV4:
                         return UploadDataForOcv4();
                     default:
                         return OperateResult.CreateFailedResult("无当前ocv工站MES上传流程");

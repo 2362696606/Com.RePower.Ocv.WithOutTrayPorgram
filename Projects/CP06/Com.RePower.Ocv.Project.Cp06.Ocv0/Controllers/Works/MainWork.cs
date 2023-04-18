@@ -670,13 +670,13 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                     List<string> codeList = Tray.NgInfos.Select(x => x.Battery.BarCode).ToList();
                     switch (SettingManager.CurrentOcvType)
                     {
-                        case OcvTypeEnmu.Ocv1:
+                        case OcvTypeEnmu.OCV1:
                             batteryList = resultContext.Batterys
                                 .Where(x => codeList.Contains(x.BarCode) && x.OcvType == "OCV0")
                                 .AsNoTracking()
                                 .ToList();
                             break;
-                        case OcvTypeEnmu.Ocv2:
+                        case OcvTypeEnmu.OCV2:
                             batteryList = resultContext.Batterys
                                 .Where(x => codeList.Contains(x.BarCode) && x.OcvType == "OCV1")
                                 .AsNoTracking()
@@ -713,7 +713,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                         item.RemoveNgType(NgTypeEnum.K2过低);
                         switch (SettingManager.CurrentOcvType)
                         {
-                            case OcvTypeEnmu.Ocv1:
+                            case OcvTypeEnmu.OCV1:
                                 {
                                     item.Battery.KValue1 = kValue;
                                     if (kValue > maxK)
@@ -726,7 +726,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
                                     }
                                     break;
                                 }
-                            case OcvTypeEnmu.Ocv2:
+                            case OcvTypeEnmu.OCV2:
                                 {
                                     item.Battery.KValue2 = kValue;
                                     if (kValue > maxK)
@@ -948,7 +948,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
             }
             else
             {
-                if (SettingManager.CurrentOcvType == OcvTypeEnmu.Ocv0 || SettingManager.CurrentOcvType == OcvTypeEnmu.Ocv3)
+                if (SettingManager.CurrentOcvType == OcvTypeEnmu.OCV0 || SettingManager.CurrentOcvType == OcvTypeEnmu.OCV3)
                 {
                     sendValue = ngInfo.IsNg ? 2 : 1;
                 }
@@ -1009,7 +1009,7 @@ namespace Com.RePower.Ocv.Project.Cp06.Ocv0.Controllers.Works
         /// <returns></returns>
         private OperateResult RequestAllLocateCellToWms()
         {
-            if (SettingManager.CurrentOcvType == OcvTypeEnmu.Ocv0)
+            if (SettingManager.CurrentOcvType == OcvTypeEnmu.OCV0)
             {
                 LogHelper.UiLog.Info("Ocv0调用Wms出库信号接口");
                 var result = WmsService.RequestAllLocateCellToWms();

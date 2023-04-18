@@ -2,12 +2,12 @@
 {
     public enum OcvTypeEnum
     {
-        Ocv0,
-        Ocv1,
-        Ocv2,
-        Ocv3,
-        Ocv4,
-        Ocv5,
-        Ocv6,
+        OCV0,
+        OCV1,
+        OCV2,
+        OCV3,
+        OCV4,
+        OCV5,
+        OCV6,
     }
 }
