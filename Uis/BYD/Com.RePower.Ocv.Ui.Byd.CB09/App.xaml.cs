@@ -2,15 +2,6 @@
 using Com.RePower.Ocv.Ui.UiBase;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using Com.RePower.Ocv.Model.Helper;
-using Com.RePower.Ocv.Project.Byd.CB09.Modules;
-using System.Reflection;
 using Com.RePower.Ocv.Project.Byd.CB09.Works;
 
 namespace Com.RePower.Ocv.Ui.Byd.CB09
