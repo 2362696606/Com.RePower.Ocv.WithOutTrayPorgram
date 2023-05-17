@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System.Reflection;
+using AutoMapper;
 using Com.RePower.DeviceBase.DMM;
 using Com.RePower.DeviceBase.Ohm;
 using Com.RePower.DeviceBase.Plc;
@@ -18,23 +19,37 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Works
 {
     public partial class MainWork : MainWorkAbstract
     {
-        private readonly IPlc _plc;
-        private readonly IDmm _dmm;
-        private readonly IOhm _ohm;
-        private readonly ISwitchBoard _switchBoard;
-        private readonly Tray _tray;
-        private readonly IWmsService _wmsService;
-        private readonly PlcCacheSetting _plcCacheSetting;
+        protected readonly IPlc Plc;
+        protected readonly IDmm Dmm;
+        protected readonly IOhm Ohm;
+        protected readonly ISwitchBoard SwitchBoard;
+        protected readonly Tray Tray;
+        protected readonly IWmsService WmsService;
+        protected readonly IMesService MesService;
+        protected readonly IMapper Mapper;
+        protected readonly PlcCacheSetting PlcCacheSetting;
 
-        public MainWork(IPlc plc,IDmm dmm,IOhm ohm,ISwitchBoard switchBoard,Tray tray,IWmsService wmsService)
+        public MainWork(IPlc plc,IDmm dmm,IOhm ohm,ISwitchBoard switchBoard,Tray tray,IWmsService wmsService,IMesService mesService,IMapper mapper)
         {
-            _plc = plc;
-            _dmm = dmm;
-            _ohm = ohm;
-            _switchBoard = switchBoard;
-            _tray = tray;
-            _wmsService = wmsService;
-            _plcCacheSetting = PlcCacheSetting.Default;
+            Plc = plc;
+            Dmm = dmm;
+            Ohm = ohm;
+            SwitchBoard = switchBoard;
+            Tray = tray;
+            WmsService = wmsService;
+            MesService = mesService;
+            Mapper = mapper;
+            PlcCacheSetting = PlcCacheSetting.Default;
+        }
+
+        private bool _isMsaTest;
+        /// <summary>
+        /// 是否开启mas测试
+        /// </summary>
+        public bool IsMsaTest
+        {
+            get => _isMsaTest;
+            set => SetProperty(ref _isMsaTest, value);
         }
         protected override OperateResult DoWork()
         {
@@ -95,25 +110,50 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Works
                 LogHelper.UiLog.Info("等待测试请求成功");
                 DoPauseOrStop();
                 #endregion
-                #region 测试电池
-                LogHelper.UiLog.Info("测试电池");
-                var testResult = TestBatteries();
-                if (testResult.IsFailed)
-                    return testResult;
-                LogHelper.UiLog.Info("测试电池成功"); 
-                DoPauseOrStop();
-                #endregion
-                #region 验证Ng信息
-                LogHelper.UiLog.Info("验证Ng信心");
-                var verifyResult = VerifyNg();
-                if (verifyResult.IsFailed)
-                    return verifyResult;
-                LogHelper.UiLog.Info("验证Ng信息成功"); 
-                #endregion
+                if (IsMsaTest)
+                {
+                    #region 执行msa测试
+                    LogHelper.UiLog.Info("执行msa测试");
+                    var msaResult = MsaTest();
+                    if (msaResult.IsFailed)
+                        return msaResult; 
+                    LogHelper.UiLog.Info("执行msa测试成功");
+                    #endregion
+                }
+                else
+                {
+                    #region 测试电池
+                    LogHelper.UiLog.Info("测试电池");
+                    var testResult = TestBatteries();
+                    if (testResult.IsFailed)
+                        return testResult;
+                    LogHelper.UiLog.Info("测试电池成功");
+                    DoPauseOrStop();
+                    #endregion
+                    #region 验证Ng信息
+                    LogHelper.UiLog.Info("验证Ng信息");
+                    var verifyResult = VerifyNg();
+                    if (verifyResult.IsFailed)
+                        return verifyResult;
+                    LogHelper.UiLog.Info("验证Ng信息成功");
+                    #endregion
+                    #region 复测
+                    var retestResult = ReTest();
+                    if (retestResult.IsFailed)
+                        return retestResult;
+                    #endregion
+                    #region 上传结果
+                    var uploadResult = UploadTestResult();
+                    if (uploadResult.IsFailed)
+                        return uploadResult;
+                    #endregion
+                    #region 测试完成
+                    var testCompleteResult = TestComplete();
+                    if(testCompleteResult.IsFailed) return testCompleteResult;
+                    #endregion
+                }
                 return OperateResult.CreateSuccessResult();
             }
-
-
             //return OperateResult.CreateSuccessResult();
         }
     }

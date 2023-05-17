@@ -1,4 +1,4 @@
-﻿namespace Com.RePower.Ocv.Project.Byd.CB09.Serivces.Dto
+﻿namespace Com.RePower.Ocv.Project.Byd.CB09.Serivces.Dtos
 {
     public class UploadOcvTestResultDto
     {

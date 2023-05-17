@@ -195,9 +195,9 @@ namespace Com.RePower.Device.Plc.Impl
 
         public OperateResult<string> ReadString(string address, ushort length)
         {
-            string randomNumStr = string.Format("{0:D5}", new Random().Next(10000));
-            return OperateResult.CreateSuccessResult<string>($"TrayCode_{randomNumStr}");
-            //return OperateResult.CreateSuccessResult<string>("TRAY_1234__360936453");
+            //string randomNumStr = string.Format("{0:D5}", new Random().Next(10000));
+            //return OperateResult.CreateSuccessResult<string>($"TrayCode_{randomNumStr}");
+            return OperateResult.CreateSuccessResult<string>("ZS01020204");
         }
 
         public OperateResult<string> ReadString(string address, ushort length, Encoding encoding)

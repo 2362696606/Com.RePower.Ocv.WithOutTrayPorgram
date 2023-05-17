@@ -114,7 +114,7 @@
                                     </StackPanel>
                                     <StackPanel>
                                         <TextBlock Text="Ng描述:" />
-                                        <TextBlock Text="{Binding NgDescription}" />
+                                        <TextBlock Text="{Binding NgDescription}" TextWrapping="Wrap" />
                                     </StackPanel>
                                     <StackPanel>
                                         <TextBlock Text="Ng代码:" />

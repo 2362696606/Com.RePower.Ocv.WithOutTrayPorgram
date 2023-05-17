@@ -21,6 +21,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <ProjectReference Include="..\..\..\Projects\BYD\Com.RePower.Ocv.Project.Byd.CB09\Com.RePower.Ocv.Project.Byd.CB09.csproj" />
 	  <ProjectReference Include="..\..\Com.RePower.Ocv.Ui.UiBase\Com.RePower.Ocv.Ui.UiBase.csproj" />
 	</ItemGroup>

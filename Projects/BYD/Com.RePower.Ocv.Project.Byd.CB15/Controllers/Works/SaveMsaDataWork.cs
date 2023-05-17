@@ -71,10 +71,6 @@ namespace Com.RePower.Ocv.Project.Byd.CB15.Controllers.Works
         private OperateResult SaveTestDateToCsv<T>(string path)
         {
             List<T> dtos = Mapper.Map<List<T>>(Tray.NgInfos);
-            //if(typeof(T) is OcvInfoForCvsDtoBase tempDtos)
-            //{
-            //    tempDtos.OrderBy(x => x.Position);
-            //}
             try
             {
                 using (var writer = new StreamWriter(path,false,Encoding.UTF8))

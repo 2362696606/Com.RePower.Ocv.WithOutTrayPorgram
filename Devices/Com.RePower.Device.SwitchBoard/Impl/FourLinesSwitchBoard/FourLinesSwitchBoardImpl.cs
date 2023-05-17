@@ -10,7 +10,8 @@ namespace Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard
 
         public FourLinesSwitchBoardImpl()
         {
-            DeviceBase = new SerialPortDeviceBase();
+            //DeviceBase = new SerialPortDeviceBase();
+            DeviceBase = new SwitchBoardDeviceBase();
         }
 
         public override bool IsConnected

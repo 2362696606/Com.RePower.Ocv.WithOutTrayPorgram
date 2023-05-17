@@ -145,7 +145,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
             GC.SuppressFinalize(this);
         }
 
-        public OperateResult<byte[]> SendCmd(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
+        public virtual OperateResult<byte[]> SendCmd(byte[] cmd, int timeout = 10000, bool isNeedRecovery = true)
         {
             try
             {

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Com.RePower.Device.Ohm.Impl.Hioki_BT3562;
 using Com.RePower.Ocv.Model.DataBaseContext;
+using Com.RePower.Ocv.Model.Dto;
 using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Model.Extensions;
 using Com.RePower.Ocv.Model.Helper;
@@ -12,10 +13,12 @@ using Com.RePower.WpfBase;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Com.RePower.Ocv.Project.YiWei.Dto;
 
 namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
 {
@@ -233,6 +236,8 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                 var saveToLocalResult = SaveToLocalDb();
                 if (saveToLocalResult.IsFailed) return saveToLocalResult;
                 DoPauseOrStop();
+                var saveToExcel = SaveToExcel();
+
 
                 LogHelper.UiLog.Info("写入Plc[上位机交互] = 10");
                 var write6 = DevicesController.LocalPlc.Write(DevicesController.LocalPlcAddressCache["上位机交互"], 10);
@@ -241,6 +246,29 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
                     return OperateResult.CreateFailedResult(write6.Message ?? "写入Plc[上位机交互] = 10失败", write6.ErrorCode);
                 }
             }
+        }
+
+        private OperateResult SaveToExcel()
+        {
+            var path = @"./测试数据";
+            var fileName = DateTime.Now.ToString("yyyy-MM-dd") + ".xlsx";
+            string fullPath = Path.Combine(path, fileName);
+            List<NgInfoDto> ngInfoDtos = Mapper.Map<List<NgInfoDto>>(Tray.NgInfos);
+            List<ExcelSaveDto> excelSaveDtos = Mapper.Map<List<ExcelSaveDto>>(ngInfoDtos);
+            if (!string.IsNullOrEmpty(path) && !Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            //if (!File.Exists(fullPath))
+            //{
+            //    var stream = File.Create(fullPath);
+            //    stream.Close();
+            //}
+            //var excelMapper = new Npoi.Mapper.Mapper().Format<ExcelSaveDto>(
+            //    "yyyy/MM/dd HH:mm:ss", s => s.TestTime);
+            var excelMapper = new Npoi.Mapper.Mapper();
+            excelMapper.Save(fullPath, excelSaveDtos, "sheet1", !File.Exists(fullPath),true);
+            return OperateResult.CreateSuccessResult("保存到excel成功");
         }
 
         private OperateResult SendTestResultToPlc()

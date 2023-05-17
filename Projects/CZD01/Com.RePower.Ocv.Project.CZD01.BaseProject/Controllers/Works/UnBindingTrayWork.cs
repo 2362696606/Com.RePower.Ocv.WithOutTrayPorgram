@@ -19,7 +19,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                 int sendValue = 1;
                 if (!item.Battery.IsExsit)
                 {
-                    sendValue = 1;
+                    sendValue = 10;
                 }
                 else if(item.AttachedIsNg??false)
                 {
@@ -67,9 +67,20 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                             if (item.HasNgType(Model.Enums.NgTypeEnum.内阻过低 | Model.Enums.NgTypeEnum.内阻过高))
                                 sendValue = SettingManager.CurrentOtherSetting?.ResNgChannel ?? 2;
                         }
-
-                        if (sendValue == 1)
+                        if (item.AttachedIsNg ?? false)
                             sendValue = 2;
+
+                        //if (sendValue == 1
+                        //    && !item.HasNgType(Model.Enums.NgTypeEnum.单托盘k值过低 
+                        //                       | Model.Enums.NgTypeEnum.单托盘k值过高 
+                        //                       | Model.Enums.NgTypeEnum.K值计算失败
+                        //                       | Model.Enums.NgTypeEnum.压差计算失败 
+                        //                       | Model.Enums.NgTypeEnum.压差过低
+                        //                       | Model.Enums.NgTypeEnum.压差过高
+                        //                       | Model.Enums.NgTypeEnum.单托盘k值过低 
+                        //                       | Model.Enums.NgTypeEnum.单托盘k值过高 
+                        //                       | Model.Enums.NgTypeEnum.K值计算失败))
+                        //    sendValue = 2;
                     }
                 }
                 else

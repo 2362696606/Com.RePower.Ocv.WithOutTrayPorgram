@@ -8,12 +8,16 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Works;
 
 public partial class MainWork
 {
+    /// <summary>
+    /// 测试电池
+    /// </summary>
+    /// <returns>测试结果</returns>
     protected virtual OperateResult TestBatteries()
     {
         var closeResult = CloseAllChannel();
         if (closeResult.IsFailed)
             return closeResult;
-        foreach (var ngInfo in _tray.NgInfos)
+        foreach (var ngInfo in Tray.NgInfos)
         {
             TestOneBattery(ngInfo);
             DoPauseOrStop();
@@ -29,7 +33,7 @@ public partial class MainWork
     {
         foreach (var item in SwitchBoardChannelSetting.Default)
         {
-            var closeResult = _switchBoard.CloseAllChannels(item.BoardIndex);
+            var closeResult = SwitchBoard.CloseAllChannels(item.BoardIndex);
             if(closeResult.IsFailed)
                 return closeResult;
         }
@@ -44,7 +48,7 @@ public partial class MainWork
         if (TestOption.Default.IsTestVol)
         {
             LogHelper.UiLog.Info("读取电压");
-            var readResult = _dmm.ReadDc();
+            var readResult = Dmm.ReadDc();
             if (readResult.IsFailed)
                 return readResult;
             ngInfo.Battery.VolValue = readResult.Content;
@@ -54,7 +58,7 @@ public partial class MainWork
         if (TestOption.Default.IsTestRes)
         {
             LogHelper.UiLog.Info("读取内阻");
-            var readResult = _ohm.ReadRes();
+            var readResult = Ohm.ReadRes();
             if(readResult.IsFailed)
                 return readResult;
             ngInfo.Battery.Res = readResult.Content;
@@ -70,7 +74,7 @@ public partial class MainWork
             openResult = OpenChannelByBattery(ngInfo, SwitchBoardMode.PVol);
             if (openResult.IsFailed)
                 return openResult;
-            var readResult = _dmm.ReadDc();
+            var readResult = Dmm.ReadDc();
             if(readResult.IsFailed)
                 return readResult;
             ngInfo.Battery.PVolValue = readResult.Content;
@@ -86,7 +90,7 @@ public partial class MainWork
             openResult = OpenChannelByBattery(ngInfo, SwitchBoardMode.NVol);
             if (openResult.IsFailed)
                 return openResult;
-            var readResult = _dmm.ReadDc();
+            var readResult = Dmm.ReadDc();
             if (readResult.IsFailed)
                 return readResult;
             ngInfo.Battery.NVolValue = readResult.Content;
@@ -131,7 +135,7 @@ public partial class MainWork
         allChannel.AddRange(attachedChannel);
         string option = isOpen ? "打开" : "关闭";
         LogHelper.UiLog.Info($"{option}通道\"{string.Join(',', allChannel)}\"");
-        var result = isOpen ? _switchBoard.OpenChannels(boardIndex, allChannel.ToArray()) : _switchBoard.CloseChannels(boardIndex, allChannel.ToArray());
+        var result = isOpen ? SwitchBoard.OpenChannels(boardIndex, allChannel.ToArray()) : SwitchBoard.CloseChannels(boardIndex, allChannel.ToArray());
         if (result.IsSuccess)
         {
             LogHelper.UiLog.Info($"{option}通道\"{string.Join(',',allChannel)}\"成功");

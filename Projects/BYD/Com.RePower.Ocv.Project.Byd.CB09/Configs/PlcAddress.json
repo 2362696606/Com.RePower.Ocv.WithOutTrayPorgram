@@ -105,7 +105,6 @@
   {
     "Name": "Group2",
     "Items": [
-
       {
         "Name": "网络心跳",
         "Address": "MB10094",
@@ -203,6 +202,65 @@
         "Type": "Single",
         "Length": 1,
         "Description": ""
+      }
+    ]
+  },
+  {
+    "Name": "Group3",
+    "Items": [
+      {
+        "Name": "Read_1",
+        "Address": "MB1000",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "1.PLC通知上位机物料到位是否测试/r/n2.PLC通知上位机气缸伸出到位，可以测试（复测也是发送2)"
+      },
+      {
+        "Name": "Send_1",
+        "Address": "MB1002",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "1.上位机回复可以测试/r/n2.上位机回复测试完成"
+      },
+      {
+        "Name": "Send_2",
+        "Address": "MB1004",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "1.上位机测试结束，通知PLC放行/r/n2.上位机测试结束，通知PLC复测"
+      },
+      {
+        "Name": "Send_3",
+        "Address": "MB1006",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "测试结果异常，提示人工干预（三色灯报警） (1-OK 2—NG)"
+      },
+      {
+        "Name": "Read_2",
+        "Address": "MB1008",
+        "Type": "String",
+        "Length": 32,
+        "Description": "托盘条码"
+      },
+      {
+        "Name": "Send_4",
+        "Address": "MB1044",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "上位机重置PLC"
+      }
+    ]
+  },
+  {
+    "Name": "Group4",
+    "Items": [
+      {
+        "Name": "报警信息",
+        "Address": "MB1042",
+        "Type": "Int16",
+        "Length": 1,
+        "Description": "1.急停中/r/n2.PLC总气压低报警/r/n1013.气缸伸出未到位报警/r/n1014.气缸缩回未到位报警/r/n3.NG报警"
       }
     ]
   }

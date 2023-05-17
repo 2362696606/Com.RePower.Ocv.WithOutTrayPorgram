@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MaterialDesignThemes.Wpf;
 
 namespace Com.RePower.Ocv.Ui.YiWei.ViewModels
 {
@@ -34,6 +35,15 @@ namespace Com.RePower.Ocv.Ui.YiWei.ViewModels
         {
             var view = new CalibrationSettingView();
             view.Show();
+        }
+
+        [RelayCommand]
+        private void OpenConfigSelectedView()
+        {
+            var view = new ConfigSelectView();
+            var viewModel = new ConfigSelectViewModel();
+            view.DataContext = viewModel;
+            var result = DialogHost.Show(view, "MainViewDialogHost");
         }
     }
 }

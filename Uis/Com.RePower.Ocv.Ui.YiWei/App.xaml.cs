@@ -17,6 +17,7 @@ using Com.RePower.Ocv.Model.DataBaseContext;
 using Com.RePower.Ocv.Ui.UiBase;
 using Com.RePower.Ocv.Model.Mapper;
 using Microsoft.EntityFrameworkCore;
+using Com.RePower.Ocv.Project.YiWei.Mapper;
 
 namespace Com.RePower.Ocv.Ui.YiWei
 {
@@ -32,7 +33,7 @@ namespace Com.RePower.Ocv.Ui.YiWei
 
         protected override void AddService(ServiceCollection serviceCollection)
         {
-            serviceCollection.AddAutoMapper(typeof(OrganizationProfile));
+            serviceCollection.AddAutoMapper(typeof(OrganizationProfile), typeof(YiWeiProfile));
             serviceCollection.AddHttpClient();
             serviceCollection.AddDbContext<LocalTestResultDbContext>();
         }

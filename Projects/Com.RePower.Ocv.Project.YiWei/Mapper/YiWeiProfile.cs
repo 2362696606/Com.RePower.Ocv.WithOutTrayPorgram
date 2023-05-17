@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
-using Com.RePower.Ocv.Model;
+using Com.RePower.Ocv.Model.Dto;
 using Com.RePower.Ocv.Project.YiWei.Dto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Project.YiWei.Mapper
 {
@@ -15,6 +10,9 @@ namespace Com.RePower.Ocv.Project.YiWei.Mapper
         {
             //CreateMap<NgInfo,ExcelSaveDto>()
             //    .ForMember
+            CreateMap<NgInfoDto, ExcelSaveDto>().IncludeMembers(x => x.Battery);
+            CreateMap<BatteryDto, ExcelSaveDto>().ForMember(desc => desc.TestTime,
+                opt => opt.MapFrom(x => x.TestTime.ToString("yyyy/mm/dd hh:mm:ss")));
         }
     }
 }

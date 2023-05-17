@@ -1,6 +1,6 @@
 ﻿using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Model.Helper;
-using Com.RePower.Ocv.Project.Byd.CB09.Serivces.Dto;
+using Com.RePower.Ocv.Project.Byd.CB09.Serivces.Dtos;
 using Com.RePower.Ocv.Project.Byd.CB09.Settings;
 using Com.RePower.WpfBase;
 using Newtonsoft.Json;

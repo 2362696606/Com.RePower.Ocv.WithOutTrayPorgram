@@ -8,9 +8,13 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Works;
 
 public partial class MainWork
 {
+    /// <summary>
+    /// 验证Ng
+    /// </summary>
+    /// <returns>验证Ng</returns>
     protected OperateResult VerifyNg()
     {
-        foreach (var ngInfo in _tray.NgInfos)
+        foreach (var ngInfo in Tray.NgInfos)
         {
             LogHelper.UiLog.Info($"验证电池{ngInfo.Battery.Position}Ng信息");
             if (TestOption.Default.IsTestVol)
@@ -67,6 +71,17 @@ public partial class MainWork
                 {
                     ngInfo.AddNgType(NgTypeEnum.温度过低);
                 }
+            }
+            if (ngInfo.IsNg)
+            {
+                var switchBoard = SwitchBoardChannelSetting.Default
+                    .First(x => x.Correspondence.ContainsKey(ngInfo.Battery.Position));
+                var boardIndex = switchBoard.BoardIndex;
+                var channel = switchBoard.Correspondence[ngInfo.Battery.Position];
+                var channelNgInfo = ChannelsNgInfoCache.Default.ChannelsGroups.First(x => x.BoardIndex == boardIndex).Nginfos
+                    .First(x => x.Channel == channel);
+                channelNgInfo.NgTimes += 1;
+                ChannelsNgInfoCache.Default.SaveChanged();
             }
             LogHelper.UiLog.Info($"验证电池{ngInfo.Battery.Position}Ng信息成功");
         }
