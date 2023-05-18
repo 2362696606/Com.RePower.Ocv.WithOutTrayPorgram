@@ -13,9 +13,9 @@ public class OtherSetting:ApplicationSettingsBase
     [DefaultSettingValue("0.0")]
     [DisplayName("左压合X轴坐标")]
     [SettingsDescription("左压合X轴坐标")]
-    public decimal LeftX
+    public double LeftX
     {
-        get => (decimal)this[nameof(LeftX)];
+        get => (double)this[nameof(LeftX)];
         set => this[nameof(LeftX)] = value;
     }
     /// <summary>
@@ -25,9 +25,9 @@ public class OtherSetting:ApplicationSettingsBase
     [DefaultSettingValue("0.0")]
     [DisplayName("左上下Z轴坐标")]
     [SettingsDescription("左上下Z轴坐标")]
-    public decimal LeftZ
+    public double LeftZ
     {
-        get => (decimal)this[nameof(LeftZ)];
+        get => (double)this[nameof(LeftZ)];
         set => this[nameof(LeftZ)] = value;
     }
     /// <summary>
@@ -37,9 +37,9 @@ public class OtherSetting:ApplicationSettingsBase
     [DefaultSettingValue("0.0")]
     [DisplayName("右压合X轴坐标")]
     [SettingsDescription("右压合X轴坐标")]
-    public decimal RightX
+    public double RightX
     {
-        get => (decimal)this[nameof(RightX)];
+        get => (double)this[nameof(RightX)];
         set => this[nameof(RightX)] = value;
     }
     /// <summary>
@@ -49,9 +49,9 @@ public class OtherSetting:ApplicationSettingsBase
     [DefaultSettingValue("0.0")]
     [DisplayName("右上下Z轴坐标")]
     [SettingsDescription("右上下Z轴坐标")]
-    public decimal RightZ
+    public double RightZ
     {
-        get => (decimal)this[nameof(RightZ)];
+        get => (double)this[nameof(RightZ)];
         set => this[nameof(RightZ)] = value;
     }
 }

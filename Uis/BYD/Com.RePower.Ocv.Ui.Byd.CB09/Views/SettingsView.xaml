@@ -51,6 +51,18 @@
                         </handyControl:PropertyGrid.Resources>
                     </handyControl:PropertyGrid>
                 </TabItem>
+                <TabItem Header="其他设置">
+                    <handyControl:PropertyGrid FontSize="30" SelectedObject="{Binding OtherSetting}">
+                        <handyControl:PropertyGrid.Resources>
+                            <ResourceDictionary>
+                                <ResourceDictionary.MergedDictionaries>
+                                    <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
+                                    <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
+                                </ResourceDictionary.MergedDictionaries>
+                            </ResourceDictionary>
+                        </handyControl:PropertyGrid.Resources>
+                    </handyControl:PropertyGrid>
+                </TabItem>
             </TabControl>
         </DockPanel>
         <materialDesign:Snackbar MessageQueue="{Binding MessageQueue}" />

@@ -4,98 +4,98 @@
     "Items": [
       {
         "Name": "运行状态",
-        "Address": "MB10000",
+        "Address": "MW5000",
         "Type": "Int16",
         "Length": 1,
         "Description": "0:没启动;\r\n1:自动运行;\r\n2:手动运行;\r\n3:放行;\r\n4:故障;"
       },
       {
         "Name": "设备故障代码",
-        "Address": "MB10002",
+        "Address": "MW5001",
         "Type": "Int16",
         "Length": 1,
         "Description": "PLC根据实际情况定义"
       },
       {
         "Name": "请求测试",
-        "Address": "MB10004",
+        "Address": "MW5002",
         "Type": "Int16",
         "Length": 1,
         "Description": "0:初始状态;\r\n1:请求读条码，下发坐标;\r\n2:请求测试 ;"
       },
       {
         "Name": "烟感状状",
-        "Address": "MB10006",
+        "Address": "MW5003",
         "Type": "Int16",
         "Length": 1,
         "Description": "0:正常;\r\n1:烟感1报警;\r\n2:烟感2报警;\r\n3:烟感1与2报警;"
       },
       {
         "Name": "环境温度一",
-        "Address": "MB10008",
+        "Address": "MW5004",
         "Type": "Int16",
         "Length": 1,
         "Description": ""
       },
       {
         "Name": "环境温度二",
-        "Address": "MB10010",
+        "Address": "MW5005",
         "Type": "Int16",
         "Length": 1,
         "Description": ""
       },
       {
         "Name": "针床状态",
-        "Address": "MB10012",
+        "Address": "MW5006",
         "Type": "Int16",
         "Length": 1,
         "Description": "0:无托盘;\r\n1:有托盘;"
       },
       {
         "Name": "预留一",
-        "Address": "MB10014",
+        "Address": "MW5007",
         "Type": "Int16",
         "Length": 1,
         "Description": ""
       },
       {
         "Name": "预留二",
-        "Address": "MB10016",
+        "Address": "MW5008",
         "Type": "Int16",
         "Length": 1,
         "Description": ""
       },
       {
         "Name": "预留三",
-        "Address": "MB10018",
+        "Address": "MW5009",
         "Type": "Int16",
         "Length": 1,
         "Description": ""
       },
       {
         "Name": "预留四",
-        "Address": "MB10020",
+        "Address": "MW5010",
         "Type": "Int16",
         "Length": 1,
         "Description": ""
       },
       {
         "Name": "预留五",
-        "Address": "MB10024",
+        "Address": "MW5012",
         "Type": "Single",
         "Length": 1,
         "Description": ""
       },
       {
         "Name": "上托盘条码信息",
-        "Address": "MB10028",
+        "Address": "MW5014",
         "Type": "String",
         "Length": 32,
         "Description": ""
       },
       {
         "Name": "预留六",
-        "Address": "MB10061",
+        "Address": "MW5030",
         "Type": "String",
         "Length": 32,
         "Description": ""
@@ -107,98 +107,98 @@
     "Items": [
       {
         "Name": "网络心跳",
-        "Address": "MB10094",
+        "Address": "MW5047",
         "Type": "Int16",
         "Length": 1,
         "Description": "网络心跳:上位机与PLC链接成功，1秒时钟交替1->0"
       },
       {
         "Name": "托盘1_条码返回结果",
-        "Address": "MB10096",
+        "Address": "MW5048",
         "Type": "Int16",
         "Length": 1,
         "Description": "1:OK;\r\n2:电芯条码不合规格;\r\n5:电芯条码重复;\r\n6:其他;"
       },
       {
         "Name": "预留",
-        "Address": "MB10098",
+        "Address": "MW5049",
         "Type": "Int16",
         "Length": 1,
         "Description": "备用"
       },
       {
         "Name": "测试标志",
-        "Address": "MB10100",
+        "Address": "MW5050",
         "Type": "Int16",
         "Length": 1,
         "Description": "0:是初始状态;\r\n1:读码，下发坐标后写1;\r\n2:测试完成;\r\n3:脱开复测;"
       },
       {
         "Name": "火警通知",
-        "Address": "MB10102",
+        "Address": "MW5051",
         "Type": "Int16",
         "Length": 1,
         "Description": "0:无火警;\r\n1:有火警;"
       },
       {
         "Name": "测试结果",
-        "Address": "MB10104",
+        "Address": "MW5052",
         "Type": "Int16",
         "Length": 1,
         "Description": "0:有报警;\r\n1:测试超时;\r\n2:测试结果NG(PLC蜂鸣器响亮红灯);"
       },
       {
         "Name": "出库",
-        "Address": "MB10106",
+        "Address": "MW5053",
         "Type": "Int16",
         "Length": 1,
         "Description": "1:允许出库(PLC复位);"
       },
       {
         "Name": "预留一",
-        "Address": "MB10108",
+        "Address": "MW5054",
         "Type": "Int16",
         "Length": 1,
         "Description": ""
       },
       {
         "Name": "预留二",
-        "Address": "MB10110",
+        "Address": "MW5055",
         "Type": "Int16",
         "Length": 1,
         "Description": ""
       },
       {
         "Name": "预留三",
-        "Address": "MB10112",
+        "Address": "MW5056",
         "Type": "Int16",
         "Length": 1,
         "Description": ""
       },
       {
         "Name": "左压合X轴坐标",
-        "Address": "MB10116",
+        "Address": "MW5058",
         "Type": "Single",
         "Length": 1,
         "Description": ""
       },
       {
         "Name": "左上下Z轴坐标",
-        "Address": "MB10120",
+        "Address": "MW5060",
         "Type": "Single",
         "Length": 1,
         "Description": ""
       },
       {
         "Name": "右压合X轴坐标",
-        "Address": "MB10124",
+        "Address": "MW5062",
         "Type": "Single",
         "Length": 1,
         "Description": ""
       },
       {
         "Name": "右上下Z轴坐标",
-        "Address": "MB10128",
+        "Address": "MW5064",
         "Type": "Single",
         "Length": 1,
         "Description": ""
@@ -210,42 +210,42 @@
     "Items": [
       {
         "Name": "Read_1",
-        "Address": "MB1000",
+        "Address": "MW500",
         "Type": "Int16",
         "Length": 1,
         "Description": "1.PLC通知上位机物料到位是否测试/r/n2.PLC通知上位机气缸伸出到位，可以测试（复测也是发送2)"
       },
       {
         "Name": "Send_1",
-        "Address": "MB1002",
+        "Address": "MW501",
         "Type": "Int16",
         "Length": 1,
         "Description": "1.上位机回复可以测试/r/n2.上位机回复测试完成"
       },
       {
         "Name": "Send_2",
-        "Address": "MB1004",
+        "Address": "MW502",
         "Type": "Int16",
         "Length": 1,
         "Description": "1.上位机测试结束，通知PLC放行/r/n2.上位机测试结束，通知PLC复测"
       },
       {
         "Name": "Send_3",
-        "Address": "MB1006",
+        "Address": "MW503",
         "Type": "Int16",
         "Length": 1,
         "Description": "测试结果异常，提示人工干预（三色灯报警） (1-OK 2—NG)"
       },
       {
         "Name": "Read_2",
-        "Address": "MB1008",
+        "Address": "MW504",
         "Type": "String",
         "Length": 32,
         "Description": "托盘条码"
       },
       {
         "Name": "Send_4",
-        "Address": "MB1044",
+        "Address": "MW522",
         "Type": "Int16",
         "Length": 1,
         "Description": "上位机重置PLC"
@@ -257,7 +257,7 @@
     "Items": [
       {
         "Name": "报警信息",
-        "Address": "MB1042",
+        "Address": "MW521",
         "Type": "Int16",
         "Length": 1,
         "Description": "1.急停中/r/n2.PLC总气压低报警/r/n1013.气缸伸出未到位报警/r/n1014.气缸缩回未到位报警/r/n3.NG报警"

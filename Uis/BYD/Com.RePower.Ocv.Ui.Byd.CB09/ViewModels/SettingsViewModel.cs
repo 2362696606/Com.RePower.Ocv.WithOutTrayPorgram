@@ -16,6 +16,7 @@ public class SettingsViewModel:ObservableObject
     }
     public TestOption TestOption=>TestOption.Default;
     public BatteryStandard BatteryStandard => BatteryStandard.Default;
+    public OtherSetting OtherSetting => OtherSetting.Default;
     public RelayCommand<object> DoSaveCommand { get; }
     public SnackbarMessageQueue MessageQueue { get; } = new SnackbarMessageQueue();
     private void DoSave(object? obj)

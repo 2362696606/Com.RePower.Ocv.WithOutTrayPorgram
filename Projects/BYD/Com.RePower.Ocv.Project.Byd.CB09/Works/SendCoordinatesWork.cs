@@ -12,7 +12,7 @@ public partial class MainWork
     /// <returns>下发结果</returns>
     protected virtual OperateResult SendCoordinates()
     {
-        var otherSetting = new OtherSetting();
+        var otherSetting = OtherSetting.Default;
         LogHelper.UiLog.Info("下发左压合X轴坐标");
         var writeResult = Plc.Write(PlcCacheSetting["Group2"]["左压合X轴坐标"].Address, (float)otherSetting.LeftX);
         if (writeResult.IsFailed)
