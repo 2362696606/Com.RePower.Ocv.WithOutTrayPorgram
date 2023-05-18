@@ -7,11 +7,19 @@
     xmlns:local="clr-namespace:Com.RePower.Ocv.Ui.UiBase.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uiHelper="clr-namespace:Com.RePower.Ocv.Ui.UiBase.ViewHelper"
+    xmlns:valueConverter="clr-namespace:Com.RePower.Ocv.Ui.UiBase.ValueConverters"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <ResourceDictionary Source="./Dictionarys/BaseDictionary.xaml" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="./Dictionarys/BaseDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <uiHelper:BindingProxy x:Key="proxy" Data="{Binding}" />
+            <valueConverter:BoolToVisibility x:Key="BoolToVisibility" />
+        </ResourceDictionary>
     </UserControl.Resources>
     <materialDesign:Card Margin="20" Padding="16">
         <Grid>
@@ -131,12 +139,22 @@
                                 <DataGridTextColumn Binding="{Binding Battery.OcvType}" Header="Ocv类型" />
                                 <DataGridTextColumn Binding="{Binding Battery.Position}" Header="位置" />
                                 <DataGridTextColumn Binding="{Binding Battery.VolValue}" Header="电压" />
-                                <DataGridTextColumn Binding="{Binding Battery.PVolValue}" Header="正极壳体电压" />
-                                <DataGridTextColumn Binding="{Binding Battery.NVolValue}" Header="负极壳体电压" />
+                                <DataGridTextColumn
+                                    Binding="{Binding Battery.PVolValue}"
+                                    Header="正极壳体电压"
+                                    Visibility="{Binding Data.PVolIsVisibility, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
+                                <DataGridTextColumn
+                                    Binding="{Binding Battery.NVolValue}"
+                                    Header="负极壳体电压"
+                                    Visibility="{Binding Data.NVolIsVisibility, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
                                 <DataGridTextColumn Binding="{Binding Battery.Res}" Header="内阻" />
                                 <DataGridTextColumn Binding="{Binding Battery.Temp}" Header="温度" />
                                 <DataGridTextColumn Binding="{Binding Battery.PTemp}" Header="正极温度" />
                                 <DataGridTextColumn Binding="{Binding Battery.NTemp}" Header="正极温度" />
+                                <DataGridTextColumn
+                                    Binding="{Binding Battery.KValue1}"
+                                    Header="K值"
+                                    Visibility="{Binding Data.K1ValueIsVisibility, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}" />
                                 <DataGridTextColumn Binding="{Binding IsNg}" Header="是否Ng" />
                                 <DataGridTextColumn Binding="{Binding NgDescription}" Header="Ng描述" />
                                 <DataGridTextColumn Binding="{Binding Battery.TestTime}" Header="测试时间" />
@@ -186,6 +204,11 @@
                         </ResourceDictionary.MergedDictionaries>
                     </ResourceDictionary>
                 </StackPanel.Resources>
+                <StackPanel Margin="10,0" Orientation="Horizontal">
+                    <CheckBox Content="正极壳体" IsChecked="{Binding PVolIsVisibility}" />
+                    <CheckBox Content="负极壳体" IsChecked="{Binding NVolIsVisibility}" />
+                    <CheckBox Content="K值" IsChecked="{Binding K1ValueIsVisibility}" />
+                </StackPanel>
                 <hc:TextBox
                     hc:TitleElement.Title="条目数:"
                     hc:TitleElement.TitlePlacement="Left"

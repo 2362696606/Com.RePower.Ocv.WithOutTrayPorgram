@@ -189,6 +189,33 @@ namespace Com.RePower.Ocv.Ui.UiBase.ViewModels
             set { SetProperty(ref _ngRate, value); }
         }
 
+        private bool _nVolIsVisibility;
+        /// <summary>
+        /// 是否显示负极壳体电压
+        /// </summary>
+        public bool NVolIsVisibility
+        {
+            get => _nVolIsVisibility;
+            set => SetProperty(ref _nVolIsVisibility, value);
+        }
+        private bool _pVolIsVisibility;
+        /// <summary>
+        /// 是否显示正极壳体电压
+        /// </summary>
+        public bool PVolIsVisibility
+        {
+            get => _pVolIsVisibility;
+            set => SetProperty(ref _pVolIsVisibility, value);
+        }
+        private bool _k1ValueIsVisibility;
+        /// <summary>
+        /// 是否显示K1
+        /// </summary>
+        public bool K1ValueIsVisibility
+        {
+            get => _k1ValueIsVisibility;
+            set => SetProperty(ref _k1ValueIsVisibility, value);
+        }
         public List<OrderOption> OrderOptions { get; set; }
         public OrderOption OrderOptionSelectedItem { get; set; }
 
