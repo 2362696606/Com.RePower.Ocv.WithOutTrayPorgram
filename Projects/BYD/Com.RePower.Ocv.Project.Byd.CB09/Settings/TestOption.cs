@@ -108,7 +108,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Settings
         /// <summary>
         /// 是否测试温度
         /// </summary>
-        [ApplicationScopedSetting]
+        [UserScopedSetting]
         [DefaultSettingValue("false")]
         [DisplayName("是否测试温度")]
         [SettingsDescription("是否测试温度")]
@@ -120,7 +120,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Settings
         /// <summary>
         /// 是否正极测试温度
         /// </summary>
-        [ApplicationScopedSetting]
+        [UserScopedSetting]
         [DefaultSettingValue("false")]
         [DisplayName("是否正极测试温度")]
         [SettingsDescription("是否正极测试温度")]
@@ -132,7 +132,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Settings
         /// <summary>
         /// 是否测试负极温度
         /// </summary>
-        [ApplicationScopedSetting]
+        [UserScopedSetting]
         [DefaultSettingValue("false")]
         [DisplayName("是否测试负极温度")]
         [SettingsDescription("是否测试负极温度")]

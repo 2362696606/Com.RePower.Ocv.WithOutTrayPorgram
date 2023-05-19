@@ -1,4 +1,4 @@
-﻿using Com.RePower.Ocv.Model.DataBaseContext;
+﻿using System.Configuration;
 using Com.RePower.Ocv.Project.Byd.CB09.Serivces.Dtos;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,15 +6,6 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Serivces.DbContexts;
 
 public partial class OcvDataDbContext : DbContext
 {
-    public OcvDataDbContext()
-    {
-    }
-
-    public OcvDataDbContext(DbContextOptions<OcvDataDbContext> options)
-        : base(options)
-    {
-    }
-
     public virtual DbSet<RnDbDcir> RnDbDcir { get; set; }
 
     public virtual DbSet<RnDbOcv> RnDbOcv0 { get; set; }
@@ -31,14 +22,14 @@ public partial class OcvDataDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        string connectString = string.Empty;
-        using (var settingContext = new OcvSettingDbContext())
-        {
-            var item = settingContext.SettingItems.First(x => x.SettingName == "MES数据库连接字符串");
-            connectString = item.JsonValue;
-        }
-        optionsBuilder.UseSqlServer(connectString);
-        optionsBuilder.UseLazyLoadingProxies();
+        //string connectString = string.Empty;
+        //using (var settingContext = new OcvSettingDbContext())
+        //{
+        //    var item = settingContext.SettingItems.First(x => x.SettingName == "MES数据库连接字符串");
+        //    connectString = item.JsonValue;
+        //}
+        optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["BloggingDatabase"].ConnectionString);
+        //optionsBuilder.UseLazyLoadingProxies();
         base.OnConfiguring(optionsBuilder);
     }
 

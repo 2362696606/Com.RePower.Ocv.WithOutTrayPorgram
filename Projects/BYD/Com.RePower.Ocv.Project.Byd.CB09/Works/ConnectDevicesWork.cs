@@ -39,6 +39,13 @@ public partial class MainWork
             if(connectResult.IsFailed)
                 return connectResult;
         }
+        if (!TemperatureSensor.IsConnected)
+        {
+            LogHelper.UiLog.Info("连接温度传感器");
+            var connectResult = TemperatureSensor.Connect();
+            if(connectResult.IsFailed)
+                return connectResult;
+        }
         return OperateResult.CreateSuccessResult();
     }
 }

@@ -67,7 +67,7 @@ public partial class MainWork
                 {
                     ngInfo.AddNgType(NgTypeEnum.温度过高);
                 }
-                if ((ngInfo.Battery.Temp ?? 0) > BatteryStandard.Default.MinTemp)
+                if ((ngInfo.Battery.Temp ?? 0) < BatteryStandard.Default.MinTemp)
                 {
                     ngInfo.AddNgType(NgTypeEnum.温度过低);
                 }

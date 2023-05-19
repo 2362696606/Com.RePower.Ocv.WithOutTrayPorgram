@@ -52,6 +52,7 @@
 	  <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.Ohm\Com.RePower.Device.Ohm.csproj" />
 	  <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.Plc\Com.RePower.Device.Plc.csproj" />
 	  <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.SwitchBoard\Com.RePower.Device.SwitchBoard.csproj" />
+	  <ProjectReference Include="..\..\..\Devices\Com.RePower.Device.TemperatureSensor\Com.RePower.Device.TemperatureSensor.csproj" />
 	  <ProjectReference Include="..\..\Com.RePower.Ocv.Project.ProjectBase\Com.RePower.Ocv.Project.ProjectBase.csproj" />
 	</ItemGroup>
 

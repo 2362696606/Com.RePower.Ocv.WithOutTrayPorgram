@@ -112,14 +112,21 @@
                                         <TextBlock Text="负极壳体电压:" />
                                         <TextBlock Text="{Binding Battery.NVolValue}" />
                                     </StackPanel>
+                                    <StackPanel Visibility="{Binding Data.SettingManager.IsTestTemp, Converter={StaticResource BoolToVisibility}, Source={StaticResource proxy}}">
+                                        <TextBlock Text="温度:" />
+                                        <TextBlock Text="{Binding Battery.Temp}" />
+                                    </StackPanel>
                                     <StackPanel>
                                         <TextBlock Text="Ng描述:" />
-                                        <TextBlock Text="{Binding NgDescription}" TextWrapping="Wrap" />
+                                        <TextBlock
+                                            Text="{Binding NgDescription}"
+                                            TextWrapping="Wrap"
+                                            ToolTip="{Binding NgDescription}" />
                                     </StackPanel>
-                                    <StackPanel>
+                                    <!--<StackPanel>
                                         <TextBlock Text="Ng代码:" />
                                         <TextBlock Text="{Binding NgType, Converter={StaticResource NgTypeToCode}}" />
-                                    </StackPanel>
+                                    </StackPanel>-->
                                 </StackPanel>
                             </materialDesign:Card>
                         </DataTemplate>

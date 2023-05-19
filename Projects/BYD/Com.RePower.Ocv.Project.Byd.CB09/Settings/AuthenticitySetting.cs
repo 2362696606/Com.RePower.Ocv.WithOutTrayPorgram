@@ -43,6 +43,18 @@ public class AuthenticitySetting : ApplicationSettingsBase
         set => this[nameof(IsRealOhm)] = value;
     }
     /// <summary>
+    /// 真实内阻仪
+    /// </summary>
+    [ApplicationScopedSetting]
+    [DefaultSettingValue("false")]
+    [DisplayName("真实温度传感器")]
+    [SettingsDescription("是否是真实温度传感器")]
+    public bool IsRealTemperatureSensor
+    {
+        get => (bool)this[nameof(IsRealTemperatureSensor)];
+        set => this[nameof(IsRealTemperatureSensor)] = value;
+    }
+    /// <summary>
     /// 真实切换版
     /// </summary>
     [ApplicationScopedSetting]

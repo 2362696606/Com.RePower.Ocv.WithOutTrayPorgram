@@ -5,6 +5,7 @@ using Com.RePower.DeviceBase.DMM;
 using Com.RePower.DeviceBase.Ohm;
 using Com.RePower.DeviceBase.Plc;
 using Com.RePower.DeviceBase.SwitchBoard;
+using Com.RePower.DeviceBase.TemperatureSensor;
 using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.Byd.CB09.Serivces;
@@ -19,6 +20,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Works
 {
     public partial class MainWork : MainWorkAbstract
     {
+        protected readonly ITemperatureSensor TemperatureSensor;
         protected readonly IPlc Plc;
         protected readonly IDmm Dmm;
         protected readonly IOhm Ohm;
@@ -29,8 +31,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Works
         protected readonly IMapper Mapper;
         protected readonly PlcCacheSetting PlcCacheSetting;
 
-        public MainWork(IPlc plc,IDmm dmm,IOhm ohm,ISwitchBoard switchBoard,Tray tray,IWmsService wmsService,IMesService mesService,IMapper mapper)
+        public MainWork(IPlc plc, IDmm dmm, IOhm ohm, ISwitchBoard switchBoard, ITemperatureSensor temperatureSensor,
+            Tray tray, IWmsService wmsService, IMesService mesService, IMapper mapper)
         {
+            TemperatureSensor = temperatureSensor;
             Plc = plc;
             Dmm = dmm;
             Ohm = ohm;

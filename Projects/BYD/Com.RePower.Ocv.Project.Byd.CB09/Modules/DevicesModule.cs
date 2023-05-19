@@ -3,10 +3,12 @@ using Com.RePower.Device.DMM.Impl.Keysight_34461A;
 using Com.RePower.Device.Ohm.Impl.Hioki_BT3562;
 using Com.RePower.Device.Plc.Impl;
 using Com.RePower.Device.SwitchBoard.Impl.FourLinesSwitchBoard;
+using Com.RePower.Device.TemperatureSensor.Impl.MtvTemperatureSensor;
 using Com.RePower.DeviceBase.DMM;
 using Com.RePower.DeviceBase.Ohm;
 using Com.RePower.DeviceBase.Plc;
 using Com.RePower.DeviceBase.SwitchBoard;
+using Com.RePower.DeviceBase.TemperatureSensor;
 using Com.RePower.Ocv.Project.Byd.CB09.Settings;
 using HslCommunication.Core;
 
@@ -89,6 +91,31 @@ public class DevicesModule:Module
         }
 
         builder.RegisterInstance(ohmInstance).As<IOhm>();
+        #endregion
+
+        #region 注册温度传感器
+        var temperatureSensorSetting = new NetTemperatureSensorSetting();
+        ITemperatureSensor temperatureSensorInstance;
+        if (authenticitySetting.IsRealTemperatureSensor)
+        {
+            var trulyTemperatureSensor = new MtvTemperatureSensorImpl();
+            trulyTemperatureSensor.DeviceName = temperatureSensorSetting.DeviceName;
+            trulyTemperatureSensor.IpAddress = temperatureSensorSetting.IpAddress;
+            trulyTemperatureSensor.Port = temperatureSensorSetting.Port;
+            trulyTemperatureSensor.ReadDelay = temperatureSensorSetting.ReadDelay;
+            temperatureSensorInstance = trulyTemperatureSensor;
+        }
+        else
+        {
+            var simTemperatureSensor = new MtvTemperatureSensorSimulator();
+            simTemperatureSensor.DeviceName = temperatureSensorSetting.DeviceName;
+            simTemperatureSensor.IpAddress = temperatureSensorSetting.IpAddress;
+            simTemperatureSensor.Port = temperatureSensorSetting.Port;
+            simTemperatureSensor.ReadDelay = temperatureSensorSetting.ReadDelay;
+            temperatureSensorInstance = simTemperatureSensor;
+        }
+
+        builder.RegisterInstance(temperatureSensorInstance).As<ITemperatureSensor>(); 
         #endregion
 
         #region 注册切换版

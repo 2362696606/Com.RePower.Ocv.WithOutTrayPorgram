@@ -19,13 +19,27 @@ public partial class MainWork
             return closeResult;
         foreach (var ngInfo in Tray.NgInfos)
         {
-            TestOneBattery(ngInfo);
+            var testResult = TestOneBattery(ngInfo);
+            if (testResult.IsFailed) return testResult;
             DoPauseOrStop();
         }
         if (TestOption.Default.IsTestTemp)
         {
-            //ToDo:测试温度
+            var testResult = TestTemperature();
+            if (testResult.IsFailed) return testResult;
             DoPauseOrStop();
+        }
+        return OperateResult.CreateSuccessResult();
+    }
+    protected virtual OperateResult TestTemperature()
+    {
+        var result = TemperatureSensor.ReadTemp();
+        if (result.IsFailed) return result;
+        double[] tempValues = result.Content ?? throw new ArgumentNullException(nameof(result.Content));
+        for (int i = 0; i < Tray.NgInfos.Count(); i++)
+        {
+            var battery = Tray.NgInfos.First(x => x.Battery.Position == (i + 1)).Battery;
+            battery.Temp = tempValues[i];
         }
         return OperateResult.CreateSuccessResult();
     }

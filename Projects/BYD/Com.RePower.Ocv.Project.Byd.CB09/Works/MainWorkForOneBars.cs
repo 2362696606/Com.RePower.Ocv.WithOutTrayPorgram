@@ -3,6 +3,7 @@ using Com.RePower.DeviceBase.DMM;
 using Com.RePower.DeviceBase.Ohm;
 using Com.RePower.DeviceBase.Plc;
 using Com.RePower.DeviceBase.SwitchBoard;
+using Com.RePower.DeviceBase.TemperatureSensor;
 using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.Ocv.Project.Byd.CB09.Serivces;
@@ -12,7 +13,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Works;
 
 public class MainWorkForOneBars:MainWork
 {
-    public MainWorkForOneBars(IPlc plc, IDmm dmm, IOhm ohm, ISwitchBoard switchBoard, Tray tray, IWmsService wmsService, IMesService mesService, IMapper mapper) : base(plc, dmm, ohm, switchBoard, tray, wmsService, mesService, mapper)
+
+    public MainWorkForOneBars(IPlc plc, IDmm dmm, IOhm ohm, ISwitchBoard switchBoard,
+        ITemperatureSensor temperatureSensor, Tray tray, IWmsService wmsService, IMesService mesService, IMapper mapper)
+        : base(plc, dmm, ohm, switchBoard, temperatureSensor, tray, wmsService, mesService, mapper)
     {
     }
 
