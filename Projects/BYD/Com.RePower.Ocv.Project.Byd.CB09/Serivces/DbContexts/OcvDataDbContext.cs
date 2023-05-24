@@ -28,7 +28,7 @@ public partial class OcvDataDbContext : DbContext
         //    var item = settingContext.SettingItems.First(x => x.SettingName == "MES数据库连接字符串");
         //    connectString = item.JsonValue;
         //}
-        optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["BloggingDatabase"].ConnectionString);
+        optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["MesDataBase"].ConnectionString);
         //optionsBuilder.UseLazyLoadingProxies();
         base.OnConfiguring(optionsBuilder);
     }

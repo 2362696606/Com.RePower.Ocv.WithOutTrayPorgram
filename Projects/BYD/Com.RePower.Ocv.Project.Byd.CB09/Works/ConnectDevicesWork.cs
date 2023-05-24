@@ -1,4 +1,5 @@
-﻿using Com.RePower.Ocv.Model.Helper;
+﻿using Com.RePower.Device.Ohm.Impl.Hioki_BT3562;
+using Com.RePower.Ocv.Model.Helper;
 using Com.RePower.WpfBase;
 
 namespace Com.RePower.Ocv.Project.Byd.CB09.Works;
@@ -28,9 +29,18 @@ public partial class MainWork
         if (!Ohm.IsConnected)
         {
             LogHelper.UiLog.Info("连接内阻仪");
-            var connectResult = Dmm.Connect();
+            var connectResult = Ohm.Connect();
             if(connectResult.IsFailed)
                 return connectResult;
+            if (Ohm is HiokiBt3562Impl tempOhm)
+            {
+                LogHelper.UiLog.Info("正在初始化内阻仪");
+                var setResult = tempOhm.SetRang();
+                if (setResult.IsFailed) return setResult;
+                setResult = tempOhm.SetInitiateContinuous();
+                if (setResult.IsFailed) return setResult;
+                LogHelper.UiLog.Info("初始化内阻仪成功");
+            }
         }
         if (!SwitchBoard.IsConnected)
         {

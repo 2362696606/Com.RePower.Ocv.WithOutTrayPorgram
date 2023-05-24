@@ -1,5 +1,7 @@
-﻿using Com.RePower.DeviceBase.Helper;
+﻿using CLDC.Framework.Log;
+using Com.RePower.DeviceBase.Helper;
 using Com.RePower.WpfBase;
+using Com.RePower.WpfBase.Extensions;
 using System.IO.Ports;
 
 namespace Com.RePower.DeviceBase.BaseDevice
@@ -155,6 +157,7 @@ namespace Com.RePower.DeviceBase.BaseDevice
                 }
                 else
                 {
+                    Log.getMessageFile("串口日志").Info($"串口:{SerialPort.PortName}发送{cmd.ToHexString(' ')}");
                     SerialPort.Write(cmd, 0, cmd.Length);
                     return OperateResult.CreateSuccessResult<byte[]>(null);
                 }

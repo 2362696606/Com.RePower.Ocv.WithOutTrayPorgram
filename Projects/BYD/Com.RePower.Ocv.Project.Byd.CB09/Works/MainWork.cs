@@ -67,6 +67,9 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Works
                 LogHelper.UiLog.Info("连接设备成功");
                 DoPauseOrStop();
                 #endregion
+                #region 开始PLC心跳
+                KeepHeartbeat();
+                #endregion
                 #region 等待请求读取条码
                 LogHelper.UiLog.Info("等待请求读取托盘条码");
                 var waitResult = WaitTrayCodeRequest();

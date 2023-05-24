@@ -18,6 +18,7 @@ namespace Com.RePower.Device.Ohm.Impl.Hioki_BT3562
         public override OperateResult<double> ReadRes()
         {
             byte[] cmd = Encoding.ASCII.GetBytes(":READ?" + "\r\n");
+            //byte[] cmd = Encoding.ASCII.GetBytes("*IDN?" + "\r\n");
             var result = SendCmd(cmd.ToArray());
             if (result.IsFailed)
             {

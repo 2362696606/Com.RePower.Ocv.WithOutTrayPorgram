@@ -18,7 +18,7 @@ namespace Com.RePower.DeviceBase.Helper
         /// <returns></returns>
         public static OperateResult<byte[]> SendAndRecovery(this SerialPort serialPort, byte[] bytes, int timeOut = 10000, int readDelay = -1)
         {
-            Log.getMessageFile("串口日志").Info($"串口:{serialPort.PortName}发送{bytes.ToHexString(',')}");
+            Log.getMessageFile("串口日志").Info($"串口:{serialPort.PortName}发送{bytes.ToHexString(' ')}");
 
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
@@ -51,7 +51,7 @@ namespace Com.RePower.DeviceBase.Helper
             int length = serialPort.BytesToRead;
             byte[] result = new byte[length];
             serialPort.Read(result, 0, length);
-            Log.getMessageFile("串口日志").Info($"串口:{serialPort.PortName}收到回复{result.ToHexString()}");
+            Log.getMessageFile("串口日志").Info($"串口:{serialPort.PortName}收到回复{result.ToHexString(' ')}");
             return OperateResult.CreateSuccessResult(result);
         }
 
