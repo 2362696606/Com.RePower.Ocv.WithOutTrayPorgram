@@ -44,14 +44,14 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                                 if(ngInfo.Battery.KValue1<SettingManager.CurrentBatteryStandard?.MinKValue)
                                     ngInfo.AddNgType(Model.Enums.NgTypeEnum.整体k值过低);
                             }
-                            if(SettingManager.CurrentTestOption?.IsVerifyVolDifference??false)
+
+                            if (SettingManager.CurrentTestOption?.IsVerifyVolDifference ?? false) 
                             {
                                 ngInfo.Battery.ReserveValue1 = (ocv2Info.Battery.VolValue - ngInfo.Battery.VolValue);
                                 if (ngInfo.Battery.ReserveValue1 > SettingManager.CurrentBatteryStandard?.MaxVolDifference)
                                     ngInfo.AddNgType(Model.Enums.NgTypeEnum.压差过高);
                                 if (ngInfo.Battery.ReserveValue1 > SettingManager.CurrentBatteryStandard?.MinVolDifference)
                                     ngInfo.AddNgType(Model.Enums.NgTypeEnum.压差过低);
-
                             }
                         }
                         else

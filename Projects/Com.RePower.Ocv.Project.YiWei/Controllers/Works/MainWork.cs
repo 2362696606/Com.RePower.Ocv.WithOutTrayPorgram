@@ -19,6 +19,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Com.RePower.Ocv.Project.YiWei.Dto;
+using Npoi.Mapper;
 
 namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
 {
@@ -253,6 +254,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
             var path = @"./测试数据";
             var fileName = DateTime.Now.ToString("yyyy-MM-dd") + ".xlsx";
             string fullPath = Path.Combine(path, fileName);
+            fullPath = Path.GetFullPath(fullPath);
             List<NgInfoDto> ngInfoDtos = Mapper.Map<List<NgInfoDto>>(Tray.NgInfos);
             List<ExcelSaveDto> excelSaveDtos = Mapper.Map<List<ExcelSaveDto>>(ngInfoDtos);
             if (!string.IsNullOrEmpty(path) && !Directory.Exists(path))
@@ -267,7 +269,25 @@ namespace Com.RePower.Ocv.Project.YiWei.Controllers.Works
             //var excelMapper = new Npoi.Mapper.Mapper().Format<ExcelSaveDto>(
             //    "yyyy/MM/dd HH:mm:ss", s => s.TestTime);
             var excelMapper = new Npoi.Mapper.Mapper();
-            excelMapper.Save(fullPath, excelSaveDtos, "sheet1", !File.Exists(fullPath),true);
+            excelMapper.Map<ExcelSaveDto>("电芯条码", x => x.BarCode)
+                .Map<ExcelSaveDto>("电池位置", x => x.Position)
+                .Map<ExcelSaveDto>("电池类型", x => x.BatteryType)
+                .Map<ExcelSaveDto>("Ocv类型", x => x.OcvType)
+                .Map<ExcelSaveDto>("Ocv工站名", x => x.OcvStationName)
+                .Map<ExcelSaveDto>("电压", x => x.VolValue)
+                .Map<ExcelSaveDto>("正极壳体电压", x => x.PVolValue)
+                .Map<ExcelSaveDto>("负极壳体电压", x => x.NVolValue)
+                .Map<ExcelSaveDto>("内阻", x => x.Res)
+                .Map<ExcelSaveDto>("温度", x => x.Temp)
+                .Map<ExcelSaveDto>("正极温度", x => x.PTemp)
+                .Map<ExcelSaveDto>("负极温度", x => x.NTemp)
+                .Map<ExcelSaveDto>("ng描述", x => x.NgDescription)
+                .Map<ExcelSaveDto>("是否ng", x => x.IsNg)
+                .Map<ExcelSaveDto>("托盘条码", x => x.TrayCode)
+                .Map<ExcelSaveDto>("测试时间", x => x.TestTime)
+                .Map<ExcelSaveDto>("任务号", x => x.TaskCode);
+            //excelMapper.Save(fullPath, excelSaveDtos, "sheet1", !File.Exists(fullPath),true);
+            excelMapper.Save(fullPath, excelSaveDtos, "sheet1", !File.Exists(fullPath), true);
             return OperateResult.CreateSuccessResult("保存到excel成功");
         }
 

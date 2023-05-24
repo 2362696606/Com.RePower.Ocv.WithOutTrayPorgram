@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Npoi.Mapper;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace Com.RePower.Ocv.Ui.UiBase.ViewModels
@@ -310,6 +311,23 @@ namespace Com.RePower.Ocv.Ui.UiBase.ViewModels
 
                         var excelMapper = new Npoi.Mapper.Mapper().Format<BatteryToExcelDto>(
                             "yyyy/MM/dd HH:mm:ss",s=>s.TestTime);
+                        excelMapper.Map<BatteryToExcelDto>("电芯条码",x=>x.BarCode)
+                            .Map<BatteryToExcelDto>("电池位置",x=>x.Position)
+                            .Map<BatteryToExcelDto>("电池类型", x => x.BatteryType)
+                            .Map<BatteryToExcelDto>("Ocv类型", x => x.OcvType)
+                            .Map<BatteryToExcelDto>("Ocv工站名", x => x.OcvStationName)
+                            .Map<BatteryToExcelDto>("电压", x => x.VolValue)
+                            .Map<BatteryToExcelDto>("正极壳体电压", x => x.PVolValue)
+                            .Map<BatteryToExcelDto>("负极壳体电压", x => x.NVolValue)
+                            .Map<BatteryToExcelDto>("内阻", x => x.Res)
+                            .Map<BatteryToExcelDto>("温度", x => x.Temp)
+                            .Map<BatteryToExcelDto>("正极温度", x => x.PTemp)
+                            .Map<BatteryToExcelDto>("负极温度", x => x.NTemp)
+                            .Map<BatteryToExcelDto>("ng描述", x => x.NgDescription)
+                            .Map<BatteryToExcelDto>("是否ng", x => x.IsNg)
+                            .Map<BatteryToExcelDto>("托盘条码", x => x.TrayCode)
+                            .Map<BatteryToExcelDto>("测试时间", x => x.TestTime)
+                            .Map<BatteryToExcelDto>("任务号", x => x.TaskCode);
                         excelMapper.Save(fullPath, dtos, "sheet1");
                         MessageQueue.Enqueue("导出成功");
                         return;

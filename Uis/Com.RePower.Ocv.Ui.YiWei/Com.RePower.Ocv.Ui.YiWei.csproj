@@ -6,6 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\Images\Logo.ico</ApplicationIcon>
+    <Authors></Authors>
+    <Company></Company>
+    <Version>1.0.0.1</Version>
+    <Product></Product>
+    <Description></Description>
+    <Copyright></Copyright>
   </PropertyGroup>
 
   <ItemGroup>

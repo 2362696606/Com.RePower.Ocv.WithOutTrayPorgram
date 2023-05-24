@@ -12,7 +12,7 @@ namespace Com.RePower.Ocv.Project.YiWei.Mapper
             //    .ForMember
             CreateMap<NgInfoDto, ExcelSaveDto>().IncludeMembers(x => x.Battery);
             CreateMap<BatteryDto, ExcelSaveDto>().ForMember(desc => desc.TestTime,
-                opt => opt.MapFrom(x => x.TestTime.ToString("yyyy/mm/dd hh:mm:ss")));
+                opt => opt.MapFrom(x => x.TestTime.ToString("yyyy/MM/dd hh:mm:ss")));
         }
     }
 }
