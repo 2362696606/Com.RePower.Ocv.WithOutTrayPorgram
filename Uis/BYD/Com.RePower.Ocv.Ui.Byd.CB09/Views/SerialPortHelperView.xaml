@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Com.RePower.Ocv.Ui.Byd.CB09.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -34,6 +35,7 @@
             <StackPanel Orientation="Horizontal">
                 <Button Command="{Binding ConnectCommand}" Content="连接" />
                 <Button Command="{Binding ReflashCommand}" Content="刷新" />
+                <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Content="关闭" />
             </StackPanel>
         </UniformGrid>
         <Grid Grid.Row="1">
@@ -42,14 +44,17 @@
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding SendCmd}" />
+            <TextBox Style="{StaticResource MaterialDesignFilledTextBox}" Text="{Binding SendCmd}" />
             <StackPanel Grid.Column="1" Orientation="Vertical">
-                <Button Command="{Binding HaxSendCommand}" Content="Hax发送" />
+                <Button Command="{Binding HexSendCommand}" Content="Hax发送" />
                 <Button Command="{Binding StringSendCommand}" Content="String发送" />
-                <CheckBox IsChecked="{Binding IsNeedRecovery}" />
+                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsNeedRecovery}" />
             </StackPanel>
-            <TextBox Text="{Binding RecoveryCmd}" />
+            <TextBlock Grid.Column="2" Text="{Binding RecoveryCmd}" />
         </Grid>
-        <ListBox Grid.Row="2" ItemsSource="{Binding Recording}" />
+        <ListBox
+            Grid.Row="2"
+            Height="200"
+            ItemsSource="{Binding Recording}" />
     </Grid>
 </UserControl>

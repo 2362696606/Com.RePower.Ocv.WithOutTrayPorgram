@@ -18,6 +18,7 @@ namespace Com.RePower.Ocv.Ui.Byd.CB09.ViewModels
         {
             AppVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "Unknown";
             this.OpenSettingsCommand = new RelayCommand(OpenSettings);
+            this.OpenSerialPortHelperCommand = new RelayCommand(OpenSerialPortHelper);
         }
 
         private void OpenSettings()
@@ -28,8 +29,14 @@ namespace Com.RePower.Ocv.Ui.Byd.CB09.ViewModels
             };
             DialogHost.Show(view, "MainDialog");
         }
+        private void OpenSerialPortHelper()
+        {
+            SerialPortHelperView view = new SerialPortHelperView();
+            DialogHost.Show(view, "MainDialog");
+        }
 
         public string AppVersion { get; }
         public RelayCommand OpenSettingsCommand { get; set; }
+        public RelayCommand OpenSerialPortHelperCommand { get; set; }
     }
 }

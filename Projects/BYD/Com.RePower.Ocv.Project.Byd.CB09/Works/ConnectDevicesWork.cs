@@ -37,6 +37,7 @@ public partial class MainWork
                 LogHelper.UiLog.Info("正在初始化内阻仪");
                 var setResult = tempOhm.SetRang();
                 if (setResult.IsFailed) return setResult;
+                Thread.Sleep(200);
                 setResult = tempOhm.SetInitiateContinuous();
                 if (setResult.IsFailed) return setResult;
                 LogHelper.UiLog.Info("初始化内阻仪成功");

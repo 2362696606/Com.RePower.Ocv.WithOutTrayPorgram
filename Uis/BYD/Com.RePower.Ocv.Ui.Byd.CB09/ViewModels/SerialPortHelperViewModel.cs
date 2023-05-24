@@ -1,18 +1,12 @@
-﻿using Com.RePower.Device.Ohm;
-using Com.RePower.Device.Ohm.Impl.Hioki_BT3562;
-using Com.RePower.DeviceBase.BaseDevice;
+﻿using Com.RePower.Device.Ohm.Impl.Hioki_BT3562;
 using Com.RePower.DeviceBase.Ohm;
-using Com.RePower.Ocv.Model.Extensions;
 using Com.RePower.WpfBase;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HandyControl.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Com.RePower.Ocv.Ui.Byd.CB09.ViewModels
 {
@@ -25,73 +19,73 @@ namespace Com.RePower.Ocv.Ui.Byd.CB09.ViewModels
             Reflash();
             this.ReflashCommand = new RelayCommand(Reflash);
             this.ConnectCommand = new RelayCommand(DoConnect);
+            this.HexSendCommand = new RelayCommand(HexSend);
+            this.StringSendCommand = new RelayCommand(StringSend);
         }
-        private string _portName;
+        private string _portName = string.Empty;
 
         public string PortName
         {
-            get { return _portName; }
-            set { SetProperty(ref _portName, value); }
+            get => _portName;
+            set => SetProperty(ref _portName, value);
         }
         private int _baudRate;
 
         public int BaudRate
         {
-            get { return _baudRate; }
-            set { SetProperty(ref _baudRate, value); }
+            get => _baudRate;
+            set => SetProperty(ref _baudRate, value);
         }
         private int _realDelay;
 
         public int ReadDelay
         {
-            get { return _realDelay; }
-            set { SetProperty(ref _realDelay, value); }
+            get => _realDelay;
+            set => SetProperty(ref _realDelay, value);
         }
 
         private bool _isConnected;
 
         public bool IsConnected
         {
-            get { return _isConnected; }
-            set { SetProperty(ref _isConnected, value); }
+            get => _isConnected;
+            set => SetProperty(ref _isConnected, value);
         }
 
         public RelayCommand ReflashCommand { get; set; }
         public RelayCommand ConnectCommand { get; set; }
-        public RelayCommand HaxSendCommand { get; set; }
+        public RelayCommand HexSendCommand { get; set; }
         public RelayCommand StringSendCommand { get; set; }
         private bool _isNeedRecovery;
 
         public bool IsNeedRecovery
         {
-            get { return _isNeedRecovery; }
-            set { SetProperty(ref _isNeedRecovery, value); }
+            get => _isNeedRecovery;
+            set => SetProperty(ref _isNeedRecovery, value);
         }
 
         private string _sendCmd = string.Empty;
 
         public string SendCmd
         {
-            get { return _sendCmd; }
-            set { SetProperty(ref _sendCmd, value); }
+            get => _sendCmd;
+            set => SetProperty(ref _sendCmd, value);
         }
-        private string _recoveryCmd;
+        private string _recoveryCmd = string.Empty;
 
         public string RecoveryCmd
         {
-            get { return _recoveryCmd; }
-            set { SetProperty(ref _recoveryCmd, value); }
+            get => _recoveryCmd;
+            set => SetProperty(ref _recoveryCmd, value);
         }
 
-        private ObservableCollection<string> _recording;
+        private ObservableCollection<string> _recording = new ObservableCollection<string>();
 
         public ObservableCollection<string> Recording
         {
-            get { return _recording; }
-            set { SetProperty(ref _recording, value); }
+            get => _recording;
+            set => SetProperty(ref _recording, value);
         }
-
-
 
         public void Reflash()
         {
@@ -118,14 +112,52 @@ namespace Com.RePower.Ocv.Ui.Byd.CB09.ViewModels
         }
         public void DoConnect()
         {
-            var result = Ohm.Connect();
+            if (!Ohm.IsConnected)
+            {
+                Ohm.Connect();
+            }
+            else
+            {
+                Ohm.DisConnect();
+            }
             Reflash();
         }
-        public void HaxSend()
+        public void HexSend()
         {
-            byte[] byteArray = new byte[] { 1, 2, 3 };
-
-            
+            var cmd = HexStringToByteArray(SendCmd);
+            Recording.Add($"发：{Convert.ToHexString(cmd)}");
+            var result = Ohm.SendCmd(cmd, isNeedRecovery: IsNeedRecovery);
+            if (result is { IsSuccess: true, Content.Length: > 0 })
+            {
+                Recording.Add($"收：{Convert.ToHexString(result.Content)}");
+            }
+            Reflash();
+        }
+        public void StringSend()
+        {
+            var cmd = Encoding.ASCII.GetBytes(SendCmd);
+            Recording.Add($"发：{Convert.ToHexString(cmd)}");
+            var result = Ohm.SendCmd(cmd, isNeedRecovery: IsNeedRecovery);
+            if (result is { IsSuccess: true, Content.Length: > 0 })
+            {
+                Recording.Add($"收：{Convert.ToHexString(result.Content)}");
+            }
+            Reflash();
+        }
+        private byte[] HexStringToByteArray(string hexString)
+        {
+            if (string.IsNullOrEmpty(hexString))
+            {
+                return new byte[] { };
+            }
+            string[] hexValuesSplit = hexString.Split(' ');
+            List<byte> byteList = new List<byte>();
+            foreach (var s in hexValuesSplit)
+            {
+                var value = Convert.ToByte(s, 16);
+                byteList.Add(value);
+            }
+            return byteList.ToArray();
         }
     }
 }

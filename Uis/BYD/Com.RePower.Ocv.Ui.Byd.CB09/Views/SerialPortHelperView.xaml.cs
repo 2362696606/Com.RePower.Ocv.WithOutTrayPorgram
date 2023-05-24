@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Com.RePower.Ocv.Ui.Byd.CB09.ViewModels;
+using Com.RePower.WpfBase;
 
 namespace Com.RePower.Ocv.Ui.Byd.CB09.Views
 {
@@ -23,6 +25,7 @@ namespace Com.RePower.Ocv.Ui.Byd.CB09.Views
         public SerialPortHelperView()
         {
             InitializeComponent();
+            this.DataContext = IocHelper.Default.GetService<SerialPortHelperViewModel>();
         }
     }
 }

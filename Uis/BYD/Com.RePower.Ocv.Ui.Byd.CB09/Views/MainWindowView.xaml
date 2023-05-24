@@ -49,6 +49,7 @@
                                 Header="校准工具"
                                 Visibility="{Binding CanCalibration, Converter={StaticResource BooleanToVisibilityConverter}}" />-->
                             <MenuItem Command="{Binding OpenSettingsCommand}" Header="参数配置" />
+                            <MenuItem Command="{Binding OpenSerialPortHelperCommand}" Header="串口助手" />
                             <!--<MenuItem Command="{Binding OpenDataSearchCommand}" Header="数据查询" />-->
                         </Menu>
                         <Grid Grid.Row="1">
