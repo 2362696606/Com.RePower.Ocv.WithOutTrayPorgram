@@ -73,7 +73,7 @@ public class DevicesModule:Module
         IOhm ohmInstance;
         if (authenticitySetting.IsRealOhm)
         {
-            var trulyOhm = new HiokiBt3562Impl();
+            var trulyOhm = new Hioki_BT3562ManualImpl();
             trulyOhm.DeviceName = ohmSetting.DeviceName;
             trulyOhm.PortName = ohmSetting.PortName;
             trulyOhm.BaudRate = ohmSetting.BaudRate;
