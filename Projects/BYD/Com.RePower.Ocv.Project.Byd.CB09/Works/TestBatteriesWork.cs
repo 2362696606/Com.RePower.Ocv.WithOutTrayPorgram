@@ -56,7 +56,7 @@ public partial class MainWork
     protected virtual OperateResult TestOneBattery(NgInfo ngInfo)
     {
         LogHelper.UiLog.Info($"测试电池{ngInfo.Battery.Position}");
-        var openResult = OpenChannelByBattery(ngInfo);
+        var openResult = OpenChannelByBattery(ngInfo.Battery.Position);
         if(openResult.IsFailed)
             return openResult;
         if (TestOption.Default.IsTestVol)
@@ -75,24 +75,39 @@ public partial class MainWork
             var readResult = Ohm.ReadRes();
             if(readResult.IsFailed)
                 return readResult;
-            ngInfo.Battery.Res = readResult.Content;
+            if (CalibrationSetting.Default.IsUseCalibration)
+            {
+                var calibrationItem = CalibrationSetting.Default[ngInfo.Battery.Position];
+                if (CalibrationSetting.Default.IsUseAutoCalibration)
+                {
+                    ngInfo.Battery.Res = readResult.Content + calibrationItem.AutoCalibrationValue;
+                }
+                else
+                {
+                    ngInfo.Battery.Res = readResult.Content + calibrationItem.ManualCalibrationValue;
+                }
+            }
+            else
+            {
+                ngInfo.Battery.Res = readResult.Content;
+            }
             LogHelper.UiLog.Info("读取内阻成功");
         }
-        var closeResult = OpenChannelByBattery(ngInfo, SwitchBoardMode.Vol, false);
+        var closeResult = OpenChannelByBattery(ngInfo.Battery.Position, SwitchBoardMode.Vol, false);
         if(closeResult.IsFailed)
             return closeResult;
         DoPauseOrStop();
         if (TestOption.Default.IsTestPVol)
         {
             LogHelper.UiLog.Info("读取正极壳体电压");
-            openResult = OpenChannelByBattery(ngInfo, SwitchBoardMode.PVol);
+            openResult = OpenChannelByBattery(ngInfo.Battery.Position, SwitchBoardMode.PVol);
             if (openResult.IsFailed)
                 return openResult;
             var readResult = Dmm.ReadDc();
             if(readResult.IsFailed)
                 return readResult;
             ngInfo.Battery.PVolValue = readResult.Content;
-            closeResult = OpenChannelByBattery(ngInfo, SwitchBoardMode.PVol, false);
+            closeResult = OpenChannelByBattery(ngInfo.Battery.Position, SwitchBoardMode.PVol, false);
             if (closeResult.IsFailed)
                 return closeResult;
             LogHelper.UiLog.Info("读取正极壳体电压成功");
@@ -101,14 +116,14 @@ public partial class MainWork
         if (TestOption.Default.IsTestNVol)
         {
             LogHelper.UiLog.Info("读取负极壳体电压");
-            openResult = OpenChannelByBattery(ngInfo, SwitchBoardMode.NVol);
+            openResult = OpenChannelByBattery(ngInfo.Battery.Position, SwitchBoardMode.NVol);
             if (openResult.IsFailed)
                 return openResult;
             var readResult = Dmm.ReadDc();
             if (readResult.IsFailed)
                 return readResult;
             ngInfo.Battery.NVolValue = readResult.Content;
-            closeResult = OpenChannelByBattery(ngInfo, SwitchBoardMode.NVol, false);
+            closeResult = OpenChannelByBattery(ngInfo.Battery.Position, SwitchBoardMode.NVol, false);
             if (closeResult.IsFailed)
                 return closeResult;
             LogHelper.UiLog.Info("读取负极壳体电压成功");
@@ -117,12 +132,12 @@ public partial class MainWork
         ngInfo.Battery.IsTested = true;
         return OperateResult.CreateSuccessResult();
     }
-    protected virtual OperateResult OpenChannelByBattery(NgInfo ngInfo,SwitchBoardMode mode = SwitchBoardMode.Vol,bool isOpen = true)
+    protected virtual OperateResult OpenChannelByBattery(int position,SwitchBoardMode mode = SwitchBoardMode.Vol,bool isOpen = true)
     {
         SwitchBoardChannelConfig config =
-            SwitchBoardChannelSetting.Default.First(x => x.Correspondence.ContainsKey(ngInfo.Battery.Position));
+            SwitchBoardChannelSetting.Default.First(x => x.Correspondence.ContainsKey(position));
         int boardIndex = config.BoardIndex;
-        int channel = config.Correspondence[ngInfo.Battery.Position];
+        int channel = config.Correspondence[position];
         List<int> attachedChannel = new List<int>();
         if (config.IsNeedAttached)
         {

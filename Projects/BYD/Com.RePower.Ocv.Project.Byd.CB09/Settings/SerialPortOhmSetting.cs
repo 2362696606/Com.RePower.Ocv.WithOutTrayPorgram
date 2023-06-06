@@ -41,4 +41,13 @@ public class SerialPortOhmSetting:ApplicationSettingsBase
     [DisplayName("读取延迟")]
     [SettingsDescription("内阻仪读取延迟")]
     public int ReadDelay => (int)this[nameof(ReadDelay)];
+
+    /// <summary>
+    /// 保留位数
+    /// </summary>
+    [ApplicationScopedSetting]
+    [DefaultSettingValue("3")]
+    [DisplayName("保留位数")]
+    [SettingsDescription("保留位数")]
+    public int Digits => (int)this[nameof(Digits)];
 }

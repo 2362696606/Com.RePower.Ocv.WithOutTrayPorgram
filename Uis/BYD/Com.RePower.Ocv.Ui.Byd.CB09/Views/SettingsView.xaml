@@ -24,6 +24,11 @@
                     Content="保存" />
                 <Button
                     Margin="5"
+                    Command="{Binding DoUpgradeCommand}"
+                    CommandParameter="{Binding ElementName=SettingsTabControl}"
+                    Content="更新" />
+                <Button
+                    Margin="5"
                     Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
                     Content="关闭" />
             </StackPanel>

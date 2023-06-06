@@ -18,7 +18,18 @@ public partial class MainWork
                     return sendRetestSingalResult;
                 LogHelper.UiLog.Info("等待测试请求");
                 var waitResult = WaitTestRequest();
-                if(waitResult.IsFailed)
+                if (waitResult.IsFailed)
+                    return waitResult;
+                LogHelper.UiLog.Info("等待测试请求成功");
+                var sendResult = SendCoordinates();
+                if(sendResult.IsFailed)
+                    return sendResult;
+                LogHelper.UiLog.Info("下发坐标");
+                sendResult = SendReadTrayCodeComplete();
+                if(sendResult.IsFailed)
+                    return sendResult;
+                waitResult = WaitTestRequest();
+                if (waitResult.IsFailed)
                     return waitResult;
                 LogHelper.UiLog.Info("等待测试请求成功");
                 LogHelper.UiLog.Info("测试Ng电池");
@@ -47,5 +58,11 @@ public partial class MainWork
         if (writeResult.IsSuccess)
             LogHelper.UiLog.Info("下发复测信号成功");
         return writeResult;
+    }
+    protected virtual OperateResult WaitRetestRequest()
+    {
+        var waitResult = Plc.Wait(PlcCacheSetting["Group1"]["请求测试"].Address, (short)3,
+            cancellation: FlowController.CancelToken);
+        return waitResult;
     }
 }

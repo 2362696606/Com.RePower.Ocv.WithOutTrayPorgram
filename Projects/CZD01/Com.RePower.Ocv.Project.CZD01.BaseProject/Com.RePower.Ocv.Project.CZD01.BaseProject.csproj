@@ -21,4 +21,8 @@
     <ProjectReference Include="..\..\Com.RePower.Ocv.Project.ProjectBase\Com.RePower.Ocv.Project.ProjectBase.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Messages\" />
+  </ItemGroup>
+
 </Project>

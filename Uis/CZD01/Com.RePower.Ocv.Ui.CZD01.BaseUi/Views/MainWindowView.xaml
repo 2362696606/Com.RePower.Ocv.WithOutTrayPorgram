@@ -28,7 +28,7 @@
                         <MenuItem Command="{Binding OpenSettingViewCommand}" Header="参数配置" />
                         <MenuItem Command="{Binding OpenDataSearchViewCommand}" Header="数据查询" />
                         <MenuItem Command="{Binding OpenCalibrationViewCommand}" Header="校准工具" />
-                        <MenuItem Command="{Binding OpenCalibrationViewCommand}" Header="配置选择" />
+                        <!--<MenuItem Command="{Binding OpenCalibrationViewCommand}" Header="配置选择" />-->
                     </Menu>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>

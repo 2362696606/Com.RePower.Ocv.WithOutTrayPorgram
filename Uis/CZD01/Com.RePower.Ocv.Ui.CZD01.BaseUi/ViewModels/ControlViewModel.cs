@@ -12,7 +12,6 @@ namespace Com.RePower.Ocv.Ui.CZD01.BaseUi.ViewModels
             _work = mainWork;
         }
 
-
         private IProjectMainWork? _work;
 
         public IProjectMainWork? Work

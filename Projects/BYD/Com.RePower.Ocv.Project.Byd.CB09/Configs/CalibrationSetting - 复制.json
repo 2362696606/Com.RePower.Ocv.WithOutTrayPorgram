@@ -1,0 +1,196 @@
+{
+  "IsUseCalibration": true,
+  "IsUseAutoCalibration": false,
+  "CalibrationItems": [
+    {
+      "Channel": 1,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0.4
+    },
+    {
+      "Channel": 2,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 3,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 4,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 5,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 6,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 7,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 8,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 9,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 10,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 11,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 12,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 13,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 14,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 15,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 16,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 17,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 18,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 19,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 20,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 21,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 22,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 23,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 24,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 25,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 26,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 27,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 28,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 29,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 30,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 31,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 32,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 33,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 34,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 35,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 36,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 37,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    },
+    {
+      "Channel": 38,
+      "AutoCalibrationValue": 0,
+      "ManualCalibrationValue": 0
+    }
+  ]
+}

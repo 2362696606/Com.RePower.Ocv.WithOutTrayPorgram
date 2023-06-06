@@ -12,6 +12,7 @@ using Com.RePower.Ocv.Project.Byd.CB09.Serivces;
 using Com.RePower.Ocv.Project.Byd.CB09.Settings;
 using Com.RePower.Ocv.Project.ProjectBase.Controllers;
 using Com.RePower.WpfBase;
+using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
 using NPOI.HSSF.Record.Chart;
 using NPOI.SS.Formula.Functions;
@@ -44,6 +45,10 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Works
             MesService = mesService;
             Mapper = mapper;
             PlcCacheSetting = PlcCacheSetting.Default;
+
+
+
+            var s = CalibrationSetting.Default;
         }
 
         private bool _isMsaTest;
@@ -55,6 +60,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Works
             get => _isMsaTest;
             set => SetProperty(ref _isMsaTest, value);
         }
+
         protected override OperateResult DoWork()
         {
             while (true)
@@ -123,7 +129,7 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Works
                     LogHelper.UiLog.Info("执行msa测试");
                     var msaResult = MsaTest();
                     if (msaResult.IsFailed)
-                        return msaResult; 
+                        return msaResult;
                     LogHelper.UiLog.Info("执行msa测试成功");
                     #endregion
                 }
@@ -156,10 +162,9 @@ namespace Com.RePower.Ocv.Project.Byd.CB09.Works
                     #endregion
                     #region 测试完成
                     var testCompleteResult = TestComplete();
-                    if(testCompleteResult.IsFailed) return testCompleteResult;
+                    if (testCompleteResult.IsFailed) return testCompleteResult;
                     #endregion
                 }
-                return OperateResult.CreateSuccessResult();
             }
             //return OperateResult.CreateSuccessResult();
         }

@@ -21,9 +21,19 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                 {
                     sendValue = 10;
                 }
-                else if(item.AttachedIsNg??false)
+                else if (SettingManager.CurrentOcvType == Model.Enums.OcvTypeEnum.OCV0)
                 {
-                    sendValue = 2;
+                    if (item.IsNg)
+                    {
+                        if (item.AttachedIsNg ?? false)
+                        {
+                            sendValue = 4;
+                        }
+                        else
+                        {
+                            sendValue = 2;
+                        }
+                    }
                 }
                 else if (SettingManager.CurrentOcvType ==  Model.Enums.OcvTypeEnum.OCV3)
                 {
@@ -82,6 +92,10 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                         //                       | Model.Enums.NgTypeEnum.K值计算失败))
                         //    sendValue = 2;
                     }
+                }
+                else if (item.AttachedIsNg ?? false)
+                {
+                    sendValue = 2;
                 }
                 else
                 {

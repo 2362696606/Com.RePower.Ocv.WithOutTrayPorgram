@@ -78,6 +78,7 @@ public class DevicesModule:Module
             trulyOhm.PortName = ohmSetting.PortName;
             trulyOhm.BaudRate = ohmSetting.BaudRate;
             trulyOhm.ReadDelay = ohmSetting.ReadDelay;
+            trulyOhm.Digits = ohmSetting.Digits;
             ohmInstance = trulyOhm;
         }
         else
@@ -87,6 +88,7 @@ public class DevicesModule:Module
             simOhm.PortName = ohmSetting.PortName;
             simOhm.BaudRate = ohmSetting.BaudRate;
             simOhm.ReadDelay = ohmSetting.ReadDelay;
+            simOhm.Digits = ohmSetting.Digits;
             ohmInstance = simOhm;
         }
 

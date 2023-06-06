@@ -94,6 +94,10 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                     if (testBatteriesResult.IsFailed)
                         return testBatteriesResult;
                     DoPauseOrStop();
+                    var verifyResult = VerifyNgCount();
+                    if(verifyResult.IsFailed)
+                        return verifyResult;
+                    DoPauseOrStop();
                     var verfyKValueResult = VerifyKValue();
                     if (verfyKValueResult.IsFailed)
                         return verfyKValueResult;

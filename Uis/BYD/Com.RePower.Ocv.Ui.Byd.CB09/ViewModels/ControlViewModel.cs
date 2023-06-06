@@ -1,6 +1,10 @@
-﻿using Com.RePower.Ocv.Project;
+﻿using System;
+using System.Windows.Input;
+using Com.RePower.Ocv.Project;
+using Com.RePower.Ocv.Ui.Byd.CB09.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MaterialDesignThemes.Wpf;
 
 namespace Com.RePower.Ocv.Ui.Byd.CB09.ViewModels
 {
@@ -14,19 +18,68 @@ namespace Com.RePower.Ocv.Ui.Byd.CB09.ViewModels
         {
             Work = work;
             this.DoStartCommand = new RelayCommand(DoStart);
-            this.DoStopCommand = new RelayCommand(DoStop); 
+            this.DoStopCommand = new RelayCommand(DoStop);
+            this.MasterTestCommand = new RelayCommand(DoMasterTest, CanDoMasterTest);
         }
+
+        private bool CanDoMasterTest()
+        {
+            if (Work is Project.Byd.CB09.Works.MainWork mainWork)
+            {
+                //return mainWork.CanDoMasterTest();
+                return true;
+            }
+            return false;
+        }
+
+        private void DoMasterTest()
+        {
+            if (Work is Project.Byd.CB09.Works.MainWork mainWork)
+            {
+                var view = new CalibrationSettingView
+                {
+                    DataContext = new CalibrationSettingViewModel(Work),
+                };
+                DialogHost.Show(view, "MainDialog");
+            }
+        }
+
+
+        public RelayCommand MasterTestCommand { get; set; }
 
         private void DoStart()
         {
-            if (Work?.WorkStatus == 0 || Work?.WorkStatus == 2)
-                Work.StartWorkAsync();
-            else
-                Work?.PauseWorkAsync();
+            try
+            {
+                if (Work?.WorkStatus == 0 || Work?.WorkStatus == 2)
+                    Work.StartWorkAsync();
+                else
+                    Work?.PauseWorkAsync();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            finally
+            {
+                CommandManager.InvalidateRequerySuggested();
+            }
         }
         private void DoStop()
         {
-            Work?.StopWorkAsync();
+            try
+            {
+                CommandManager.InvalidateRequerySuggested();
+                Work?.StopWorkAsync();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            finally
+            {
+                CommandManager.InvalidateRequerySuggested();
+            }
         }
     }
 }

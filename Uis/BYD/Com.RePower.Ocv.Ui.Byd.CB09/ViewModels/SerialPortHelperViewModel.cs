@@ -130,6 +130,7 @@ namespace Com.RePower.Ocv.Ui.Byd.CB09.ViewModels
             if (result is { IsSuccess: true, Content.Length: > 0 })
             {
                 Recording.Add($"收：{Convert.ToHexString(result.Content)}");
+                this.RecoveryCmd = Convert.ToHexString(result.Content);
             }
             Reflash();
         }
@@ -141,6 +142,7 @@ namespace Com.RePower.Ocv.Ui.Byd.CB09.ViewModels
             if (result is { IsSuccess: true, Content.Length: > 0 })
             {
                 Recording.Add($"收：{Convert.ToHexString(result.Content)}");
+                this.RecoveryCmd = Convert.ToHexString(result.Content);
             }
             Reflash();
         }

@@ -27,7 +27,7 @@ namespace Com.RePower.DeviceBase.Helper
                 manualResetEvent.Set();
             }
 
-            //serialPort.DataReceived += setFlag;
+            serialPort.DataReceived += SetFlag;
             serialPort.Write(bytes, 0, bytes.Length);
 
             #region 等待延迟

@@ -15,7 +15,7 @@ namespace Com.RePower.Ocv.Ui.Byd.CB09.UiHelper
 
         public object Data
         {
-            get => GetValue(DataProperty);
+            get => (object)GetValue(DataProperty);
             set => SetValue(DataProperty, value);
         }
 

@@ -37,7 +37,7 @@
                             IsChecked="{Binding Work.IsMsaTest}"
                             Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" />
                     </StackPanel>
-                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <!--<StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                         <TextBlock
                             Margin="0,0,5,0"
                             FontSize="16"
@@ -46,10 +46,14 @@
                             FontSize="16"
                             IsChecked="{Binding Work.IsManualTesting}"
                             Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" />
-                    </StackPanel>
+                    </StackPanel>-->
                 </UniformGrid>
-                <UniformGrid Grid.Row="1" Rows="1">
-                    <UniformGrid.Resources>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.Resources>
                         <Style
                             x:Key="ButtonStyle"
                             BasedOn="{StaticResource MaterialDesignFlatLightBgButton}"
@@ -73,9 +77,24 @@
                             <Setter Property="FontSize" Value="80" />
                             <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp3" />
                         </Style>
-                    </UniformGrid.Resources>
+                    </Grid.Resources>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Button
+                            Command="{Binding MasterTestCommand}"
+                            Content="Master"
+                            Style="{StaticResource ButtonStyle}" />
+                        <Button
+                            Grid.Column="1"
+                            Command="{Binding DoStopCommand}"
+                            Content="停止"
+                            Style="{StaticResource ButtonStyle}" />
+                    </Grid>
 
-                    <Button Command="{Binding DoStartCommand}">
+                    <Button Grid.Row="1" Command="{Binding DoStartCommand}">
                         <Button.Style>
                             <Style BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
                                 <Style.Triggers>
@@ -92,11 +111,7 @@
                             </Style>
                         </Button.Style>
                     </Button>
-                    <Button
-                        Command="{Binding DoStopCommand}"
-                        Content="停止"
-                        Style="{StaticResource ButtonStyle}" />
-                </UniformGrid>
+                </Grid>
             </Grid>
         </materialDesign:Card>
     </Grid>

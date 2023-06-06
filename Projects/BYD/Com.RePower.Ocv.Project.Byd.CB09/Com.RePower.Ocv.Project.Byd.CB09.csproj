@@ -21,12 +21,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Configs\CalibrationSetting - 复制.json" />
 	  <None Remove="Configs\ChannelsNgInfo.json" />
 	  <None Remove="Configs\PlcAddress.json" />
 	  <None Remove="Configs\SwitchBoardChannelSetting.json" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Include="Configs\CalibrationSetting - 复制.json">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Content>
 	  <Content Include="Configs\ChannelsNgInfo.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
@@ -58,6 +62,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Extensions\" />
+	  <Folder Include="Messages\" />
 	</ItemGroup>
 
 	<ItemGroup>

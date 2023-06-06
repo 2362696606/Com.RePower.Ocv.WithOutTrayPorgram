@@ -1,6 +1,8 @@
 ﻿using Com.RePower.Ocv.Model.Entity;
 using Com.RePower.Ocv.Model.Helper;
+using Com.RePower.Ocv.Project.CZD01.BaseProject.Messages;
 using Com.RePower.WpfBase;
+using CommunityToolkit.Mvvm.Messaging;
 using Org.BouncyCastle.Math.EC.Rfc7748;
 using System;
 using System.Collections.Generic;
@@ -189,6 +191,22 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                 var readResult = DevicesController.Ohm?.ReadRes() ?? OperateResult.CreateFailedResult<double>("内阻仪实例为null");
                 if (readResult.IsFailed)
                     return readResult;
+                var resValue = readResult.Content;
+                if (resValue > 100)
+                {
+                    ManualResetEvent flag = new ManualResetEvent(false);
+                    Dictionary<string, object> parameters = new Dictionary<string, object>()
+                        { { "warringInfo", "测试通道内阻超过100mΩ" }, { "flag", flag } };
+                    DoMethodMessage message = new DoMethodMessage()
+                    {
+                        MethodName = "DoWarring",
+                        Parameters = parameters
+                    };
+                    WeakReferenceMessenger.Default.Send<DoMethodMessage, string>(message, "DoMainViewMethod");
+                    flag.WaitOne();
+                }
+
+
                 ngInfo.Battery.Res = readResult.Content;
             }
             return OperateResult.CreateSuccessResult();

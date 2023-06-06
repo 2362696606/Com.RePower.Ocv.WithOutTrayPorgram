@@ -69,7 +69,7 @@
                         </DataTemplate>
                     </TabControl.ContentTemplate>
                 </TabControl>
-                <materialDesign:Snackbar MessageQueue="{Binding MessageQueue}" />
+                <!--<materialDesign:Snackbar MessageQueue="{Binding MessageQueue}" />-->
             </Grid>
         </materialDesign:ColorZone>
     </materialDesign:Card>
