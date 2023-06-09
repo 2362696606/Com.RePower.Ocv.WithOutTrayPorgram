@@ -13,6 +13,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
     {
         private OperateResult TestPreparation()
         {
+            isCheckNgContinue = false;
             LogHelper.UiLog.Info("重置交互信号");
             //string address = SettingManager.PlcValueCacheSetting?["测试标志位"]?.Address ?? string.Empty;
             //if (string.IsNullOrEmpty(address))

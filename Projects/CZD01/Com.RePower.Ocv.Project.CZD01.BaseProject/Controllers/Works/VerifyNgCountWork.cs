@@ -12,7 +12,7 @@ public partial class MainWork
     {
         var max = SettingManager.CurrentOtherSetting?.MaxErrorNg ?? 4;
         var count = Tray.NgInfos.Count(x => x.IsNg);
-        if (count > max)
+        if (!isCheckNgContinue && count > max)
         {
             var sendResult = SendWarring(1);
             if (sendResult.IsFailed)
@@ -27,6 +27,7 @@ public partial class MainWork
             };
             WeakReferenceMessenger.Default.Send<DoMethodMessage, string>(message, "DoMainViewMethod");
             flag.WaitOne();
+            isCheckNgContinue = true;
             sendResult = CleanWarring();
             if (sendResult.IsFailed)
                 LogHelper.UiLog.Warn(sendResult.Message);

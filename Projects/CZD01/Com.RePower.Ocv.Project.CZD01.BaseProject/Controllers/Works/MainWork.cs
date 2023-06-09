@@ -31,6 +31,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
             SceneContext = sceneContext;
         }
 
+        private bool isCheckNgContinue;
 
         private bool _isScheduledCalibration;
         /// <summary>
@@ -94,10 +95,10 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                     if (testBatteriesResult.IsFailed)
                         return testBatteriesResult;
                     DoPauseOrStop();
-                    var verifyResult = VerifyNgCount();
-                    if(verifyResult.IsFailed)
-                        return verifyResult;
-                    DoPauseOrStop();
+                    //var verifyResult = VerifyNgCount();
+                    //if(verifyResult.IsFailed)
+                    //    return verifyResult;
+                    //DoPauseOrStop();
                     var verfyKValueResult = VerifyKValue();
                     if (verfyKValueResult.IsFailed)
                         return verfyKValueResult;

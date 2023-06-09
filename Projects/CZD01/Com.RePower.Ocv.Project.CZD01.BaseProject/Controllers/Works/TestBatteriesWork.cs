@@ -14,6 +14,7 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
 {
     public partial class MainWork
     {
+        
         private OperateResult TestBatteries()
         {
             for (int i = 1; i <= (SettingManager.CurrentTestOrder?.Count ?? 0); i++) 
@@ -76,70 +77,70 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                     {
                         continue;
                     }
-                    else
+                    var openResult = DevicesController.SwitchBoard?.OpenChannel(1, i + 1) ?? OperateResult.CreateFailedResult("切换板实例为null");
+                    if (openResult.IsFailed)
+                        return openResult;
+                    var testOneBatteryResult = TestOneBattery(ngInfo);
+                    if (testOneBatteryResult.IsFailed)
+                        return testOneBatteryResult;
+                    var closeResult = DevicesController.SwitchBoard?.CloseChannel(1, i + 1) ?? OperateResult.CreateFailedResult("切换板实例为null");
+                    if (closeResult.IsFailed) return closeResult;
+                    if (SettingManager.CurrentTestOption?.IsTestNVol ?? false)
                     {
-                        var openResult = DevicesController.SwitchBoard?.OpenChannel(1, i + 1) ?? OperateResult.CreateFailedResult("切换板实例为null");
-                        if (openResult.IsFailed)
+                        DoPauseOrStop();
+                        int startChannel = SettingManager.CurrentOtherSetting?.NVolStartChannel ?? 5;
+                        var openResult1 = DevicesController.SwitchBoard?.OpenChannel(1, i + startChannel) ?? OperateResult.CreateFailedResult("切换板实例为null");
+                        if (openResult1.IsFailed)
                             return openResult;
-                        var testOneBatteryResult = TestOneBattery(ngInfo);
-                        if (testOneBatteryResult.IsFailed)
-                            return testOneBatteryResult;
-                        var closeResult = DevicesController.SwitchBoard?.CloseChannel(1, i + 1) ?? OperateResult.CreateFailedResult("切换板实例为null");
-                        if (closeResult.IsFailed) return closeResult;
-                        if (SettingManager.CurrentTestOption?.IsTestNVol ?? false)
-                        {
-                            DoPauseOrStop();
-                            int startChannel = SettingManager.CurrentOtherSetting?.NVolStartChannel ?? 5;
-                            var openResult1 = DevicesController.SwitchBoard?.OpenChannel(1, i + startChannel) ?? OperateResult.CreateFailedResult("切换板实例为null");
-                            if (openResult1.IsFailed)
-                                return openResult;
-                            var testNVolResult = TestNVol(ngInfo);
-                            if (testNVolResult.IsFailed) return testNVolResult;
-                            var closeResult1 = DevicesController.SwitchBoard?.CloseChannel(1, i + startChannel) ?? OperateResult.CreateFailedResult("切换板实例为null");
-                            if (closeResult1.IsFailed) return closeResult1;
-                        }
-                        if (SettingManager.CurrentTestOption?.IsTestPVol ?? false)
-                        {
-                            DoPauseOrStop();
-                            int startChannel = SettingManager.CurrentOtherSetting?.PVolStartChannel ?? 9;
-                            var openResult1 = DevicesController.SwitchBoard?.OpenChannel(1, i + startChannel) ?? OperateResult.CreateFailedResult("切换板实例为null");
-                            if (openResult1.IsFailed)
-                                return openResult;
-                            var testPVolResult = TestPVol(ngInfo);
-                            if (testPVolResult.IsFailed) return testPVolResult;
-                            var closeResult1 = DevicesController.SwitchBoard?.CloseChannel(1, i + startChannel) ?? OperateResult.CreateFailedResult("切换板实例为null");
-                            if (closeResult1.IsFailed) return closeResult1;
-                        }
-                        if (SettingManager.CurrentTestOption?.IsTestTemp ?? false)
-                        {
-                            DoPauseOrStop();
-                            if (tempList == null)
-                            {
-                                var readResult = DevicesController.TemperatureSensor?.ReadTemp() ?? OperateResult.CreateFailedResult<double[]>("温度传感器实例为null");
-                                if (readResult.IsFailed)
-                                    return readResult;
-                                if (readResult.Content is { })
-                                    tempList = readResult.Content.ToList();
-                                else
-                                    return OperateResult.CreateFailedResult("读取温度时返回Content为null");
-                            }
-                            ngInfo.Battery.Temp = tempList[i];
-                        }
-                        ngInfo.Battery.IsTested = true;
-                        ngInfo.Battery.TestTime = DateTime.Now;
-                        var cleanResult = WaitStatusClean();
-                        if (cleanResult.IsFailed)
-                            return cleanResult;
-                        var localNgInfoResult = ValidateNgInfoWithLocal(ngInfo);
-                        if (localNgInfoResult.IsFailed)
-                            return localNgInfoResult; 
-                        if(isRetest)
-                        {
-                            if (ngInfo.Battery.ReserveInt1 == null)
-                                ngInfo.Battery.ReserveInt1 = 0;
-                            ngInfo.Battery.ReserveInt1 += 1;
-                        }
+                        var testNVolResult = TestNVol(ngInfo);
+                        if (testNVolResult.IsFailed) return testNVolResult;
+                        var closeResult1 = DevicesController.SwitchBoard?.CloseChannel(1, i + startChannel) ?? OperateResult.CreateFailedResult("切换板实例为null");
+                        if (closeResult1.IsFailed) return closeResult1;
                     }
+                    if (SettingManager.CurrentTestOption?.IsTestPVol ?? false)
+                    {
+                        DoPauseOrStop();
+                        int startChannel = SettingManager.CurrentOtherSetting?.PVolStartChannel ?? 9;
+                        var openResult1 = DevicesController.SwitchBoard?.OpenChannel(1, i + startChannel) ?? OperateResult.CreateFailedResult("切换板实例为null");
+                        if (openResult1.IsFailed)
+                            return openResult;
+                        var testPVolResult = TestPVol(ngInfo);
+                        if (testPVolResult.IsFailed) return testPVolResult;
+                        var closeResult1 = DevicesController.SwitchBoard?.CloseChannel(1, i + startChannel) ?? OperateResult.CreateFailedResult("切换板实例为null");
+                        if (closeResult1.IsFailed) return closeResult1;
+                    }
+                    if (SettingManager.CurrentTestOption?.IsTestTemp ?? false)
+                    {
+                        DoPauseOrStop();
+                        if (tempList == null)
+                        {
+                            var readResult = DevicesController.TemperatureSensor?.ReadTemp() ?? OperateResult.CreateFailedResult<double[]>("温度传感器实例为null");
+                            if (readResult.IsFailed)
+                                return readResult;
+                            if (readResult.Content is { })
+                                tempList = readResult.Content.ToList();
+                            else
+                                return OperateResult.CreateFailedResult("读取温度时返回Content为null");
+                        }
+                        ngInfo.Battery.Temp = tempList[i];
+                    }
+                    ngInfo.Battery.IsTested = true;
+                    ngInfo.Battery.TestTime = DateTime.Now;
+                    var cleanResult = WaitStatusClean();
+                    if (cleanResult.IsFailed)
+                        return cleanResult;
+                    var localNgInfoResult = ValidateNgInfoWithLocal(ngInfo);
+                    if (localNgInfoResult.IsFailed)
+                        return localNgInfoResult; 
+                    if(isRetest)
+                    {
+                        ngInfo.Battery.ReserveInt1 ??= 0;
+                        ngInfo.Battery.ReserveInt1 += 1;
+                    }
+
+                    var verifyResult = VerifyNgCount();
+                    if(verifyResult.IsFailed)
+                        return verifyResult;
                 }
             }
             return OperateResult.CreateSuccessResult();
