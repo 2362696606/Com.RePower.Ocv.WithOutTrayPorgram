@@ -16,4 +16,16 @@ public class CalibrationChangedMessage
     /// 偏差值
     /// </summary>
     public double SubValue { get; set; }
+    /// <summary>
+    /// 校准后结果
+    /// </summary>
+    public double AfterCalibrationValue { get; set; }
+    /// <summary>
+    /// 计量偏差
+    /// </summary>
+    public double MeasureDev { get; set; }
+    /// <summary>
+    /// 计量结果
+    /// </summary>
+    public string MeasureResult { get; set; } = string.Empty;
 }

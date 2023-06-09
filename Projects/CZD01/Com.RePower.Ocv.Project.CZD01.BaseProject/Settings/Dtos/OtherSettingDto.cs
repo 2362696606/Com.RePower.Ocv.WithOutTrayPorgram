@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Com.RePower.Ocv.Model.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -41,5 +42,10 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Settings.Dtos
         /// 压差Ng通道
         /// </summary>
         public int VolDifferenceNgChannel { get; set; }
+
+        /// <summary>
+        /// 最大ng报警数
+        /// </summary>
+        public int MaxErrorNg { get; set; }
     }
 }

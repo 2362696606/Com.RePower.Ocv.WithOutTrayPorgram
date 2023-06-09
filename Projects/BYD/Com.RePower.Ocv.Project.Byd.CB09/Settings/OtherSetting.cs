@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Configuration;
+using NPOI.SS.Formula.Functions;
 
 namespace Com.RePower.Ocv.Project.Byd.CB09.Settings;
 
@@ -53,5 +54,17 @@ public class OtherSetting:ApplicationSettingsBase
     {
         get => (double)this[nameof(RightZ)];
         set => this[nameof(RightZ)] = value;
+    }
+    /// <summary>
+    /// 最大计量偏差值
+    /// </summary>
+    [UserScopedSetting]
+    [DefaultSettingValue("0.00005")]
+    [DisplayName("最大计量偏差值")]
+    [SettingsDescription("最大计量偏差值")]
+    public double MaxMeasureDev
+    {
+        get => (double)this[nameof(MaxMeasureDev)];
+        set => this[nameof(MaxMeasureDev)] = value;
     }
 }

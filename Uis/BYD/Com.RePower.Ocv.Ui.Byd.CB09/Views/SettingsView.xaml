@@ -33,41 +33,22 @@
                     Content="关闭" />
             </StackPanel>
             <TabControl Name="SettingsTabControl">
+                <TabControl.Resources>
+                    <ResourceDictionary>
+                        <ResourceDictionary.MergedDictionaries>
+                            <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
+                            <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
+                        </ResourceDictionary.MergedDictionaries>
+                    </ResourceDictionary>
+                </TabControl.Resources>
                 <TabItem Header="测试选项">
-                    <handyControl:PropertyGrid SelectedObject="{Binding TestOption}">
-                        <handyControl:PropertyGrid.Resources>
-                            <ResourceDictionary>
-                                <ResourceDictionary.MergedDictionaries>
-                                    <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
-                                    <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
-                                </ResourceDictionary.MergedDictionaries>
-                            </ResourceDictionary>
-                        </handyControl:PropertyGrid.Resources>
-                    </handyControl:PropertyGrid>
+                    <handyControl:PropertyGrid SelectedObject="{Binding TestOption}" />
                 </TabItem>
                 <TabItem Header="电池选项">
-                    <handyControl:PropertyGrid SelectedObject="{Binding BatteryStandard}">
-                        <handyControl:PropertyGrid.Resources>
-                            <ResourceDictionary>
-                                <ResourceDictionary.MergedDictionaries>
-                                    <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
-                                    <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
-                                </ResourceDictionary.MergedDictionaries>
-                            </ResourceDictionary>
-                        </handyControl:PropertyGrid.Resources>
-                    </handyControl:PropertyGrid>
+                    <handyControl:PropertyGrid SelectedObject="{Binding BatteryStandard}" />
                 </TabItem>
                 <TabItem Header="其他设置">
-                    <handyControl:PropertyGrid SelectedObject="{Binding OtherSetting}">
-                        <handyControl:PropertyGrid.Resources>
-                            <ResourceDictionary>
-                                <ResourceDictionary.MergedDictionaries>
-                                    <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
-                                    <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
-                                </ResourceDictionary.MergedDictionaries>
-                            </ResourceDictionary>
-                        </handyControl:PropertyGrid.Resources>
-                    </handyControl:PropertyGrid>
+                    <handyControl:PropertyGrid SelectedObject="{Binding OtherSetting}" />
                 </TabItem>
             </TabControl>
         </DockPanel>

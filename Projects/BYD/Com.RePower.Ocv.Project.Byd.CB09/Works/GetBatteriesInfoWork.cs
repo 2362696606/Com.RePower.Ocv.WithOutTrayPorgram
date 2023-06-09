@@ -44,6 +44,7 @@ public partial class MainWork
             ngInfo.Battery.BarCode = battery.BatteryBarcode;
             ngInfo.Battery.Position = battery.PalletIndex;
             ngInfo.Battery.BatteryType = resultObj.PileContent.BatteryType == "102" ? 1 : 0;
+            ngInfo.Battery.TrayCode = Tray.TrayCode;
             tempNgInfos.Add(ngInfo);
         }
 

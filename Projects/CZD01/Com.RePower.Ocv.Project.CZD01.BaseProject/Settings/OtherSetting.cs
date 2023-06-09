@@ -97,10 +97,22 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Settings
 			set { SetProperty(ref _volDifferenceNgChannel, value); }
 		}
 
-        /// <summary>
-        /// 用于保存
-        /// </summary>
-        [IgnorSetting]
+		private int _maxErrorNg;
+		/// <summary>
+		/// 最大ng报警数
+		/// </summary>
+		[SettingName("最大Ng报警数")]
+		public int MaxErrorNg
+		{
+			get { return _maxErrorNg; }
+			set { SetProperty(ref _maxErrorNg, value); }
+		}
+
+
+		/// <summary>
+		/// 用于保存
+		/// </summary>
+		[IgnorSetting]
         [JsonIgnore]
         public Func<string, OperateResult>? SaveEvent { get; set; }
         public OperateResult SaveChanged()

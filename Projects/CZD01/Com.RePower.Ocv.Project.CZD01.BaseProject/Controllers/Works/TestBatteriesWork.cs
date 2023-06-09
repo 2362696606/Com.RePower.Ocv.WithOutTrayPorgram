@@ -194,6 +194,11 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                 var resValue = readResult.Content;
                 if (resValue > 100)
                 {
+                    var sendResult = SendWarring(2);
+                    if (sendResult.IsFailed)
+                    {
+                        LogHelper.UiLog.Warn(sendResult.Message);
+                    }
                     ManualResetEvent flag = new ManualResetEvent(false);
                     Dictionary<string, object> parameters = new Dictionary<string, object>()
                         { { "warringInfo", "测试通道内阻超过100mΩ" }, { "flag", flag } };
@@ -204,6 +209,11 @@ namespace Com.RePower.Ocv.Project.CZD01.BaseProject.Controllers.Works
                     };
                     WeakReferenceMessenger.Default.Send<DoMethodMessage, string>(message, "DoMainViewMethod");
                     flag.WaitOne();
+                    sendResult = CleanWarring();
+                    if (sendResult.IsFailed)
+                    {
+                        LogHelper.UiLog.Warn(sendResult.Message);
+                    }
                 }
 
 

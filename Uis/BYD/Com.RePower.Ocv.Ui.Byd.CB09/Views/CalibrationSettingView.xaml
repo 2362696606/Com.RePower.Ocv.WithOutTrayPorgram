@@ -69,6 +69,9 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                         <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
@@ -128,6 +131,30 @@
                                         Grid.Row="4"
                                         Grid.Column="1"
                                         Text="{Binding ReadRes}" />
+                                    <TextBlock
+                                        Grid.Row="5"
+                                        Grid.Column="0"
+                                        Text="校准后:" />
+                                    <TextBlock
+                                        Grid.Row="5"
+                                        Grid.Column="1"
+                                        Text="{Binding AfterCalibrationValue}" />
+                                    <TextBlock
+                                        Grid.Row="6"
+                                        Grid.Column="0"
+                                        Text="计量偏差:" />
+                                    <TextBlock
+                                        Grid.Row="6"
+                                        Grid.Column="1"
+                                        Text="{Binding MeasureDev}" />
+                                    <TextBlock
+                                        Grid.Row="7"
+                                        Grid.Column="0"
+                                        Text="计量结果:" />
+                                    <TextBlock
+                                        Grid.Row="7"
+                                        Grid.Column="1"
+                                        Text="{Binding MeasureResult}" />
                                 </Grid>
                             </materialDesign:Card>
                         </DataTemplate>
@@ -142,6 +169,7 @@
                         </Style>
                     </StackPanel.Resources>
                     <Button Command="{Binding DoMasterTestCommand}" Content="执行校准" />
+                    <Button Command="{Binding DoMeasureCommand}" Content="执行计量" />
                     <Button Command="{Binding SaveCommand}" Content="保存" />
                     <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Content="关闭" />
                 </StackPanel>

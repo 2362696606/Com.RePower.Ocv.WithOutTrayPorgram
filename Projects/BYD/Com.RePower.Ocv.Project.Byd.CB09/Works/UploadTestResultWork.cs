@@ -36,7 +36,11 @@ public partial class MainWork
             {
                 Position = item.Battery.Position,
                 BarCode = item.Battery.BarCode,
+                Vol = item.Battery.VolValue??0,
+                Res = item.Battery.Res??0,
+                PVolValue = item.Battery.PVolValue ?? 0,
                 NVolValue = item.Battery.NVolValue ?? 0,
+                Temp = item.Battery.Temp ?? 0,
                 NgResult = item.IsNg ? "Ng" : "OK",
                 NgDescription = item.NgDescription ?? string.Empty
             };
@@ -46,7 +50,11 @@ public partial class MainWork
         var exMapper = new Mapper();
         exMapper.Map<ExcelSaveDto>("位置", n => n.Position)
             .Map<ExcelSaveDto>("电芯条码", n => n.BarCode)
+            .Map<ExcelSaveDto>("电压",n=>n.Vol)
+            .Map<ExcelSaveDto>("内阻",n=>n.Res)
+            .Map<ExcelSaveDto>("正极壳体电压",n=>n.PVolValue)
             .Map<ExcelSaveDto>("负极壳体电压", n => n.NVolValue)
+            .Map<ExcelSaveDto>("温度",n=>n.Temp)
             .Map<ExcelSaveDto>("测试结果", n => n.NgResult)
             .Map<ExcelSaveDto>("Ng原因", n => n.NgDescription);
         string dir = @$"./正常数据文件夹_normal";

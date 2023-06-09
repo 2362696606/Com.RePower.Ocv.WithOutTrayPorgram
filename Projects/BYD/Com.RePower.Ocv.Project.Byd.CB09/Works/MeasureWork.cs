@@ -1,18 +1,15 @@
-﻿using System.Diagnostics.Eventing.Reader;
-using System.Globalization;
-using Com.RePower.Device.Plc.Impl;
-using Com.RePower.Ocv.Project.Byd.CB09.Messages;
+﻿using Com.RePower.Ocv.Project.Byd.CB09.Messages;
 using Com.RePower.Ocv.Project.Byd.CB09.Settings;
 using Com.RePower.WpfBase;
-using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Npoi.Mapper;
+using System.Globalization;
 
 namespace Com.RePower.Ocv.Project.Byd.CB09.Works;
 
 public partial class MainWork
 {
-    public virtual OperateResult DoMasterTest()
+    public OperateResult DoMeasure()
     {
         try
         {
@@ -22,7 +19,6 @@ public partial class MainWork
             {
                 return connectedResult;
             }
-
             List<CalibrationExcelDto> dtos = new List<CalibrationExcelDto>();
             foreach (var item in calibrationSetting.CalibrationItems)
             {
@@ -58,17 +54,42 @@ public partial class MainWork
                 else
                 {
                     var readValue = readResult.Content;
-                    double subValue = (Com.RePower.Ocv.Model.Extensions.DoubleExtensions.Sub(item.StandRes, readValue) ??
+                    double subValue = (Model.Extensions.DoubleExtensions.Sub(item.StandRes, readValue) ??
                                        throw new Exception("计算异常"));
+                    //double measureDev = Model.Extensions.DoubleExtensions.Div(
+                    //                        Math.Abs(Model.Extensions.DoubleExtensions.Add(readValue,
+                    //                            item.AutoCalibrationValue) ?? throw new Exception("计算异常")),
+                    //                        item.StandRes) ??
+                    //                    throw new Exception("计算异常");
+                    double afterCalibrationValue;
+                    if (calibrationSetting.IsUseAutoCalibration)
+                    {
+                        afterCalibrationValue = Model.Extensions.DoubleExtensions.Add(readValue, item.AutoCalibrationValue) ??
+                                                throw new Exception("计算异常");
+                    }
+                    else
+                    {
+                        afterCalibrationValue = Model.Extensions.DoubleExtensions.Add(readValue, item.ManualCalibrationValue) ??
+                                                throw new Exception("计算异常");
+                    }
+                        
+                    double measureDev = Math.Abs(
+                        Model.Extensions.DoubleExtensions.Sub(afterCalibrationValue, item.StandRes) ??
+                        throw new Exception("计算异常"));
+                    string measureResult = (measureDev < OtherSetting.Default.MaxMeasureDev) ? "Ok" : "Ng";
                     dto.ReadValue = readValue.ToString(CultureInfo.InvariantCulture);
                     dto.SubValue = subValue.ToString(CultureInfo.InvariantCulture);
-                    item.AutoCalibrationValue = subValue;
-                    calibrationSetting.SaveChanged();
+                    dto.MeasureDev = measureDev.ToString(CultureInfo.InvariantCulture);
+                    dto.AfterCalibrationValue = afterCalibrationValue.ToString(CultureInfo.InvariantCulture);
+                    dto.MeasureResult = measureResult;
                     CalibrationChangedMessage param = new CalibrationChangedMessage()
                     {
                         CalibrationItem = item,
                         ReadResValue = readValue,
                         SubValue = subValue,
+                        AfterCalibrationValue = afterCalibrationValue,
+                        MeasureDev = measureDev,
+                        MeasureResult = measureResult
                     };
                     DoMethodMessage message = new DoMethodMessage()
                     {
@@ -83,7 +104,7 @@ public partial class MainWork
             Npoi.Mapper.Mapper mapper = new Npoi.Mapper.Mapper();
             string fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".xlsx";
             //string fileName = DateTime.Now.ToString("yyyy/MM/dd-HH:mm:ss") + ".xlsx";
-            string dirPath = Path.GetFullPath("./Master");
+            string dirPath = Path.GetFullPath("./Master/Measure");
             string fullPath = Path.Combine(dirPath, fileName);
             if (!Directory.Exists(dirPath))
             {
@@ -91,14 +112,19 @@ public partial class MainWork
             }
 
             mapper.Map<CalibrationExcelDto>("通道", s => s.Channel)
-                .Map<CalibrationExcelDto>("自动校准值", s => s.AutoCalibrationValue)
-                .Map<CalibrationExcelDto>("手动校准值", s => s.ManualCalibrationValue)
+                //.Map<CalibrationExcelDto>("自动校准值", s => s.AutoCalibrationValue)
+                //.Map<CalibrationExcelDto>("手动校准值", s => s.ManualCalibrationValue)
                 .Map<CalibrationExcelDto>("标准值", s => s.StandRes)
-                .Map<CalibrationExcelDto>("读取值", s => s.ReadValue)
-                .Map<CalibrationExcelDto>("偏差值", s => s.SubValue)
-                .Ignore<CalibrationExcelDto>(s => s.MeasureResult)
-                .Ignore<CalibrationExcelDto>(s => s.MeasureDev);
-            mapper.Save(fullPath, dtos, "sheet1", true, true);
+                //.Map<CalibrationExcelDto>("读取值", s => s.ReadValue)
+                .Map<CalibrationExcelDto>("校准后",s=>s.AfterCalibrationValue)
+                //.Map<CalibrationExcelDto>("偏差值", s => s.SubValue)
+                .Map<CalibrationExcelDto>("计量偏差", s => s.MeasureDev)
+                .Map<CalibrationExcelDto>("计量结果", s => s.MeasureResult)
+                .Ignore<CalibrationExcelDto>(s => s.AutoCalibrationValue)
+                .Ignore<CalibrationExcelDto>(s=>s.SubValue)
+                .Ignore<CalibrationExcelDto>(s=>s.ReadValue)
+                .Ignore<CalibrationExcelDto>(s => s.ManualCalibrationValue);
+            mapper.Save(fullPath, dtos, "sheet1");
             return OperateResult.CreateSuccessResult();
         }
         catch (Exception e)
@@ -106,7 +132,7 @@ public partial class MainWork
             return OperateResult.CreateFailedResult(e.ToString());
         }
     }
-    public virtual bool CanDoMasterTest()
+    public virtual bool CanDoMeasure()
     {
         if (this.WorkStatus == 0 && TestOption.Default.IsTestRes)
         {
@@ -114,17 +140,4 @@ public partial class MainWork
         }
         return false;
     }
-}
-
-public class CalibrationExcelDto
-{
-    public string Channel { get; set; } = "UnKnown";
-    public string AutoCalibrationValue { get; set; } = "UnKnown";
-    public string ManualCalibrationValue { get; set; } = "UnKnown";
-    public string StandRes { get; set; } = "UnKnown";
-    public string ReadValue { get; set; } = "UnKnown";
-    public string SubValue { get; set; } = "UnKnown";
-    public string AfterCalibrationValue { get; set; } = "UnKnown";
-    public string MeasureDev { get; set; } = "UnKnow";
-    public string MeasureResult { get; set; } = "UnKnow";
 }

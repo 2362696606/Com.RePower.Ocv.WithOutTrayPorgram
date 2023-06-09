@@ -8,6 +8,7 @@ using Com.RePower.Ocv.Project.Byd.CB09.Messages;
 using Com.RePower.Ocv.Project.Byd.CB09.Models;
 using Com.RePower.Ocv.Project.Byd.CB09.Settings;
 using Com.RePower.Ocv.Ui.Byd.CB09.UiHelper;
+using Com.RePower.WpfBase;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -31,9 +32,11 @@ public class CalibrationSettingViewModel:ObservableObject
         WeakReferenceMessenger.Default.Register<DoMethodMessage,string>(this, "CalibrationChangeMessage",
             MessageHelper.DoMethod);
         DoMasterTestCommand = new RelayCommand(DoMasterTest, CanDoMasterTest);
+        DoMeasureCommand = new RelayCommand(DoMeasure, CanDoMeasure);
     }
 
     public RelayCommand DoMasterTestCommand { get; set; }
+    public RelayCommand DoMeasureCommand { get; set; }
 
     private bool CanDoMasterTest()
     {
@@ -51,15 +54,12 @@ public class CalibrationSettingViewModel:ObservableObject
         {
             try
             {
-                Task.Factory.StartNew(() =>
-                    {
-                        mainWork.DoMasterTest();
-                    }).ContinueWith((_) =>
-                    {
+                Task.Factory.StartNew<OperateResult>(() => mainWork.DoMasterTest()).ContinueWith((result) =>
+                {
 #pragma warning disable CA1416
-                        MessageQueue.Enqueue("校准完成");
+                    MessageQueue.Enqueue(result.Result.IsSuccess ? "校准完成" : $"校准失败:{result.Result.Message}");
 #pragma warning restore CA1416
-                    });
+                });
             }
             catch (Exception e)
             {
@@ -69,7 +69,36 @@ public class CalibrationSettingViewModel:ObservableObject
             }
         }
     }
-
+    private bool CanDoMeasure()
+    {
+        if (_work is Project.Byd.CB09.Works.MainWork mainWork)
+        {
+            return mainWork.CanDoMeasure();
+            //return true;
+        }
+        return false;
+    }
+    private void DoMeasure()
+    {
+        if (_work is Project.Byd.CB09.Works.MainWork mainWork)
+        {
+            try
+            {
+                Task.Factory.StartNew<OperateResult>(() => mainWork.DoMeasure()).ContinueWith((result) =>
+                {
+#pragma warning disable CA1416
+                    MessageQueue.Enqueue(result.Result.IsSuccess ? "计量完成" : $"计量失败:{result.Result.Message}");
+#pragma warning restore CA1416
+                });
+            }
+            catch (Exception e)
+            {
+#pragma warning disable CA1416
+                MessageQueue.Enqueue($"计量失败：{e.Message}");
+#pragma warning restore CA1416
+            }
+        }
+    }
 
     private void InitCalibrationItems()
     {
@@ -103,7 +132,10 @@ public class CalibrationSettingViewModel:ObservableObject
                         AutoCalibrationValue = addItem.AutoCalibrationValue,
                         ManualCalibrationValue = addItem.ManualCalibrationValue,
                         ReadRes = obj.ReadResValue,
-                        StandRes = addItem.StandRes
+                        StandRes = addItem.StandRes,
+                        MeasureDev = obj.MeasureDev,
+                        MeasureResult = obj.MeasureResult,
+                        AfterCalibrationValue = obj.AfterCalibrationValue,
                     });
                     OnPropertyChanged(nameof(CalibrationItems));
                 }
@@ -114,6 +146,9 @@ public class CalibrationSettingViewModel:ObservableObject
                     item.ManualCalibrationValue = obj.CalibrationItem.ManualCalibrationValue;
                     item.ReadRes = obj.ReadResValue;
                     item.StandRes = obj.CalibrationItem.StandRes;
+                    item.MeasureResult = obj.MeasureResult;
+                    item.MeasureDev = obj.MeasureDev;
+                    item.AfterCalibrationValue = obj.AfterCalibrationValue;
                 }
             }
         });
@@ -234,4 +269,28 @@ public class CalibrationItemViewModel:ObservableObject
         get => _readRes;
         set => SetProperty(ref _readRes, value);
     }
+
+    private double _measureDev;
+
+    public double MeasureDev
+    {
+        get => _measureDev;
+        set => SetProperty(ref _measureDev, value);
+    }
+
+    private string _measureResult = string.Empty;
+
+    public string MeasureResult
+    {
+        get => _measureResult;
+        set => SetProperty(ref _measureResult, value);
+    }
+    private double _afterCalibrationValue;
+
+    public double AfterCalibrationValue
+    {
+        get => _afterCalibrationValue;
+        set => SetProperty(ref _afterCalibrationValue, value);
+    }
+
 }
